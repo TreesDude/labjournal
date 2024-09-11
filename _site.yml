@@ -14,7 +14,14 @@ navbar:
       menu:
       - text: "Page 1"
         href: lab1.html
-        
+      - text: "Week 1"
+        href: testjt.html
+      - text: "Week 2"
+        href: week2.html
+    - text: "RQs"
+      menu:
+      - text: "1st draft"
+        href: RQdraft1.html
         # here, other .Rmds can be added
 
 

@@ -1,0 +1,368 @@
+---
+title: "t62al"
+author: "by: Vero"
+bibliography: references.bib
+
+ 
+---
+
+
+```{r, globalsettings, echo=FALSE, warning=FALSE, results='hide'}
+library(knitr)
+
+knitr::opts_chunk$set(echo = TRUE)
+opts_chunk$set(tidy.opts=list(width.cutoff=100),tidy=TRUE, warning = FALSE, message = FALSE,comment = "#>", cache=TRUE, class.source=c("test"), class.output=c("test2"))
+options(width = 100)
+rgl::setupKnitr()
+
+
+
+colorize <- function(x, color) {sprintf("<span style='color: %s;'>%s</span>", color, x) }
+
+```
+
+```{r klippy, echo=FALSE, include=TRUE}
+klippy::klippy(position = c('top', 'right'))
+#klippy::klippy(color = 'darkred')
+#klippy::klippy(tooltip_message = 'Click to copy', tooltip_success = 'Done')
+```
+
+<!--- 
+HOW TO MAKE TOKENS:
+install.packages("gitcreds") 
+gitcreds::gitcreds_set() --->
+
+<!--- TO MAKE NEW CHUNKS: ctrl + Alt + i --->
+
+```{r, eval=FALSE}
+########################### Title: Introduction to R for SNA Author: J Tolsma version: 30-10-2019
+
+# start with clean workspace
+rm(list = ls())
+
+# install.packages I will need later here
+install.packages("installr")  # you  first install packages
+install.packages("foreign")
+install.packages("tidyverse")
+```
+
+
+```{r}
+require(foreign)  # used to read in spss data files
+require(tidyverse)
+
+# define workdirectory, note the double backslashes
+# setwd("C:\Users\Vero\OneDrive - Radboud Universiteit\Documents\GitHub\labjournal")  # change to your own workdirectory
+```
+```{r Cheat sheet}
+###########Cheat Sheet##########
+
+# variable labels 
+# c("primary", "secondary", "tertiary")
+
+# Operator symbols: 
+# $
+# == logical operator. What are the other logical operators in R?
+# [] is used to subset elements from an object (e.g. dataframe/vector/matrix)
+#  NA is used in R to define missing values. It means Not Applicable.
+
+# Functions:
+# summary(), attributes(), attr(), table(), names(), head(), fix(), View()
+
+# as.character() 
+# as.numeric()
+
+
+# in tidy: 
+  #the piping operator 
+  # %>%, 
+  # the left is transported to the (first argument of the) function on the right. Thus, in the example below, you see that in the second and third call to mutate I don’t have to tell the function which dataset I am using.
+
+# mean(), 
+# rowMeans(), 
+# rowSums, 
+# cbind(), 
+# is.na(), 
+# ifelse().
+
+# logicals FALSE and TRUE can be summed? (FALSE equals 0 and TRUE equals 1).
+```
+
+```{r}
+# ignore the warnings ?read.spss note that I have saved the data files in a folder called
+# 'addfiles'.
+
+cv08 <- foreign::read.spss("tutorial_data\\Cultural_Changes_2008.sav", use.value.labels = T, to.data.frame = T)
+cv10 <- foreign::read.spss("tutorial_data\\Cultural_Changes_2010.sav", use.value.labels = T, to.data.frame = T)
+
+# normally I think setting use.value.labels=F is more convenient. Thus lets load the data again but
+# now WITHOUT LABELS 
+cv08_nolab <- foreign::read.spss("tutorial_data\\Cultural_Changes_2008.sav", use.value.labels = F, to.data.frame = T)
+cv10_nolab <- foreign::read.spss("tutorial_data\\Cultural_Changes_2010.sav", use.value.labels = F, to.data.frame = T)
+
+# finally, import the data using haven
+cv08_haven <- haven::read_spss("tutorial_data\\Cultural_Changes_2008.sav")
+cv10_haven <- haven::read_spss("tutorial_data\\Cultural_Changes_2010.sav")
+
+str(cv08) # str = asks for structure of an object 
+str(cv08_nolab)
+str(cv08_haven)
+
+
+# acsessing variable:
+# datasetname$variablename
+
+str(cv08$lftop)  # a factor
+str(cv08_nolab$lftop)  # a numeric variable
+str(cv08_haven$lftop)  # a 'dbl+lbl' this stands for doubles, or real numbers, which are labeled  
+# next to the data itself, attributes are stored
+attributes(cv08$lftop)
+attributes(cv08_nolab$lftop)
+attributes(cv08_haven$lftop)
+
+# to access specific attributes
+attr(cv08_haven$lftop, "labels")
+
+summary(cv08$lftop)
+summary(cv08_nolab$lftop)
+summary(cv08_haven$lftop)
+table(cv08_haven$lftop, useNA = "always")
+
+#LOOKING AT DATA 
+names(cv08_haven)
+summary(cv08_haven)
+head(cv08_haven)
+
+# fix(cv08_haven) #will produce an error
+# fix(cv08)
+# View(cv08_haven)
+
+
+```
+
+----
+```{r A.7.1 Define Missings}
+
+str(cv08_haven$lftop)
+summary(cv08_haven$lftop)
+attr(cv08_haven$lftop, "labels")
+table(cv08_haven$lftop, useNA = "always")
+
+# copy the original variable in a new one, and attach it to the dataset. 
+cv08$lftop_new <- cv08$lftop
+
+# replace those values of our new variable
+cv08$lftop_new[cv08$lftop_new == "Onbekend"] <- NA
+
+#Check if recode works 
+table(cv08$lftop_new, useNA = "always")
+
+levels(cv08$lftop_new)
+
+# as numeric variable not as a factor (categorical).
+str(cv08$lftop_new)
+
+cv08$agen <- as.numeric(as.character(cv08$lftop_new))  
+# how clumsy. we first convert the factor to a string and then to a numeric variable.
+table(cv08$agen, useNA = "always")
+
+str(cv08$agen)
+
+```
+
+```{r A.7.2 Tidy }
+
+# install.packages("tidyverse")
+library(tidyverse)
+
+# ‘mutate’ the original dataset by adding a variable.
+cv08_haven <- mutate(cv08_haven, lftop_new = lftop)
+
+#Replace missings.Note: 99 is the “onbekend” category.
+cv08_haven$lftop_new <- na_if(cv08_haven$lftop_new, 99)
+
+#Normally: combine these two steps into one
+cv08_haven <- mutate(cv08_haven, lftop_new = na_if(lftop, 99))
+
+
+#check
+table(cv08_haven$lftop_new, useNA = "always")
+
+
+```
+----
+```{r A.8 Recode variables}
+
+
+# var006n = second variable lets us recode the variable education (in CV08)
+#create a new variable educ3 with three levels:
+#1. primary
+#2. secondary
+#3. tertiary
+
+
+#levels
+levels(cv08$var006n)
+
+# table 
+table(cv08$var006n, useNA = "always")
+
+# lets make it a numeric variable first
+cv08$educn <- as.numeric(cv08$var006n)
+# check
+table(cv08$educn, useNA = "always")
+
+
+
+
+
+# start with an empty variable
+cv08$educ3 <- NA
+# fill category by category
+cv08$educ3[cv08$educn == 2 | cv08$educn == 3] <- 1
+cv08$educ3[cv08$educn > 3 & cv08$educn < 8] <- 2
+cv08$educ3[cv08$educn > 7 & cv08$educn < 11] <- 3
+
+# check
+table(cv08$educ3, useNA = "always")
+
+
+
+prop.table(table(cv08$educ3, useNA = "always"))
+
+# now educ3 is a numeric variable, we want it as factor
+cv08$educ3 <- as.factor(cv08$educ3)
+table(cv08$educ3, useNA = "always")
+
+
+levels(cv08$educ3) <- c("primary", "secondary", "tertiary")
+table(cv08$educ3, useNA = "always")
+```
+
+```{r A.8.2 Tidy}
+
+# dplyr::recode   #doesnt work on labelled variables that were imported via haven package 
+
+# install.packages('labelled')
+require(labelled)  # to be able to use the recode function on haven labelled variables
+
+# inspect variable
+str(cv08_haven$var006n)
+
+attr(cv08_haven$var006n, "labels")
+
+table(cv08_haven$var006n, useNA = "always")
+
+
+
+
+# recode values, all missings as one value
+cv08_haven <- mutate(cv08_haven, educ3 = recode(var006n, `-3` = -9, `-1` = 1, `1` = 1, `2` = 2, `3` = 2,
+    `4` = 2, `5` = 2, `6` = 3, `7` = 3, `8` = 3, `10` = -9), .keep_value_labels = FALSE)
+
+# replace missing values with NA.
+cv08_haven <- mutate(cv08_haven, educ3 = na_if(educ3, -9))
+
+# make educ3 a factor
+cv08_haven <- mutate(cv08_haven, educ3 = factor(educ3, levels = c(1, 2, 3), labels = c("primary", "secondary",
+    "tertiary")))
+
+# check
+table(cv08_haven$educ3, useNA = "always")
+
+
+
+
+
+
+#the piping operator 
+  # %>%, 
+  # the left is transported to the (first argument of the) function on the right. Thus, in the example below, you see that in the second and third call to mutate I don’t have to tell the function which dataset I am using.
+# in Base R (since 4.1.0) operator: |>
+
+cv08_haven <- mutate(cv08_haven, educ3 = recode(var006n, `-3` = -9, `-1` = 1, `1` = 1, `2` = 2, `3` = 2,
+    `4` = 2, `5` = 2, `6` = 3, `7` = 3, `8` = 3, `10` = -9), .keep_value_labels = FALSE) %>%
+    mutate(educ3 = na_if(educ3, -9)) %>%
+    mutate(educ3 = factor(educ3, levels = c(1, 2, 3), labels = c("primary", "secondary", "tertiary")))
+
+# even more tidy:
+cv08_haven <- cv08_haven %>%
+    mutate(educ3 = recode(var006n, `-3` = -9, `-1` = 1, `1` = 1, `2` = 2, `3` = 2, `4` = 2, `5` = 2,
+        `6` = 3, `7` = 3, `8` = 3, `10` = -9), .keep_value_labels = FALSE) %>%
+    mutate(educ3 = na_if(educ3, -9)) %>%
+    mutate(educ3 = factor(educ3, levels = c(1, 2, 3), labels = c("primary", "secondary", "tertiary")))
+
+# the MOST tidy:
+cv08_haven <- cv08_haven %>%
+    mutate(educ3 = recode(var006n, `-3` = -9, `-1` = 1, `1` = 1, `2` = 2, `3` = 2, `4` = 2, `5` = 2,
+        `6` = 3, `7` = 3, `8` = 3, `10` = -9, .keep_value_labels = FALSE), educ3 = na_if(educ3, -9),
+        educ3 = factor(educ3, levels = c(1, 2, 3), labels = c("primary", "secondary", "tertiary")))
+```
+----
+```{r A.9 Means and counting specific values}
+# A.9.1. R Base 
+
+# Step 1: Look at the various 
+summary(cv08$int055)
+summary(cv08$int056)
+summary(cv08$int057)
+
+# Step 2: Make numeric 
+cv08$int055n <- as.numeric(cv08$int055)
+table(cv08$int055n, useNA = "always")
+
+cv08$int056n <- as.numeric(cv08$int056)
+table(cv08$int056n, useNA = "always")
+
+cv08$int057n <- as.numeric(cv08$int057)
+table(cv08$int057n, useNA = "always")
+
+# Step 3: Define missings and recode
+cv08$int055n[cv08$int055n < 5] <- NA
+cv08$int055n <- cv08$int055n - 4
+
+cv08$int056n[cv08$int056n < 5] <- NA
+cv08$int056n <- cv08$int056n - 4
+
+cv08$int057n[cv08$int057n < 5] <- NA
+cv08$int057n <- cv08$int057n - 4
+
+# Step 4: Calculate means
+# How does the function mean work in R?
+mean(cv08$int055n)  # whoops
+mean(cv08$int055n, na.rm = TRUE)  # works.  but not what we want. 
+# na.rm -> tells function whether or not to remove NA values from the calculation
+
+mean(c(cv08$int055n, cv08$int056n, cv08$int057n), na.rm = T)  # works but not what we want.
+
+# calculate a mean for each row/respondent. 
+testmeans <- rowMeans(cbind(cv08$int055n, cv08$int056n, cv08$int057n), na.rm = T)
+head(testmeans)  # yes!
+# head() function : Return the First or Last Part of an Object
+
+
+# What we really want is a mean but only if there is a maximum of 1 NA in the three variables.
+# lets first count how many missings we have for each respondent
+nmis <- rowSums(is.na(cbind(cv08$int055n, cv08$int056n, cv08$int057n)))
+
+# ?is.na ?rowSums
+testmeans <- ifelse(nmis < 2, testmeans, NA)
+
+# add the calculated means to our dataset
+cv08$int_mean <- testmeans
+
+
+```
+
+
+----
+
+
+
+----
+
+# References
+
+
+
+

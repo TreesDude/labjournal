@@ -34,14 +34,21 @@ klippy::klippy(position = c('top', 'right'))
 #klippy::klippy(tooltip_message = 'Click to copy', tooltip_success = 'Done')
 ```
 
+```{r token}
+#install.packages("gitcreds")
+# gitcreds::gitcreds_set()
+```
 
+```{r}
+# ctrl + Alt + i  to MAKE CHUNKS
 
+```
 
 ----
 
 <!--- The ---- is a visual line (page break looking mf) on the 
 website 
-Always ADD A SPACE BETWEEN A PAE BREAK AND the next comment, otherwise it will appear on page --->
+Always ADD A SPACE BETWEEN A PAGE BREAK AND the next comment, otherwise it will appear on page --->
 
 
 <!--- This is the best way to write a comment. 

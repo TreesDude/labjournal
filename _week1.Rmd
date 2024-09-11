@@ -1,0 +1,74 @@
+---
+title: "_SNASS tutorial"
+author: "TreesDude"
+date: "2024-09-04"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+```{r token}
+#install.packages("gitcreds")
+# gitcreds::gitcreds_set()
+```
+
+```{r}
+# TO MAKENEW CHUNKS: ctrl + Alt + i  
+
+```
+
+```{r}
+########################### Title: Introducation to R for SNA Author: J Tolsma version: 30-10-2019
+
+# start with clean workspace
+rm(list = ls())
+
+# install.packages I will need later here
+install.packages("installr")  # you  first install packages
+install.packages("foreign")
+require(foreign)  # used to read in spss data files
+require(tidyverse)
+
+# define workdirectory, note the double backslashes
+setwd("C:\Users\Vero\OneDrive - Radboud Universiteit\Documents\GitHub\labjournal")  # change to your own workdirectory
+```
+
+```{r}
+# ignore the warnings ?read.spss note that I have saved the data files in a folder called
+# 'addfiles'.
+
+cv08 <- foreign::read.spss("addfiles\\Cultural_Changes_2008.sav", use.value.labels = T, to.data.frame = T)
+cv10 <- foreign::read.spss("addfiles\\Cultural_Changes_2010.sav", use.value.labels = T, to.data.frame = T)
+
+# normally I think setting use.value.labels=F is more convenient. Thus lets load the data again but
+# now without labels
+cv08_nolab <- foreign::read.spss("addfiles\\Cultural_Changes_2008.sav", use.value.labels = F, to.data.frame = T)
+cv10_nolab <- foreign::read.spss("addfiles\\Cultural_Changes_2010.sav", use.value.labels = F, to.data.frame = T)
+
+# finally, import the data using haven
+cv08_haven <- haven::read_spss("addfiles\\Cultural_Changes_2008.sav")
+cv10_haven <- haven::read_spss("addfiles\\Cultural_Changes_2010.sav")
+```
+
