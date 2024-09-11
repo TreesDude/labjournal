@@ -19,13 +19,13 @@ colorize <- function(x, color) {sprintf("<span style='color: %s;'>%s</span>", co
 
 ```
 
-
 ```{r klippy, echo=FALSE, include=TRUE}
 klippy::klippy(position = c('top', 'right'))
 #klippy::klippy(color = 'darkred')
 #klippy::klippy(tooltip_message = 'Click to copy', tooltip_success = 'Done')
 ```
 
+# Triads - 4x4 matrix
 
 ```{r}
 # install.packages("igraph")
@@ -53,8 +53,10 @@ sna::triad.census(matrix_zeros)
 
 ```
 
+## Triad census output
 
 ```{r}
+
 # 003
 # A,B,C, the empty graph.
 
@@ -105,7 +107,18 @@ sna::triad.census(matrix_zeros)
 
 ```
 
+# heading (learning to take notes with R)
 
+note:
+
+1.  kjhg\
+2.  lkjh
+    -   kjh
+    -   kjhgf
+
+text here \$ N = ß \Sigma lss \sqrt {sd } \$ text again
+
+# Centrality measures (practice with a network)
 
 ```{r}
 # install.packages("RSiena")
@@ -123,12 +136,27 @@ tenxten <- s501[1:10,1:10] # select a 10 x 10 matrix [rows and columns are divid
 tenxten_graph <- graph.adjacency(tenxten) # make matrixa graph object 
 plot(tenxten_graph) # make plot of network 
 
-
-# assignment: give (on ego level) descriptive statistics on all kind of centrality measures 
-
+sna::triad.census(tenxten)
 
 
+# Nr. of possible Triad compositions:
+  # 10*9*8 / 6 = 
 
 
+# Play around with Centrality Measures 
 ```
 
+# START WRITING INTRO (UPDATE RESEARCH QUESTIONS)
+
+Try to be specific show that you UNDERSTAND INTER-DEPENDENCIES
+
+MAKE A LISTOFTHE TYPE OF DATA YOU WILL NEED Relational attributes, etc.
+
+Update Lab journal
+
+[USING THE REFERENCES]{.underline}
+
+Open: references.bib take "bibTex Citation" if you want to use it, use \@ - symbol and use the word behind the { \
+In this example, it would be \@ "rmarkdown2018" (without the quotation marks
+
+@Book{rmarkdown2018, title = {R Markdown: The Definitive Guide}, author = {Yihui Xie and J.J. Allaire and Garrett Grolemund}, publisher = {Chapman and Hall/CRC}, address = {Boca Raton, Florida}, year = {2018}, note = {ISBN 9781138359338}, url = {<https://bookdown.org/yihui/rmarkdown>}, }

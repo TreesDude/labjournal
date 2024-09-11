@@ -25,7 +25,7 @@ navbar:
       - text: "1st draft"
         href: RQdraft1.html
       - text: "2nd draft"
-#        href: RQdraft2.html
+        href: RQdraft2.html
         
         # here, other .Rmds can be added
 

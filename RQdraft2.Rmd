@@ -1,0 +1,73 @@
+---
+title: "RQdraft2"
+author: "Verooo"
+date: "2024-09-11"
+output: html_document
+---
+
+
+```{r, globalsettings, echo=FALSE, warning=FALSE, results='hide'}
+library(knitr)
+
+knitr::opts_chunk$set(echo = TRUE)
+opts_chunk$set(tidy.opts=list(width.cutoff=100),tidy=TRUE, warning = FALSE, message = FALSE,comment = "#>", cache=TRUE, class.source=c("test"), class.output=c("test2"))
+options(width = 100)
+rgl::setupKnitr()
+
+
+
+colorize <- function(x, color) {sprintf("<span style='color: %s;'>%s</span>", color, x) }
+
+```
+
+```{r klippy, echo=FALSE, include=TRUE}
+klippy::klippy(position = c('top', 'right'))
+#klippy::klippy(color = 'darkred')
+#klippy::klippy(tooltip_message = 'Click to copy', tooltip_success = 'Done')
+```
+# Brainstorm
+
+
+---
+
+# Research Questions (old, replace with new ones!)
+RQ1a: 
+  To what extent does gender homophily occur across all co-publications of the staff of the Sociology Department and Political Science Department at Radboud University? 
+
+RQ1b:
+  To what extent do the two departments differ in their gender homophily? 
+
+RQ2:
+  To what extent does gender homophily in co-publishing influence the prestige of the publication journal?
+
+
+RQ3:
+  To what extent do structural network effects influence the gender homophily of each department?
+
+
+
+## Horta et al. (2022)
+- male researchers preferred to co-publish with other male researchers, 
+- and female researchers preferred to collaborate with other females.
+- researchers of approximately similar ages tended to collaborate more with each other.
+- geographical, cultural, & institutional proximity were strongest predictors of collaboration.
+- analysis shows that in the social sciences, ACQUIRED attributes (particularly preferences regarding research agendas) take precedence over ASCRIBED attributes (e.g. gender or age)
+
+- Horta et al. (2022) - RQs:
+  - (1) What homophily preferences determine research collaborations among higher education researchers? 
+  - (2) What are the most powerful homophily indicators in research collaborations in higher education research?
+ 
+
+## Kwiek & Roszka (2021)
+- Most male scientists collaborate solely with males.
+- Most female scientists, in contrast, do not collaborate with females at all.
+- All-female authorship marginal, all-male authorship pervasive, in all age groups.
+- Articles written in mixed-sex collaboration published in more prestigious journals.
+
+---
+
+# References:
+
+Horta, H., Feng, S., & Santos, J. M. (2022). Homophily in higher education research: a perspective based on co-authorships. Scientometrics, 127(1), 523–543. https://doi.org/10.1007/s11192-021-04227-z
+
+Kwiek, M., & Roszka, W. (2021). Gender-based homophily in research: A large-scale study of man-woman collaboration. Journal of Informetrics, 15(3), 101171. https://doi.org/10.1016/j.joi.2021.101171

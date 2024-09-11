@@ -372,7 +372,9 @@ div.tocify {
     <li>
       <a href="RQdraft1.html">1st draft</a>
     </li>
-    <li class="dropdown-header">2nd draft</li>
+    <li>
+      <a href="RQdraft2.html">2nd draft</a>
+    </li>
   </ul>
 </li>
       </ul>
@@ -413,6 +415,9 @@ div.tocify {
   addClassKlippyTo("pre.r, pre.markdown");
   addKlippy('right', 'top', 'auto', '1', 'Copy code', 'Copied!');
 </script>
+<div id="triads---4x4-matrix" class="section level1" number="1">
+<h1><span class="header-section-number">1</span> Triads - 4x4
+matrix</h1>
 <pre class="r test"><code># install.packages(&#39;igraph&#39;)
 library(igraph)
 # install.packages(&#39;sna&#39;)
@@ -439,6 +444,9 @@ sna::triad.census(matrix_zeros)</code></pre>
 #&gt; [1,]   2   2   0    0    0    0    0    0    0    0   0    0    0    0   0   0</code></pre>
 <pre class="r test"><code># output shows the count of each of the 16 possible configurations of triads so if below 003 it
 # says e.g. 2, that means that the configuration 003 (A,B,C, the empty graph) is possible 2 times</code></pre>
+<div id="triad-census-output" class="section level2" number="1.1">
+<h2><span class="header-section-number">1.1</span> Triad census
+output</h2>
 <pre class="r test"><code># 003 A,B,C, the empty graph.
 
 # 012 A-&gt;B, C, the graph with a single directed edge.
@@ -470,6 +478,28 @@ sna::triad.census(matrix_zeros)</code></pre>
 # 210 A-&gt;B&lt;-&gt;C, A&lt;-&gt;C.
 
 # 300 A&lt;-&gt;B&lt;-&gt;C, A&lt;-&gt;C, the complete graph.</code></pre>
+</div>
+</div>
+<div id="heading-learning-to-take-notes-with-r" class="section level1"
+number="2">
+<h1><span class="header-section-number">2</span> heading (learning to
+take notes with R)</h1>
+<p>note:</p>
+<ol style="list-style-type: decimal">
+<li>kjhg<br />
+</li>
+<li>lkjh
+<ul>
+<li>kjh</li>
+<li>kjhgf</li>
+</ul></li>
+</ol>
+<p>text here $ N = ß lss $ text again</p>
+</div>
+<div id="centrality-measures-practice-with-a-network"
+class="section level1" number="3">
+<h1><span class="header-section-number">3</span> Centrality measures
+(practice with a network)</h1>
 <pre class="r test"><code># install.packages(&#39;RSiena&#39;)
 library(RSiena)
 # install.packages(&#39;igraph&#39;) library(igraph) install.packages(&#39;sna&#39;)
@@ -484,9 +514,36 @@ dim(s501)  # get dimensions of data</code></pre>
 tenxten_graph &lt;- graph.adjacency(tenxten)  # make matrixa graph object 
 plot(tenxten_graph)  # make plot of network </code></pre>
 <p><img src="week2_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
-<pre class="r test"><code># assignment: give (on ego level) descriptive statistics on all kind of centrality measures</code></pre>
+<pre class="r test"><code>sna::triad.census(tenxten)</code></pre>
+<pre class="test2"><code>#&gt;      003 012 102 021D 021U 021C 111D 111U 030T 030C 201 120D 120U 120C 210 300
+#&gt; [1,]  82   0  37    0    0    0    0    0    0    0   0    0    0    0   0   1</code></pre>
+<pre class="r test"><code># Nr. of possible Triad compositions: 10*9*8 / 6 =
 
-<div id="rmd-source-code">LS0tDQp0aXRsZTogIldlZWsyIC0gRGVzY3JpcHRpdmVzIg0KYXV0aG9yOiAiVmVyb29vbyINCmRhdGU6ICIyMDI0LTA5LTEwIg0Kb3V0cHV0OiBodG1sX2RvY3VtZW50DQotLS0NCg0KYGBge3IsIGdsb2JhbHNldHRpbmdzLCBlY2hvPUZBTFNFLCB3YXJuaW5nPUZBTFNFLCByZXN1bHRzPSdoaWRlJ30NCmxpYnJhcnkoa25pdHIpDQoNCmtuaXRyOjpvcHRzX2NodW5rJHNldChlY2hvID0gVFJVRSkNCm9wdHNfY2h1bmskc2V0KHRpZHkub3B0cz1saXN0KHdpZHRoLmN1dG9mZj0xMDApLHRpZHk9VFJVRSwgd2FybmluZyA9IEZBTFNFLCBtZXNzYWdlID0gRkFMU0UsY29tbWVudCA9ICIjPiIsIGNhY2hlPVRSVUUsIGNsYXNzLnNvdXJjZT1jKCJ0ZXN0IiksIGNsYXNzLm91dHB1dD1jKCJ0ZXN0MiIpKQ0Kb3B0aW9ucyh3aWR0aCA9IDEwMCkNCnJnbDo6c2V0dXBLbml0cigpDQoNCg0KDQpjb2xvcml6ZSA8LSBmdW5jdGlvbih4LCBjb2xvcikge3NwcmludGYoIjxzcGFuIHN0eWxlPSdjb2xvcjogJXM7Jz4lczwvc3Bhbj4iLCBjb2xvciwgeCkgfQ0KDQpgYGANCg0KDQpgYGB7ciBrbGlwcHksIGVjaG89RkFMU0UsIGluY2x1ZGU9VFJVRX0NCmtsaXBweTo6a2xpcHB5KHBvc2l0aW9uID0gYygndG9wJywgJ3JpZ2h0JykpDQoja2xpcHB5OjprbGlwcHkoY29sb3IgPSAnZGFya3JlZCcpDQoja2xpcHB5OjprbGlwcHkodG9vbHRpcF9tZXNzYWdlID0gJ0NsaWNrIHRvIGNvcHknLCB0b29sdGlwX3N1Y2Nlc3MgPSAnRG9uZScpDQpgYGANCg0KDQpgYGB7cn0NCiMgaW5zdGFsbC5wYWNrYWdlcygiaWdyYXBoIikNCmxpYnJhcnkoaWdyYXBoKQ0KI2luc3RhbGwucGFja2FnZXMoInNuYSIpDQpsaWJyYXJ5KHNuYSkNCg0KDQojIENyZWF0ZSBhIDR4NCBtYXRyaXggZmlsbGVkIHdpdGggMCdzDQptYXRyaXhfemVyb3MgPC0gbWF0cml4KDAsIG5yb3cgPSA0LCBuY29sID0gNCkNCg0KIyBBZGQgYSB0aWUgYmV0d2VlbiBub2RlIDEgYW5kIG5vZGUgMyBieSBwbGFjaW5nIGEgMQ0KbWF0cml4X3plcm9zWzEsIDNdIDwtIDEgICMgRnJvbSBub2RlIDEgdG8gbm9kZSAzDQoNCg0KIyBQcmludCB0aGUgbWF0cml4DQpwcmludChtYXRyaXhfemVyb3MpDQoNCm1hdHJpeF9ncmFwaCA8LSBncmFwaC5hZGphY2VuY3kobWF0cml4X3plcm9zKQ0Kc25hOjp0cmlhZC5jZW5zdXMobWF0cml4X3plcm9zKQ0KDQojIG91dHB1dCBzaG93cyB0aGUgY291bnQgb2YgZWFjaCBvZiB0aGUgMTYgcG9zc2libGUgY29uZmlndXJhdGlvbnMgb2YgdHJpYWRzICANCiAgICAjIHNvIGlmIGJlbG93IDAwMyBpdCBzYXlzIGUuZy4gMiwgdGhhdCBtZWFucyB0aGF0IHRoZSBjb25maWd1cmF0aW9uIDAwMyAoQSxCLEMsIHRoZSBlbXB0eSBncmFwaCkgaXMgcG9zc2libGUgMiB0aW1lcyANCg0KDQpgYGANCg0KDQpgYGB7cn0NCiMgMDAzDQojIEEsQixDLCB0aGUgZW1wdHkgZ3JhcGguDQoNCiMgMDEyDQojIEEtPkIsIEMsIHRoZSBncmFwaCB3aXRoIGEgc2luZ2xlIGRpcmVjdGVkIGVkZ2UuDQoNCiMgMTAyDQojIEE8LT5CLCBDLCB0aGUgZ3JhcGggd2l0aCBhIG11dHVhbCBjb25uZWN0aW9uIGJldHdlZW4gdHdvIHZlcnRpY2VzLg0KDQojIDAyMUQNCiMgQTwtQi0+QywgdGhlIG91dC1zdGFyLg0KDQojIDAyMVUNCiMgQS0+QjwtQywgdGhlIGluLXN0YXIuDQoNCiMgMDIxQw0KIyBBLT5CLT5DLCBkaXJlY3RlZCBsaW5lLg0KDQojIDExMUQNCiMgQTwtPkI8LUMuDQoNCiMgMTExVQ0KIyBBPC0+Qi0+Qy4NCg0KIyAwMzBUDQojIEEtPkI8LUMsIEEtPkMuDQoNCiMgMDMwQw0KIyBBPC1CPC1DLCBBLT5DLg0KDQojIDIwMQ0KIyBBPC0+QjwtPkMuDQoNCiMgMTIwRA0KIyBBPC1CLT5DLCBBPC0+Qy4NCg0KIyAxMjBVDQojIEEtPkI8LUMsIEE8LT5DLg0KDQojIDEyMEMNCiMgQS0+Qi0+QywgQTwtPkMuDQoNCiMgMjEwDQojIEEtPkI8LT5DLCBBPC0+Qy4NCg0KIyAzMDANCiMgQTwtPkI8LT5DLCBBPC0+QywgdGhlIGNvbXBsZXRlIGdyYXBoLg0KDQpgYGANCg0KDQoNCmBgYHtyfQ0KIyBpbnN0YWxsLnBhY2thZ2VzKCJSU2llbmEiKQ0KbGlicmFyeShSU2llbmEpDQojaW5zdGFsbC5wYWNrYWdlcygiaWdyYXBoIikNCiMgbGlicmFyeShpZ3JhcGgpDQojaW5zdGFsbC5wYWNrYWdlcygic25hIikNCmxpYnJhcnkoc25hKQ0KDQo/czUwMSAjIE5ldHdvcmsgMSBkYXRhOiBleGNlcnB0IGZyb20gIlRlZW5hZ2UgRnJpZW5kcyBhbmQgTGlmZXN0eWxlIFN0dWR5IiBkYXRhLg0KZGltKHM1MDEpICMgZ2V0IGRpbWVuc2lvbnMgb2YgZGF0YQ0KDQp0ZW54dGVuIDwtIHM1MDFbMToxMCwxOjEwXSAjIHNlbGVjdCBhIDEwIHggMTAgbWF0cml4IFtyb3dzIGFuZCBjb2x1bW5zIGFyZSBkaXZpZGVkIGJ5IGNvbW1hXSkNCg0KdGVueHRlbl9ncmFwaCA8LSBncmFwaC5hZGphY2VuY3kodGVueHRlbikgIyBtYWtlIG1hdHJpeGEgZ3JhcGggb2JqZWN0IA0KcGxvdCh0ZW54dGVuX2dyYXBoKSAjIG1ha2UgcGxvdCBvZiBuZXR3b3JrIA0KDQoNCiMgYXNzaWdubWVudDogZ2l2ZSAob24gZWdvIGxldmVsKSBkZXNjcmlwdGl2ZSBzdGF0aXN0aWNzIG9uIGFsbCBraW5kIG9mIGNlbnRyYWxpdHkgbWVhc3VyZXMgDQoNCg0KDQoNCg0KYGBgDQoNCg==</div>
+
+# Play around with Centrality Measures</code></pre>
+</div>
+<div id="start-writing-intro-update-research-questions"
+class="section level1" number="4">
+<h1><span class="header-section-number">4</span> START WRITING INTRO
+(UPDATE RESEARCH QUESTIONS)</h1>
+<p>Try to be specific show that you UNDERSTAND INTER-DEPENDENCIES</p>
+<p>MAKE A LISTOFTHE TYPE OF DATA YOU WILL NEED Relational attributes,
+etc.</p>
+<p>Update Lab journal</p>
+<p><u>USING THE REFERENCES</u></p>
+<p>Open: references.bib take “bibTex Citation” if you want to use it,
+use @ - symbol and use the word behind the {<br />
+In this example, it would be @ “rmarkdown2018” (without the quotation
+marks</p>
+<p><span class="citation">@Book</span>{rmarkdown2018, title = {R
+Markdown: The Definitive Guide}, author = {Yihui Xie and J.J. Allaire
+and Garrett Grolemund}, publisher = {Chapman and Hall/CRC}, address =
+{Boca Raton, Florida}, year = {2018}, note = {ISBN 9781138359338}, url =
+{<a href="https://bookdown.org/yihui/rmarkdown"
+class="uri">https://bookdown.org/yihui/rmarkdown</a>}, }</p>
+</div>
+
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIldlZWsyIC0gRGVzY3JpcHRpdmVzIg0KYXV0aG9yOiAiVmVyb29vbyINCmRhdGU6ICIyMDI0LTA5LTEwIg0Kb3V0cHV0OiBodG1sX2RvY3VtZW50DQotLS0NCg0KYGBge3IsIGdsb2JhbHNldHRpbmdzLCBlY2hvPUZBTFNFLCB3YXJuaW5nPUZBTFNFLCByZXN1bHRzPSdoaWRlJ30NCmxpYnJhcnkoa25pdHIpDQoNCmtuaXRyOjpvcHRzX2NodW5rJHNldChlY2hvID0gVFJVRSkNCm9wdHNfY2h1bmskc2V0KHRpZHkub3B0cz1saXN0KHdpZHRoLmN1dG9mZj0xMDApLHRpZHk9VFJVRSwgd2FybmluZyA9IEZBTFNFLCBtZXNzYWdlID0gRkFMU0UsY29tbWVudCA9ICIjPiIsIGNhY2hlPVRSVUUsIGNsYXNzLnNvdXJjZT1jKCJ0ZXN0IiksIGNsYXNzLm91dHB1dD1jKCJ0ZXN0MiIpKQ0Kb3B0aW9ucyh3aWR0aCA9IDEwMCkNCnJnbDo6c2V0dXBLbml0cigpDQoNCg0KDQpjb2xvcml6ZSA8LSBmdW5jdGlvbih4LCBjb2xvcikge3NwcmludGYoIjxzcGFuIHN0eWxlPSdjb2xvcjogJXM7Jz4lczwvc3Bhbj4iLCBjb2xvciwgeCkgfQ0KDQpgYGANCg0KYGBge3Iga2xpcHB5LCBlY2hvPUZBTFNFLCBpbmNsdWRlPVRSVUV9DQprbGlwcHk6OmtsaXBweShwb3NpdGlvbiA9IGMoJ3RvcCcsICdyaWdodCcpKQ0KI2tsaXBweTo6a2xpcHB5KGNvbG9yID0gJ2RhcmtyZWQnKQ0KI2tsaXBweTo6a2xpcHB5KHRvb2x0aXBfbWVzc2FnZSA9ICdDbGljayB0byBjb3B5JywgdG9vbHRpcF9zdWNjZXNzID0gJ0RvbmUnKQ0KYGBgDQoNCiMgVHJpYWRzIC0gNHg0IG1hdHJpeA0KDQpgYGB7cn0NCiMgaW5zdGFsbC5wYWNrYWdlcygiaWdyYXBoIikNCmxpYnJhcnkoaWdyYXBoKQ0KI2luc3RhbGwucGFja2FnZXMoInNuYSIpDQpsaWJyYXJ5KHNuYSkNCg0KDQojIENyZWF0ZSBhIDR4NCBtYXRyaXggZmlsbGVkIHdpdGggMCdzDQptYXRyaXhfemVyb3MgPC0gbWF0cml4KDAsIG5yb3cgPSA0LCBuY29sID0gNCkNCg0KIyBBZGQgYSB0aWUgYmV0d2VlbiBub2RlIDEgYW5kIG5vZGUgMyBieSBwbGFjaW5nIGEgMQ0KbWF0cml4X3plcm9zWzEsIDNdIDwtIDEgICMgRnJvbSBub2RlIDEgdG8gbm9kZSAzDQoNCg0KIyBQcmludCB0aGUgbWF0cml4DQpwcmludChtYXRyaXhfemVyb3MpDQoNCm1hdHJpeF9ncmFwaCA8LSBncmFwaC5hZGphY2VuY3kobWF0cml4X3plcm9zKQ0Kc25hOjp0cmlhZC5jZW5zdXMobWF0cml4X3plcm9zKQ0KDQojIG91dHB1dCBzaG93cyB0aGUgY291bnQgb2YgZWFjaCBvZiB0aGUgMTYgcG9zc2libGUgY29uZmlndXJhdGlvbnMgb2YgdHJpYWRzICANCiAgICAjIHNvIGlmIGJlbG93IDAwMyBpdCBzYXlzIGUuZy4gMiwgdGhhdCBtZWFucyB0aGF0IHRoZSBjb25maWd1cmF0aW9uIDAwMyAoQSxCLEMsIHRoZSBlbXB0eSBncmFwaCkgaXMgcG9zc2libGUgMiB0aW1lcyANCg0KDQpgYGANCg0KIyMgVHJpYWQgY2Vuc3VzIG91dHB1dA0KDQpgYGB7cn0NCg0KIyAwMDMNCiMgQSxCLEMsIHRoZSBlbXB0eSBncmFwaC4NCg0KIyAwMTINCiMgQS0+QiwgQywgdGhlIGdyYXBoIHdpdGggYSBzaW5nbGUgZGlyZWN0ZWQgZWRnZS4NCg0KIyAxMDINCiMgQTwtPkIsIEMsIHRoZSBncmFwaCB3aXRoIGEgbXV0dWFsIGNvbm5lY3Rpb24gYmV0d2VlbiB0d28gdmVydGljZXMuDQoNCiMgMDIxRA0KIyBBPC1CLT5DLCB0aGUgb3V0LXN0YXIuDQoNCiMgMDIxVQ0KIyBBLT5CPC1DLCB0aGUgaW4tc3Rhci4NCg0KIyAwMjFDDQojIEEtPkItPkMsIGRpcmVjdGVkIGxpbmUuDQoNCiMgMTExRA0KIyBBPC0+QjwtQy4NCg0KIyAxMTFVDQojIEE8LT5CLT5DLg0KDQojIDAzMFQNCiMgQS0+QjwtQywgQS0+Qy4NCg0KIyAwMzBDDQojIEE8LUI8LUMsIEEtPkMuDQoNCiMgMjAxDQojIEE8LT5CPC0+Qy4NCg0KIyAxMjBEDQojIEE8LUItPkMsIEE8LT5DLg0KDQojIDEyMFUNCiMgQS0+QjwtQywgQTwtPkMuDQoNCiMgMTIwQw0KIyBBLT5CLT5DLCBBPC0+Qy4NCg0KIyAyMTANCiMgQS0+QjwtPkMsIEE8LT5DLg0KDQojIDMwMA0KIyBBPC0+QjwtPkMsIEE8LT5DLCB0aGUgY29tcGxldGUgZ3JhcGguDQoNCmBgYA0KDQojIGhlYWRpbmcgKGxlYXJuaW5nIHRvIHRha2Ugbm90ZXMgd2l0aCBSKQ0KDQpub3RlOg0KDQoxLiAga2poZ1wNCjIuICBsa2poDQogICAgLSAgIGtqaA0KICAgIC0gICBramhnZg0KDQp0ZXh0IGhlcmUgXCQgTiA9IMOfIFxTaWdtYSBsc3MgXHNxcnQge3NkIH0gXCQgdGV4dCBhZ2Fpbg0KDQojIENlbnRyYWxpdHkgbWVhc3VyZXMgKHByYWN0aWNlIHdpdGggYSBuZXR3b3JrKQ0KDQpgYGB7cn0NCiMgaW5zdGFsbC5wYWNrYWdlcygiUlNpZW5hIikNCmxpYnJhcnkoUlNpZW5hKQ0KI2luc3RhbGwucGFja2FnZXMoImlncmFwaCIpDQojIGxpYnJhcnkoaWdyYXBoKQ0KI2luc3RhbGwucGFja2FnZXMoInNuYSIpDQpsaWJyYXJ5KHNuYSkNCg0KP3M1MDEgIyBOZXR3b3JrIDEgZGF0YTogZXhjZXJwdCBmcm9tICJUZWVuYWdlIEZyaWVuZHMgYW5kIExpZmVzdHlsZSBTdHVkeSIgZGF0YS4NCmRpbShzNTAxKSAjIGdldCBkaW1lbnNpb25zIG9mIGRhdGENCg0KdGVueHRlbiA8LSBzNTAxWzE6MTAsMToxMF0gIyBzZWxlY3QgYSAxMCB4IDEwIG1hdHJpeCBbcm93cyBhbmQgY29sdW1ucyBhcmUgZGl2aWRlZCBieSBjb21tYV0pDQoNCnRlbnh0ZW5fZ3JhcGggPC0gZ3JhcGguYWRqYWNlbmN5KHRlbnh0ZW4pICMgbWFrZSBtYXRyaXhhIGdyYXBoIG9iamVjdCANCnBsb3QodGVueHRlbl9ncmFwaCkgIyBtYWtlIHBsb3Qgb2YgbmV0d29yayANCg0Kc25hOjp0cmlhZC5jZW5zdXModGVueHRlbikNCg0KDQojIE5yLiBvZiBwb3NzaWJsZSBUcmlhZCBjb21wb3NpdGlvbnM6DQogICMgMTAqOSo4IC8gNiA9IA0KDQoNCiMgUGxheSBhcm91bmQgd2l0aCBDZW50cmFsaXR5IE1lYXN1cmVzIA0KYGBgDQoNCiMgU1RBUlQgV1JJVElORyBJTlRSTyAoVVBEQVRFIFJFU0VBUkNIIFFVRVNUSU9OUykNCg0KVHJ5IHRvIGJlIHNwZWNpZmljIHNob3cgdGhhdCB5b3UgVU5ERVJTVEFORCBJTlRFUi1ERVBFTkRFTkNJRVMNCg0KTUFLRSBBIExJU1RPRlRIRSBUWVBFIE9GIERBVEEgWU9VIFdJTEwgTkVFRCBSZWxhdGlvbmFsIGF0dHJpYnV0ZXMsIGV0Yy4NCg0KVXBkYXRlIExhYiBqb3VybmFsDQoNCltVU0lORyBUSEUgUkVGRVJFTkNFU117LnVuZGVybGluZX0NCg0KT3BlbjogcmVmZXJlbmNlcy5iaWIgdGFrZSAiYmliVGV4IENpdGF0aW9uIiBpZiB5b3Ugd2FudCB0byB1c2UgaXQsIHVzZSBcQCAtIHN5bWJvbCBhbmQgdXNlIHRoZSB3b3JkIGJlaGluZCB0aGUgeyBcDQpJbiB0aGlzIGV4YW1wbGUsIGl0IHdvdWxkIGJlIFxAICJybWFya2Rvd24yMDE4IiAod2l0aG91dCB0aGUgcXVvdGF0aW9uIG1hcmtzDQoNCkBCb29re3JtYXJrZG93bjIwMTgsIHRpdGxlID0ge1IgTWFya2Rvd246IFRoZSBEZWZpbml0aXZlIEd1aWRlfSwgYXV0aG9yID0ge1lpaHVpIFhpZSBhbmQgSi5KLiBBbGxhaXJlIGFuZCBHYXJyZXR0IEdyb2xlbXVuZH0sIHB1Ymxpc2hlciA9IHtDaGFwbWFuIGFuZCBIYWxsL0NSQ30sIGFkZHJlc3MgPSB7Qm9jYSBSYXRvbiwgRmxvcmlkYX0sIHllYXIgPSB7MjAxOH0sIG5vdGUgPSB7SVNCTiA5NzgxMTM4MzU5MzM4fSwgdXJsID0gezxodHRwczovL2Jvb2tkb3duLm9yZy95aWh1aS9ybWFya2Rvd24+fSwgfQ0K</div>
 
 
 </div>
