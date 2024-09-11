@@ -9,11 +9,11 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
-<meta name="author" content="Vero" />
+<meta name="author" content="Veroooo" />
 
 <meta name="date" content="2024-09-10" />
 
-<title>week2</title>
+<title>Week2 - Descriptives</title>
 
 <script src="site_libs/header-attrs-2.28/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -359,6 +359,7 @@ div.tocify {
     <li>
       <a href="week2.html">Week 2</a>
     </li>
+    <li class="dropdown-header">Week 3</li>
   </ul>
 </li>
 <li class="dropdown">
@@ -371,6 +372,7 @@ div.tocify {
     <li>
       <a href="RQdraft1.html">1st draft</a>
     </li>
+    <li class="dropdown-header">2nd draft</li>
   </ul>
 </li>
       </ul>
@@ -400,8 +402,8 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">week2</h1>
-<h4 class="author">Vero</h4>
+<h1 class="title toc-ignore">Week2 - Descriptives</h1>
+<h4 class="author">Veroooo</h4>
 <h4 class="date">2024-09-10</h4>
 
 </div>
@@ -411,8 +413,80 @@ div.tocify {
   addClassKlippyTo("pre.r, pre.markdown");
   addKlippy('right', 'top', 'auto', '1', 'Copy code', 'Copied!');
 </script>
+<pre class="r test"><code># install.packages(&#39;igraph&#39;)
+library(igraph)
+# install.packages(&#39;sna&#39;)
+library(sna)
 
-<div id="rmd-source-code">LS0tDQp0aXRsZTogIndlZWsyIg0KYXV0aG9yOiAiVmVybyINCmRhdGU6ICIyMDI0LTA5LTEwIg0Kb3V0cHV0OiBodG1sX2RvY3VtZW50DQotLS0NCg0KYGBge3IsIGdsb2JhbHNldHRpbmdzLCBlY2hvPUZBTFNFLCB3YXJuaW5nPUZBTFNFLCByZXN1bHRzPSdoaWRlJ30NCmxpYnJhcnkoa25pdHIpDQoNCmtuaXRyOjpvcHRzX2NodW5rJHNldChlY2hvID0gVFJVRSkNCm9wdHNfY2h1bmskc2V0KHRpZHkub3B0cz1saXN0KHdpZHRoLmN1dG9mZj0xMDApLHRpZHk9VFJVRSwgd2FybmluZyA9IEZBTFNFLCBtZXNzYWdlID0gRkFMU0UsY29tbWVudCA9ICIjPiIsIGNhY2hlPVRSVUUsIGNsYXNzLnNvdXJjZT1jKCJ0ZXN0IiksIGNsYXNzLm91dHB1dD1jKCJ0ZXN0MiIpKQ0Kb3B0aW9ucyh3aWR0aCA9IDEwMCkNCnJnbDo6c2V0dXBLbml0cigpDQoNCg0KDQpjb2xvcml6ZSA8LSBmdW5jdGlvbih4LCBjb2xvcikge3NwcmludGYoIjxzcGFuIHN0eWxlPSdjb2xvcjogJXM7Jz4lczwvc3Bhbj4iLCBjb2xvciwgeCkgfQ0KDQpgYGANCg0KYGBge3Iga2xpcHB5LCBlY2hvPUZBTFNFLCBpbmNsdWRlPVRSVUV9DQprbGlwcHk6OmtsaXBweShwb3NpdGlvbiA9IGMoJ3RvcCcsICdyaWdodCcpKQ0KI2tsaXBweTo6a2xpcHB5KGNvbG9yID0gJ2RhcmtyZWQnKQ0KI2tsaXBweTo6a2xpcHB5KHRvb2x0aXBfbWVzc2FnZSA9ICdDbGljayB0byBjb3B5JywgdG9vbHRpcF9zdWNjZXNzID0gJ0RvbmUnKQ0KYGBg</div>
+
+# Create a 4x4 matrix filled with 0&#39;s
+matrix_zeros &lt;- matrix(0, nrow = 4, ncol = 4)
+
+# Add a tie between node 1 and node 3 by placing a 1
+matrix_zeros[1, 3] &lt;- 1  # From node 1 to node 3
+
+
+# Print the matrix
+print(matrix_zeros)</code></pre>
+<pre class="test2"><code>#&gt;      [,1] [,2] [,3] [,4]
+#&gt; [1,]    0    0    1    0
+#&gt; [2,]    0    0    0    0
+#&gt; [3,]    0    0    0    0
+#&gt; [4,]    0    0    0    0</code></pre>
+<pre class="r test"><code>matrix_graph &lt;- graph.adjacency(matrix_zeros)
+sna::triad.census(matrix_zeros)</code></pre>
+<pre class="test2"><code>#&gt;      003 012 102 021D 021U 021C 111D 111U 030T 030C 201 120D 120U 120C 210 300
+#&gt; [1,]   2   2   0    0    0    0    0    0    0    0   0    0    0    0   0   0</code></pre>
+<pre class="r test"><code># output shows the count of each of the 16 possible configurations of triads so if below 003 it
+# says e.g. 2, that means that the configuration 003 (A,B,C, the empty graph) is possible 2 times</code></pre>
+<pre class="r test"><code># 003 A,B,C, the empty graph.
+
+# 012 A-&gt;B, C, the graph with a single directed edge.
+
+# 102 A&lt;-&gt;B, C, the graph with a mutual connection between two vertices.
+
+# 021D A&lt;-B-&gt;C, the out-star.
+
+# 021U A-&gt;B&lt;-C, the in-star.
+
+# 021C A-&gt;B-&gt;C, directed line.
+
+# 111D A&lt;-&gt;B&lt;-C.
+
+# 111U A&lt;-&gt;B-&gt;C.
+
+# 030T A-&gt;B&lt;-C, A-&gt;C.
+
+# 030C A&lt;-B&lt;-C, A-&gt;C.
+
+# 201 A&lt;-&gt;B&lt;-&gt;C.
+
+# 120D A&lt;-B-&gt;C, A&lt;-&gt;C.
+
+# 120U A-&gt;B&lt;-C, A&lt;-&gt;C.
+
+# 120C A-&gt;B-&gt;C, A&lt;-&gt;C.
+
+# 210 A-&gt;B&lt;-&gt;C, A&lt;-&gt;C.
+
+# 300 A&lt;-&gt;B&lt;-&gt;C, A&lt;-&gt;C, the complete graph.</code></pre>
+<pre class="r test"><code># install.packages(&#39;RSiena&#39;)
+library(RSiena)
+# install.packages(&#39;igraph&#39;) library(igraph) install.packages(&#39;sna&#39;)
+library(sna)
+
+`?`(s501  # Network 1 data: excerpt from &#39;Teenage Friends and Lifestyle Study&#39; data.
+)
+dim(s501)  # get dimensions of data</code></pre>
+<pre class="test2"><code>#&gt; [1] 50 50</code></pre>
+<pre class="r test"><code>tenxten &lt;- s501[1:10, 1:10]  # select a 10 x 10 matrix [rows and columns are divided by comma])
+
+tenxten_graph &lt;- graph.adjacency(tenxten)  # make matrixa graph object 
+plot(tenxten_graph)  # make plot of network </code></pre>
+<p><img src="week2_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<pre class="r test"><code># assignment: give (on ego level) descriptive statistics on all kind of centrality measures</code></pre>
+
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIldlZWsyIC0gRGVzY3JpcHRpdmVzIg0KYXV0aG9yOiAiVmVyb29vbyINCmRhdGU6ICIyMDI0LTA5LTEwIg0Kb3V0cHV0OiBodG1sX2RvY3VtZW50DQotLS0NCg0KYGBge3IsIGdsb2JhbHNldHRpbmdzLCBlY2hvPUZBTFNFLCB3YXJuaW5nPUZBTFNFLCByZXN1bHRzPSdoaWRlJ30NCmxpYnJhcnkoa25pdHIpDQoNCmtuaXRyOjpvcHRzX2NodW5rJHNldChlY2hvID0gVFJVRSkNCm9wdHNfY2h1bmskc2V0KHRpZHkub3B0cz1saXN0KHdpZHRoLmN1dG9mZj0xMDApLHRpZHk9VFJVRSwgd2FybmluZyA9IEZBTFNFLCBtZXNzYWdlID0gRkFMU0UsY29tbWVudCA9ICIjPiIsIGNhY2hlPVRSVUUsIGNsYXNzLnNvdXJjZT1jKCJ0ZXN0IiksIGNsYXNzLm91dHB1dD1jKCJ0ZXN0MiIpKQ0Kb3B0aW9ucyh3aWR0aCA9IDEwMCkNCnJnbDo6c2V0dXBLbml0cigpDQoNCg0KDQpjb2xvcml6ZSA8LSBmdW5jdGlvbih4LCBjb2xvcikge3NwcmludGYoIjxzcGFuIHN0eWxlPSdjb2xvcjogJXM7Jz4lczwvc3Bhbj4iLCBjb2xvciwgeCkgfQ0KDQpgYGANCg0KDQpgYGB7ciBrbGlwcHksIGVjaG89RkFMU0UsIGluY2x1ZGU9VFJVRX0NCmtsaXBweTo6a2xpcHB5KHBvc2l0aW9uID0gYygndG9wJywgJ3JpZ2h0JykpDQoja2xpcHB5OjprbGlwcHkoY29sb3IgPSAnZGFya3JlZCcpDQoja2xpcHB5OjprbGlwcHkodG9vbHRpcF9tZXNzYWdlID0gJ0NsaWNrIHRvIGNvcHknLCB0b29sdGlwX3N1Y2Nlc3MgPSAnRG9uZScpDQpgYGANCg0KDQpgYGB7cn0NCiMgaW5zdGFsbC5wYWNrYWdlcygiaWdyYXBoIikNCmxpYnJhcnkoaWdyYXBoKQ0KI2luc3RhbGwucGFja2FnZXMoInNuYSIpDQpsaWJyYXJ5KHNuYSkNCg0KDQojIENyZWF0ZSBhIDR4NCBtYXRyaXggZmlsbGVkIHdpdGggMCdzDQptYXRyaXhfemVyb3MgPC0gbWF0cml4KDAsIG5yb3cgPSA0LCBuY29sID0gNCkNCg0KIyBBZGQgYSB0aWUgYmV0d2VlbiBub2RlIDEgYW5kIG5vZGUgMyBieSBwbGFjaW5nIGEgMQ0KbWF0cml4X3plcm9zWzEsIDNdIDwtIDEgICMgRnJvbSBub2RlIDEgdG8gbm9kZSAzDQoNCg0KIyBQcmludCB0aGUgbWF0cml4DQpwcmludChtYXRyaXhfemVyb3MpDQoNCm1hdHJpeF9ncmFwaCA8LSBncmFwaC5hZGphY2VuY3kobWF0cml4X3plcm9zKQ0Kc25hOjp0cmlhZC5jZW5zdXMobWF0cml4X3plcm9zKQ0KDQojIG91dHB1dCBzaG93cyB0aGUgY291bnQgb2YgZWFjaCBvZiB0aGUgMTYgcG9zc2libGUgY29uZmlndXJhdGlvbnMgb2YgdHJpYWRzICANCiAgICAjIHNvIGlmIGJlbG93IDAwMyBpdCBzYXlzIGUuZy4gMiwgdGhhdCBtZWFucyB0aGF0IHRoZSBjb25maWd1cmF0aW9uIDAwMyAoQSxCLEMsIHRoZSBlbXB0eSBncmFwaCkgaXMgcG9zc2libGUgMiB0aW1lcyANCg0KDQpgYGANCg0KDQpgYGB7cn0NCiMgMDAzDQojIEEsQixDLCB0aGUgZW1wdHkgZ3JhcGguDQoNCiMgMDEyDQojIEEtPkIsIEMsIHRoZSBncmFwaCB3aXRoIGEgc2luZ2xlIGRpcmVjdGVkIGVkZ2UuDQoNCiMgMTAyDQojIEE8LT5CLCBDLCB0aGUgZ3JhcGggd2l0aCBhIG11dHVhbCBjb25uZWN0aW9uIGJldHdlZW4gdHdvIHZlcnRpY2VzLg0KDQojIDAyMUQNCiMgQTwtQi0+QywgdGhlIG91dC1zdGFyLg0KDQojIDAyMVUNCiMgQS0+QjwtQywgdGhlIGluLXN0YXIuDQoNCiMgMDIxQw0KIyBBLT5CLT5DLCBkaXJlY3RlZCBsaW5lLg0KDQojIDExMUQNCiMgQTwtPkI8LUMuDQoNCiMgMTExVQ0KIyBBPC0+Qi0+Qy4NCg0KIyAwMzBUDQojIEEtPkI8LUMsIEEtPkMuDQoNCiMgMDMwQw0KIyBBPC1CPC1DLCBBLT5DLg0KDQojIDIwMQ0KIyBBPC0+QjwtPkMuDQoNCiMgMTIwRA0KIyBBPC1CLT5DLCBBPC0+Qy4NCg0KIyAxMjBVDQojIEEtPkI8LUMsIEE8LT5DLg0KDQojIDEyMEMNCiMgQS0+Qi0+QywgQTwtPkMuDQoNCiMgMjEwDQojIEEtPkI8LT5DLCBBPC0+Qy4NCg0KIyAzMDANCiMgQTwtPkI8LT5DLCBBPC0+QywgdGhlIGNvbXBsZXRlIGdyYXBoLg0KDQpgYGANCg0KDQoNCmBgYHtyfQ0KIyBpbnN0YWxsLnBhY2thZ2VzKCJSU2llbmEiKQ0KbGlicmFyeShSU2llbmEpDQojaW5zdGFsbC5wYWNrYWdlcygiaWdyYXBoIikNCiMgbGlicmFyeShpZ3JhcGgpDQojaW5zdGFsbC5wYWNrYWdlcygic25hIikNCmxpYnJhcnkoc25hKQ0KDQo/czUwMSAjIE5ldHdvcmsgMSBkYXRhOiBleGNlcnB0IGZyb20gIlRlZW5hZ2UgRnJpZW5kcyBhbmQgTGlmZXN0eWxlIFN0dWR5IiBkYXRhLg0KZGltKHM1MDEpICMgZ2V0IGRpbWVuc2lvbnMgb2YgZGF0YQ0KDQp0ZW54dGVuIDwtIHM1MDFbMToxMCwxOjEwXSAjIHNlbGVjdCBhIDEwIHggMTAgbWF0cml4IFtyb3dzIGFuZCBjb2x1bW5zIGFyZSBkaXZpZGVkIGJ5IGNvbW1hXSkNCg0KdGVueHRlbl9ncmFwaCA8LSBncmFwaC5hZGphY2VuY3kodGVueHRlbikgIyBtYWtlIG1hdHJpeGEgZ3JhcGggb2JqZWN0IA0KcGxvdCh0ZW54dGVuX2dyYXBoKSAjIG1ha2UgcGxvdCBvZiBuZXR3b3JrIA0KDQoNCiMgYXNzaWdubWVudDogZ2l2ZSAob24gZWdvIGxldmVsKSBkZXNjcmlwdGl2ZSBzdGF0aXN0aWNzIG9uIGFsbCBraW5kIG9mIGNlbnRyYWxpdHkgbWVhc3VyZXMgDQoNCg0KDQoNCg0KYGBgDQoNCg==</div>
 
 
 </div>

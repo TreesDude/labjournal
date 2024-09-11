@@ -1,6 +1,6 @@
 ---
 title: "Lab journal"
-author: "by: Vero"
+author: "by: Verooo"
 bibliography: references.bib
 
  
@@ -66,7 +66,7 @@ But please note, we are not here to make a beautiful website, our intention is j
 # My Lab Journal
 Last compiled on `r format(Sys.time(), '%B, %Y')`  
 
-*Describe lab journal here.*
+*Description: Very cool lab journal. Yes, yes.*
 
 <br>
 

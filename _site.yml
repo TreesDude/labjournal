@@ -18,10 +18,15 @@ navbar:
         href: testjt.html
       - text: "Week 2"
         href: week2.html
+      - text: "Week 3"
+#        href: week3.html
     - text: "RQs"
       menu:
       - text: "1st draft"
         href: RQdraft1.html
+      - text: "2nd draft"
+#        href: RQdraft2.html
+        
         # here, other .Rmds can be added
 
 
