@@ -37,7 +37,7 @@ klippy::klippy(position = c('top', 'right'))
 
 # Research Questions
 RQ1a: 
-  To what extent does gender homophily occur across all co-publications of the staff of the Sociology Department and Computing Sciences at Radboud University? 
+  To what extent does gender homophily occur across all co-publications of the staff of the Sociology Department and Political Science Department at Radboud University? 
 
 RQ1b:
   To what extent do the two departments differ in their gender homophily? 
