@@ -107,17 +107,6 @@ sna::triad.census(matrix_zeros)
 
 ```
 
-# heading (learning to take notes with R)
-
-note:
-
-1.  kjhg\
-2.  lkjh
-    -   kjh
-    -   kjhgf
-
-text here \$ N = ß \Sigma lss \sqrt {sd } \$ text again
-
 # Centrality measures (practice with a network)
 
 ```{r}
@@ -146,17 +135,47 @@ sna::triad.census(tenxten)
 # Play around with Centrality Measures 
 ```
 
-# START WRITING INTRO (UPDATE RESEARCH QUESTIONS)
+# HW: START WRITING INTRO (UPDATE RESEARCH QUESTIONS)
 
 Try to be specific show that you UNDERSTAND INTER-DEPENDENCIES
 
-MAKE A LISTOFTHE TYPE OF DATA YOU WILL NEED Relational attributes, etc.
+MAKE A LIST OF THE TYPE OF DATA YOU WILL NEED Relational attributes, etc.
 
 Update Lab journal
 
-[USING THE REFERENCES]{.underline}
+Also still redo what i missed in class: make centrality measures of the 10x10 matrix 
 
-Open: references.bib take "bibTex Citation" if you want to use it, use \@ - symbol and use the word behind the { \
-In this example, it would be \@ "rmarkdown2018" (without the quotation marks
+# heading (learning to take notes with R)
+
+note:
+
+1.  kjhg\
+2.  lkjh
+    -   kjh
+    -   kjhgf
+
+text here
+$$
+N = ß \Sigma lss \sqrt {sd }
+$$
+text again
+
+
+text here
+$$
+N = 1 
+$$
+text again
+
+
+
+# USING THE REFERENCES
+
+Open: references.bib
+
+take "bibTex Citation" from online and put it in there
+
+if you want to use it, use \@ - symbol and use the word behind the " { "\
+In this example, it would be \@ "rmarkdown2018" (without the quotation marks)
 
 @Book{rmarkdown2018, title = {R Markdown: The Definitive Guide}, author = {Yihui Xie and J.J. Allaire and Garrett Grolemund}, publisher = {Chapman and Hall/CRC}, address = {Boca Raton, Florida}, year = {2018}, note = {ISBN 9781138359338}, url = {<https://bookdown.org/yihui/rmarkdown>}, }

@@ -3,6 +3,7 @@ title: "RQdraft1"
 author: "Verooo"
 date: "2024-09-10"
 output: html_document
+bibliography: references.bib
 ---
 
 ```{r, globalsettings, echo=FALSE, warning=FALSE, results='hide'}
@@ -69,9 +70,8 @@ RQ3: To what extent do structural network effects influence the gender homophily
 
     1.  What homophily preferences determine research collaborations among higher education researchers?
 
-    ```{=html}
     <!-- -->
-    ```
+
     2.  What are the most powerful homophily indicators in research collaborations in higher education research?
 
 ## Kwiek & Roszka (2021)
