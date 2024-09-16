@@ -9,10 +9,11 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
-<meta name="author" content="Your Name" />
+<meta name="author" content="Verooo" />
 
+<meta name="date" content="2024-09-16" />
 
-<title>Journal 1</title>
+<title>Chapter 8 - SNASS</title>
 
 <script src="site_libs/header-attrs-2.28/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -38,10 +39,6 @@
 <script src="site_libs/navigation-1.1/sourceembed.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
-<script src="site_libs/clipboard-1.7.1/clipboard.min.js"></script>
-<link href="site_libs/primer-tooltips-1.4.0/build.css" rel="stylesheet" />
-<link href="site_libs/klippy-0.0.0.9500/css/klippy.min.css" rel="stylesheet" />
-<script src="site_libs/klippy-0.0.0.9500/js/klippy.min.js"></script>
 <link href="site_libs/font-awesome-6.4.2/css/all.min.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet" />
 
@@ -406,27 +403,39 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Journal 1</h1>
-<h4 class="author">Your Name</h4>
+<h1 class="title toc-ignore">Chapter 8 - SNASS</h1>
+<h4 class="author">Verooo</h4>
+<h4 class="date">2024-09-16</h4>
 
 </div>
 
 
-<script>
-  addClassKlippyTo("pre.r, pre.markdown");
-  addKlippy('right', 'top', 'auto', '1', 'Copy code', 'Copied!');
-</script>
-<p>Last compiled on September, 2024</p>
-<p><br></p>
-<hr />
-<p>This is just an example page of your <span style="color: red;">lab
-journal</span>. You can journal the assignments of the first day
-here.</p>
-<hr />
-<pre class="r test"><code>print(&quot;Hello Lab Journal&quot;)</code></pre>
-<pre class="test2"><code>#&gt; [1] &quot;Hello Lab Journal&quot;</code></pre>
+<p>#########################################Title: Webscraping in R
+Author: Bas Hofstra Version: #########################################
+29-07-2</p>
+<div id="start-with-clean-workspace" class="section level1" number="1">
+<h1><span class="header-section-number">1</span> start with clean
+workspace</h1>
+<p>rm(list = ls())</p>
+</div>
+<div id="install.packagesdata.table" class="section level1" number="2">
+<h1><span class="header-section-number">2</span>
+install.packages(‘data.table’)</h1>
+<p>library(data.table) # mainly for faster data handling
+library(tidyverse) # I assume you already installed this one!
+#install.packages(‘httr’) # we don’t need this for now require(httr)
+install.packages(“xml2”) require(xml2) install.packages(“rvest”)
+require(rvest) install.packages(“devtools”) require(devtools) #Note
+we’re doing something different here. We’re installing a <em>latest</em>
+version directly from #GitHub This is because the released version of
+this packages contains some errors!
+devtools::install_github(“jkeirstead/scholar”)</p>
+<p>require(scholar)</p>
+<p>#define workdirectory, note the double <em>backslashes</em> if you’re
+on windows setwd(‘/yourpathhere)’</p>
+</div>
 
-<div id="rmd-source-code">LS0tDQp0aXRsZTogIkpvdXJuYWwgMSINCiNiaWJsaW9ncmFwaHk6IHJlZmVyZW5jZXMuYmliDQphdXRob3I6ICJZb3VyIE5hbWUiDQotLS0NCg0KDQoNCmBgYHtyLCBnbG9iYWxzZXR0aW5ncywgZWNobz1GQUxTRSwgd2FybmluZz1GQUxTRSwgcmVzdWx0cz0naGlkZSd9DQpsaWJyYXJ5KGtuaXRyKQ0KDQprbml0cjo6b3B0c19jaHVuayRzZXQoZWNobyA9IFRSVUUpDQpvcHRzX2NodW5rJHNldCh0aWR5Lm9wdHM9bGlzdCh3aWR0aC5jdXRvZmY9MTAwKSx0aWR5PVRSVUUsIHdhcm5pbmcgPSBGQUxTRSwgbWVzc2FnZSA9IEZBTFNFLGNvbW1lbnQgPSAiIz4iLCBjYWNoZT1UUlVFLCBjbGFzcy5zb3VyY2U9YygidGVzdCIpLCBjbGFzcy5vdXRwdXQ9YygidGVzdDIiKSkNCm9wdGlvbnMod2lkdGggPSAxMDApDQpyZ2w6OnNldHVwS25pdHIoKQ0KDQoNCg0KY29sb3JpemUgPC0gZnVuY3Rpb24oeCwgY29sb3IpIHtzcHJpbnRmKCI8c3BhbiBzdHlsZT0nY29sb3I6ICVzOyc+JXM8L3NwYW4+IiwgY29sb3IsIHgpIH0NCg0KYGBgDQoNCmBgYHtyIGtsaXBweSwgZWNobz1GQUxTRSwgaW5jbHVkZT1UUlVFfQ0Ka2xpcHB5OjprbGlwcHkocG9zaXRpb24gPSBjKCd0b3AnLCAncmlnaHQnKSkNCiNrbGlwcHk6OmtsaXBweShjb2xvciA9ICdkYXJrcmVkJykNCiNrbGlwcHk6OmtsaXBweSh0b29sdGlwX21lc3NhZ2UgPSAnQ2xpY2sgdG8gY29weScsIHRvb2x0aXBfc3VjY2VzcyA9ICdEb25lJykNCmBgYA0KDQpMYXN0IGNvbXBpbGVkIG9uIGByIGZvcm1hdChTeXMudGltZSgpLCAnJUIsICVZJylgDQoNCjxicj4NCg0KLS0tLQ0KICANClRoaXMgaXMganVzdCBhbiBleGFtcGxlIHBhZ2Ugb2YgeW91ciBgciBjb2xvcml6ZSgibGFiIGpvdXJuYWwiLCAicmVkIilgLg0KWW91IGNhbiBqb3VybmFsIHRoZSBhc3NpZ25tZW50cyBvZiB0aGUgZmlyc3QgZGF5IGhlcmUuDQogIA0KDQotLS0tDQoNCg0KYGBge3J9DQpwcmludCgiSGVsbG8gTGFiIEpvdXJuYWwiKQ0KYGBgDQoNCg0KDQo=</div>
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIkNoYXB0ZXIgOCAtIFNOQVNTIg0KYXV0aG9yOiAiVmVyb29vIg0KZGF0ZTogIjIwMjQtMDktMTYiDQpvdXRwdXQ6IGh0bWxfZG9jdW1lbnQNCi0tLQ0KIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyNUaXRsZTogV2Vic2NyYXBpbmcgaW4gUiBBdXRob3I6IEJhcyBIb2ZzdHJhIFZlcnNpb246DQojIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyAyOS0wNy0yDQoNCiMgc3RhcnQgd2l0aCBjbGVhbiB3b3Jrc3BhY2UNCnJtKGxpc3QgPSBscygpKQ0KDQojIGluc3RhbGwucGFja2FnZXMoJ2RhdGEudGFibGUnKQ0KbGlicmFyeShkYXRhLnRhYmxlKSAgIyBtYWlubHkgZm9yIGZhc3RlciBkYXRhIGhhbmRsaW5nDQpsaWJyYXJ5KHRpZHl2ZXJzZSkgICMgSSBhc3N1bWUgeW91IGFscmVhZHkgaW5zdGFsbGVkIHRoaXMgb25lIQ0KI2luc3RhbGwucGFja2FnZXMoJ2h0dHInKSAjIHdlIGRvbid0IG5lZWQgdGhpcyBmb3Igbm93IHJlcXVpcmUoaHR0cikNCmluc3RhbGwucGFja2FnZXMoInhtbDIiKQ0KcmVxdWlyZSh4bWwyKQ0KaW5zdGFsbC5wYWNrYWdlcygicnZlc3QiKQ0KcmVxdWlyZShydmVzdCkNCmluc3RhbGwucGFja2FnZXMoImRldnRvb2xzIikNCnJlcXVpcmUoZGV2dG9vbHMpDQojTm90ZSB3ZSdyZSBkb2luZyBzb21ldGhpbmcgZGlmZmVyZW50IGhlcmUuIFdlJ3JlIGluc3RhbGxpbmcgYSAqbGF0ZXN0KiB2ZXJzaW9uIGRpcmVjdGx5IGZyb20NCiNHaXRIdWIgVGhpcyBpcyBiZWNhdXNlIHRoZSByZWxlYXNlZCB2ZXJzaW9uIG9mIHRoaXMgcGFja2FnZXMgY29udGFpbnMgc29tZSBlcnJvcnMhDQpkZXZ0b29sczo6aW5zdGFsbF9naXRodWIoImprZWlyc3RlYWQvc2Nob2xhciIpDQoNCnJlcXVpcmUoc2Nob2xhcikNCg0KI2RlZmluZSB3b3JrZGlyZWN0b3J5LCBub3RlIHRoZSBkb3VibGUgKmJhY2tzbGFzaGVzKiBpZiB5b3UncmUgb24gd2luZG93cyBzZXR3ZCgnL3lvdXJwYXRoaGVyZSkn</div>
 
 
 </div>
@@ -464,7 +473,7 @@ $(document).ready(function () {
 <!-- code folding -->
 <script>
 $(document).ready(function () {
-  window.initializeSourceEmbed("lab1.Rmd");
+  window.initializeSourceEmbed("Webscraping-Chapter8-tutorial.Rmd");
   window.initializeCodeFolding("show" === "show");
 });
 </script>

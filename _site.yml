@@ -18,6 +18,8 @@ navbar:
         href: testjt.html
       - text: "Week 2"
         href: week2.html
+      - text: Chapter 8 - Webscraping tutorial
+        href: Webscraping-Chapter8-tutorial.html
       - text: "Week 3"
 #        href: week3.html
     - text: "RQs"

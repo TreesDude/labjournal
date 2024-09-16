@@ -1,0 +1,29 @@
+---
+title: "Chapter 8 - SNASS"
+author: "Verooo"
+date: "2024-09-16"
+output: html_document
+---
+#########################################Title: Webscraping in R Author: Bas Hofstra Version:
+######################################### 29-07-2
+
+# start with clean workspace
+rm(list = ls())
+
+# install.packages('data.table')
+library(data.table)  # mainly for faster data handling
+library(tidyverse)  # I assume you already installed this one!
+#install.packages('httr') # we don't need this for now require(httr)
+install.packages("xml2")
+require(xml2)
+install.packages("rvest")
+require(rvest)
+install.packages("devtools")
+require(devtools)
+#Note we're doing something different here. We're installing a *latest* version directly from
+#GitHub This is because the released version of this packages contains some errors!
+devtools::install_github("jkeirstead/scholar")
+
+require(scholar)
+
+#define workdirectory, note the double *backslashes* if you're on windows setwd('/yourpathhere)'
