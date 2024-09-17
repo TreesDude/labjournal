@@ -4,8 +4,12 @@ author: "Verooo"
 date: "2024-09-16"
 output: html_document
 ---
-#########################################Title: Webscraping in R Author: Bas Hofstra Version:
-######################################### 29-07-2
+
+###Title: Webscraping in R Author: Bas Hofstra Version: \### 29-07-2
+
+# Set-up
+
+```{r}
 
 # start with clean workspace
 rm(list = ls())
@@ -14,16 +18,320 @@ rm(list = ls())
 library(data.table)  # mainly for faster data handling
 library(tidyverse)  # I assume you already installed this one!
 #install.packages('httr') # we don't need this for now require(httr)
-install.packages("xml2")
-require(xml2)
-install.packages("rvest")
-require(rvest)
-install.packages("devtools")
+#install.packages("devtools")
 require(devtools)
+
+#install.packages("rvest")
+require(rvest)
+# rvest:This is the explanation the writers of the package give: “rvest is new package that makes it easy to scrape (or harvest) data from html web pages.” Seems like something we need, a package that stores information from webpages into relatively structured data that we can then query/manipulate.
+
+#install.packages("xml2")
+require(xml2)
+#xml2:This is what the writers of the package say about it: “Work with XML files using a simple, consistent interface.” So we can manipulate the data scraped with rvest, using the xml2 package functions
+
 #Note we're doing something different here. We're installing a *latest* version directly from
 #GitHub This is because the released version of this packages contains some errors!
 devtools::install_github("jkeirstead/scholar")
 
 require(scholar)
 
+library(dplyr)
 #define workdirectory, note the double *backslashes* if you're on windows setwd('/yourpathhere)'
+
+
+
+```
+
+# Get anchor data
+
+goal: get to know \
+(i) who the Radboud University Department of Sociology staff is, \
+(ii) what they publish with respect to scientific work, and \
+(iii) who they collaborate with.
+
+```{r, Anchor data}
+soc_staff <- read_html("https://web.archive.org/web/20230528153336/https://www.ru.nl/sociology/research/staff/") #extracts the source html of a webpage
+
+head(soc_staff)
+
+#which object? 
+class(soc_staff)
+
+#so we need to find WHERE the table is located in the html 'inspect element' in mozilla firefox or
+# view page source' and you see that everything AFTER /td in the 'body' of the page seems to be
+# the table we do need
+soc_staff <- soc_staff %>%
+    rvest::html_nodes("body") %>%
+    xml2::xml_find_all("//td") %>%
+    rvest::html_text()
+
+soc_staff
+
+
+#Assigning even and odd rows to 'fodd' and 'feven' (bc the output just lists the left and right side of the table interchangably)
+fodd <- function(x) x%%2 != 0
+feven <- function(x) x%%2 == 0
+
+# How long are the data? nstaf beinhalted wie viele staff members es gibt ABER ist z.Z. noch falsch weil jede zweite Zeile information und kein Name ist) 
+nstaff <- length(soc_staff)
+nstaff
+
+#make variable that holds all the names (aka. all the information in uneven rows)
+soc_names <- soc_staff[fodd(1:nstaff)] 
+# needs to be 0:nstaff instead of 1:nstaff 
+  #(because the list positions start with 0 NOT with 1)
+#OR insert the fODD function here 
+  # because the names are actually in the uneven rows, as opposed to the SNASS example where they are in even-numbered rows 
+head(soc_names)
+
+
+#
+soc_expertise <- soc_staff[feven(1:nstaff)]  #in the 1 until 94st number, get the even elements
+head(soc_expertise)
+
+
+#put the two vectors [variables in Vero's mind] (names and exptertise) together in a data frame (list) 
+soc_df <- data.frame(cbind(soc_names, soc_expertise))  #columnbind those and we have a DF for soc staff!
+
+# inspect in environment -> Data 
+
+
+#inspect again, and remove the rows we don't need (check for yourself to be certain!)
+delrows <- which(soc_df$soc_names == "Staff:" | soc_df$soc_names == "PhD:" | soc_df$soc_names == "External PhD:" |
+    soc_df$soc_names == "Guest researchers:" | soc_df$soc_names == "Other researchers:")
+
+soc_df <- soc_df[-delrows, ]
+
+# inspect in environment -> Data
+
+```
+
+# Extract names and last names 
+```{r, name extraction}
+# gsub   is a function that remove something and replaces it with something else
+
+# select only last names aka. DELETE everything BEHIND a comma 
+# [because the staff is listed with the last name in first place like e.g.: Müller, K. (Katrin) MSc]
+
+  #Last name seems to be everything before the comma
+soc_df$last_name <- gsub(",.*$", "", soc_df$soc_names)
+
+# first name is everything between brackets
+
+
+# stringr PACKAGE NEEDED
+# install.packages("stringr")
+# STILL DOESNT WORK BC NEWEST stringr PACKAGE FUCKS SHIT UP 
+# INSTALL AN OLDER VERSION OF THE PACKAGE:
+
+  # install.packages("devtools")
+  # devtools::install_version("stringr", version = "1.4.1")
+# soc_df$first_name <- str_extract_all(soc_df$soc_names, "(?<=\\().+?(?=\\))", simplify = TRUE)
+
+# still does not work 
+#My own attempt at fixing above mistake:
+ # soc_df$first_name_TRY <-substr(soc_df$soc_names, start = "(", stop = ")")
+
+require(tidyverse)
+soc_df$first_name <- str_extract_all(soc_df$soc_names, "(?<=\\().+?(?=\\))", simplify = TRUE)
+
+ 
+ view(soc_df)
+
+```
+
+
+
+## clean up names 
+```{r, clean up names }
+
+soc_df$last_name <- gsub(" J. \\(Jansje\\) van MSc", "", soc_df$last_name)
+soc_df$first_name <- tolower(soc_df$first_name)  # everything to lower!
+soc_df$last_name <- tolower(soc_df$last_name)
+# trimws() looses all spacing before and after (if you specify 'both') a character string
+soc_df$last_name <- trimws(soc_df$last_name, which = c("both"), whitespace = "[ \t\r\n]")
+soc_df$first_name <- trimws(soc_df$first_name, which = c("both"), whitespace = "[ \t\r\n]")
+soc_df$soc_expertise <- trimws(soc_df$soc_expertise, which = c("both"), whitespace = "[ \t\r\n]")
+soc_df$soc_names <- trimws(soc_df$soc_names, which = c("both"), whitespace = "[ \t\r\n]")
+```
+
+## make new variable (staff being from Radboud)
+
+```{r, new variable}
+# create a variable that contains a character string “radboud university” for all.
+soc_df$affiliation <- "radboud university"
+view(soc_df)
+
+```
+
+# Google Scholar Profiles and Publication
+## reminder: for loops 
+```{r, for loop}
+# The 'for loop': for every i in a vector (can be numbers, strings, etc.), say 1 to 10, you can do
+# 'something'
+for (i in 1:10) {
+    print(i)  # So for every i from 1 to 10, we print i, see what happens!
+}
+
+# # or do something more complicated p <- rnorm(10, 0, 1) # draw 10 normally distributed numbers
+# with mean 0 and SD 1 (so z-scores, essentially) plot(density(p)) # relatively, normal, right?  u
+# <- 0 # make an element we can fill up in the loop below for (i in 1:10) { u[i] <- p[i]*p[i] # get
+# p-squared for every i-th element in vector p print(u[i]) # and print that squared element }
+```
+## linking a SINGLE staff member to their google scholar link 
+```{r}
+
+soc_df$gs_id <- ""  # we set an empty identifier
+
+
+# using get_scholar_id()
+# The function get_scholar_id needs a last name, first name, and affiliation.
+
+
+require(scholar)
+#downloaded function:
+get_scholar_id_fix <- function (last_name = "", first_name = "", affiliation = NA)
+{
+  if (!any(nzchar(c(first_name, last_name))))
+    stop("At least one of first and last name must be specified!")
+  site <- getOption("scholar_site")
+  url <- paste0(site, "/citations?view_op=search_authors&mauthors=",
+                first_name, "+", last_name, "&hl=en&oi=ao")
+  page <- get_scholar_resp(url)
+  if (is.null(page))
+    return(NA)
+  aa <- httr::content(page, as = "text")
+  # added by Bas Hofstra: bugfix for IDs that have a dash ("-")
+  ids <- substring(aa, regexpr(";user=", aa))
+  ids <- substr(ids, 1, 19) # error prone, but unsure how to solve otherwise
+  # if (nchar(stringr::str_extract_all(string = aa, pattern = ";user=[[:alnum:]]+[[:punct:]]")[[1]][1]) < 18) {
+  #   ids <- stringr::str_extract_all(string = aa, pattern = ";user=[[:alnum:]]+[[:punct:]]+[[:alnum:]]+[[:punct:]]")
+  # } else {
+  #   ids <- stringr::str_extract_all(string = aa, pattern = ";user=[[:alnum:]]+[[:punct:]]")
+  # }
+  if (length(unlist(ids)) == 0) {
+    message("No Scholar ID found.")
+    return(NA)
+  }
+  ids <- ids %>% unlist %>% gsub(";user=|[[:punct:]]$", "",
+                                 .) %>% unique
+  if (length(ids) > 1) {
+    profiles <- lapply(ids, scholar::get_profile)
+    if (is.na(affiliation)) {
+      x_profile <- profiles[[1]]
+      warning("Selecting first out of ", length(profiles),
+              " candidate matches.")
+    }
+    else {
+      which_profile <- sapply(profiles, function(x) {
+        stringr::str_count(string = x$affiliation, pattern = stringr::coll(affiliation,
+                                                                           ignore_case = TRUE))
+      })
+      if (all(which_profile == 0)) {
+        warning("No researcher found at the indicated affiliation.")
+        return(NA)
+      }
+      else {
+        x_profile <- profiles[[which(which_profile !=
+                                       0)]]
+      }
+    }
+  }
+  else {
+    x_profile <- scholar::get_profile(id = ids)
+  }
+  return(x_profile$id)
+}
+
+
+#TRYING get_scholar_id from ONE staff member first 
+
+# SETTING SOURCE:
+#source("C:/Users/Vero/OneDrive - Radboud Universiteit/Documents/GitHub/labjournal")  
+# DOES NOT WORK BUT WORKS IF YOU DEFINE FUNCTION IN THE SAME SCRIPT YOU ARE WORKINGIN 
+# Put the function_fix.R in your working directory, we need this first line.
+# Vero: I put the function in an R-Script and saved it in the same folder as the script I have open rn. 
+
+
+get_scholar_id_fix(last_name = "tolsma", first_name = "jochem", affiliation = "radboud university")
+
+get_profile("Iu23-90AAAAJ")  # Jochem's profile
+
+```
+### get scholar publications, citations
+```{r, pubs and citations}
+get_publications("Iu23-90AAAAJ")  # Jochem's pubs
+
+
+get_citation_history("Iu23-90AAAAJ")  # Jochem's citation history
+```
+### get collaborators 
+```{r, collaborators}
+jochem_coauthors <- get_coauthors("Iu23-90AAAAJ", n_coauthors = 50, n_deep = 1)  
+# Jochem's collaborators and their co-authors!
+
+```
+
+## plot network of single staff member 
+```{r, plot}
+plot_coauthors(get_coauthors("Iu23-90AAAAJ", n_coauthors = 20, n_deep = 1), size_labels = 2)  
+# Doesn't look like much yet, but we'll make it prettier later.
+
+```
+# link scholar profiles of ALL STAFF 
+```{r, staff total scholar link, eval=FALSE, include=FALSE}
+# Look throught get_scholar_id_fix(last_name, first_name, affiliation) 
+# if we can find google scholar profiles of sociology staff!
+for (i in 1:nrow(soc_df)) {
+  
+  time <- runif(1, 0, 8) # randomized request times bc scholar has a "trip switch" against spam 
+  Sys.sleep(time)
+# for every number from 1 to 10 we draw one number from 0 to 8 from a uniform distribution we put
+# the wrapper sys.sleep around it that we put R to sleep for the drawn number
+  
+  
+  tryCatch({
+     soc_df[i,c("gs_id")] <- get_scholar_id_fix(last_name = soc_df[i, c("last_name")], # so search on last_name of staff (third column)
+                                             first_name = soc_df[i, c("first_name")],  # search on first_name of staff (fourth column)
+                                             affiliation = soc_df[i,c("affiliation")]) # search on affiliation of each staff (fifth column)
+
+    }, error=function(e){cat("ERROR :", conditionMessage(e), "\n")}) # continue on error, but print the error
+  }
+
+# remove those without pubs from the df
+# seems we're left with about 34 sociology staff members!
+soc_df <- soc_df[!soc_df$gs_id == "", ]
+soc_df
+```
+## get publications (all staff)
+```{r eval=FALSE, include=FALSE}
+#CURRENTLY: CODE IN THIS CHUNK IS NOT RUN (change in little setting weel at the top rightof this chunk)
+
+# gather the profiles and publications and store them in a LIST 
+
+soc_list_profiles <- list()  # first we create an empty list that we then fill up with the for loop
+soc_list_publications <- list()
+
+for (i in 1:nrow(soc_df)) {
+
+    time <- runif(1, 0, 10) # randomized requests? 
+    Sys.sleep(time)
+
+    # note how you call different elements in a list '[[]]', fill in the i-th element
+    soc_list_profiles[[i]] <- get_profile(soc_df[i, c("gs_id")])  # Note how we call row i (remember how to call rows in a DF/Matrix) and then the associated scholar id
+    soc_list_publications[[i]] <- get_publications(soc_df[i, c("gs_id")])
+    soc_list_publications[[i]][, c("gs_id")] <- soc_df[i, c("gs_id")]  # note that we again attach an id
+    # so both functions here call the entire profile and pubs for an author, based on google scholar ids
+
+}
+# Notice how fast the data blow up! The 34 RU sociology scholars publish ~3000 papers
+soc_df_publications <- bind_rows(soc_list_publications)
+
+
+
+```
+## google scholar says NO :(  (too many requests despite random requests)
+-> cannot make lists with publications and profiles as of now (evening of 17th September) :/
+
+# continue shortly before "getting collaborators" at Chapter 8.6.4
+search and find: note how soc_list_profiles
