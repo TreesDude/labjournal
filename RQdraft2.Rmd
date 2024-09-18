@@ -25,17 +25,15 @@ klippy::klippy(position = c('top', 'right'))
 #klippy::klippy(tooltip_message = 'Click to copy', tooltip_success = 'Done')
 ```
 
-# Brainstorm
-
 ------------------------------------------------------------------------
 
-# Research Questions (old, replace with new ones!)
+# Research Questions 
 
 RQ1a: To what extent does gender homophily occur across all co-publications of the staff of the Sociology Department and Political Science Department at Radboud University?
 
 RQ1b: To what extent do the two departments differ in their gender homophily?
 
-RQ2: To what extent does gender homophily in co-publishing influence the prestige of the publication journal?
+RQ2: How to does gender homophily affect collaboration differently for collaborations between staff who have published in low vs. high prestige journals?
 
 RQ3: To what extent do structural network effects influence the gender homophily of each department?
 
@@ -84,6 +82,8 @@ Kwiek, M., & Roszka, W. (2021). Gender-based homophily in research: A large-scal
 | **Actor attributes**              |                                                         |                                                                                                        |
 +-----------------------------------+---------------------------------------------------------+--------------------------------------------------------------------------------------------------------+
 | Name                              | Name from university department website                 | using "read_html()" function                                                                           |
++-----------------------------------+---------------------------------------------------------+--------------------------------------------------------------------------------------------------------+
+| Age                               | length of career                                        | time since first publication                                                                           |
 +-----------------------------------+---------------------------------------------------------+--------------------------------------------------------------------------------------------------------+
 | Gender                            | Google Scholar:\                                        | What about gender neutral names? If we go by this principle, then gender neutral names = non-binary ?? |
 |                                   | Name ➙ Look up in gendered list whether Woman or Man    |                                                                                                        |

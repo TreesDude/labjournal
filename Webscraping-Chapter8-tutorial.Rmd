@@ -284,7 +284,7 @@ plot_coauthors(get_coauthors("Iu23-90AAAAJ", n_coauthors = 20, n_deep = 1), size
 # if we can find google scholar profiles of sociology staff!
 for (i in 1:nrow(soc_df)) {
   
-  time <- runif(1, 0, 8) # randomized request times bc scholar has a "trip switch" against spam 
+  time <- runif(1, 0, 8) # randomized request times bc scholar has a "trip switch" against spam (rate limit)
   Sys.sleep(time)
 # for every number from 1 to 10 we draw one number from 0 to 8 from a uniform distribution we put
 # the wrapper sys.sleep around it that we put R to sleep for the drawn number
