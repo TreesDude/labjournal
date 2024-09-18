@@ -39,6 +39,8 @@
 <script src="site_libs/navigation-1.1/sourceembed.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="site_libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-6.4.2/css/all.min.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet" />
 
@@ -358,7 +360,9 @@ div.tocify {
     <li>
       <a href="Webscraping-Chapter8-tutorial.html">Chapter 8 - Webscraping tutorial</a>
     </li>
-    <li class="dropdown-header">Week 3</li>
+    <li>
+      <a href="week3RSelenium.html">Week 3 - RSelenium</a>
+    </li>
   </ul>
 </li>
 <li class="dropdown">
@@ -477,8 +481,10 @@ devtools::install_github(&quot;jkeirstead/scholar&quot;)</code></pre>
 <pre class="r"><code>library(dplyr)
 #define workdirectory, note the double *backslashes* if you&#39;re on windows setwd(&#39;/yourpathhere)&#39;</code></pre>
 </div>
-<div id="get-anchor-data" class="section level1" number="2">
-<h1><span class="header-section-number">2</span> Get anchor data</h1>
+<div id="get-anchor-data--ru-sociology" class="section level1"
+number="2">
+<h1><span class="header-section-number">2</span> Get anchor data -RU
+sociology</h1>
 <p>goal: get to know<br />
 (i) who the Radboud University Department of Sociology staff is,<br />
 (ii) what they publish with respect to scientific work, and<br />
@@ -487,124 +493,67 @@ devtools::install_github(&quot;jkeirstead/scholar&quot;)</code></pre>
 
 head(soc_staff)</code></pre>
 <pre><code>## $node
-## &lt;pointer: 0x00000273260d3950&gt;
+## &lt;pointer: 0x0000018822fe1ed0&gt;
 ## 
 ## $doc
-## &lt;pointer: 0x00000273250e73c0&gt;</code></pre>
+## &lt;pointer: 0x00000188200e90d0&gt;</code></pre>
 <pre class="r"><code>#which object? 
 class(soc_staff)</code></pre>
 <pre><code>## [1] &quot;xml_document&quot; &quot;xml_node&quot;</code></pre>
 <pre class="r"><code>#so we need to find WHERE the table is located in the html &#39;inspect element&#39; in mozilla firefox or
 # view page source&#39; and you see that everything AFTER /td in the &#39;body&#39; of the page seems to be
 # the table we do need
+
+# soc_staff_0 &lt;- soc_staff %&gt;%
+#     rvest::html_nodes(&quot;body&quot;) %&gt;%
+#     xml2::xml_find_all(&quot;//td&quot;) %&gt;% # xml2 here looks across multiple layers/ child-elements (hence the // !!! )
+#     rvest::html_text()
+# 
+# 
+# # BETTER?
+# # using html_elements to ONLY USE ONE PACKAGE (RVEST)
 soc_staff &lt;- soc_staff %&gt;%
-    rvest::html_nodes(&quot;body&quot;) %&gt;%
-    xml2::xml_find_all(&quot;//td&quot;) %&gt;%
+    rvest::html_elements(&quot;body&quot;) %&gt;%
+    rvest::html_elements (&quot;td&quot;) %&gt;%
+    rvest::html_text()
+#   
+#     
+# view(soc_staff)
+# 
+# # Get whole table at once? 
+# soc_staff_1 &lt;- soc_staff %&gt;%
+#     rvest::html_elements(&quot;body&quot;) %&gt;%
+#     rvest::html_table()
+
+#view(soc_staff_1)
+#class(soc_staff_1) # list (you can turn into a data frame to use it for further data manipulatino fromhere on)
+
+# (fshowdf) to make output look pretty (but i probably misunderstood what exactly Jochem said)</code></pre>
+</div>
+<div id="get-anchor-data---leiden-university---polsci"
+class="section level1" number="3">
+<h1><span class="header-section-number">3</span> get anchor data -
+Leiden University - PolSci</h1>
+<pre class="r"><code>#do it for Leiden University 
+leiden_polsci_staff &lt;- read_html(&quot;https://www.universiteitleiden.nl/en/academic-staff/overview?pageNumber=1&amp;faculty=social-and-behavioural-sciences&amp;facultyinstitute=institute-of-political-science&quot;) #extracts the source html of a webpage
+
+# div id content 
+# section 
+# ul class table list
+
+
+leiden_polsci_staff_2 &lt;- leiden_polsci_staff %&gt;%
+    rvest::html_elements(&quot;body&quot;) %&gt;%
+    rvest::html_elements(&quot;li&quot;)  %&gt;%
+    rvest::html_elements(&quot;strong&quot;) %&gt;%
     rvest::html_text()
 
-soc_staff</code></pre>
-<pre><code>##   [1] &quot;Staff:&quot;                                                                                                                                                      
-##   [2] &quot;Expertise:&quot;                                                                                                                                                  
-##   [3] &quot;Batenburg, prof. dr. R. (Ronald)&quot;                                                                                                                            
-##   [4] &quot;Healthcare, labour market and healthcare professions and training&quot;                                                                                           
-##   [5] &quot;Begall, dr. K.H. (Katia)&quot;                                                                                                                                    
-##   [6] &quot;Family, life course, labour market participation, division of household tasks and gender norms&quot;                                                              
-##   [7] &quot;Bekhuis, dr. H. (Hidde)&quot;                                                                                                                                     
-##   [8] &quot;Welfare state, nationalism and sports&quot;                                                                                                                       
-##   [9] &quot;Berg, dr. L. van den (Lonneke)&quot;                                                                                                                              
-##  [10] &quot;Family, life course and transition to adulthood&quot;                                                                                                             
-##  [11] &quot;Blommaert, dr. L. (Lieselotte)&quot;                                                                                                                              
-##  [12] &quot;Discrimination and inequality on the labour market&quot;                                                                                                          
-##  [13] &quot;Eisinga, prof. dr. R.N. (Rob)&quot;                                                                                                                               
-##  [14] &quot;Methods of research and statistics&quot;                                                                                                                          
-##  [15] &quot;Gesthuizen, dr. M.J.W. (Maurice)&quot;                                                                                                                            
-##  [16] &quot;\n                                Poverty en social cohesion\n                              &quot;                                                                
-##  [17] &quot;Geurts, dr. P.G. (Nella)&quot;                                                                                                                                    
-##  [18] &quot;\n                                Integration and migration\n                              &quot;                                                                 
-##  [19] &quot;Glas, dr. S. (Saskia)&quot;                                                                                                                                       
-##  [20] &quot;Islam, gender attitudes and sexuality&quot;                                                                                                                       
-##  [21] &quot;Hek, dr. M. van (Margriet)&quot;                                                                                                                                  
-##  [22] &quot;Educational inequality, gender inequality, organizational sociology and culture&quot;                                                                             
-##  [23] &quot;Hoekman, dr. R. H. A.(Remco)&quot;                                                                                                                                
-##  [24] &quot;Sports and policy sociology&quot;                                                                                                                                 
-##  [25] &quot;Hofstra, dr. B. (Bas)&quot;                                                                                                                                       
-##  [26] &quot;Diversity, inequality and innovation&quot;                                                                                                                        
-##  [27] &quot;Koops, dr. J. (Judith)&quot;                                                                                                                                      
-##  [28] &quot;Family sociology and demography&quot;                                                                                                                             
-##  [29] &quot;Kraaykamp, prof. dr. G.L.M. (Gerbert)&quot;                                                                                                                       
-##  [30] &quot;Educational inequality, culture and health&quot;                                                                                                                  
-##  [31] &quot;Meuleman, dr. (Roza)&quot;                                                                                                                                        
-##  [32] &quot;Culture and nationalism&quot;                                                                                                                                     
-##  [33] &quot;Savelkoul, dr. M.J. (Michael)&quot;                                                                                                                               
-##  [34] &quot;Ethnic diversity, prejudice and social cohesion&quot;                                                                                                             
-##  [35] &quot;Scheepers, prof. dr. P.L.H. (Peer)&quot;                                                                                                                          
-##  [36] &quot;Comparative research, social cohesion and diversity&quot;                                                                                                         
-##  [37] &quot;Spierings, dr. C.H.B.M. (Niels)&quot;                                                                                                                             
-##  [38] &quot;Islam, gender, populism, social media, Middle East and migration&quot;                                                                                            
-##  [39] &quot;Tolsma, dr. J. (Jochem)&quot;                                                                                                                                     
-##  [40] &quot;Inequality, criminology and ethnic diversity&quot;                                                                                                                
-##  [41] &quot;\n                                Verbakel, prof. dr. C.M.C. (Ellen)\n                                Head of the department\n                              &quot;
-##  [42] &quot;Health, family and work&quot;                                                                                                                                     
-##  [43] &quot;Visser, dr. M. (Mark)&quot;                                                                                                                                       
-##  [44] &quot;Older workers, radicalism and social cohesion&quot;                                                                                                               
-##  [45] &quot;Wolbers, prof. dr. M.H.J. (Maarten)&quot;                                                                                                                         
-##  [46] &quot;Educational inequality and labour market inequality&quot;                                                                                                         
-##  [47] &quot;PhD:&quot;                                                                                                                                                        
-##  [48] &quot;Expertise:&quot;                                                                                                                                                  
-##  [49] &quot;Bussemakers, C. (Carlijn) MSc&quot;                                                                                                                               
-##  [50] &quot;Adverse youth experiences and social inequality&quot;                                                                                                             
-##  [51] &quot;Franken, R. (Rob) MSc&quot;                                                                                                                                       
-##  [52] &quot;Sport networks and motivation for sustainable sports participation&quot;                                                                                          
-##  [53] &quot;Firat, M. (Mustafa) MSc&quot;                                                                                                                                     
-##  [54] &quot;Social inequality, older workers, life course and retirement&quot;                                                                                                
-##  [55] &quot;\n                                Güneyli, A. (Ayşegül)\n                              &quot;                                                                     
-##  [56] &quot;Work-care&quot;                                                                                                                                                   
-##  [57] &quot;Hendriks, I.P. (Inge) MSc&quot;                                                                                                                                   
-##  [58] &quot;Resistance to refugees and social cohesion&quot;                                                                                                                  
-##  [59] &quot;Jeroense, T.M.G. (Thijmen) MSc&quot;                                                                                                                              
-##  [60] &quot;Political participation, segregation, opinion polarization and voting behaviour&quot;                                                                             
-##  [61] &quot;Kollar, R. (Rachel)&quot;                                                                                                                                         
-##  [62] &quot;Spirit project&quot;                                                                                                                                              
-##  [63] &quot;Linders, N. (Nik) MSc&quot;                                                                                                                                       
-##  [64] &quot;Populism, gender, masculinity and sexuality&quot;                                                                                                                 
-##  [65] &quot;Loh, S.M. (Renae) MSc&quot;                                                                                                                                       
-##  [66] &quot;Educational sociology, social stratification, gender inequality and information communication technology (ICT)&quot;                                              
-##  [67] &quot;Meijeren, M. (Maikel) MSc&quot;                                                                                                                                   
-##  [68] &quot;Social capital, volunteer work and diversity&quot;                                                                                                                
-##  [69] &quot;Mensvoort, C.A. van (Carly) MSc&quot;                                                                                                                             
-##  [70] &quot;Gender, leadership and social norms&quot;                                                                                                                         
-##  [71] &quot;\n                                Mulders, A.M. (Anne Maaike) MSc\n                              &quot;                                                           
-##  [72] &quot;Social inequality in science&quot;                                                                                                                                
-##  [73] &quot;Müller, K. (Katrin) MSc&quot;                                                                                                                                     
-##  [74] &quot;Opinions about discrimination, migration and inequality&quot;                                                                                                     
-##  [75] &quot;Raiber, K. (Klara) MSc&quot;                                                                                                                                      
-##  [76] &quot;Informal care, employment, social inequality and gender&quot;                                                                                                     
-##  [77] &quot;Ramaekers, M.J.M. (Marlou) MSc&quot;                                                                                                                              
-##  [78] &quot;Prosocial behaviour and family&quot;                                                                                                                              
-##  [79] &quot;Wiertsema, S. (Sara) MSc&quot;                                                                                                                                    
-##  [80] &quot;Inequality in sports and physical activity, school-to-work transition and employment&quot;                                                                        
-##  [81] &quot;External PhD:&quot;                                                                                                                                               
-##  [82] &quot;Expertise:&quot;                                                                                                                                                  
-##  [83] &quot;Betkó, drs. J.G. (János)&quot;                                                                                                                                    
-##  [84] &quot;Social assistance benefit, poverty, reintegration, RCT and social experiment&quot;                                                                                
-##  [85] &quot;Middendorp J. (Jansje) van MSc&quot;                                                                                                                              
-##  [86] &quot;Home administration&quot;                                                                                                                                         
-##  [87] &quot;Vis, E. (Elize) MSc&quot;                                                                                                                                         
-##  [88] &quot;Healthcare, labour market, healthcare professions and training, health and social capital&quot;                                                                   
-##  [89] &quot;Weber, T. (Tijmen) MSc&quot;                                                                                                                                      
-##  [90] &quot;International student mobility and the internationalization of higher education&quot;                                                                             
-##  [91] &quot;Guest researchers:&quot;                                                                                                                                          
-##  [92] &quot;Expertise:&quot;                                                                                                                                                  
-##  [93] &quot;Khawli, E. el (Elissa) post-doc, Dr.&quot;                                                                                                                        
-##  [94] &quot;Inequality in older age&quot;                                                                                                                                     
-##  [95] &quot;Sterkens, dr. C.J.A. (Carl)&quot;                                                                                                                                 
-##  [96] &quot;Religious conflicts, cohesion, religion and the philosophy of life&quot;                                                                                          
-##  [97] &quot;Vermeer, dr. P.A.D.M. (Paul)&quot;                                                                                                                                
-##  [98] &quot;Socialization processes, secularisation, religion and the philosophy of life&quot;                                                                                
-##  [99] &quot;Other researchers:&quot;                                                                                                                                          
-## [100] &quot;Expertise:&quot;                                                                                                                                                  
-## [101] &quot;Grubben, M. (Malou)&quot;                                                                                                                                         
-## [102] &quot;Inequality in sports and movement&quot;</code></pre>
+view(leiden_polsci_staff_2)</code></pre>
+</div>
+<div id="sort-rows-into-names-and-expertise" class="section level1"
+number="4">
+<h1><span class="header-section-number">4</span> sort rows into names
+and expertise</h1>
 <pre class="r"><code>#Assigning even and odd rows to &#39;fodd&#39; and &#39;feven&#39; (bc the output just lists the left and right side of the table interchangably)
 fodd &lt;- function(x) x%%2 != 0
 feven &lt;- function(x) x%%2 == 0
@@ -647,8 +596,8 @@ soc_df &lt;- soc_df[-delrows, ]
 # inspect in environment -&gt; Data</code></pre>
 </div>
 <div id="extract-names-and-last-names" class="section level1"
-number="3">
-<h1><span class="header-section-number">3</span> Extract names and last
+number="5">
+<h1><span class="header-section-number">5</span> Extract names and last
 names</h1>
 <pre class="r"><code># gsub   is a function that remove something and replaces it with something else
 
@@ -679,8 +628,8 @@ soc_df$first_name &lt;- str_extract_all(soc_df$soc_names, &quot;(?&lt;=\\().+?(?
 
  
  view(soc_df)</code></pre>
-<div id="clean-up-names" class="section level2" number="3.1">
-<h2><span class="header-section-number">3.1</span> clean up names</h2>
+<div id="clean-up-names" class="section level2" number="5.1">
+<h2><span class="header-section-number">5.1</span> clean up names</h2>
 <pre class="r"><code>soc_df$last_name &lt;- gsub(&quot; J. \\(Jansje\\) van MSc&quot;, &quot;&quot;, soc_df$last_name)
 soc_df$first_name &lt;- tolower(soc_df$first_name)  # everything to lower!
 soc_df$last_name &lt;- tolower(soc_df$last_name)
@@ -691,8 +640,8 @@ soc_df$soc_expertise &lt;- trimws(soc_df$soc_expertise, which = c(&quot;both&quo
 soc_df$soc_names &lt;- trimws(soc_df$soc_names, which = c(&quot;both&quot;), whitespace = &quot;[ \t\r\n]&quot;)</code></pre>
 </div>
 <div id="make-new-variable-staff-being-from-radboud"
-class="section level2" number="3.2">
-<h2><span class="header-section-number">3.2</span> make new variable
+class="section level2" number="5.2">
+<h2><span class="header-section-number">5.2</span> make new variable
 (staff being from Radboud)</h2>
 <pre class="r"><code># create a variable that contains a character string “radboud university” for all.
 soc_df$affiliation &lt;- &quot;radboud university&quot;
@@ -700,11 +649,11 @@ view(soc_df)</code></pre>
 </div>
 </div>
 <div id="google-scholar-profiles-and-publication" class="section level1"
-number="4">
-<h1><span class="header-section-number">4</span> Google Scholar Profiles
+number="6">
+<h1><span class="header-section-number">6</span> Google Scholar Profiles
 and Publication</h1>
-<div id="reminder-for-loops" class="section level2" number="4.1">
-<h2><span class="header-section-number">4.1</span> reminder: for
+<div id="reminder-for-loops" class="section level2" number="6.1">
+<h2><span class="header-section-number">6.1</span> reminder: for
 loops</h2>
 <pre class="r"><code># The &#39;for loop&#39;: for every i in a vector (can be numbers, strings, etc.), say 1 to 10, you can do
 # &#39;something&#39;
@@ -727,8 +676,8 @@ for (i in 1:10) {
 # p-squared for every i-th element in vector p print(u[i]) # and print that squared element }</code></pre>
 </div>
 <div id="linking-a-single-staff-member-to-their-google-scholar-link"
-class="section level2" number="4.2">
-<h2><span class="header-section-number">4.2</span> linking a SINGLE
+class="section level2" number="6.2">
+<h2><span class="header-section-number">6.2</span> linking a SINGLE
 staff member to their google scholar link</h2>
 <pre class="r"><code>soc_df$gs_id &lt;- &quot;&quot;  # we set an empty identifier
 
@@ -843,8 +792,8 @@ get_scholar_id_fix(last_name = &quot;tolsma&quot;, first_name = &quot;jochem&quo
 ## $not_available
 ## [1] 0</code></pre>
 <div id="get-scholar-publications-citations" class="section level3"
-number="4.2.1">
-<h3><span class="header-section-number">4.2.1</span> get scholar
+number="6.2.1">
+<h3><span class="header-section-number">6.2.1</span> get scholar
 publications, citations</h3>
 <pre class="r"><code>get_publications(&quot;Iu23-90AAAAJ&quot;)  # Jochem&#39;s pubs</code></pre>
 <pre><code>##                                                                                                                                                                                  title
@@ -1442,51 +1391,2390 @@ publications, citations</h3>
 ## 16 2023   333
 ## 17 2024   265</code></pre>
 </div>
-<div id="get-collaborators" class="section level3" number="4.2.2">
-<h3><span class="header-section-number">4.2.2</span> get
+<div id="get-collaborators" class="section level3" number="6.2.2">
+<h3><span class="header-section-number">6.2.2</span> get
 collaborators</h3>
 <pre class="r"><code>jochem_coauthors &lt;- get_coauthors(&quot;Iu23-90AAAAJ&quot;, n_coauthors = 50, n_deep = 1)  
 # Jochem&#39;s collaborators and their co-authors!</code></pre>
 </div>
 </div>
 <div id="plot-network-of-single-staff-member" class="section level2"
-number="4.3">
-<h2><span class="header-section-number">4.3</span> plot network of
+number="6.3">
+<h2><span class="header-section-number">6.3</span> plot network of
 single staff member</h2>
 <pre class="r"><code>plot_coauthors(get_coauthors(&quot;Iu23-90AAAAJ&quot;, n_coauthors = 20, n_deep = 1), size_labels = 2)  </code></pre>
-<pre><code>## Warning: Removed 149 rows containing missing values or
+<pre><code>## Warning: Removed 150 rows containing missing values or
 ## values outside the scale range (`geom_point()`).</code></pre>
-<pre><code>## Warning: ggrepel: 2 unlabeled data points (too many overlaps). Consider increasing max.overlaps</code></pre>
+<pre><code>## Warning: ggrepel: 5 unlabeled data points (too many overlaps). Consider increasing max.overlaps</code></pre>
 <p><img src="Webscraping-Chapter8-tutorial_files/figure-html/plot-1.png" width="672" /></p>
 <pre class="r"><code># Doesn&#39;t look like much yet, but we&#39;ll make it prettier later.</code></pre>
 </div>
 </div>
 <div id="link-scholar-profiles-of-all-staff" class="section level1"
-number="5">
-<h1><span class="header-section-number">5</span> link scholar profiles
+number="7">
+<h1><span class="header-section-number">7</span> link scholar profiles
 of ALL STAFF</h1>
 <div id="get-publications-all-staff" class="section level2"
-number="5.1">
-<h2><span class="header-section-number">5.1</span> get publications (all
+number="7.1">
+<h2><span class="header-section-number">7.1</span> get publications (all
 staff)</h2>
 </div>
 <div
 id="google-scholar-says-no-too-many-requests-despite-random-requests"
-class="section level2" number="5.2">
-<h2><span class="header-section-number">5.2</span> google scholar says
+class="section level2" number="7.2">
+<h2><span class="header-section-number">7.2</span> google scholar says
 NO :( (too many requests despite random requests)</h2>
 <p>-&gt; cannot make lists with publications and profiles as of now
 (evening of 17th September) :/</p>
 </div>
 </div>
 <div id="continue-shortly-before-getting-collaborators-at-chapter-8.6.4"
-class="section level1" number="6">
-<h1><span class="header-section-number">6</span> continue shortly before
+class="section level1" number="8">
+<h1><span class="header-section-number">8</span> continue shortly before
 “getting collaborators” at Chapter 8.6.4</h1>
 <p>search and find: note how soc_list_profiles</p>
 </div>
+<div id="gender-from-names" class="section level1" number="9">
+<h1><span class="header-section-number">9</span> gender from names</h1>
+<pre class="r"><code># voornamenbank Maartens insitute 
+# e.g. Vero:
+# https://nvb.meertens.knaw.nl/naam/is/Vero
 
-<div id="rmd-source-code">LS0tDQp0aXRsZTogIkNoYXB0ZXIgOCAtIFNOQVNTIg0KYXV0aG9yOiAiVmVyb29vIg0KZGF0ZTogIjIwMjQtMDktMTYiDQpvdXRwdXQ6IGh0bWxfZG9jdW1lbnQNCi0tLQ0KDQojIyNUaXRsZTogV2Vic2NyYXBpbmcgaW4gUiBBdXRob3I6IEJhcyBIb2ZzdHJhIFZlcnNpb246IFwjIyMgMjktMDctMg0KDQojIFNldC11cA0KDQpgYGB7cn0NCg0KIyBzdGFydCB3aXRoIGNsZWFuIHdvcmtzcGFjZQ0Kcm0obGlzdCA9IGxzKCkpDQoNCiMgaW5zdGFsbC5wYWNrYWdlcygnZGF0YS50YWJsZScpDQpsaWJyYXJ5KGRhdGEudGFibGUpICAjIG1haW5seSBmb3IgZmFzdGVyIGRhdGEgaGFuZGxpbmcNCmxpYnJhcnkodGlkeXZlcnNlKSAgIyBJIGFzc3VtZSB5b3UgYWxyZWFkeSBpbnN0YWxsZWQgdGhpcyBvbmUhDQojaW5zdGFsbC5wYWNrYWdlcygnaHR0cicpICMgd2UgZG9uJ3QgbmVlZCB0aGlzIGZvciBub3cgcmVxdWlyZShodHRyKQ0KI2luc3RhbGwucGFja2FnZXMoImRldnRvb2xzIikNCnJlcXVpcmUoZGV2dG9vbHMpDQoNCiNpbnN0YWxsLnBhY2thZ2VzKCJydmVzdCIpDQpyZXF1aXJlKHJ2ZXN0KQ0KIyBydmVzdDpUaGlzIGlzIHRoZSBleHBsYW5hdGlvbiB0aGUgd3JpdGVycyBvZiB0aGUgcGFja2FnZSBnaXZlOiDigJxydmVzdCBpcyBuZXcgcGFja2FnZSB0aGF0IG1ha2VzIGl0IGVhc3kgdG8gc2NyYXBlIChvciBoYXJ2ZXN0KSBkYXRhIGZyb20gaHRtbCB3ZWIgcGFnZXMu4oCdIFNlZW1zIGxpa2Ugc29tZXRoaW5nIHdlIG5lZWQsIGEgcGFja2FnZSB0aGF0IHN0b3JlcyBpbmZvcm1hdGlvbiBmcm9tIHdlYnBhZ2VzIGludG8gcmVsYXRpdmVseSBzdHJ1Y3R1cmVkIGRhdGEgdGhhdCB3ZSBjYW4gdGhlbiBxdWVyeS9tYW5pcHVsYXRlLg0KDQojaW5zdGFsbC5wYWNrYWdlcygieG1sMiIpDQpyZXF1aXJlKHhtbDIpDQojeG1sMjpUaGlzIGlzIHdoYXQgdGhlIHdyaXRlcnMgb2YgdGhlIHBhY2thZ2Ugc2F5IGFib3V0IGl0OiDigJxXb3JrIHdpdGggWE1MIGZpbGVzIHVzaW5nIGEgc2ltcGxlLCBjb25zaXN0ZW50IGludGVyZmFjZS7igJ0gU28gd2UgY2FuIG1hbmlwdWxhdGUgdGhlIGRhdGEgc2NyYXBlZCB3aXRoIHJ2ZXN0LCB1c2luZyB0aGUgeG1sMiBwYWNrYWdlIGZ1bmN0aW9ucw0KDQojTm90ZSB3ZSdyZSBkb2luZyBzb21ldGhpbmcgZGlmZmVyZW50IGhlcmUuIFdlJ3JlIGluc3RhbGxpbmcgYSAqbGF0ZXN0KiB2ZXJzaW9uIGRpcmVjdGx5IGZyb20NCiNHaXRIdWIgVGhpcyBpcyBiZWNhdXNlIHRoZSByZWxlYXNlZCB2ZXJzaW9uIG9mIHRoaXMgcGFja2FnZXMgY29udGFpbnMgc29tZSBlcnJvcnMhDQpkZXZ0b29sczo6aW5zdGFsbF9naXRodWIoImprZWlyc3RlYWQvc2Nob2xhciIpDQoNCnJlcXVpcmUoc2Nob2xhcikNCg0KbGlicmFyeShkcGx5cikNCiNkZWZpbmUgd29ya2RpcmVjdG9yeSwgbm90ZSB0aGUgZG91YmxlICpiYWNrc2xhc2hlcyogaWYgeW91J3JlIG9uIHdpbmRvd3Mgc2V0d2QoJy95b3VycGF0aGhlcmUpJw0KDQoNCg0KYGBgDQoNCiMgR2V0IGFuY2hvciBkYXRhDQoNCmdvYWw6IGdldCB0byBrbm93IFwNCihpKSB3aG8gdGhlIFJhZGJvdWQgVW5pdmVyc2l0eSBEZXBhcnRtZW50IG9mIFNvY2lvbG9neSBzdGFmZiBpcywgXA0KKGlpKSB3aGF0IHRoZXkgcHVibGlzaCB3aXRoIHJlc3BlY3QgdG8gc2NpZW50aWZpYyB3b3JrLCBhbmQgXA0KKGlpaSkgd2hvIHRoZXkgY29sbGFib3JhdGUgd2l0aC4NCg0KYGBge3IsIEFuY2hvciBkYXRhfQ0Kc29jX3N0YWZmIDwtIHJlYWRfaHRtbCgiaHR0cHM6Ly93ZWIuYXJjaGl2ZS5vcmcvd2ViLzIwMjMwNTI4MTUzMzM2L2h0dHBzOi8vd3d3LnJ1Lm5sL3NvY2lvbG9neS9yZXNlYXJjaC9zdGFmZi8iKSAjZXh0cmFjdHMgdGhlIHNvdXJjZSBodG1sIG9mIGEgd2VicGFnZQ0KDQpoZWFkKHNvY19zdGFmZikNCg0KI3doaWNoIG9iamVjdD8gDQpjbGFzcyhzb2Nfc3RhZmYpDQoNCiNzbyB3ZSBuZWVkIHRvIGZpbmQgV0hFUkUgdGhlIHRhYmxlIGlzIGxvY2F0ZWQgaW4gdGhlIGh0bWwgJ2luc3BlY3QgZWxlbWVudCcgaW4gbW96aWxsYSBmaXJlZm94IG9yDQojIHZpZXcgcGFnZSBzb3VyY2UnIGFuZCB5b3Ugc2VlIHRoYXQgZXZlcnl0aGluZyBBRlRFUiAvdGQgaW4gdGhlICdib2R5JyBvZiB0aGUgcGFnZSBzZWVtcyB0byBiZQ0KIyB0aGUgdGFibGUgd2UgZG8gbmVlZA0Kc29jX3N0YWZmIDwtIHNvY19zdGFmZiAlPiUNCiAgICBydmVzdDo6aHRtbF9ub2RlcygiYm9keSIpICU+JQ0KICAgIHhtbDI6OnhtbF9maW5kX2FsbCgiLy90ZCIpICU+JQ0KICAgIHJ2ZXN0OjpodG1sX3RleHQoKQ0KDQpzb2Nfc3RhZmYNCg0KDQojQXNzaWduaW5nIGV2ZW4gYW5kIG9kZCByb3dzIHRvICdmb2RkJyBhbmQgJ2ZldmVuJyAoYmMgdGhlIG91dHB1dCBqdXN0IGxpc3RzIHRoZSBsZWZ0IGFuZCByaWdodCBzaWRlIG9mIHRoZSB0YWJsZSBpbnRlcmNoYW5nYWJseSkNCmZvZGQgPC0gZnVuY3Rpb24oeCkgeCUlMiAhPSAwDQpmZXZlbiA8LSBmdW5jdGlvbih4KSB4JSUyID09IDANCg0KIyBIb3cgbG9uZyBhcmUgdGhlIGRhdGE/IG5zdGFmIGJlaW5oYWx0ZWQgd2llIHZpZWxlIHN0YWZmIG1lbWJlcnMgZXMgZ2lidCBBQkVSIGlzdCB6LlouIG5vY2ggZmFsc2NoIHdlaWwgamVkZSB6d2VpdGUgWmVpbGUgaW5mb3JtYXRpb24gdW5kIGtlaW4gTmFtZSBpc3QpIA0KbnN0YWZmIDwtIGxlbmd0aChzb2Nfc3RhZmYpDQpuc3RhZmYNCg0KI21ha2UgdmFyaWFibGUgdGhhdCBob2xkcyBhbGwgdGhlIG5hbWVzIChha2EuIGFsbCB0aGUgaW5mb3JtYXRpb24gaW4gdW5ldmVuIHJvd3MpDQpzb2NfbmFtZXMgPC0gc29jX3N0YWZmW2ZvZGQoMTpuc3RhZmYpXSANCiMgbmVlZHMgdG8gYmUgMDpuc3RhZmYgaW5zdGVhZCBvZiAxOm5zdGFmZiANCiAgIyhiZWNhdXNlIHRoZSBsaXN0IHBvc2l0aW9ucyBzdGFydCB3aXRoIDAgTk9UIHdpdGggMSkNCiNPUiBpbnNlcnQgdGhlIGZPREQgZnVuY3Rpb24gaGVyZSANCiAgIyBiZWNhdXNlIHRoZSBuYW1lcyBhcmUgYWN0dWFsbHkgaW4gdGhlIHVuZXZlbiByb3dzLCBhcyBvcHBvc2VkIHRvIHRoZSBTTkFTUyBleGFtcGxlIHdoZXJlIHRoZXkgYXJlIGluIGV2ZW4tbnVtYmVyZWQgcm93cyANCmhlYWQoc29jX25hbWVzKQ0KDQoNCiMNCnNvY19leHBlcnRpc2UgPC0gc29jX3N0YWZmW2ZldmVuKDE6bnN0YWZmKV0gICNpbiB0aGUgMSB1bnRpbCA5NHN0IG51bWJlciwgZ2V0IHRoZSBldmVuIGVsZW1lbnRzDQpoZWFkKHNvY19leHBlcnRpc2UpDQoNCg0KI3B1dCB0aGUgdHdvIHZlY3RvcnMgW3ZhcmlhYmxlcyBpbiBWZXJvJ3MgbWluZF0gKG5hbWVzIGFuZCBleHB0ZXJ0aXNlKSB0b2dldGhlciBpbiBhIGRhdGEgZnJhbWUgKGxpc3QpIA0Kc29jX2RmIDwtIGRhdGEuZnJhbWUoY2JpbmQoc29jX25hbWVzLCBzb2NfZXhwZXJ0aXNlKSkgICNjb2x1bW5iaW5kIHRob3NlIGFuZCB3ZSBoYXZlIGEgREYgZm9yIHNvYyBzdGFmZiENCg0KIyBpbnNwZWN0IGluIGVudmlyb25tZW50IC0+IERhdGEgDQoNCg0KI2luc3BlY3QgYWdhaW4sIGFuZCByZW1vdmUgdGhlIHJvd3Mgd2UgZG9uJ3QgbmVlZCAoY2hlY2sgZm9yIHlvdXJzZWxmIHRvIGJlIGNlcnRhaW4hKQ0KZGVscm93cyA8LSB3aGljaChzb2NfZGYkc29jX25hbWVzID09ICJTdGFmZjoiIHwgc29jX2RmJHNvY19uYW1lcyA9PSAiUGhEOiIgfCBzb2NfZGYkc29jX25hbWVzID09ICJFeHRlcm5hbCBQaEQ6IiB8DQogICAgc29jX2RmJHNvY19uYW1lcyA9PSAiR3Vlc3QgcmVzZWFyY2hlcnM6IiB8IHNvY19kZiRzb2NfbmFtZXMgPT0gIk90aGVyIHJlc2VhcmNoZXJzOiIpDQoNCnNvY19kZiA8LSBzb2NfZGZbLWRlbHJvd3MsIF0NCg0KIyBpbnNwZWN0IGluIGVudmlyb25tZW50IC0+IERhdGENCg0KYGBgDQoNCiMgRXh0cmFjdCBuYW1lcyBhbmQgbGFzdCBuYW1lcyANCmBgYHtyLCBuYW1lIGV4dHJhY3Rpb259DQojIGdzdWIgICBpcyBhIGZ1bmN0aW9uIHRoYXQgcmVtb3ZlIHNvbWV0aGluZyBhbmQgcmVwbGFjZXMgaXQgd2l0aCBzb21ldGhpbmcgZWxzZQ0KDQojIHNlbGVjdCBvbmx5IGxhc3QgbmFtZXMgYWthLiBERUxFVEUgZXZlcnl0aGluZyBCRUhJTkQgYSBjb21tYSANCiMgW2JlY2F1c2UgdGhlIHN0YWZmIGlzIGxpc3RlZCB3aXRoIHRoZSBsYXN0IG5hbWUgaW4gZmlyc3QgcGxhY2UgbGlrZSBlLmcuOiBNw7xsbGVyLCBLLiAoS2F0cmluKSBNU2NdDQoNCiAgI0xhc3QgbmFtZSBzZWVtcyB0byBiZSBldmVyeXRoaW5nIGJlZm9yZSB0aGUgY29tbWENCnNvY19kZiRsYXN0X25hbWUgPC0gZ3N1YigiLC4qJCIsICIiLCBzb2NfZGYkc29jX25hbWVzKQ0KDQojIGZpcnN0IG5hbWUgaXMgZXZlcnl0aGluZyBiZXR3ZWVuIGJyYWNrZXRzDQoNCg0KIyBzdHJpbmdyIFBBQ0tBR0UgTkVFREVEDQojIGluc3RhbGwucGFja2FnZXMoInN0cmluZ3IiKQ0KIyBTVElMTCBET0VTTlQgV09SSyBCQyBORVdFU1Qgc3RyaW5nciBQQUNLQUdFIEZVQ0tTIFNISVQgVVAgDQojIElOU1RBTEwgQU4gT0xERVIgVkVSU0lPTiBPRiBUSEUgUEFDS0FHRToNCg0KICAjIGluc3RhbGwucGFja2FnZXMoImRldnRvb2xzIikNCiAgIyBkZXZ0b29sczo6aW5zdGFsbF92ZXJzaW9uKCJzdHJpbmdyIiwgdmVyc2lvbiA9ICIxLjQuMSIpDQojIHNvY19kZiRmaXJzdF9uYW1lIDwtIHN0cl9leHRyYWN0X2FsbChzb2NfZGYkc29jX25hbWVzLCAiKD88PVxcKCkuKz8oPz1cXCkpIiwgc2ltcGxpZnkgPSBUUlVFKQ0KDQojIHN0aWxsIGRvZXMgbm90IHdvcmsgDQojTXkgb3duIGF0dGVtcHQgYXQgZml4aW5nIGFib3ZlIG1pc3Rha2U6DQogIyBzb2NfZGYkZmlyc3RfbmFtZV9UUlkgPC1zdWJzdHIoc29jX2RmJHNvY19uYW1lcywgc3RhcnQgPSAiKCIsIHN0b3AgPSAiKSIpDQoNCnJlcXVpcmUodGlkeXZlcnNlKQ0Kc29jX2RmJGZpcnN0X25hbWUgPC0gc3RyX2V4dHJhY3RfYWxsKHNvY19kZiRzb2NfbmFtZXMsICIoPzw9XFwoKS4rPyg/PVxcKSkiLCBzaW1wbGlmeSA9IFRSVUUpDQoNCiANCiB2aWV3KHNvY19kZikNCg0KYGBgDQoNCg0KDQojIyBjbGVhbiB1cCBuYW1lcyANCmBgYHtyLCBjbGVhbiB1cCBuYW1lcyB9DQoNCnNvY19kZiRsYXN0X25hbWUgPC0gZ3N1YigiIEouIFxcKEphbnNqZVxcKSB2YW4gTVNjIiwgIiIsIHNvY19kZiRsYXN0X25hbWUpDQpzb2NfZGYkZmlyc3RfbmFtZSA8LSB0b2xvd2VyKHNvY19kZiRmaXJzdF9uYW1lKSAgIyBldmVyeXRoaW5nIHRvIGxvd2VyIQ0Kc29jX2RmJGxhc3RfbmFtZSA8LSB0b2xvd2VyKHNvY19kZiRsYXN0X25hbWUpDQojIHRyaW13cygpIGxvb3NlcyBhbGwgc3BhY2luZyBiZWZvcmUgYW5kIGFmdGVyIChpZiB5b3Ugc3BlY2lmeSAnYm90aCcpIGEgY2hhcmFjdGVyIHN0cmluZw0Kc29jX2RmJGxhc3RfbmFtZSA8LSB0cmltd3Moc29jX2RmJGxhc3RfbmFtZSwgd2hpY2ggPSBjKCJib3RoIiksIHdoaXRlc3BhY2UgPSAiWyBcdFxyXG5dIikNCnNvY19kZiRmaXJzdF9uYW1lIDwtIHRyaW13cyhzb2NfZGYkZmlyc3RfbmFtZSwgd2hpY2ggPSBjKCJib3RoIiksIHdoaXRlc3BhY2UgPSAiWyBcdFxyXG5dIikNCnNvY19kZiRzb2NfZXhwZXJ0aXNlIDwtIHRyaW13cyhzb2NfZGYkc29jX2V4cGVydGlzZSwgd2hpY2ggPSBjKCJib3RoIiksIHdoaXRlc3BhY2UgPSAiWyBcdFxyXG5dIikNCnNvY19kZiRzb2NfbmFtZXMgPC0gdHJpbXdzKHNvY19kZiRzb2NfbmFtZXMsIHdoaWNoID0gYygiYm90aCIpLCB3aGl0ZXNwYWNlID0gIlsgXHRcclxuXSIpDQpgYGANCg0KIyMgbWFrZSBuZXcgdmFyaWFibGUgKHN0YWZmIGJlaW5nIGZyb20gUmFkYm91ZCkNCg0KYGBge3IsIG5ldyB2YXJpYWJsZX0NCiMgY3JlYXRlIGEgdmFyaWFibGUgdGhhdCBjb250YWlucyBhIGNoYXJhY3RlciBzdHJpbmcg4oCccmFkYm91ZCB1bml2ZXJzaXR54oCdIGZvciBhbGwuDQpzb2NfZGYkYWZmaWxpYXRpb24gPC0gInJhZGJvdWQgdW5pdmVyc2l0eSINCnZpZXcoc29jX2RmKQ0KDQpgYGANCg0KIyBHb29nbGUgU2Nob2xhciBQcm9maWxlcyBhbmQgUHVibGljYXRpb24NCiMjIHJlbWluZGVyOiBmb3IgbG9vcHMgDQpgYGB7ciwgZm9yIGxvb3B9DQojIFRoZSAnZm9yIGxvb3AnOiBmb3IgZXZlcnkgaSBpbiBhIHZlY3RvciAoY2FuIGJlIG51bWJlcnMsIHN0cmluZ3MsIGV0Yy4pLCBzYXkgMSB0byAxMCwgeW91IGNhbiBkbw0KIyAnc29tZXRoaW5nJw0KZm9yIChpIGluIDE6MTApIHsNCiAgICBwcmludChpKSAgIyBTbyBmb3IgZXZlcnkgaSBmcm9tIDEgdG8gMTAsIHdlIHByaW50IGksIHNlZSB3aGF0IGhhcHBlbnMhDQp9DQoNCiMgIyBvciBkbyBzb21ldGhpbmcgbW9yZSBjb21wbGljYXRlZCBwIDwtIHJub3JtKDEwLCAwLCAxKSAjIGRyYXcgMTAgbm9ybWFsbHkgZGlzdHJpYnV0ZWQgbnVtYmVycw0KIyB3aXRoIG1lYW4gMCBhbmQgU0QgMSAoc28gei1zY29yZXMsIGVzc2VudGlhbGx5KSBwbG90KGRlbnNpdHkocCkpICMgcmVsYXRpdmVseSwgbm9ybWFsLCByaWdodD8gIHUNCiMgPC0gMCAjIG1ha2UgYW4gZWxlbWVudCB3ZSBjYW4gZmlsbCB1cCBpbiB0aGUgbG9vcCBiZWxvdyBmb3IgKGkgaW4gMToxMCkgeyB1W2ldIDwtIHBbaV0qcFtpXSAjIGdldA0KIyBwLXNxdWFyZWQgZm9yIGV2ZXJ5IGktdGggZWxlbWVudCBpbiB2ZWN0b3IgcCBwcmludCh1W2ldKSAjIGFuZCBwcmludCB0aGF0IHNxdWFyZWQgZWxlbWVudCB9DQpgYGANCiMjIGxpbmtpbmcgYSBTSU5HTEUgc3RhZmYgbWVtYmVyIHRvIHRoZWlyIGdvb2dsZSBzY2hvbGFyIGxpbmsgDQpgYGB7cn0NCg0Kc29jX2RmJGdzX2lkIDwtICIiICAjIHdlIHNldCBhbiBlbXB0eSBpZGVudGlmaWVyDQoNCg0KIyB1c2luZyBnZXRfc2Nob2xhcl9pZCgpDQojIFRoZSBmdW5jdGlvbiBnZXRfc2Nob2xhcl9pZCBuZWVkcyBhIGxhc3QgbmFtZSwgZmlyc3QgbmFtZSwgYW5kIGFmZmlsaWF0aW9uLg0KDQoNCnJlcXVpcmUoc2Nob2xhcikNCiNkb3dubG9hZGVkIGZ1bmN0aW9uOg0KZ2V0X3NjaG9sYXJfaWRfZml4IDwtIGZ1bmN0aW9uIChsYXN0X25hbWUgPSAiIiwgZmlyc3RfbmFtZSA9ICIiLCBhZmZpbGlhdGlvbiA9IE5BKQ0Kew0KICBpZiAoIWFueShuemNoYXIoYyhmaXJzdF9uYW1lLCBsYXN0X25hbWUpKSkpDQogICAgc3RvcCgiQXQgbGVhc3Qgb25lIG9mIGZpcnN0IGFuZCBsYXN0IG5hbWUgbXVzdCBiZSBzcGVjaWZpZWQhIikNCiAgc2l0ZSA8LSBnZXRPcHRpb24oInNjaG9sYXJfc2l0ZSIpDQogIHVybCA8LSBwYXN0ZTAoc2l0ZSwgIi9jaXRhdGlvbnM/dmlld19vcD1zZWFyY2hfYXV0aG9ycyZtYXV0aG9ycz0iLA0KICAgICAgICAgICAgICAgIGZpcnN0X25hbWUsICIrIiwgbGFzdF9uYW1lLCAiJmhsPWVuJm9pPWFvIikNCiAgcGFnZSA8LSBnZXRfc2Nob2xhcl9yZXNwKHVybCkNCiAgaWYgKGlzLm51bGwocGFnZSkpDQogICAgcmV0dXJuKE5BKQ0KICBhYSA8LSBodHRyOjpjb250ZW50KHBhZ2UsIGFzID0gInRleHQiKQ0KICAjIGFkZGVkIGJ5IEJhcyBIb2ZzdHJhOiBidWdmaXggZm9yIElEcyB0aGF0IGhhdmUgYSBkYXNoICgiLSIpDQogIGlkcyA8LSBzdWJzdHJpbmcoYWEsIHJlZ2V4cHIoIjt1c2VyPSIsIGFhKSkNCiAgaWRzIDwtIHN1YnN0cihpZHMsIDEsIDE5KSAjIGVycm9yIHByb25lLCBidXQgdW5zdXJlIGhvdyB0byBzb2x2ZSBvdGhlcndpc2UNCiAgIyBpZiAobmNoYXIoc3RyaW5ncjo6c3RyX2V4dHJhY3RfYWxsKHN0cmluZyA9IGFhLCBwYXR0ZXJuID0gIjt1c2VyPVtbOmFsbnVtOl1dK1tbOnB1bmN0Ol1dIilbWzFdXVsxXSkgPCAxOCkgew0KICAjICAgaWRzIDwtIHN0cmluZ3I6OnN0cl9leHRyYWN0X2FsbChzdHJpbmcgPSBhYSwgcGF0dGVybiA9ICI7dXNlcj1bWzphbG51bTpdXStbWzpwdW5jdDpdXStbWzphbG51bTpdXStbWzpwdW5jdDpdXSIpDQogICMgfSBlbHNlIHsNCiAgIyAgIGlkcyA8LSBzdHJpbmdyOjpzdHJfZXh0cmFjdF9hbGwoc3RyaW5nID0gYWEsIHBhdHRlcm4gPSAiO3VzZXI9W1s6YWxudW06XV0rW1s6cHVuY3Q6XV0iKQ0KICAjIH0NCiAgaWYgKGxlbmd0aCh1bmxpc3QoaWRzKSkgPT0gMCkgew0KICAgIG1lc3NhZ2UoIk5vIFNjaG9sYXIgSUQgZm91bmQuIikNCiAgICByZXR1cm4oTkEpDQogIH0NCiAgaWRzIDwtIGlkcyAlPiUgdW5saXN0ICU+JSBnc3ViKCI7dXNlcj18W1s6cHVuY3Q6XV0kIiwgIiIsDQogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAuKSAlPiUgdW5pcXVlDQogIGlmIChsZW5ndGgoaWRzKSA+IDEpIHsNCiAgICBwcm9maWxlcyA8LSBsYXBwbHkoaWRzLCBzY2hvbGFyOjpnZXRfcHJvZmlsZSkNCiAgICBpZiAoaXMubmEoYWZmaWxpYXRpb24pKSB7DQogICAgICB4X3Byb2ZpbGUgPC0gcHJvZmlsZXNbWzFdXQ0KICAgICAgd2FybmluZygiU2VsZWN0aW5nIGZpcnN0IG91dCBvZiAiLCBsZW5ndGgocHJvZmlsZXMpLA0KICAgICAgICAgICAgICAiIGNhbmRpZGF0ZSBtYXRjaGVzLiIpDQogICAgfQ0KICAgIGVsc2Ugew0KICAgICAgd2hpY2hfcHJvZmlsZSA8LSBzYXBwbHkocHJvZmlsZXMsIGZ1bmN0aW9uKHgpIHsNCiAgICAgICAgc3RyaW5ncjo6c3RyX2NvdW50KHN0cmluZyA9IHgkYWZmaWxpYXRpb24sIHBhdHRlcm4gPSBzdHJpbmdyOjpjb2xsKGFmZmlsaWF0aW9uLA0KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgaWdub3JlX2Nhc2UgPSBUUlVFKSkNCiAgICAgIH0pDQogICAgICBpZiAoYWxsKHdoaWNoX3Byb2ZpbGUgPT0gMCkpIHsNCiAgICAgICAgd2FybmluZygiTm8gcmVzZWFyY2hlciBmb3VuZCBhdCB0aGUgaW5kaWNhdGVkIGFmZmlsaWF0aW9uLiIpDQogICAgICAgIHJldHVybihOQSkNCiAgICAgIH0NCiAgICAgIGVsc2Ugew0KICAgICAgICB4X3Byb2ZpbGUgPC0gcHJvZmlsZXNbW3doaWNoKHdoaWNoX3Byb2ZpbGUgIT0NCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDApXV0NCiAgICAgIH0NCiAgICB9DQogIH0NCiAgZWxzZSB7DQogICAgeF9wcm9maWxlIDwtIHNjaG9sYXI6OmdldF9wcm9maWxlKGlkID0gaWRzKQ0KICB9DQogIHJldHVybih4X3Byb2ZpbGUkaWQpDQp9DQoNCg0KI1RSWUlORyBnZXRfc2Nob2xhcl9pZCBmcm9tIE9ORSBzdGFmZiBtZW1iZXIgZmlyc3QgDQoNCiMgU0VUVElORyBTT1VSQ0U6DQojc291cmNlKCJDOi9Vc2Vycy9WZXJvL09uZURyaXZlIC0gUmFkYm91ZCBVbml2ZXJzaXRlaXQvRG9jdW1lbnRzL0dpdEh1Yi9sYWJqb3VybmFsIikgIA0KIyBET0VTIE5PVCBXT1JLIEJVVCBXT1JLUyBJRiBZT1UgREVGSU5FIEZVTkNUSU9OIElOIFRIRSBTQU1FIFNDUklQVCBZT1UgQVJFIFdPUktJTkdJTiANCiMgUHV0IHRoZSBmdW5jdGlvbl9maXguUiBpbiB5b3VyIHdvcmtpbmcgZGlyZWN0b3J5LCB3ZSBuZWVkIHRoaXMgZmlyc3QgbGluZS4NCiMgVmVybzogSSBwdXQgdGhlIGZ1bmN0aW9uIGluIGFuIFItU2NyaXB0IGFuZCBzYXZlZCBpdCBpbiB0aGUgc2FtZSBmb2xkZXIgYXMgdGhlIHNjcmlwdCBJIGhhdmUgb3BlbiBybi4gDQoNCg0KZ2V0X3NjaG9sYXJfaWRfZml4KGxhc3RfbmFtZSA9ICJ0b2xzbWEiLCBmaXJzdF9uYW1lID0gImpvY2hlbSIsIGFmZmlsaWF0aW9uID0gInJhZGJvdWQgdW5pdmVyc2l0eSIpDQoNCmdldF9wcm9maWxlKCJJdTIzLTkwQUFBQUoiKSAgIyBKb2NoZW0ncyBwcm9maWxlDQoNCmBgYA0KIyMjIGdldCBzY2hvbGFyIHB1YmxpY2F0aW9ucywgY2l0YXRpb25zDQpgYGB7ciwgcHVicyBhbmQgY2l0YXRpb25zfQ0KZ2V0X3B1YmxpY2F0aW9ucygiSXUyMy05MEFBQUFKIikgICMgSm9jaGVtJ3MgcHVicw0KDQoNCmdldF9jaXRhdGlvbl9oaXN0b3J5KCJJdTIzLTkwQUFBQUoiKSAgIyBKb2NoZW0ncyBjaXRhdGlvbiBoaXN0b3J5DQpgYGANCiMjIyBnZXQgY29sbGFib3JhdG9ycyANCmBgYHtyLCBjb2xsYWJvcmF0b3JzfQ0Kam9jaGVtX2NvYXV0aG9ycyA8LSBnZXRfY29hdXRob3JzKCJJdTIzLTkwQUFBQUoiLCBuX2NvYXV0aG9ycyA9IDUwLCBuX2RlZXAgPSAxKSAgDQojIEpvY2hlbSdzIGNvbGxhYm9yYXRvcnMgYW5kIHRoZWlyIGNvLWF1dGhvcnMhDQoNCmBgYA0KDQojIyBwbG90IG5ldHdvcmsgb2Ygc2luZ2xlIHN0YWZmIG1lbWJlciANCmBgYHtyLCBwbG90fQ0KcGxvdF9jb2F1dGhvcnMoZ2V0X2NvYXV0aG9ycygiSXUyMy05MEFBQUFKIiwgbl9jb2F1dGhvcnMgPSAyMCwgbl9kZWVwID0gMSksIHNpemVfbGFiZWxzID0gMikgIA0KIyBEb2Vzbid0IGxvb2sgbGlrZSBtdWNoIHlldCwgYnV0IHdlJ2xsIG1ha2UgaXQgcHJldHRpZXIgbGF0ZXIuDQoNCmBgYA0KIyBsaW5rIHNjaG9sYXIgcHJvZmlsZXMgb2YgQUxMIFNUQUZGIA0KYGBge3IsIHN0YWZmIHRvdGFsIHNjaG9sYXIgbGluaywgZXZhbD1GQUxTRSwgaW5jbHVkZT1GQUxTRX0NCiMgTG9vayB0aHJvdWdodCBnZXRfc2Nob2xhcl9pZF9maXgobGFzdF9uYW1lLCBmaXJzdF9uYW1lLCBhZmZpbGlhdGlvbikgDQojIGlmIHdlIGNhbiBmaW5kIGdvb2dsZSBzY2hvbGFyIHByb2ZpbGVzIG9mIHNvY2lvbG9neSBzdGFmZiENCmZvciAoaSBpbiAxOm5yb3coc29jX2RmKSkgew0KICANCiAgdGltZSA8LSBydW5pZigxLCAwLCA4KSAjIHJhbmRvbWl6ZWQgcmVxdWVzdCB0aW1lcyBiYyBzY2hvbGFyIGhhcyBhICJ0cmlwIHN3aXRjaCIgYWdhaW5zdCBzcGFtIChyYXRlIGxpbWl0KQ0KICBTeXMuc2xlZXAodGltZSkNCiMgZm9yIGV2ZXJ5IG51bWJlciBmcm9tIDEgdG8gMTAgd2UgZHJhdyBvbmUgbnVtYmVyIGZyb20gMCB0byA4IGZyb20gYSB1bmlmb3JtIGRpc3RyaWJ1dGlvbiB3ZSBwdXQNCiMgdGhlIHdyYXBwZXIgc3lzLnNsZWVwIGFyb3VuZCBpdCB0aGF0IHdlIHB1dCBSIHRvIHNsZWVwIGZvciB0aGUgZHJhd24gbnVtYmVyDQogIA0KICANCiAgdHJ5Q2F0Y2goew0KICAgICBzb2NfZGZbaSxjKCJnc19pZCIpXSA8LSBnZXRfc2Nob2xhcl9pZF9maXgobGFzdF9uYW1lID0gc29jX2RmW2ksIGMoImxhc3RfbmFtZSIpXSwgIyBzbyBzZWFyY2ggb24gbGFzdF9uYW1lIG9mIHN0YWZmICh0aGlyZCBjb2x1bW4pDQogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBmaXJzdF9uYW1lID0gc29jX2RmW2ksIGMoImZpcnN0X25hbWUiKV0sICAjIHNlYXJjaCBvbiBmaXJzdF9uYW1lIG9mIHN0YWZmIChmb3VydGggY29sdW1uKQ0KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgYWZmaWxpYXRpb24gPSBzb2NfZGZbaSxjKCJhZmZpbGlhdGlvbiIpXSkgIyBzZWFyY2ggb24gYWZmaWxpYXRpb24gb2YgZWFjaCBzdGFmZiAoZmlmdGggY29sdW1uKQ0KDQogICAgfSwgZXJyb3I9ZnVuY3Rpb24oZSl7Y2F0KCJFUlJPUiA6IiwgY29uZGl0aW9uTWVzc2FnZShlKSwgIlxuIil9KSAjIGNvbnRpbnVlIG9uIGVycm9yLCBidXQgcHJpbnQgdGhlIGVycm9yDQogIH0NCg0KIyByZW1vdmUgdGhvc2Ugd2l0aG91dCBwdWJzIGZyb20gdGhlIGRmDQojIHNlZW1zIHdlJ3JlIGxlZnQgd2l0aCBhYm91dCAzNCBzb2Npb2xvZ3kgc3RhZmYgbWVtYmVycyENCnNvY19kZiA8LSBzb2NfZGZbIXNvY19kZiRnc19pZCA9PSAiIiwgXQ0Kc29jX2RmDQpgYGANCiMjIGdldCBwdWJsaWNhdGlvbnMgKGFsbCBzdGFmZikNCmBgYHtyIGV2YWw9RkFMU0UsIGluY2x1ZGU9RkFMU0V9DQojQ1VSUkVOVExZOiBDT0RFIElOIFRISVMgQ0hVTksgSVMgTk9UIFJVTiAoY2hhbmdlIGluIGxpdHRsZSBzZXR0aW5nIHdlZWwgYXQgdGhlIHRvcCByaWdodG9mIHRoaXMgY2h1bmspDQoNCiMgZ2F0aGVyIHRoZSBwcm9maWxlcyBhbmQgcHVibGljYXRpb25zIGFuZCBzdG9yZSB0aGVtIGluIGEgTElTVCANCg0Kc29jX2xpc3RfcHJvZmlsZXMgPC0gbGlzdCgpICAjIGZpcnN0IHdlIGNyZWF0ZSBhbiBlbXB0eSBsaXN0IHRoYXQgd2UgdGhlbiBmaWxsIHVwIHdpdGggdGhlIGZvciBsb29wDQpzb2NfbGlzdF9wdWJsaWNhdGlvbnMgPC0gbGlzdCgpDQoNCmZvciAoaSBpbiAxOm5yb3coc29jX2RmKSkgew0KDQogICAgdGltZSA8LSBydW5pZigxLCAwLCAxMCkgIyByYW5kb21pemVkIHJlcXVlc3RzPyANCiAgICBTeXMuc2xlZXAodGltZSkNCg0KICAgICMgbm90ZSBob3cgeW91IGNhbGwgZGlmZmVyZW50IGVsZW1lbnRzIGluIGEgbGlzdCAnW1tdXScsIGZpbGwgaW4gdGhlIGktdGggZWxlbWVudA0KICAgIHNvY19saXN0X3Byb2ZpbGVzW1tpXV0gPC0gZ2V0X3Byb2ZpbGUoc29jX2RmW2ksIGMoImdzX2lkIildKSAgIyBOb3RlIGhvdyB3ZSBjYWxsIHJvdyBpIChyZW1lbWJlciBob3cgdG8gY2FsbCByb3dzIGluIGEgREYvTWF0cml4KSBhbmQgdGhlbiB0aGUgYXNzb2NpYXRlZCBzY2hvbGFyIGlkDQogICAgc29jX2xpc3RfcHVibGljYXRpb25zW1tpXV0gPC0gZ2V0X3B1YmxpY2F0aW9ucyhzb2NfZGZbaSwgYygiZ3NfaWQiKV0pDQogICAgc29jX2xpc3RfcHVibGljYXRpb25zW1tpXV1bLCBjKCJnc19pZCIpXSA8LSBzb2NfZGZbaSwgYygiZ3NfaWQiKV0gICMgbm90ZSB0aGF0IHdlIGFnYWluIGF0dGFjaCBhbiBpZA0KICAgICMgc28gYm90aCBmdW5jdGlvbnMgaGVyZSBjYWxsIHRoZSBlbnRpcmUgcHJvZmlsZSBhbmQgcHVicyBmb3IgYW4gYXV0aG9yLCBiYXNlZCBvbiBnb29nbGUgc2Nob2xhciBpZHMNCg0KfQ0KIyBOb3RpY2UgaG93IGZhc3QgdGhlIGRhdGEgYmxvdyB1cCEgVGhlIDM0IFJVIHNvY2lvbG9neSBzY2hvbGFycyBwdWJsaXNoIH4zMDAwIHBhcGVycw0Kc29jX2RmX3B1YmxpY2F0aW9ucyA8LSBiaW5kX3Jvd3Moc29jX2xpc3RfcHVibGljYXRpb25zKQ0KDQoNCg0KYGBgDQojIyBnb29nbGUgc2Nob2xhciBzYXlzIE5PIDooICAodG9vIG1hbnkgcmVxdWVzdHMgZGVzcGl0ZSByYW5kb20gcmVxdWVzdHMpDQotPiBjYW5ub3QgbWFrZSBsaXN0cyB3aXRoIHB1YmxpY2F0aW9ucyBhbmQgcHJvZmlsZXMgYXMgb2Ygbm93IChldmVuaW5nIG9mIDE3dGggU2VwdGVtYmVyKSA6Lw0KDQojIGNvbnRpbnVlIHNob3J0bHkgYmVmb3JlICJnZXR0aW5nIGNvbGxhYm9yYXRvcnMiIGF0IENoYXB0ZXIgOC42LjQNCnNlYXJjaCBhbmQgZmluZDogbm90ZSBob3cgc29jX2xpc3RfcHJvZmlsZXMNCg==</div>
+# use the concatenate function cat 
+# and make a loop that just fills in the name in question in the link 
+
+# INSERT CODE HERE 
+
+
+
+# Last names: https://cbgfamilienamen.nl/nfb/</code></pre>
+</div>
+<div id="custom-functions-chunk-for-functions-to-run-later-on"
+class="section level1" number="10">
+<h1><span class="header-section-number">10</span> custom functions chunk
+for functions to run later on</h1>
+<pre class="r"><code>fpackage.check &lt;- function(packages) {
+    lapply(packages, FUN = function(x) {
+        if (!require(x, character.only = TRUE)) {
+            install.packages(x, dependencies = TRUE)
+            library(x, character.only = TRUE)
+        }
+    })
+}
+
+fsave &lt;- function(x, file = NULL, location = &quot;./data/processed/&quot;) {
+    ifelse(!dir.exists(&quot;data&quot;), dir.create(&quot;data&quot;), FALSE)
+    ifelse(!dir.exists(&quot;data/processed&quot;), dir.create(&quot;data/processed&quot;), FALSE)
+    if (is.null(file))
+        file = deparse(substitute(x))
+    datename &lt;- substr(gsub(&quot;[:-]&quot;, &quot;&quot;, Sys.time()), 1, 8)
+    totalname &lt;- paste(location, datename, file, &quot;.rda&quot;, sep = &quot;&quot;)
+    save(x, file = totalname)  #need to fix if file is reloaded as input name, not as x. 
+}
+
+fload &lt;- function(filename) {
+    load(filename)
+    get(ls()[ls() != &quot;filename&quot;])
+}
+
+#install.packages(&quot;kableExtra&quot;)
+library(kableExtra)</code></pre>
+<pre><code>## 
+## Attaching package: &#39;kableExtra&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:dplyr&#39;:
+## 
+##     group_rows</code></pre>
+<pre class="r"><code>fshowdf &lt;- function(x, ...) {
+    knitr::kable(x, digits = 2, &quot;html&quot;, ...) %&gt;%
+        kableExtra::kable_styling(bootstrap_options = c(&quot;striped&quot;, &quot;hover&quot;)) %&gt;%
+        kableExtra::scroll_box(width = &quot;100%&quot;, height = &quot;300px&quot;)
+}</code></pre>
+</div>
+<div id="open-alex" class="section level1" number="11">
+<h1><span class="header-section-number">11</span> Open alex</h1>
+<pre class="r"><code># SEE SUNBELT WEBSITE: Attributes tab 
+# if you put html from open alex api into the read html function then you need to replace any spaces with a + symbol
+
+# get JSON package so it can read the JSON object </code></pre>
+</div>
+<div id="r-package-openalexr-using-r-wrapper" class="section level1"
+number="12">
+<h1><span class="header-section-number">12</span> R Package openalexR
+(using r wrapper )</h1>
+<pre class="r"><code># make JSON object easier to use
+
+#install.packages(&quot;openalexR&quot;)
+library(openalexR)</code></pre>
+<pre><code>## Thank you for using openalexR!
+## To acknowledge our work, please cite the package by calling `citation(&quot;openalexR&quot;)`.
+## To suppress this message, add `openalexR.message = suppressed` to your .Renviron file.</code></pre>
+<pre class="r"><code>options(openalexR.mailto = &quot;palmtreesdude@gmail.com&quot;)
+
+df &lt;- oa_fetch(entity= &quot;author&quot;, search = &quot;Jochem Tolsma&quot;)
+
+fshowdf(df)</code></pre>
+<div
+style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:300px; overflow-x: scroll; width:100%; ">
+<table class="table table-striped table-hover" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+id
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+display_name
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+display_name_alternatives
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+relevance_score
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+ids
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+orcid
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+works_count
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+cited_by_count
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+counts_by_year
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+affiliation_display_name
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+affiliation_id
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+affiliation_ror
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+affiliation_country_code
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+affiliation_type
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+affiliation_lineage
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+affiliations_other
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+topics
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+works_api_url
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<a href="https://openalex.org/A5087380803"
+class="uri">https://openalex.org/A5087380803</a>
+</td>
+<td style="text-align:left;">
+Jochem Tolsma
+</td>
+<td style="text-align:left;">
+J. Tolsma , Jochem Tolsma, J L Tolsma
+</td>
+<td style="text-align:right;">
+8869.57
+</td>
+<td style="text-align:left;">
+<a href="https://openalex.org/A5087380803"
+class="uri">https://openalex.org/A5087380803</a> , <a
+href="https://orcid.org/0000-0002-4411-6932"
+class="uri">https://orcid.org/0000-0002-4411-6932</a>
+</td>
+<td style="text-align:left;">
+<a href="https://orcid.org/0000-0002-4411-6932"
+class="uri">https://orcid.org/0000-0002-4411-6932</a>
+</td>
+<td style="text-align:right;">
+85
+</td>
+<td style="text-align:right;">
+1996
+</td>
+<td style="text-align:left;">
+2024, 2023, 2022, 2021, 2020, 2019, 2018, 2017, 2016, 2015, 2014, 2013,
+2012, 8, 5, 4, 3, 2, 2, 3, 4, 12, 4, 8, 7, 1, 212, 263, 202, 248, 241,
+165, 190, 134, 177, 141, 122, 99, 65
+</td>
+<td style="text-align:left;">
+Radboud University Nijmegen
+</td>
+<td style="text-align:left;">
+<a href="https://openalex.org/I145872427"
+class="uri">https://openalex.org/I145872427</a>
+</td>
+<td style="text-align:left;">
+<a href="https://ror.org/016xsfp80"
+class="uri">https://ror.org/016xsfp80</a>
+</td>
+<td style="text-align:left;">
+NL
+</td>
+<td style="text-align:left;">
+education
+</td>
+<td style="text-align:left;">
+<a href="https://openalex.org/I145872427"
+class="uri">https://openalex.org/I145872427</a>
+</td>
+<td style="text-align:left;">
+<a href="https://openalex.org/I169381384"
+class="uri">https://openalex.org/I169381384</a> , <a
+href="https://openalex.org/I4210087716"
+class="uri">https://openalex.org/I4210087716</a>
+</td>
+<td style="text-align:left;">
+1 , 1 , 1 , 1 , 2 , 2 , 2 , 2 , 3 , 3 , 3 , 3 , 4 , 4 , 4 , 4 , 5 , 5 ,
+5 , 5 , 6 , 6 , 6 , 6 , 7 , 7 , 7 , 7 , 8 , 8 , 8 , 8 , 9 , 9 , 9 , 9 ,
+10 , 10 , 10 , 10 , 11 , 11 , 11 , 11 , 12 , 12 , 12 , 12 , 13 , 13 , 13
+, 13 , 14 , 14 , 14 , 14 , 15 , 15 , 15 , 15 , 16 , 16 , 16 , 16 , 17 ,
+17 , 17 , 17 , 18 , 18 , 18 , 18 , 19 , 19 , 19 , 19 , 20 , 20 , 20 , 20
+, 21 , 21 , 21 , 21 , 22 , 22 , 22 , 22 , 23 , 23 , 23 , 23 , 24 , 24 ,
+24 , 24 , 25 , 25 , 25 , 25 , 15 , 15 , 15 , 15 , 12 , 12 , 12 , 12 , 9
+, 9 , 9 , 9 , 8 , 8 , 8 , 8 , 8 , 8 , 8 , 8 , 8 , 8 , 8 , 8 , 7 , 7 , 7
+, 7 , 7 , 7 , 7 , 7 , 6 , 6 , 6 , 6 , 5 , 5 , 5 , 5 , 5 , 5 , 5 , 5 , 5
+, 5 , 5 , 5 , 5 , 5 , 5 , 5 , 4 , 4 , 4 , 4 , 4 , 4 , 4 , 4 , 4 , 4 , 4
+, 4 , 4 , 4 , 4 , 4 , 4 , 4 , 4 , 4 , 4 , 4 , 4 , 4 , 3 , 3 , 3 , 3 , 3
+, 3 , 3 , 3 , 3 , 3 , 3 , 3 , 3 , 3 , 3 , 3 , 3 , 3 , 3 , 3 , 2 , 2 , 2
+, 2 , topic , subfield , field , domain , topic , subfield , field ,
+domain , topic , subfield , field , domain , topic , subfield , field ,
+domain , topic , subfield , field , domain , topic , subfield , field ,
+domain , topic , subfield , field , domain , topic , subfield , field ,
+domain , topic , subfield , field , domain , topic , subfield , field ,
+domain , topic , subfield , field , domain , topic , subfield , field ,
+domain , topic , subfield , field , domain , topic , subfield , field ,
+domain , topic , subfield , field , domain , topic , subfield , field ,
+domain , topic , subfield , field , domain , topic , subfield , field ,
+domain , topic , subfield , field , domain , topic , subfield , field ,
+domain , topic , subfield , field , domain , topic , subfield , field ,
+domain , topic , subfield , field , domain , topic , subfield , field ,
+domain , topic , subfield , field , domain , <a
+href="https://openalex.org/T11239"
+class="uri">https://openalex.org/T11239</a> , <a
+href="https://openalex.org/subfields/3312"
+class="uri">https://openalex.org/subfields/3312</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T11645"
+class="uri">https://openalex.org/T11645</a> , <a
+href="https://openalex.org/subfields/3312"
+class="uri">https://openalex.org/subfields/3312</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T12088"
+class="uri">https://openalex.org/T12088</a> , <a
+href="https://openalex.org/subfields/3312"
+class="uri">https://openalex.org/subfields/3312</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T10216"
+class="uri">https://openalex.org/T10216</a> , <a
+href="https://openalex.org/subfields/3312"
+class="uri">https://openalex.org/subfields/3312</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T10108"
+class="uri">https://openalex.org/T10108</a> , <a
+href="https://openalex.org/subfields/3320"
+class="uri">https://openalex.org/subfields/3320</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T10349"
+class="uri">https://openalex.org/T10349</a> , <a
+href="https://openalex.org/subfields/3312"
+class="uri">https://openalex.org/subfields/3312</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T10314"
+class="uri">https://openalex.org/T10314</a> , <a
+href="https://openalex.org/subfields/3312"
+class="uri">https://openalex.org/subfields/3312</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T10235"
+class="uri">https://openalex.org/T10235</a> , <a
+href="https://openalex.org/subfields/3306"
+class="uri">https://openalex.org/subfields/3306</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T13064"
+class="uri">https://openalex.org/T13064</a> , <a
+href="https://openalex.org/subfields/3304"
+class="uri">https://openalex.org/subfields/3304</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T13709"
+class="uri">https://openalex.org/T13709</a> , <a
+href="https://openalex.org/subfields/3304"
+class="uri">https://openalex.org/subfields/3304</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T10574"
+class="uri">https://openalex.org/T10574</a> , <a
+href="https://openalex.org/subfields/3312"
+class="uri">https://openalex.org/subfields/3312</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T10557"
+class="uri">https://openalex.org/T10557</a> , <a
+href="https://openalex.org/subfields/3315"
+class="uri">https://openalex.org/subfields/3315</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T10443"
+class="uri">https://openalex.org/T10443</a> , <a
+href="https://openalex.org/subfields/3320"
+class="uri">https://openalex.org/subfields/3320</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T10652"
+class="uri">https://openalex.org/T10652</a> , <a
+href="https://openalex.org/subfields/3312"
+class="uri">https://openalex.org/subfields/3312</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T11397"
+class="uri">https://openalex.org/T11397</a> , <a
+href="https://openalex.org/subfields/3320"
+class="uri">https://openalex.org/subfields/3320</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T10674"
+class="uri">https://openalex.org/T10674</a> , <a
+href="https://openalex.org/subfields/3304"
+class="uri">https://openalex.org/subfields/3304</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T12592"
+class="uri">https://openalex.org/T12592</a> , <a
+href="https://openalex.org/subfields/3109"
+class="uri">https://openalex.org/subfields/3109</a> , <a
+href="https://openalex.org/fields/31"
+class="uri">https://openalex.org/fields/31</a> , <a
+href="https://openalex.org/domains/3"
+class="uri">https://openalex.org/domains/3</a> , <a
+href="https://openalex.org/T10762"
+class="uri">https://openalex.org/T10762</a> , <a
+href="https://openalex.org/subfields/3203"
+class="uri">https://openalex.org/subfields/3203</a> , <a
+href="https://openalex.org/fields/32"
+class="uri">https://openalex.org/fields/32</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T13532"
+class="uri">https://openalex.org/T13532</a> , <a
+href="https://openalex.org/subfields/3304"
+class="uri">https://openalex.org/subfields/3304</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T11076"
+class="uri">https://openalex.org/T11076</a> , <a
+href="https://openalex.org/subfields/3320"
+class="uri">https://openalex.org/subfields/3320</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T12714"
+class="uri">https://openalex.org/T12714</a> , <a
+href="https://openalex.org/subfields/3312"
+class="uri">https://openalex.org/subfields/3312</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T10208"
+class="uri">https://openalex.org/T10208</a> , <a
+href="https://openalex.org/subfields/2002"
+class="uri">https://openalex.org/subfields/2002</a> , <a
+href="https://openalex.org/fields/20"
+class="uri">https://openalex.org/fields/20</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T10064"
+class="uri">https://openalex.org/T10064</a> , <a
+href="https://openalex.org/subfields/3109"
+class="uri">https://openalex.org/subfields/3109</a> , <a
+href="https://openalex.org/fields/31"
+class="uri">https://openalex.org/fields/31</a> , <a
+href="https://openalex.org/domains/3"
+class="uri">https://openalex.org/domains/3</a> , <a
+href="https://openalex.org/T10182"
+class="uri">https://openalex.org/T10182</a> , <a
+href="https://openalex.org/subfields/3203"
+class="uri">https://openalex.org/subfields/3203</a> , <a
+href="https://openalex.org/fields/32"
+class="uri">https://openalex.org/fields/32</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T11120"
+class="uri">https://openalex.org/T11120</a> , <a
+href="https://openalex.org/subfields/3312"
+class="uri">https://openalex.org/subfields/3312</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , Social Capital and
+Trust in Communities , Sociology and Political Science , Social Sciences
+, Social Sciences , Effects of Residential Segregation on Communities
+and Individuals , Sociology and Political Science , Social Sciences ,
+Social Sciences , Intergenerational Mobility and Social Stratification ,
+Sociology and Political Science , Social Sciences , Social Sciences ,
+Politics and Social Implications of Immigration , Sociology and
+Political Science , Social Sciences , Social Sciences , Empirical
+Analysis of Political Behavior and Institutions , Political Science and
+International Relations , Social Sciences , Social Sciences , Migration
+Networks and Impacts on Labor Market , Sociology and Political Science ,
+Social Sciences , Social Sciences , Intergroup Relations and Social
+Identity Theories , Sociology and Political Science , Social Sciences ,
+Social Sciences , Impact of Social Factors on Health Outcomes , Health ,
+Social Sciences , Social Sciences , Education and Research Methods in
+Social Sciences , Education , Social Sciences , Social Sciences ,
+Education Policy and Social Development , Education , Social Sciences ,
+Social Sciences , Impact of Social Structure on Crime and Delinquency ,
+Sociology and Political Science , Social Sciences , Social Sciences ,
+The Impact of Digital Media on Public Discourse , Communication , Social
+Sciences , Social Sciences , Politics and Economics of Welfare State ,
+Political Science and International Relations , Social Sciences , Social
+Sciences , Racial Discrimination and Health Inequities , Sociology and
+Political Science , Social Sciences , Social Sciences , Populism in
+Contemporary Politics , Political Science and International Relations ,
+Social Sciences , Social Sciences , Inequality in Education: Impact of
+Socioeconomic Status , Education , Social Sciences , Social Sciences ,
+Statistical Physics of Opinion Dynamics , Statistical and Nonlinear
+Physics , Physics and Astronomy , Physical Sciences , Mental Health of
+Refugees and Immigrants , Clinical Psychology , Psychology , Social
+Sciences , Vocational Education and Training in Australia , Education ,
+Social Sciences , Social Sciences , Impact of Procedural Justice on
+Police Legitimacy , Political Science and International Relations ,
+Social Sciences , Social Sciences , Youth Transitions and Social
+Inequality , Sociology and Political Science , Social Sciences , Social
+Sciences , Labor Market Dynamics and Inequality , Economics and
+Econometrics , Economics, Econometrics and Finance , Social Sciences ,
+Statistical Mechanics of Complex Networks , Statistical and Nonlinear
+Physics , Physics and Astronomy , Physical Sciences , Emotion Regulation
+and Psychopathology in Children and Adolescents, Clinical Psychology ,
+Psychology , Social Sciences , Multilevel Perspectives on Prosocial
+Behavior and Volunteering , Sociology and Political Science , Social
+Sciences , Social Sciences
+</td>
+<td style="text-align:left;">
+<a href="https://api.openalex.org/works?filter=author.id:A5087380803"
+class="uri">https://api.openalex.org/works?filter=author.id:A5087380803</a>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<pre class="r"><code>#second affiliation ofJochem is lost when using this wrapper 
+# SOMETIMES INFORMATION CAN GET LOST 
+df_papers &lt;- oa_fetch(entity = &quot;works&quot;, author.id = df$id)
+df_papers$author[1] # selecting first item in column &quot;author&quot; which in this case is a full data base </code></pre>
+<pre><code>## [[1]]
+##                              au_id  au_display_name                              au_orcid
+## 1 https://openalex.org/A5010780363 Tom van der Meer https://orcid.org/0000-0002-6164-2926
+## 2 https://openalex.org/A5087380803    Jochem Tolsma https://orcid.org/0000-0002-4411-6932
+##   author_position is_corresponding
+## 1           first            FALSE
+## 2            last            FALSE
+##                                                                              au_affiliation_raw
+## 1 Department of Political Science, University of Amsterdam, 1012 DL Amsterdam, The Netherlands;
+## 2               Department of Sociology, Radboud University, 6500 HE Nijmegen, The Netherlands;
+##                    institution_id    institution_display_name           institution_ror
+## 1 https://openalex.org/I887064364     University of Amsterdam https://ror.org/04dkp9463
+## 2 https://openalex.org/I145872427 Radboud University Nijmegen https://ror.org/016xsfp80
+##   institution_country_code institution_type             institution_lineage
+## 1                       NL        education https://openalex.org/I887064364
+## 2                       NL        education https://openalex.org/I145872427</code></pre>
+<pre class="r"><code># OUtput gives us id from author AND CO-author 
+
+
+# To prevent doubles for authors that have common names we can use MULTIPLE FILTERS: eg. institution Radboud University and country NL and so on... 
+
+# find institution ids first to then filterforinstitutions:
+oa_fetch(entity = &quot;institutions&quot;, search = &quot;Radboud University&quot;)</code></pre>
+<pre><code>## # A tibble: 2 × 22
+##   id    display_name display_name_alterna…¹ display_name_acronyms display_name_interna…² ror   ids  
+##   &lt;chr&gt; &lt;chr&gt;        &lt;list&gt;                 &lt;list&gt;                &lt;list&gt;                 &lt;chr&gt; &lt;lis&gt;
+## 1 http… Radboud Uni… &lt;chr [3]&gt;              &lt;lgl [1]&gt;             &lt;chr [44]&gt;             http… &lt;chr&gt;
+## 2 http… Radboud Uni… &lt;chr [2]&gt;              &lt;chr [1]&gt;             &lt;chr [10]&gt;             http… &lt;chr&gt;
+## # ℹ abbreviated names: ¹​display_name_alternatives, ²​display_name_international
+## # ℹ 15 more variables: country_code &lt;chr&gt;, geo &lt;list&gt;, type &lt;chr&gt;, homepage_url &lt;chr&gt;,
+## #   image_url &lt;chr&gt;, image_thumbnail_url &lt;chr&gt;, associated_institutions &lt;list&gt;,
+## #   relevance_score &lt;dbl&gt;, works_count &lt;int&gt;, cited_by_count &lt;int&gt;, counts_by_year &lt;list&gt;,
+## #   works_api_url &lt;chr&gt;, topics &lt;list&gt;, updated_date &lt;chr&gt;, created_date &lt;chr&gt;</code></pre>
+<pre class="r"><code>#output will show id: https://openalex.org/I145872427    for Radboud University Nijmegen
+
+# in code on Jochems in line 162 file title 45 publicationsOpenAlex.rmd
+
+oa_fetch(entity= &quot;author&quot;, search = &quot;Jochem Tolsma&quot;, affiliations.institution.id = &quot;https://openalex.org/I145872427&quot;)</code></pre>
+<pre><code>## # A tibble: 1 × 18
+##   id      display_name display_name_alterna…¹ relevance_score ids   orcid works_count cited_by_count
+##   &lt;chr&gt;   &lt;chr&gt;        &lt;list&gt;                           &lt;dbl&gt; &lt;lis&gt; &lt;chr&gt;       &lt;int&gt;          &lt;int&gt;
+## 1 https:… Jochem Tols… &lt;chr [3]&gt;                        8870. &lt;chr&gt; http…          85           1996
+## # ℹ abbreviated name: ¹​display_name_alternatives
+## # ℹ 10 more variables: counts_by_year &lt;list&gt;, affiliation_display_name &lt;chr&gt;, affiliation_id &lt;chr&gt;,
+## #   affiliation_ror &lt;chr&gt;, affiliation_country_code &lt;chr&gt;, affiliation_type &lt;chr&gt;,
+## #   affiliation_lineage &lt;chr&gt;, affiliations_other &lt;list&gt;, topics &lt;list&gt;, works_api_url &lt;chr&gt;</code></pre>
+<pre class="r"><code>#putput already has a lot of information on Jochem 
+
+
+# NEXT: find all papers Jochem wrote 
+
+oa_fetch (entity = &quot;works&quot;, author.id = &#39;https://openalex.org/A5087380803&#39;)</code></pre>
+<pre><code>## # A tibble: 87 × 38
+##    id    title display_name author ab    publication_date so    so_id host_organization issn_l url  
+##    &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;        &lt;list&gt; &lt;chr&gt; &lt;chr&gt;            &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;             &lt;chr&gt;  &lt;chr&gt;
+##  1 http… Ethn… Ethnic Dive… &lt;df&gt;   Rece… 2014-06-27       Annu… http… Annual Reviews    0360-… http…
+##  2 http… Anti… Anti-Muslim… &lt;df&gt;   Jour… 2010-07-25       Euro… http… Oxford Universit… 0266-… http…
+##  3 http… The … The impact … &lt;df&gt;   Up t… 2009-07-01       Acta… http… Palgrave Macmill… 0001-… http…
+##  4 http… Who … Who is bull… &lt;df&gt;   This… 2013-01-01       Soci… http… Elsevier BV       0378-… http…
+##  5 http… Neig… Neighbourho… &lt;df&gt;   Supp… 2017-01-13       Euro… http… Oxford Universit… 0266-… http…
+##  6 http… Kudo… Kudos make … &lt;df&gt;   Stra… 2023-01-01       Soci… http… Elsevier BV       0378-… http…
+##  7 http… Simi… Similarity … &lt;df&gt;   Indi… 2024-01-01       Soci… http… Elsevier BV       0378-… http…
+##  8 http… Ethn… Ethnic Comp… &lt;df&gt;   Jour… 2007-11-25       Euro… http… Oxford Universit… 0266-… http…
+##  9 http… Educ… Education a… &lt;df&gt;   Abst… 2012-05-01       Jour… http… Taylor &amp; Francis  1369-… http…
+## 10 http… Co-o… Co-occurren… &lt;df&gt;   Alth… 2019-12-01       Chil… http… Elsevier BV       0145-… http…
+## # ℹ 77 more rows
+## # ℹ 27 more variables: pdf_url &lt;chr&gt;, license &lt;chr&gt;, version &lt;chr&gt;, first_page &lt;chr&gt;,
+## #   last_page &lt;chr&gt;, volume &lt;chr&gt;, issue &lt;chr&gt;, is_oa &lt;lgl&gt;, is_oa_anywhere &lt;lgl&gt;, oa_status &lt;chr&gt;,
+## #   oa_url &lt;chr&gt;, any_repository_has_fulltext &lt;lgl&gt;, language &lt;chr&gt;, grants &lt;list&gt;,
+## #   cited_by_count &lt;int&gt;, counts_by_year &lt;list&gt;, publication_year &lt;int&gt;, cited_by_api_url &lt;chr&gt;,
+## #   ids &lt;list&gt;, doi &lt;chr&gt;, type &lt;chr&gt;, referenced_works &lt;list&gt;, related_works &lt;list&gt;,
+## #   is_paratext &lt;lgl&gt;, is_retracted &lt;lgl&gt;, concepts &lt;list&gt;, topics &lt;list&gt;</code></pre>
+<pre class="r"><code> # id is the author id  from somewhere prior in Jochems script </code></pre>
+<div id="adjacency-matrix-for-4-authors" class="section level2"
+number="12.1">
+<h2><span class="header-section-number">12.1</span> Adjacency matrix for
+4 authors</h2>
+<pre class="r"><code>packages &lt;- c(&quot;tidyverse&quot;, &quot;scholar&quot;, &quot;openalexR&quot;, &quot;rvest&quot;, &quot;jsonlite&quot;)
+fpackage.check(packages)</code></pre>
+<pre><code>## Loading required package: jsonlite</code></pre>
+<pre><code>## 
+## Attaching package: &#39;jsonlite&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:purrr&#39;:
+## 
+##     flatten</code></pre>
+<pre><code>## [[1]]
+## NULL
+## 
+## [[2]]
+## NULL
+## 
+## [[3]]
+## NULL
+## 
+## [[4]]
+## NULL
+## 
+## [[5]]
+## NULL</code></pre>
+<pre class="r"><code># make adjacency matrix for these four people 
+
+#Jochem tolsma
+# Tom van de Meer
+# Maurice Gesthuizen 
+# Michael Savelkoul  
+
+# What data do we need? 
+  # Authors, University, works, and co-authors 
+  # All in one data frame 
+
+
+# Jochem Tolsma 
+df_jochem &lt;- oa_fetch(entity= &quot;author&quot;, search = &quot;Jochem Tolsma&quot;, affiliations.institution.id = &quot;https://openalex.org/I145872427&quot;)
+
+fshowdf(df_jochem)</code></pre>
+<div
+style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:300px; overflow-x: scroll; width:100%; ">
+<table class="table table-striped table-hover" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+id
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+display_name
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+display_name_alternatives
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+relevance_score
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+ids
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+orcid
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+works_count
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+cited_by_count
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+counts_by_year
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+affiliation_display_name
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+affiliation_id
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+affiliation_ror
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+affiliation_country_code
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+affiliation_type
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+affiliation_lineage
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+affiliations_other
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+topics
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+works_api_url
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<a href="https://openalex.org/A5087380803"
+class="uri">https://openalex.org/A5087380803</a>
+</td>
+<td style="text-align:left;">
+Jochem Tolsma
+</td>
+<td style="text-align:left;">
+J. Tolsma , Jochem Tolsma, J L Tolsma
+</td>
+<td style="text-align:right;">
+8869.57
+</td>
+<td style="text-align:left;">
+<a href="https://openalex.org/A5087380803"
+class="uri">https://openalex.org/A5087380803</a> , <a
+href="https://orcid.org/0000-0002-4411-6932"
+class="uri">https://orcid.org/0000-0002-4411-6932</a>
+</td>
+<td style="text-align:left;">
+<a href="https://orcid.org/0000-0002-4411-6932"
+class="uri">https://orcid.org/0000-0002-4411-6932</a>
+</td>
+<td style="text-align:right;">
+85
+</td>
+<td style="text-align:right;">
+1996
+</td>
+<td style="text-align:left;">
+2024, 2023, 2022, 2021, 2020, 2019, 2018, 2017, 2016, 2015, 2014, 2013,
+2012, 8, 5, 4, 3, 2, 2, 3, 4, 12, 4, 8, 7, 1, 212, 263, 202, 248, 241,
+165, 190, 134, 177, 141, 122, 99, 65
+</td>
+<td style="text-align:left;">
+Radboud University Nijmegen
+</td>
+<td style="text-align:left;">
+<a href="https://openalex.org/I145872427"
+class="uri">https://openalex.org/I145872427</a>
+</td>
+<td style="text-align:left;">
+<a href="https://ror.org/016xsfp80"
+class="uri">https://ror.org/016xsfp80</a>
+</td>
+<td style="text-align:left;">
+NL
+</td>
+<td style="text-align:left;">
+education
+</td>
+<td style="text-align:left;">
+<a href="https://openalex.org/I145872427"
+class="uri">https://openalex.org/I145872427</a>
+</td>
+<td style="text-align:left;">
+<a href="https://openalex.org/I169381384"
+class="uri">https://openalex.org/I169381384</a> , <a
+href="https://openalex.org/I4210087716"
+class="uri">https://openalex.org/I4210087716</a>
+</td>
+<td style="text-align:left;">
+1 , 1 , 1 , 1 , 2 , 2 , 2 , 2 , 3 , 3 , 3 , 3 , 4 , 4 , 4 , 4 , 5 , 5 ,
+5 , 5 , 6 , 6 , 6 , 6 , 7 , 7 , 7 , 7 , 8 , 8 , 8 , 8 , 9 , 9 , 9 , 9 ,
+10 , 10 , 10 , 10 , 11 , 11 , 11 , 11 , 12 , 12 , 12 , 12 , 13 , 13 , 13
+, 13 , 14 , 14 , 14 , 14 , 15 , 15 , 15 , 15 , 16 , 16 , 16 , 16 , 17 ,
+17 , 17 , 17 , 18 , 18 , 18 , 18 , 19 , 19 , 19 , 19 , 20 , 20 , 20 , 20
+, 21 , 21 , 21 , 21 , 22 , 22 , 22 , 22 , 23 , 23 , 23 , 23 , 24 , 24 ,
+24 , 24 , 25 , 25 , 25 , 25 , 15 , 15 , 15 , 15 , 12 , 12 , 12 , 12 , 9
+, 9 , 9 , 9 , 8 , 8 , 8 , 8 , 8 , 8 , 8 , 8 , 8 , 8 , 8 , 8 , 7 , 7 , 7
+, 7 , 7 , 7 , 7 , 7 , 6 , 6 , 6 , 6 , 5 , 5 , 5 , 5 , 5 , 5 , 5 , 5 , 5
+, 5 , 5 , 5 , 5 , 5 , 5 , 5 , 4 , 4 , 4 , 4 , 4 , 4 , 4 , 4 , 4 , 4 , 4
+, 4 , 4 , 4 , 4 , 4 , 4 , 4 , 4 , 4 , 4 , 4 , 4 , 4 , 3 , 3 , 3 , 3 , 3
+, 3 , 3 , 3 , 3 , 3 , 3 , 3 , 3 , 3 , 3 , 3 , 3 , 3 , 3 , 3 , 2 , 2 , 2
+, 2 , topic , subfield , field , domain , topic , subfield , field ,
+domain , topic , subfield , field , domain , topic , subfield , field ,
+domain , topic , subfield , field , domain , topic , subfield , field ,
+domain , topic , subfield , field , domain , topic , subfield , field ,
+domain , topic , subfield , field , domain , topic , subfield , field ,
+domain , topic , subfield , field , domain , topic , subfield , field ,
+domain , topic , subfield , field , domain , topic , subfield , field ,
+domain , topic , subfield , field , domain , topic , subfield , field ,
+domain , topic , subfield , field , domain , topic , subfield , field ,
+domain , topic , subfield , field , domain , topic , subfield , field ,
+domain , topic , subfield , field , domain , topic , subfield , field ,
+domain , topic , subfield , field , domain , topic , subfield , field ,
+domain , topic , subfield , field , domain , <a
+href="https://openalex.org/T11239"
+class="uri">https://openalex.org/T11239</a> , <a
+href="https://openalex.org/subfields/3312"
+class="uri">https://openalex.org/subfields/3312</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T11645"
+class="uri">https://openalex.org/T11645</a> , <a
+href="https://openalex.org/subfields/3312"
+class="uri">https://openalex.org/subfields/3312</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T12088"
+class="uri">https://openalex.org/T12088</a> , <a
+href="https://openalex.org/subfields/3312"
+class="uri">https://openalex.org/subfields/3312</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T10216"
+class="uri">https://openalex.org/T10216</a> , <a
+href="https://openalex.org/subfields/3312"
+class="uri">https://openalex.org/subfields/3312</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T10108"
+class="uri">https://openalex.org/T10108</a> , <a
+href="https://openalex.org/subfields/3320"
+class="uri">https://openalex.org/subfields/3320</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T10349"
+class="uri">https://openalex.org/T10349</a> , <a
+href="https://openalex.org/subfields/3312"
+class="uri">https://openalex.org/subfields/3312</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T10314"
+class="uri">https://openalex.org/T10314</a> , <a
+href="https://openalex.org/subfields/3312"
+class="uri">https://openalex.org/subfields/3312</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T10235"
+class="uri">https://openalex.org/T10235</a> , <a
+href="https://openalex.org/subfields/3306"
+class="uri">https://openalex.org/subfields/3306</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T13064"
+class="uri">https://openalex.org/T13064</a> , <a
+href="https://openalex.org/subfields/3304"
+class="uri">https://openalex.org/subfields/3304</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T13709"
+class="uri">https://openalex.org/T13709</a> , <a
+href="https://openalex.org/subfields/3304"
+class="uri">https://openalex.org/subfields/3304</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T10574"
+class="uri">https://openalex.org/T10574</a> , <a
+href="https://openalex.org/subfields/3312"
+class="uri">https://openalex.org/subfields/3312</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T10557"
+class="uri">https://openalex.org/T10557</a> , <a
+href="https://openalex.org/subfields/3315"
+class="uri">https://openalex.org/subfields/3315</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T10443"
+class="uri">https://openalex.org/T10443</a> , <a
+href="https://openalex.org/subfields/3320"
+class="uri">https://openalex.org/subfields/3320</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T10652"
+class="uri">https://openalex.org/T10652</a> , <a
+href="https://openalex.org/subfields/3312"
+class="uri">https://openalex.org/subfields/3312</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T11397"
+class="uri">https://openalex.org/T11397</a> , <a
+href="https://openalex.org/subfields/3320"
+class="uri">https://openalex.org/subfields/3320</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T10674"
+class="uri">https://openalex.org/T10674</a> , <a
+href="https://openalex.org/subfields/3304"
+class="uri">https://openalex.org/subfields/3304</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T12592"
+class="uri">https://openalex.org/T12592</a> , <a
+href="https://openalex.org/subfields/3109"
+class="uri">https://openalex.org/subfields/3109</a> , <a
+href="https://openalex.org/fields/31"
+class="uri">https://openalex.org/fields/31</a> , <a
+href="https://openalex.org/domains/3"
+class="uri">https://openalex.org/domains/3</a> , <a
+href="https://openalex.org/T10762"
+class="uri">https://openalex.org/T10762</a> , <a
+href="https://openalex.org/subfields/3203"
+class="uri">https://openalex.org/subfields/3203</a> , <a
+href="https://openalex.org/fields/32"
+class="uri">https://openalex.org/fields/32</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T13532"
+class="uri">https://openalex.org/T13532</a> , <a
+href="https://openalex.org/subfields/3304"
+class="uri">https://openalex.org/subfields/3304</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T11076"
+class="uri">https://openalex.org/T11076</a> , <a
+href="https://openalex.org/subfields/3320"
+class="uri">https://openalex.org/subfields/3320</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T12714"
+class="uri">https://openalex.org/T12714</a> , <a
+href="https://openalex.org/subfields/3312"
+class="uri">https://openalex.org/subfields/3312</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T10208"
+class="uri">https://openalex.org/T10208</a> , <a
+href="https://openalex.org/subfields/2002"
+class="uri">https://openalex.org/subfields/2002</a> , <a
+href="https://openalex.org/fields/20"
+class="uri">https://openalex.org/fields/20</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T10064"
+class="uri">https://openalex.org/T10064</a> , <a
+href="https://openalex.org/subfields/3109"
+class="uri">https://openalex.org/subfields/3109</a> , <a
+href="https://openalex.org/fields/31"
+class="uri">https://openalex.org/fields/31</a> , <a
+href="https://openalex.org/domains/3"
+class="uri">https://openalex.org/domains/3</a> , <a
+href="https://openalex.org/T10182"
+class="uri">https://openalex.org/T10182</a> , <a
+href="https://openalex.org/subfields/3203"
+class="uri">https://openalex.org/subfields/3203</a> , <a
+href="https://openalex.org/fields/32"
+class="uri">https://openalex.org/fields/32</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T11120"
+class="uri">https://openalex.org/T11120</a> , <a
+href="https://openalex.org/subfields/3312"
+class="uri">https://openalex.org/subfields/3312</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , Social Capital and
+Trust in Communities , Sociology and Political Science , Social Sciences
+, Social Sciences , Effects of Residential Segregation on Communities
+and Individuals , Sociology and Political Science , Social Sciences ,
+Social Sciences , Intergenerational Mobility and Social Stratification ,
+Sociology and Political Science , Social Sciences , Social Sciences ,
+Politics and Social Implications of Immigration , Sociology and
+Political Science , Social Sciences , Social Sciences , Empirical
+Analysis of Political Behavior and Institutions , Political Science and
+International Relations , Social Sciences , Social Sciences , Migration
+Networks and Impacts on Labor Market , Sociology and Political Science ,
+Social Sciences , Social Sciences , Intergroup Relations and Social
+Identity Theories , Sociology and Political Science , Social Sciences ,
+Social Sciences , Impact of Social Factors on Health Outcomes , Health ,
+Social Sciences , Social Sciences , Education and Research Methods in
+Social Sciences , Education , Social Sciences , Social Sciences ,
+Education Policy and Social Development , Education , Social Sciences ,
+Social Sciences , Impact of Social Structure on Crime and Delinquency ,
+Sociology and Political Science , Social Sciences , Social Sciences ,
+The Impact of Digital Media on Public Discourse , Communication , Social
+Sciences , Social Sciences , Politics and Economics of Welfare State ,
+Political Science and International Relations , Social Sciences , Social
+Sciences , Racial Discrimination and Health Inequities , Sociology and
+Political Science , Social Sciences , Social Sciences , Populism in
+Contemporary Politics , Political Science and International Relations ,
+Social Sciences , Social Sciences , Inequality in Education: Impact of
+Socioeconomic Status , Education , Social Sciences , Social Sciences ,
+Statistical Physics of Opinion Dynamics , Statistical and Nonlinear
+Physics , Physics and Astronomy , Physical Sciences , Mental Health of
+Refugees and Immigrants , Clinical Psychology , Psychology , Social
+Sciences , Vocational Education and Training in Australia , Education ,
+Social Sciences , Social Sciences , Impact of Procedural Justice on
+Police Legitimacy , Political Science and International Relations ,
+Social Sciences , Social Sciences , Youth Transitions and Social
+Inequality , Sociology and Political Science , Social Sciences , Social
+Sciences , Labor Market Dynamics and Inequality , Economics and
+Econometrics , Economics, Econometrics and Finance , Social Sciences ,
+Statistical Mechanics of Complex Networks , Statistical and Nonlinear
+Physics , Physics and Astronomy , Physical Sciences , Emotion Regulation
+and Psychopathology in Children and Adolescents, Clinical Psychology ,
+Psychology , Social Sciences , Multilevel Perspectives on Prosocial
+Behavior and Volunteering , Sociology and Political Science , Social
+Sciences , Social Sciences
+</td>
+<td style="text-align:left;">
+<a href="https://api.openalex.org/works?filter=author.id:A5087380803"
+class="uri">https://api.openalex.org/works?filter=author.id:A5087380803</a>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<pre class="r"><code># Maurice Gesthuizen
+df_maurice &lt;- oa_fetch(entity= &quot;author&quot;, search = &quot;Maurice Gesthuizen&quot;, affiliations.institution.id = &quot;https://openalex.org/I145872427&quot;)
+
+fshowdf(df_maurice)</code></pre>
+<div
+style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:300px; overflow-x: scroll; width:100%; ">
+<table class="table table-striped table-hover" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+id
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+display_name
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+display_name_alternatives
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+relevance_score
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+ids
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+orcid
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+works_count
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+cited_by_count
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+counts_by_year
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+affiliation_display_name
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+affiliation_id
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+affiliation_ror
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+affiliation_country_code
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+affiliation_type
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+affiliation_lineage
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+affiliations_other
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+topics
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+works_api_url
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<a href="https://openalex.org/A5007673492"
+class="uri">https://openalex.org/A5007673492</a>
+</td>
+<td style="text-align:left;">
+Maurice Gesthuizen
+</td>
+<td style="text-align:left;">
+Maurice Johannes Wilhelmus Gesthuizen, M. Gesthuizen , Maurice
+Gesthuizen , M.J.W. Gesthuizen , Maurice J.W. Gesthuizen
+</td>
+<td style="text-align:right;">
+8262.18
+</td>
+<td style="text-align:left;">
+<a href="https://openalex.org/A5007673492"
+class="uri">https://openalex.org/A5007673492</a> , <a
+href="https://orcid.org/0000-0002-5286-3989"
+class="uri">https://orcid.org/0000-0002-5286-3989</a>
+</td>
+<td style="text-align:left;">
+<a href="https://orcid.org/0000-0002-5286-3989"
+class="uri">https://orcid.org/0000-0002-5286-3989</a>
+</td>
+<td style="text-align:right;">
+112
+</td>
+<td style="text-align:right;">
+1823
+</td>
+<td style="text-align:left;">
+2024, 2023, 2022, 2021, 2020, 2019, 2018, 2017, 2016, 2015, 2014, 2013,
+2012, 0, 3, 1, 3, 3, 10, 2, 6, 6, 6, 5, 9, 4, 85, 157, 129, 189, 146,
+120, 115, 127, 114, 142, 101, 135, 78
+</td>
+<td style="text-align:left;">
+Radboud University Nijmegen
+</td>
+<td style="text-align:left;">
+<a href="https://openalex.org/I145872427"
+class="uri">https://openalex.org/I145872427</a>
+</td>
+<td style="text-align:left;">
+<a href="https://ror.org/016xsfp80"
+class="uri">https://ror.org/016xsfp80</a>
+</td>
+<td style="text-align:left;">
+NL
+</td>
+<td style="text-align:left;">
+education
+</td>
+<td style="text-align:left;">
+<a href="https://openalex.org/I145872427"
+class="uri">https://openalex.org/I145872427</a>
+</td>
+<td style="text-align:left;">
+<a href="https://openalex.org/I40120149"
+class="uri">https://openalex.org/I40120149</a> , <a
+href="https://openalex.org/I4210100529"
+class="uri">https://openalex.org/I4210100529</a>, <a
+href="https://openalex.org/I75951250"
+class="uri">https://openalex.org/I75951250</a>
+</td>
+<td style="text-align:left;">
+1 , 1 , 1 , 1 , 2 , 2 , 2 , 2 , 3 , 3 , 3 , 3 , 4 , 4 , 4 , 4 , 5 , 5 ,
+5 , 5 , 6 , 6 , 6 , 6 , 7 , 7 , 7 , 7 , 8 , 8 , 8 , 8 , 9 , 9 , 9 , 9 ,
+10 , 10 , 10 , 10 , 11 , 11 , 11 , 11 , 12 , 12 , 12 , 12 , 13 , 13 , 13
+, 13 , 14 , 14 , 14 , 14 , 15 , 15 , 15 , 15 , 16 , 16 , 16 , 16 , 17 ,
+17 , 17 , 17 , 18 , 18 , 18 , 18 , 19 , 19 , 19 , 19 , 20 , 20 , 20 , 20
+, 21 , 21 , 21 , 21 , 22 , 22 , 22 , 22 , 23 , 23 , 23 , 23 , 24 , 24 ,
+24 , 24 , 25 , 25 , 25 , 25 , 31 , 31 , 31 , 31 , 23 , 23 , 23 , 23 , 19
+, 19 , 19 , 19 , 18 , 18 , 18 , 18 , 17 , 17 , 17 , 17 , 14 , 14 , 14 ,
+14 , 14 , 14 , 14 , 14 , 13 , 13 , 13 , 13 , 13 , 13 , 13 , 13 , 10 , 10
+, 10 , 10 , 8 , 8 , 8 , 8 , 7 , 7 , 7 , 7 , 6 , 6 , 6 , 6 , 6 , 6 , 6 ,
+6 , 5 , 5 , 5 , 5 , 5 , 5 , 5 , 5 , 4 , 4 , 4 , 4 , 4 , 4 , 4 , 4 , 4 ,
+4 , 4 , 4 , 4 , 4 , 4 , 4 , 3 , 3 , 3 , 3 , 3 , 3 , 3 , 3 , 3 , 3 , 3 ,
+3 , 3 , 3 , 3 , 3 , 2 , 2 , 2 , 2 , topic , subfield , field , domain ,
+topic , subfield , field , domain , topic , subfield , field , domain ,
+topic , subfield , field , domain , topic , subfield , field , domain ,
+topic , subfield , field , domain , topic , subfield , field , domain ,
+topic , subfield , field , domain , topic , subfield , field , domain ,
+topic , subfield , field , domain , topic , subfield , field , domain ,
+topic , subfield , field , domain , topic , subfield , field , domain ,
+topic , subfield , field , domain , topic , subfield , field , domain ,
+topic , subfield , field , domain , topic , subfield , field , domain ,
+topic , subfield , field , domain , topic , subfield , field , domain ,
+topic , subfield , field , domain , topic , subfield , field , domain ,
+topic , subfield , field , domain , topic , subfield , field , domain ,
+topic , subfield , field , domain , topic , subfield , field , domain ,
+<a href="https://openalex.org/T11959"
+class="uri">https://openalex.org/T11959</a> , <a
+href="https://openalex.org/subfields/3600"
+class="uri">https://openalex.org/subfields/3600</a> , <a
+href="https://openalex.org/fields/36"
+class="uri">https://openalex.org/fields/36</a> , <a
+href="https://openalex.org/domains/4"
+class="uri">https://openalex.org/domains/4</a> , <a
+href="https://openalex.org/T10208"
+class="uri">https://openalex.org/T10208</a> , <a
+href="https://openalex.org/subfields/2002"
+class="uri">https://openalex.org/subfields/2002</a> , <a
+href="https://openalex.org/fields/20"
+class="uri">https://openalex.org/fields/20</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T11239"
+class="uri">https://openalex.org/T11239</a> , <a
+href="https://openalex.org/subfields/3312"
+class="uri">https://openalex.org/subfields/3312</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T10443"
+class="uri">https://openalex.org/T10443</a> , <a
+href="https://openalex.org/subfields/3320"
+class="uri">https://openalex.org/subfields/3320</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T11631"
+class="uri">https://openalex.org/T11631</a> , <a
+href="https://openalex.org/subfields/3317"
+class="uri">https://openalex.org/subfields/3317</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T12088"
+class="uri">https://openalex.org/T12088</a> , <a
+href="https://openalex.org/subfields/3312"
+class="uri">https://openalex.org/subfields/3312</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T10235"
+class="uri">https://openalex.org/T10235</a> , <a
+href="https://openalex.org/subfields/3306"
+class="uri">https://openalex.org/subfields/3306</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T12714"
+class="uri">https://openalex.org/T12714</a> , <a
+href="https://openalex.org/subfields/3312"
+class="uri">https://openalex.org/subfields/3312</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T13532"
+class="uri">https://openalex.org/T13532</a> , <a
+href="https://openalex.org/subfields/3304"
+class="uri">https://openalex.org/subfields/3304</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T13064"
+class="uri">https://openalex.org/T13064</a> , <a
+href="https://openalex.org/subfields/3304"
+class="uri">https://openalex.org/subfields/3304</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T11421"
+class="uri">https://openalex.org/T11421</a> , <a
+href="https://openalex.org/subfields/3321"
+class="uri">https://openalex.org/subfields/3321</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T14424"
+class="uri">https://openalex.org/T14424</a> , <a
+href="https://openalex.org/subfields/2002"
+class="uri">https://openalex.org/subfields/2002</a> , <a
+href="https://openalex.org/fields/20"
+class="uri">https://openalex.org/fields/20</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T13709"
+class="uri">https://openalex.org/T13709</a> , <a
+href="https://openalex.org/subfields/3304"
+class="uri">https://openalex.org/subfields/3304</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T11895"
+class="uri">https://openalex.org/T11895</a> , <a
+href="https://openalex.org/subfields/3312"
+class="uri">https://openalex.org/subfields/3312</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T11645"
+class="uri">https://openalex.org/T11645</a> , <a
+href="https://openalex.org/subfields/3312"
+class="uri">https://openalex.org/subfields/3312</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T11544"
+class="uri">https://openalex.org/T11544</a> , <a
+href="https://openalex.org/subfields/3318"
+class="uri">https://openalex.org/subfields/3318</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T11120"
+class="uri">https://openalex.org/T11120</a> , <a
+href="https://openalex.org/subfields/3312"
+class="uri">https://openalex.org/subfields/3312</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T11454"
+class="uri">https://openalex.org/T11454</a> , <a
+href="https://openalex.org/subfields/3207"
+class="uri">https://openalex.org/subfields/3207</a> , <a
+href="https://openalex.org/fields/32"
+class="uri">https://openalex.org/fields/32</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T10314"
+class="uri">https://openalex.org/T10314</a> , <a
+href="https://openalex.org/subfields/3312"
+class="uri">https://openalex.org/subfields/3312</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T10108"
+class="uri">https://openalex.org/T10108</a> , <a
+href="https://openalex.org/subfields/3320"
+class="uri">https://openalex.org/subfields/3320</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T14509"
+class="uri">https://openalex.org/T14509</a> , <a
+href="https://openalex.org/subfields/1803"
+class="uri">https://openalex.org/subfields/1803</a> , <a
+href="https://openalex.org/fields/18"
+class="uri">https://openalex.org/fields/18</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T10475"
+class="uri">https://openalex.org/T10475</a> , <a
+href="https://openalex.org/subfields/3207"
+class="uri">https://openalex.org/subfields/3207</a> , <a
+href="https://openalex.org/fields/32"
+class="uri">https://openalex.org/fields/32</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T10349"
+class="uri">https://openalex.org/T10349</a> , <a
+href="https://openalex.org/subfields/3312"
+class="uri">https://openalex.org/subfields/3312</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T12781"
+class="uri">https://openalex.org/T12781</a> , <a
+href="https://openalex.org/subfields/3600"
+class="uri">https://openalex.org/subfields/3600</a> , <a
+href="https://openalex.org/fields/36"
+class="uri">https://openalex.org/fields/36</a> , <a
+href="https://openalex.org/domains/4"
+class="uri">https://openalex.org/domains/4</a> , <a
+href="https://openalex.org/T10722"
+class="uri">https://openalex.org/T10722</a> , <a
+href="https://openalex.org/subfields/3312"
+class="uri">https://openalex.org/subfields/3312</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , Health Effects of
+Precarious Employment and Unemployment , General Health Professions ,
+Health Professions , Health Sciences , Labor Market Dynamics and
+Inequality , Economics and Econometrics , Economics, Econometrics and
+Finance , Social Sciences , Social Capital and Trust in Communities ,
+Sociology and Political Science , Social Sciences , Social Sciences ,
+Politics and Economics of Welfare State , Political Science and
+International Relations , Social Sciences , Social Sciences , Impact of
+Retirement on Aging Workforce , Demography , Social Sciences , Social
+Sciences , Intergenerational Mobility and Social Stratification ,
+Sociology and Political Science , Social Sciences , Social Sciences ,
+Impact of Social Factors on Health Outcomes , Health , Social Sciences ,
+Social Sciences , Youth Transitions and Social Inequality , Sociology
+and Political Science , Social Sciences , Social Sciences , Vocational
+Education and Training in Australia , Education , Social Sciences ,
+Social Sciences , Education and Research Methods in Social Sciences ,
+Education , Social Sciences , Social Sciences , Labor Relations and
+Union Revitalization Studies , Public Administration , Social Sciences ,
+Social Sciences , Economic Policy and Development Analysis , Economics
+and Econometrics , Economics, Econometrics and Finance , Social Sciences
+, Education Policy and Social Development , Education , Social Sciences
+, Social Sciences , Cultural Capital and Social Class in Education ,
+Sociology and Political Science , Social Sciences , Social Sciences ,
+Effects of Residential Segregation on Communities and Individuals,
+Sociology and Political Science , Social Sciences , Social Sciences ,
+Gender Inequality and Labor Force Dynamics , Gender Studies , Social
+Sciences , Social Sciences , Multilevel Perspectives on Prosocial
+Behavior and Volunteering , Sociology and Political Science , Social
+Sciences , Social Sciences , Cultural Psychology and Values Research ,
+Social Psychology , Psychology , Social Sciences , Intergroup Relations
+and Social Identity Theories , Sociology and Political Science , Social
+Sciences , Social Sciences , Empirical Analysis of Political Behavior
+and Institutions , Political Science and International Relations ,
+Social Sciences , Social Sciences , Spatial Microsimulation Models for
+Policy Analysis , Management Science and Operations Research , Decision
+Sciences , Social Sciences , Role of Positive Emotions in Well-Being ,
+Social Psychology , Psychology , Social Sciences , Migration Networks
+and Impacts on Labor Market , Sociology and Political Science , Social
+Sciences , Social Sciences , Determinants of Health Care Expenditure and
+Longevity , General Health Professions , Health Professions , Health
+Sciences , The Dynamics of Work and Family Interactions , Sociology and
+Political Science , Social Sciences , Social Sciences
+</td>
+<td style="text-align:left;">
+<a href="https://api.openalex.org/works?filter=author.id:A5007673492"
+class="uri">https://api.openalex.org/works?filter=author.id:A5007673492</a>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<pre class="r"><code># Michael Savelkoul
+df_michael &lt;- oa_fetch(entity= &quot;author&quot;, search = &quot;Michael Savelkoul&quot;, affiliations.institution.id = &quot;https://openalex.org/I145872427&quot;)
+
+fshowdf(df_michael)</code></pre>
+<div
+style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:300px; overflow-x: scroll; width:100%; ">
+<table class="table table-striped table-hover" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+id
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+display_name
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+display_name_alternatives
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+relevance_score
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+ids
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+orcid
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+works_count
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+cited_by_count
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+counts_by_year
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+affiliation_display_name
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+affiliation_id
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+affiliation_ror
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+affiliation_country_code
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+affiliation_type
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+affiliation_lineage
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+affiliations_other
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+topics
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+works_api_url
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<a href="https://openalex.org/A5048988743"
+class="uri">https://openalex.org/A5048988743</a>
+</td>
+<td style="text-align:left;">
+Michael Savelkoul
+</td>
+<td style="text-align:left;">
+M.J. Savelkoul , M. Savelkoul , Michael Savelkoul
+</td>
+<td style="text-align:right;">
+4028.22
+</td>
+<td style="text-align:left;">
+<a href="https://openalex.org/A5048988743"
+class="uri">https://openalex.org/A5048988743</a> , <a
+href="https://orcid.org/0000-0002-2078-9462"
+class="uri">https://orcid.org/0000-0002-2078-9462</a>
+</td>
+<td style="text-align:left;">
+<a href="https://orcid.org/0000-0002-2078-9462"
+class="uri">https://orcid.org/0000-0002-2078-9462</a>
+</td>
+<td style="text-align:right;">
+29
+</td>
+<td style="text-align:right;">
+586
+</td>
+<td style="text-align:left;">
+2024, 2023, 2022, 2021, 2020, 2019, 2018, 2017, 2016, 2015, 2014, 2013,
+2012, 0, 2, 1, 3, 1, 2, 3, 4, 2, 2, 2, 2, 1, 55, 49, 56, 63, 92, 34, 53,
+44, 37, 44, 29, 35, 13
+</td>
+<td style="text-align:left;">
+Radboud University Nijmegen
+</td>
+<td style="text-align:left;">
+<a href="https://openalex.org/I145872427"
+class="uri">https://openalex.org/I145872427</a>
+</td>
+<td style="text-align:left;">
+<a href="https://ror.org/016xsfp80"
+class="uri">https://ror.org/016xsfp80</a>
+</td>
+<td style="text-align:left;">
+NL
+</td>
+<td style="text-align:left;">
+education
+</td>
+<td style="text-align:left;">
+<a href="https://openalex.org/I145872427"
+class="uri">https://openalex.org/I145872427</a>
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+1 , 1 , 1 , 1 , 2 , 2 , 2 , 2 , 3 , 3 , 3 , 3 , 4 , 4 , 4 , 4 , 5 , 5 ,
+5 , 5 , 6 , 6 , 6 , 6 , 7 , 7 , 7 , 7 , 8 , 8 , 8 , 8 , 9 , 9 , 9 , 9 ,
+10 , 10 , 10 , 10 , 11 , 11 , 11 , 11 , 12 , 12 , 12 , 12 , 13 , 13 , 13
+, 13 , 14 , 14 , 14 , 14 , 15 , 15 , 15 , 15 , 16 , 16 , 16 , 16 , 17 ,
+17 , 17 , 17 , 18 , 18 , 18 , 18 , 19 , 19 , 19 , 19 , 20 , 20 , 20 , 20
+, 21 , 21 , 21 , 21 , 22 , 22 , 22 , 22 , 23 , 23 , 23 , 23 , 24 , 24 ,
+24 , 24 , 25 , 25 , 25 , 25 , 9 , 9 , 9 , 9 , 8 , 8 , 8 , 8 , 5 , 5 , 5
+, 5 , 5 , 5 , 5 , 5 , 4 , 4 , 4 , 4 , 4 , 4 , 4 , 4 , 4 , 4 , 4 , 4 , 2
+, 2 , 2 , 2 , 2 , 2 , 2 , 2 , 2 , 2 , 2 , 2 , 2 , 2 , 2 , 2 , 2 , 2 , 2
+, 2 , 1 , 1 , 1 , 1 , 1 , 1 , 1 , 1 , 1 , 1 , 1 , 1 , 1 , 1 , 1 , 1 , 1
+, 1 , 1 , 1 , 1 , 1 , 1 , 1 , 1 , 1 , 1 , 1 , 1 , 1 , 1 , 1 , 1 , 1 , 1
+, 1 , 1 , 1 , 1 , 1 , 1 , 1 , 1 , 1 , 1 , 1 , 1 , 1 , 1 , 1 , 1 , 1 ,
+topic , subfield , field , domain , topic , subfield , field , domain ,
+topic , subfield , field , domain , topic , subfield , field , domain ,
+topic , subfield , field , domain , topic , subfield , field , domain ,
+topic , subfield , field , domain , topic , subfield , field , domain ,
+topic , subfield , field , domain , topic , subfield , field , domain ,
+topic , subfield , field , domain , topic , subfield , field , domain ,
+topic , subfield , field , domain , topic , subfield , field , domain ,
+topic , subfield , field , domain , topic , subfield , field , domain ,
+topic , subfield , field , domain , topic , subfield , field , domain ,
+topic , subfield , field , domain , topic , subfield , field , domain ,
+topic , subfield , field , domain , topic , subfield , field , domain ,
+topic , subfield , field , domain , topic , subfield , field , domain ,
+topic , subfield , field , domain , <a
+href="https://openalex.org/T11239"
+class="uri">https://openalex.org/T11239</a> , <a
+href="https://openalex.org/subfields/3312"
+class="uri">https://openalex.org/subfields/3312</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T10314"
+class="uri">https://openalex.org/T10314</a> , <a
+href="https://openalex.org/subfields/3312"
+class="uri">https://openalex.org/subfields/3312</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T11397"
+class="uri">https://openalex.org/T11397</a> , <a
+href="https://openalex.org/subfields/3320"
+class="uri">https://openalex.org/subfields/3320</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T10108"
+class="uri">https://openalex.org/T10108</a> , <a
+href="https://openalex.org/subfields/3320"
+class="uri">https://openalex.org/subfields/3320</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T10216"
+class="uri">https://openalex.org/T10216</a> , <a
+href="https://openalex.org/subfields/3312"
+class="uri">https://openalex.org/subfields/3312</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T10235"
+class="uri">https://openalex.org/T10235</a> , <a
+href="https://openalex.org/subfields/3306"
+class="uri">https://openalex.org/subfields/3306</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T13184"
+class="uri">https://openalex.org/T13184</a> , <a
+href="https://openalex.org/subfields/3304"
+class="uri">https://openalex.org/subfields/3304</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T14424"
+class="uri">https://openalex.org/T14424</a> , <a
+href="https://openalex.org/subfields/2002"
+class="uri">https://openalex.org/subfields/2002</a> , <a
+href="https://openalex.org/fields/20"
+class="uri">https://openalex.org/fields/20</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T11120"
+class="uri">https://openalex.org/T11120</a> , <a
+href="https://openalex.org/subfields/3312"
+class="uri">https://openalex.org/subfields/3312</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T11645"
+class="uri">https://openalex.org/T11645</a> , <a
+href="https://openalex.org/subfields/3312"
+class="uri">https://openalex.org/subfields/3312</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T10475"
+class="uri">https://openalex.org/T10475</a> , <a
+href="https://openalex.org/subfields/3207"
+class="uri">https://openalex.org/subfields/3207</a> , <a
+href="https://openalex.org/fields/32"
+class="uri">https://openalex.org/fields/32</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T13064"
+class="uri">https://openalex.org/T13064</a> , <a
+href="https://openalex.org/subfields/3304"
+class="uri">https://openalex.org/subfields/3304</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T12595"
+class="uri">https://openalex.org/T12595</a> , <a
+href="https://openalex.org/subfields/3600"
+class="uri">https://openalex.org/subfields/3600</a> , <a
+href="https://openalex.org/fields/36"
+class="uri">https://openalex.org/fields/36</a> , <a
+href="https://openalex.org/domains/4"
+class="uri">https://openalex.org/domains/4</a> , <a
+href="https://openalex.org/T12970"
+class="uri">https://openalex.org/T12970</a> , <a
+href="https://openalex.org/subfields/3312"
+class="uri">https://openalex.org/subfields/3312</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T14514"
+class="uri">https://openalex.org/T14514</a> , <a
+href="https://openalex.org/subfields/3608"
+class="uri">https://openalex.org/subfields/3608</a> , <a
+href="https://openalex.org/fields/36"
+class="uri">https://openalex.org/fields/36</a> , <a
+href="https://openalex.org/domains/4"
+class="uri">https://openalex.org/domains/4</a> , <a
+href="https://openalex.org/T10652"
+class="uri">https://openalex.org/T10652</a> , <a
+href="https://openalex.org/subfields/3312"
+class="uri">https://openalex.org/subfields/3312</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T10213"
+class="uri">https://openalex.org/T10213</a> , <a
+href="https://openalex.org/subfields/3321"
+class="uri">https://openalex.org/subfields/3321</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T10629"
+class="uri">https://openalex.org/T10629</a> , <a
+href="https://openalex.org/subfields/3600"
+class="uri">https://openalex.org/subfields/3600</a> , <a
+href="https://openalex.org/fields/36"
+class="uri">https://openalex.org/fields/36</a> , <a
+href="https://openalex.org/domains/4"
+class="uri">https://openalex.org/domains/4</a> , <a
+href="https://openalex.org/T10070"
+class="uri">https://openalex.org/T10070</a> , <a
+href="https://openalex.org/subfields/3312"
+class="uri">https://openalex.org/subfields/3312</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T10350"
+class="uri">https://openalex.org/T10350</a> , <a
+href="https://openalex.org/subfields/3605"
+class="uri">https://openalex.org/subfields/3605</a> , <a
+href="https://openalex.org/fields/36"
+class="uri">https://openalex.org/fields/36</a> , <a
+href="https://openalex.org/domains/4"
+class="uri">https://openalex.org/domains/4</a> , <a
+href="https://openalex.org/T10156"
+class="uri">https://openalex.org/T10156</a> , <a
+href="https://openalex.org/subfields/3207"
+class="uri">https://openalex.org/subfields/3207</a> , <a
+href="https://openalex.org/fields/32"
+class="uri">https://openalex.org/fields/32</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T11454"
+class="uri">https://openalex.org/T11454</a> , <a
+href="https://openalex.org/subfields/3207"
+class="uri">https://openalex.org/subfields/3207</a> , <a
+href="https://openalex.org/fields/32"
+class="uri">https://openalex.org/fields/32</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T10646"
+class="uri">https://openalex.org/T10646</a> , <a
+href="https://openalex.org/subfields/3311"
+class="uri">https://openalex.org/subfields/3311</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T12246"
+class="uri">https://openalex.org/T12246</a> , <a
+href="https://openalex.org/subfields/2713"
+class="uri">https://openalex.org/subfields/2713</a> , <a
+href="https://openalex.org/fields/27"
+class="uri">https://openalex.org/fields/27</a> , <a
+href="https://openalex.org/domains/4"
+class="uri">https://openalex.org/domains/4</a> , <a
+href="https://openalex.org/T10994"
+class="uri">https://openalex.org/T10994</a> , <a
+href="https://openalex.org/subfields/3312"
+class="uri">https://openalex.org/subfields/3312</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , Social Capital and
+Trust in Communities , Sociology and Political Science , Social Sciences
+, Social Sciences , Intergroup Relations and Social Identity Theories ,
+Sociology and Political Science , Social Sciences , Social Sciences ,
+Populism in Contemporary Politics , Political Science and International
+Relations , Social Sciences , Social Sciences , Empirical Analysis of
+Political Behavior and Institutions , Political Science and
+International Relations , Social Sciences , Social Sciences , Politics
+and Social Implications of Immigration , Sociology and Political Science
+, Social Sciences , Social Sciences , Impact of Social Factors on Health
+Outcomes , Health , Social Sciences , Social Sciences , Qualitative
+Research in Social Sciences and Education , Education , Social Sciences
+, Social Sciences , Economic Policy and Development Analysis , Economics
+and Econometrics , Economics, Econometrics and Finance , Social Sciences
+, Multilevel Perspectives on Prosocial Behavior and Volunteering ,
+Sociology and Political Science , Social Sciences , Social Sciences ,
+Effects of Residential Segregation on Communities and Individuals,
+Sociology and Political Science , Social Sciences , Social Sciences ,
+Role of Positive Emotions in Well-Being , Social Psychology , Psychology
+, Social Sciences , Education and Research Methods in Social Sciences ,
+Education , Social Sciences , Social Sciences , Health Disparities in
+Roma Population , General Health Professions , Health Professions ,
+Health Sciences , Labor Market Discrimination and Inequality in
+Employment , Sociology and Political Science , Social Sciences , Social
+Sciences , Preferred Terminology for Healthcare Recipients , Medical
+Terminology , Health Professions , Health Sciences , Racial
+Discrimination and Health Inequities , Sociology and Political Science ,
+Social Sciences , Social Sciences , Collaborative Governance in Public
+Administration and Management , Public Administration , Social Sciences
+, Social Sciences , Advancing Evidence-Based Practice Implementation in
+Healthcare , General Health Professions , Health Professions , Health
+Sciences , Social Movements and Political Conflict Analysis , Sociology
+and Political Science , Social Sciences , Social Sciences , Impact of
+Health Information Technology in Healthcare , Health Information
+Management , Health Professions , Health Sciences , Intersectionality in
+LGBTQ+ Mental Health , Social Psychology , Psychology , Social Sciences
+, Cultural Psychology and Values Research , Social Psychology ,
+Psychology , Social Sciences , Social Preferences and Economic Behavior
+, Safety Research , Social Sciences , Social Sciences , Epidemiology and
+Implications of Multimorbidity in Healthcare , Epidemiology , Medicine ,
+Health Sciences , Terrorism and Radicalization Studies , Sociology and
+Political Science , Social Sciences , Social Sciences
+</td>
+<td style="text-align:left;">
+<a href="https://api.openalex.org/works?filter=author.id:A5048988743"
+class="uri">https://api.openalex.org/works?filter=author.id:A5048988743</a>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<pre class="r"><code># Tom van der Meer
+df_tom &lt;- oa_fetch(entity= &quot;author&quot;, search = &quot;Tom van der Meer&quot;, affiliations.institution.id = &quot;https://openalex.org/I145872427&quot;)[1,]
+
+fshowdf(df_tom)</code></pre>
+<div
+style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:300px; overflow-x: scroll; width:100%; ">
+<table class="table table-striped table-hover" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+id
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+display_name
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+display_name_alternatives
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+relevance_score
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+ids
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+orcid
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+works_count
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+cited_by_count
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+counts_by_year
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+affiliation_display_name
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+affiliation_id
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+affiliation_ror
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+affiliation_country_code
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+affiliation_type
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+affiliation_lineage
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+affiliations_other
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+topics
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+works_api_url
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<a href="https://openalex.org/A5010780363"
+class="uri">https://openalex.org/A5010780363</a>
+</td>
+<td style="text-align:left;">
+Tom van der Meer
+</td>
+<td style="text-align:left;">
+Tom W.G. van Der Meer , T. W. G. van der Meer , T.W.G. Van Der Meer ,
+T.W.G. Tom van der Meer, Tom W. G. van der Meer , Tom Van Der Meer , T.
+Van Der Meer , TOM W.G. VAN DER MEER
+</td>
+<td style="text-align:right;">
+17008.72
+</td>
+<td style="text-align:left;">
+<a href="https://openalex.org/A5010780363"
+class="uri">https://openalex.org/A5010780363</a> , <a
+href="https://orcid.org/0000-0002-6164-2926"
+class="uri">https://orcid.org/0000-0002-6164-2926</a>
+</td>
+<td style="text-align:left;">
+<a href="https://orcid.org/0000-0002-6164-2926"
+class="uri">https://orcid.org/0000-0002-6164-2926</a>
+</td>
+<td style="text-align:right;">
+147
+</td>
+<td style="text-align:right;">
+4470
+</td>
+<td style="text-align:left;">
+2024, 2023, 2022, 2021, 2020, 2019, 2018, 2017, 2016, 2015, 2014, 2013,
+2012, 5, 3, 4, 5, 6, 3, 9, 21, 14, 10, 5, 6, 9, 464, 717, 556, 585, 408,
+439, 345, 229, 239, 252, 191, 228, 103
+</td>
+<td style="text-align:left;">
+University of Twente
+</td>
+<td style="text-align:left;">
+<a href="https://openalex.org/I94624287"
+class="uri">https://openalex.org/I94624287</a>
+</td>
+<td style="text-align:left;">
+<a href="https://ror.org/006hf6230"
+class="uri">https://ror.org/006hf6230</a>
+</td>
+<td style="text-align:left;">
+NL
+</td>
+<td style="text-align:left;">
+education
+</td>
+<td style="text-align:left;">
+<a href="https://openalex.org/I94624287"
+class="uri">https://openalex.org/I94624287</a>
+</td>
+<td style="text-align:left;">
+<a href="https://openalex.org/I887064364"
+class="uri">https://openalex.org/I887064364</a> , <a
+href="https://openalex.org/I865915315"
+class="uri">https://openalex.org/I865915315</a> , <a
+href="https://openalex.org/I184942183"
+class="uri">https://openalex.org/I184942183</a> , <a
+href="https://openalex.org/I121797337"
+class="uri">https://openalex.org/I121797337</a> , <a
+href="https://openalex.org/I145872427"
+class="uri">https://openalex.org/I145872427</a> , <a
+href="https://openalex.org/I4210151519"
+class="uri">https://openalex.org/I4210151519</a>, <a
+href="https://openalex.org/I4210115529"
+class="uri">https://openalex.org/I4210115529</a>, <a
+href="https://openalex.org/I4210163498"
+class="uri">https://openalex.org/I4210163498</a>
+</td>
+<td style="text-align:left;">
+1 , 1 , 1 , 1 , 2 , 2 , 2 , 2 , 3 , 3 , 3 , 3 , 4 , 4 , 4 , 4 , 5 , 5 ,
+5 , 5 , 6 , 6 , 6 , 6 , 7 , 7 , 7 , 7 , 8 , 8 , 8 , 8 , 9 , 9 , 9 , 9 ,
+10 , 10 , 10 , 10 , 11 , 11 , 11 , 11 , 12 , 12 , 12 , 12 , 13 , 13 , 13
+, 13 , 14 , 14 , 14 , 14 , 15 , 15 , 15 , 15 , 16 , 16 , 16 , 16 , 17 ,
+17 , 17 , 17 , 18 , 18 , 18 , 18 , 19 , 19 , 19 , 19 , 20 , 20 , 20 , 20
+, 21 , 21 , 21 , 21 , 22 , 22 , 22 , 22 , 23 , 23 , 23 , 23 , 24 , 24 ,
+24 , 24 , 25 , 25 , 25 , 25 , 40 , 40 , 40 , 40 , 37 , 37 , 37 , 37 , 19
+, 19 , 19 , 19 , 17 , 17 , 17 , 17 , 17 , 17 , 17 , 17 , 10 , 10 , 10 ,
+10 , 10 , 10 , 10 , 10 , 8 , 8 , 8 , 8 , 7 , 7 , 7 , 7 , 6 , 6 , 6 , 6 ,
+6 , 6 , 6 , 6 , 6 , 6 , 6 , 6 , 5 , 5 , 5 , 5 , 5 , 5 , 5 , 5 , 5 , 5 ,
+5 , 5 , 5 , 5 , 5 , 5 , 5 , 5 , 5 , 5 , 5 , 5 , 5 , 5 , 4 , 4 , 4 , 4 ,
+4 , 4 , 4 , 4 , 4 , 4 , 4 , 4 , 4 , 4 , 4 , 4 , 4 , 4 , 4 , 4 , 3 , 3 ,
+3 , 3 , 3 , 3 , 3 , 3 , topic , subfield , field , domain , topic ,
+subfield , field , domain , topic , subfield , field , domain , topic ,
+subfield , field , domain , topic , subfield , field , domain , topic ,
+subfield , field , domain , topic , subfield , field , domain , topic ,
+subfield , field , domain , topic , subfield , field , domain , topic ,
+subfield , field , domain , topic , subfield , field , domain , topic ,
+subfield , field , domain , topic , subfield , field , domain , topic ,
+subfield , field , domain , topic , subfield , field , domain , topic ,
+subfield , field , domain , topic , subfield , field , domain , topic ,
+subfield , field , domain , topic , subfield , field , domain , topic ,
+subfield , field , domain , topic , subfield , field , domain , topic ,
+subfield , field , domain , topic , subfield , field , domain , topic ,
+subfield , field , domain , topic , subfield , field , domain , <a
+href="https://openalex.org/T10108"
+class="uri">https://openalex.org/T10108</a> , <a
+href="https://openalex.org/subfields/3320"
+class="uri">https://openalex.org/subfields/3320</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T11239"
+class="uri">https://openalex.org/T11239</a> , <a
+href="https://openalex.org/subfields/3312"
+class="uri">https://openalex.org/subfields/3312</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T10557"
+class="uri">https://openalex.org/T10557</a> , <a
+href="https://openalex.org/subfields/3315"
+class="uri">https://openalex.org/subfields/3315</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T13064"
+class="uri">https://openalex.org/T13064</a> , <a
+href="https://openalex.org/subfields/3304"
+class="uri">https://openalex.org/subfields/3304</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T10443"
+class="uri">https://openalex.org/T10443</a> , <a
+href="https://openalex.org/subfields/3320"
+class="uri">https://openalex.org/subfields/3320</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T11397"
+class="uri">https://openalex.org/T11397</a> , <a
+href="https://openalex.org/subfields/3320"
+class="uri">https://openalex.org/subfields/3320</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T14012"
+class="uri">https://openalex.org/T14012</a> , <a
+href="https://openalex.org/subfields/3308"
+class="uri">https://openalex.org/subfields/3308</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T11645"
+class="uri">https://openalex.org/T11645</a> , <a
+href="https://openalex.org/subfields/3312"
+class="uri">https://openalex.org/subfields/3312</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T13710"
+class="uri">https://openalex.org/T13710</a> , <a
+href="https://openalex.org/subfields/3320"
+class="uri">https://openalex.org/subfields/3320</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T11895"
+class="uri">https://openalex.org/T11895</a> , <a
+href="https://openalex.org/subfields/3312"
+class="uri">https://openalex.org/subfields/3312</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T11120"
+class="uri">https://openalex.org/T11120</a> , <a
+href="https://openalex.org/subfields/3312"
+class="uri">https://openalex.org/subfields/3312</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T10289"
+class="uri">https://openalex.org/T10289</a> , <a
+href="https://openalex.org/subfields/3320"
+class="uri">https://openalex.org/subfields/3320</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T13332"
+class="uri">https://openalex.org/T13332</a> , <a
+href="https://openalex.org/subfields/1202"
+class="uri">https://openalex.org/subfields/1202</a> , <a
+href="https://openalex.org/fields/12"
+class="uri">https://openalex.org/fields/12</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T12619"
+class="uri">https://openalex.org/T12619</a> , <a
+href="https://openalex.org/subfields/3320"
+class="uri">https://openalex.org/subfields/3320</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T10216"
+class="uri">https://openalex.org/T10216</a> , <a
+href="https://openalex.org/subfields/3312"
+class="uri">https://openalex.org/subfields/3312</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T14493"
+class="uri">https://openalex.org/T14493</a> , <a
+href="https://openalex.org/subfields/3308"
+class="uri">https://openalex.org/subfields/3308</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T10607"
+class="uri">https://openalex.org/T10607</a> , <a
+href="https://openalex.org/subfields/2504"
+class="uri">https://openalex.org/subfields/2504</a> , <a
+href="https://openalex.org/fields/25"
+class="uri">https://openalex.org/fields/25</a> , <a
+href="https://openalex.org/domains/3"
+class="uri">https://openalex.org/domains/3</a> , <a
+href="https://openalex.org/T10235"
+class="uri">https://openalex.org/T10235</a> , <a
+href="https://openalex.org/subfields/3306"
+class="uri">https://openalex.org/subfields/3306</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T13718"
+class="uri">https://openalex.org/T13718</a> , <a
+href="https://openalex.org/subfields/3312"
+class="uri">https://openalex.org/subfields/3312</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T14292"
+class="uri">https://openalex.org/T14292</a> , <a
+href="https://openalex.org/subfields/3317"
+class="uri">https://openalex.org/subfields/3317</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T10314"
+class="uri">https://openalex.org/T10314</a> , <a
+href="https://openalex.org/subfields/3312"
+class="uri">https://openalex.org/subfields/3312</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T10553"
+class="uri">https://openalex.org/T10553</a> , <a
+href="https://openalex.org/subfields/2206"
+class="uri">https://openalex.org/subfields/2206</a> , <a
+href="https://openalex.org/fields/22"
+class="uri">https://openalex.org/fields/22</a> , <a
+href="https://openalex.org/domains/3"
+class="uri">https://openalex.org/domains/3</a> , <a
+href="https://openalex.org/T11507"
+class="uri">https://openalex.org/T11507</a> , <a
+href="https://openalex.org/subfields/3312"
+class="uri">https://openalex.org/subfields/3312</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T13086"
+class="uri">https://openalex.org/T13086</a> , <a
+href="https://openalex.org/subfields/3320"
+class="uri">https://openalex.org/subfields/3320</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T11621"
+class="uri">https://openalex.org/T11621</a> , <a
+href="https://openalex.org/subfields/2002"
+class="uri">https://openalex.org/subfields/2002</a> , <a
+href="https://openalex.org/fields/20"
+class="uri">https://openalex.org/fields/20</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , Empirical Analysis of
+Political Behavior and Institutions , Political Science and
+International Relations , Social Sciences , Social Sciences , Social
+Capital and Trust in Communities , Sociology and Political Science ,
+Social Sciences , Social Sciences , The Impact of Digital Media on
+Public Discourse , Communication , Social Sciences , Social Sciences ,
+Education and Research Methods in Social Sciences , Education , Social
+Sciences , Social Sciences , Politics and Economics of Welfare State ,
+Political Science and International Relations , Social Sciences , Social
+Sciences , Populism in Contemporary Politics , Political Science and
+International Relations , Social Sciences , Social Sciences ,
+Globalization of Law and Legal Methodology , Law , Social Sciences ,
+Social Sciences , Effects of Residential Segregation on Communities and
+Individuals, Sociology and Political Science , Social Sciences , Social
+Sciences , Judicial Review in European Legal Systems , Political Science
+and International Relations , Social Sciences , Social Sciences ,
+Cultural Capital and Social Class in Education , Sociology and Political
+Science , Social Sciences , Social Sciences , Multilevel Perspectives on
+Prosocial Behavior and Volunteering , Sociology and Political Science ,
+Social Sciences , Social Sciences , European Integration and Governance
+Dynamics , Political Science and International Relations , Social
+Sciences , Social Sciences , History of Reproduction and Gender in
+Britain , History , Arts and Humanities , Social Sciences ,
+Intergovernmental Relations in Multinational Federations , Political
+Science and International Relations , Social Sciences , Social Sciences
+, Politics and Social Implications of Immigration , Sociology and
+Political Science , Social Sciences , Social Sciences , Criminal
+Procedure and Human Rights , Law , Social Sciences , Social Sciences ,
+Magnetocaloric Materials Research , Electronic, Optical and Magnetic
+Materials , Materials Science , Physical Sciences , Impact of Social
+Factors on Health Outcomes , Health , Social Sciences , Social Sciences
+, Media Bias and Political Influence , Sociology and Political Science ,
+Social Sciences , Social Sciences , Migration, Education, and Policy
+Implications , Demography , Social Sciences , Social Sciences ,
+Intergroup Relations and Social Identity Theories , Sociology and
+Political Science , Social Sciences , Social Sciences , Dynamics of
+Turbulent Combustion Systems , Computational Mechanics , Engineering ,
+Physical Sciences , Religion and Secularism in Modern Society ,
+Sociology and Political Science , Social Sciences , Social Sciences ,
+The Sustainability and Future of Unrecognized Quasi-States , Political
+Science and International Relations , Social Sciences , Social Sciences
+, Political and Economic Impacts of Fiscal Policy Cycles , Economics and
+Econometrics , Economics, Econometrics and Finance , Social Sciences
+</td>
+<td style="text-align:left;">
+<a href="https://api.openalex.org/works?filter=author.id:A5010780363"
+class="uri">https://api.openalex.org/works?filter=author.id:A5010780363</a>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<pre class="r"><code>#if output two id&#39;s: make decision rule
+# here savest bet isto collect all 5 tom&#39;s there are bc we make a matrix
+# if we want to look at citation scores, we have to probably only take the first id 
+
+#one vector with all authors 
+all_authors &lt;- rbind(df_jochem, df_maurice, df_michael, df_tom)</code></pre>
+<div id="works" class="section level3" number="12.1.1">
+<h3><span class="header-section-number">12.1.1</span> works</h3>
+<pre class="r"><code># Jochem&#39;s work 
+df_works_jochem &lt;- oa_fetch (entity = &quot;works&quot;, author.id = &quot;https://openalex.org/A5087380803&quot;)
+
+# Maurice Gesthuizen
+df_works_maurice &lt;- oa_fetch (entity = &quot;works&quot;, author.id = &quot;https://openalex.org/A5007673492&quot;)
+
+# Michael Savelkoul
+df_works_michael &lt;- oa_fetch (entity = &quot;works&quot;, author.id = &quot;https://openalex.org/A5048988743&quot;)
+
+# Tom van der Meer
+df_works_tom &lt;- oa_fetch (entity = &quot;works&quot;, author.id = &quot;https://openalex.org/A5010780363&quot;)
+
+
+# vector with all works
+all_works &lt;- rbind(df_works_tom, df_works_michael, df_works_maurice, df_works_jochem)</code></pre>
+</div>
+</div>
+<div id="make-matrix" class="section level2" number="12.2">
+<h2><span class="header-section-number">12.2</span> make matrix</h2>
+<pre class="r"><code># ALT + MINUS make the ARROWS &lt;- 
+# STR + SHIFT + M makes the %&gt;% 
+# STR + SHIFT + C can make a comment of multiple lines you highlighted
+
+# use column &#39;author&#39; from works overview 
+# 4x4 matrix
+# decide for which time period 
+  # 2 waves of 4 years: 2019-2023, 2014-2018 
+  # select papers with publication date in this date frame 
+    # publication year variable 
+
+# make selection of dates
+#wave 1
+works_wave1 &lt;- all_works %&gt;% filter(publication_year &gt;= 2014 &amp; publication_year &lt;= 2018)
+#wave 2
+works_wave2 &lt;- all_works %&gt;% filter(publication_year &gt;= 2019 &amp; publication_year &lt;= 2023)
+
+# make empty 4x4 matrix
+  # name each row and column with the identifiers of scholars
+
+matrix_wave1 &lt;- matrix(0, nrow = 4, ncol = 4)
+
+rownames(matrix_wave1) &lt;- c(&quot;https://openalex.org/A5087380803&quot;, &quot;https://openalex.org/A5007673492&quot;, &quot;https://openalex.org/A5048988743&quot;, &quot;https://openalex.org/A5010780363&quot;)
+
+colnames(matrix_wave1)&lt;- c(&quot;https://openalex.org/A5087380803&quot;, &quot;https://openalex.org/A5007673492&quot;, &quot;https://openalex.org/A5048988743&quot;, &quot;https://openalex.org/A5010780363&quot;)
+
+print(matrix_wave1)</code></pre>
+<pre><code>##                                  https://openalex.org/A5087380803 https://openalex.org/A5007673492
+## https://openalex.org/A5087380803                                0                                0
+## https://openalex.org/A5007673492                                0                                0
+## https://openalex.org/A5048988743                                0                                0
+## https://openalex.org/A5010780363                                0                                0
+##                                  https://openalex.org/A5048988743 https://openalex.org/A5010780363
+## https://openalex.org/A5087380803                                0                                0
+## https://openalex.org/A5007673492                                0                                0
+## https://openalex.org/A5048988743                                0                                0
+## https://openalex.org/A5010780363                                0                                0</code></pre>
+<pre class="r"><code># loop through works
+
+  # row 1: 
+    # works[1,] # in the loop it would be &#39;i&#39;
+
+  # output shows we want information from column&quot;au_id&quot;
+    works_wave1[1,]$author[[1]]$au_id</code></pre>
+<pre><code>## [1] &quot;https://openalex.org/A5010780363&quot; &quot;https://openalex.org/A5087380803&quot;</code></pre>
+<pre class="r"><code>    # output: first listed is the SENDER
+    ego &lt;- works_wave1[1,]$author[[1]]$au_id[1]
+    
+    # the RECEIVERS are everyone BUT the ego aka. the first one
+    alters &lt;- works_wave1[1,]$author[[1]]$au_id[-1]
+    
+  # CHECK if ego is part of authors 
+  # Filter only the author who are part of the other authors 
+    # Check if author is in list 
+      # t[t %in% authors]
+  
+
+  matrix_wave1[ego,alters] &lt;- 1
+  #works_wave1[ego,alters] &lt;- works_wave1[ego,alters] + 1 
+
+
+
+# Create a 4x4 matrix filled with 0&#39;s
+matrix_wave2 &lt;- matrix(0, nrow = 4, ncol = 4)
+
+rownames(matrix_wave2) &lt;- c(&quot;https://openalex.org/A5087380803&quot;, &quot;https://openalex.org/A5007673492&quot;, &quot;https://openalex.org/A5048988743&quot;, &quot;https://openalex.org/A5010780363&quot;)
+
+colnames(matrix_wave2)&lt;- c(&quot;https://openalex.org/A5087380803&quot;, &quot;https://openalex.org/A5007673492&quot;, &quot;https://openalex.org/A5048988743&quot;, &quot;https://openalex.org/A5010780363&quot;)
+
+print(matrix_wave2)</code></pre>
+<pre><code>##                                  https://openalex.org/A5087380803 https://openalex.org/A5007673492
+## https://openalex.org/A5087380803                                0                                0
+## https://openalex.org/A5007673492                                0                                0
+## https://openalex.org/A5048988743                                0                                0
+## https://openalex.org/A5010780363                                0                                0
+##                                  https://openalex.org/A5048988743 https://openalex.org/A5010780363
+## https://openalex.org/A5087380803                                0                                0
+## https://openalex.org/A5007673492                                0                                0
+## https://openalex.org/A5048988743                                0                                0
+## https://openalex.org/A5010780363                                0                                0</code></pre>
+<pre class="r"><code># old code from week 2 
+# matrix_graph &lt;- graph.adjacency(matrix_wave1)
+
+# print(matrix_graph)</code></pre>
+</div>
+</div>
+
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIkNoYXB0ZXIgOCAtIFNOQVNTIg0KYXV0aG9yOiAiVmVyb29vIg0KZGF0ZTogIjIwMjQtMDktMTYiDQpvdXRwdXQ6IGh0bWxfZG9jdW1lbnQNCi0tLQ0KDQojIyNUaXRsZTogV2Vic2NyYXBpbmcgaW4gUiBBdXRob3I6IEJhcyBIb2ZzdHJhIFZlcnNpb246IFwjIyMgMjktMDctMg0KDQojIFNldC11cA0KDQpgYGB7cn0NCg0KIyBzdGFydCB3aXRoIGNsZWFuIHdvcmtzcGFjZQ0Kcm0obGlzdCA9IGxzKCkpDQoNCiMgaW5zdGFsbC5wYWNrYWdlcygnZGF0YS50YWJsZScpDQpsaWJyYXJ5KGRhdGEudGFibGUpICAjIG1haW5seSBmb3IgZmFzdGVyIGRhdGEgaGFuZGxpbmcNCmxpYnJhcnkodGlkeXZlcnNlKSAgIyBJIGFzc3VtZSB5b3UgYWxyZWFkeSBpbnN0YWxsZWQgdGhpcyBvbmUhDQojaW5zdGFsbC5wYWNrYWdlcygnaHR0cicpICMgd2UgZG9uJ3QgbmVlZCB0aGlzIGZvciBub3cgcmVxdWlyZShodHRyKQ0KI2luc3RhbGwucGFja2FnZXMoImRldnRvb2xzIikNCnJlcXVpcmUoZGV2dG9vbHMpDQoNCiNpbnN0YWxsLnBhY2thZ2VzKCJydmVzdCIpDQpyZXF1aXJlKHJ2ZXN0KQ0KIyBydmVzdDpUaGlzIGlzIHRoZSBleHBsYW5hdGlvbiB0aGUgd3JpdGVycyBvZiB0aGUgcGFja2FnZSBnaXZlOiDigJxydmVzdCBpcyBuZXcgcGFja2FnZSB0aGF0IG1ha2VzIGl0IGVhc3kgdG8gc2NyYXBlIChvciBoYXJ2ZXN0KSBkYXRhIGZyb20gaHRtbCB3ZWIgcGFnZXMu4oCdIFNlZW1zIGxpa2Ugc29tZXRoaW5nIHdlIG5lZWQsIGEgcGFja2FnZSB0aGF0IHN0b3JlcyBpbmZvcm1hdGlvbiBmcm9tIHdlYnBhZ2VzIGludG8gcmVsYXRpdmVseSBzdHJ1Y3R1cmVkIGRhdGEgdGhhdCB3ZSBjYW4gdGhlbiBxdWVyeS9tYW5pcHVsYXRlLg0KDQojaW5zdGFsbC5wYWNrYWdlcygieG1sMiIpDQpyZXF1aXJlKHhtbDIpDQojeG1sMjpUaGlzIGlzIHdoYXQgdGhlIHdyaXRlcnMgb2YgdGhlIHBhY2thZ2Ugc2F5IGFib3V0IGl0OiDigJxXb3JrIHdpdGggWE1MIGZpbGVzIHVzaW5nIGEgc2ltcGxlLCBjb25zaXN0ZW50IGludGVyZmFjZS7igJ0gU28gd2UgY2FuIG1hbmlwdWxhdGUgdGhlIGRhdGEgc2NyYXBlZCB3aXRoIHJ2ZXN0LCB1c2luZyB0aGUgeG1sMiBwYWNrYWdlIGZ1bmN0aW9ucw0KDQojTm90ZSB3ZSdyZSBkb2luZyBzb21ldGhpbmcgZGlmZmVyZW50IGhlcmUuIFdlJ3JlIGluc3RhbGxpbmcgYSAqbGF0ZXN0KiB2ZXJzaW9uIGRpcmVjdGx5IGZyb20NCiNHaXRIdWIgVGhpcyBpcyBiZWNhdXNlIHRoZSByZWxlYXNlZCB2ZXJzaW9uIG9mIHRoaXMgcGFja2FnZXMgY29udGFpbnMgc29tZSBlcnJvcnMhDQpkZXZ0b29sczo6aW5zdGFsbF9naXRodWIoImprZWlyc3RlYWQvc2Nob2xhciIpDQoNCnJlcXVpcmUoc2Nob2xhcikNCg0KbGlicmFyeShkcGx5cikNCiNkZWZpbmUgd29ya2RpcmVjdG9yeSwgbm90ZSB0aGUgZG91YmxlICpiYWNrc2xhc2hlcyogaWYgeW91J3JlIG9uIHdpbmRvd3Mgc2V0d2QoJy95b3VycGF0aGhlcmUpJw0KDQoNCg0KYGBgDQoNCiMgR2V0IGFuY2hvciBkYXRhIC1SVSBzb2Npb2xvZ3kgDQoNCmdvYWw6IGdldCB0byBrbm93IFwNCihpKSB3aG8gdGhlIFJhZGJvdWQgVW5pdmVyc2l0eSBEZXBhcnRtZW50IG9mIFNvY2lvbG9neSBzdGFmZiBpcywgXA0KKGlpKSB3aGF0IHRoZXkgcHVibGlzaCB3aXRoIHJlc3BlY3QgdG8gc2NpZW50aWZpYyB3b3JrLCBhbmQgXA0KKGlpaSkgd2hvIHRoZXkgY29sbGFib3JhdGUgd2l0aC4NCg0KYGBge3IsIEFuY2hvciBkYXRhfQ0Kc29jX3N0YWZmIDwtIHJlYWRfaHRtbCgiaHR0cHM6Ly93ZWIuYXJjaGl2ZS5vcmcvd2ViLzIwMjMwNTI4MTUzMzM2L2h0dHBzOi8vd3d3LnJ1Lm5sL3NvY2lvbG9neS9yZXNlYXJjaC9zdGFmZi8iKSAjZXh0cmFjdHMgdGhlIHNvdXJjZSBodG1sIG9mIGEgd2VicGFnZQ0KDQpoZWFkKHNvY19zdGFmZikNCg0KI3doaWNoIG9iamVjdD8gDQpjbGFzcyhzb2Nfc3RhZmYpDQoNCiNzbyB3ZSBuZWVkIHRvIGZpbmQgV0hFUkUgdGhlIHRhYmxlIGlzIGxvY2F0ZWQgaW4gdGhlIGh0bWwgJ2luc3BlY3QgZWxlbWVudCcgaW4gbW96aWxsYSBmaXJlZm94IG9yDQojIHZpZXcgcGFnZSBzb3VyY2UnIGFuZCB5b3Ugc2VlIHRoYXQgZXZlcnl0aGluZyBBRlRFUiAvdGQgaW4gdGhlICdib2R5JyBvZiB0aGUgcGFnZSBzZWVtcyB0byBiZQ0KIyB0aGUgdGFibGUgd2UgZG8gbmVlZA0KDQojIHNvY19zdGFmZl8wIDwtIHNvY19zdGFmZiAlPiUNCiMgICAgIHJ2ZXN0OjpodG1sX25vZGVzKCJib2R5IikgJT4lDQojICAgICB4bWwyOjp4bWxfZmluZF9hbGwoIi8vdGQiKSAlPiUgIyB4bWwyIGhlcmUgbG9va3MgYWNyb3NzIG11bHRpcGxlIGxheWVycy8gY2hpbGQtZWxlbWVudHMgKGhlbmNlIHRoZSAvLyAhISEgKQ0KIyAgICAgcnZlc3Q6Omh0bWxfdGV4dCgpDQojIA0KIyANCiMgIyBCRVRURVI/DQojICMgdXNpbmcgaHRtbF9lbGVtZW50cyB0byBPTkxZIFVTRSBPTkUgUEFDS0FHRSAoUlZFU1QpDQpzb2Nfc3RhZmYgPC0gc29jX3N0YWZmICU+JQ0KICAgIHJ2ZXN0OjpodG1sX2VsZW1lbnRzKCJib2R5IikgJT4lDQogICAgcnZlc3Q6Omh0bWxfZWxlbWVudHMgKCJ0ZCIpICU+JQ0KICAgIHJ2ZXN0OjpodG1sX3RleHQoKQ0KIyAgIA0KIyAgICAgDQojIHZpZXcoc29jX3N0YWZmKQ0KIyANCiMgIyBHZXQgd2hvbGUgdGFibGUgYXQgb25jZT8gDQojIHNvY19zdGFmZl8xIDwtIHNvY19zdGFmZiAlPiUNCiMgICAgIHJ2ZXN0OjpodG1sX2VsZW1lbnRzKCJib2R5IikgJT4lDQojICAgICBydmVzdDo6aHRtbF90YWJsZSgpDQoNCiN2aWV3KHNvY19zdGFmZl8xKQ0KI2NsYXNzKHNvY19zdGFmZl8xKSAjIGxpc3QgKHlvdSBjYW4gdHVybiBpbnRvIGEgZGF0YSBmcmFtZSB0byB1c2UgaXQgZm9yIGZ1cnRoZXIgZGF0YSBtYW5pcHVsYXRpbm8gZnJvbWhlcmUgb24pDQoNCiMgKGZzaG93ZGYpIHRvIG1ha2Ugb3V0cHV0IGxvb2sgcHJldHR5IChidXQgaSBwcm9iYWJseSBtaXN1bmRlcnN0b29kIHdoYXQgZXhhY3RseSBKb2NoZW0gc2FpZCkNCg0KDQpgYGANCg0KIyBnZXQgYW5jaG9yIGRhdGEgLSBMZWlkZW4gVW5pdmVyc2l0eSAtIFBvbFNjaSANCmBgYHtyfQ0KDQojZG8gaXQgZm9yIExlaWRlbiBVbml2ZXJzaXR5IA0KbGVpZGVuX3BvbHNjaV9zdGFmZiA8LSByZWFkX2h0bWwoImh0dHBzOi8vd3d3LnVuaXZlcnNpdGVpdGxlaWRlbi5ubC9lbi9hY2FkZW1pYy1zdGFmZi9vdmVydmlldz9wYWdlTnVtYmVyPTEmZmFjdWx0eT1zb2NpYWwtYW5kLWJlaGF2aW91cmFsLXNjaWVuY2VzJmZhY3VsdHlpbnN0aXR1dGU9aW5zdGl0dXRlLW9mLXBvbGl0aWNhbC1zY2llbmNlIikgI2V4dHJhY3RzIHRoZSBzb3VyY2UgaHRtbCBvZiBhIHdlYnBhZ2UNCg0KIyBkaXYgaWQgY29udGVudCANCiMgc2VjdGlvbiANCiMgdWwgY2xhc3MgdGFibGUgbGlzdA0KDQoNCmxlaWRlbl9wb2xzY2lfc3RhZmZfMiA8LSBsZWlkZW5fcG9sc2NpX3N0YWZmICU+JQ0KICAgIHJ2ZXN0OjpodG1sX2VsZW1lbnRzKCJib2R5IikgJT4lDQogICAgcnZlc3Q6Omh0bWxfZWxlbWVudHMoImxpIikgICU+JQ0KICAgIHJ2ZXN0OjpodG1sX2VsZW1lbnRzKCJzdHJvbmciKSAlPiUNCiAgICBydmVzdDo6aHRtbF90ZXh0KCkNCg0KdmlldyhsZWlkZW5fcG9sc2NpX3N0YWZmXzIpDQoNCg0KDQpgYGANCg0KDQoNCiMgc29ydCByb3dzIGludG8gbmFtZXMgYW5kIGV4cGVydGlzZSANCmBgYHtyfQ0KI0Fzc2lnbmluZyBldmVuIGFuZCBvZGQgcm93cyB0byAnZm9kZCcgYW5kICdmZXZlbicgKGJjIHRoZSBvdXRwdXQganVzdCBsaXN0cyB0aGUgbGVmdCBhbmQgcmlnaHQgc2lkZSBvZiB0aGUgdGFibGUgaW50ZXJjaGFuZ2FibHkpDQpmb2RkIDwtIGZ1bmN0aW9uKHgpIHglJTIgIT0gMA0KZmV2ZW4gPC0gZnVuY3Rpb24oeCkgeCUlMiA9PSAwDQoNCiMgSG93IGxvbmcgYXJlIHRoZSBkYXRhPyBuc3RhZiBiZWluaGFsdGVkIHdpZSB2aWVsZSBzdGFmZiBtZW1iZXJzIGVzIGdpYnQgQUJFUiBpc3Qgei5aLiBub2NoIGZhbHNjaCB3ZWlsIGplZGUgendlaXRlIFplaWxlIGluZm9ybWF0aW9uIHVuZCBrZWluIE5hbWUgaXN0KSANCm5zdGFmZiA8LSBsZW5ndGgoc29jX3N0YWZmKQ0KbnN0YWZmDQoNCiNtYWtlIHZhcmlhYmxlIHRoYXQgaG9sZHMgYWxsIHRoZSBuYW1lcyAoYWthLiBhbGwgdGhlIGluZm9ybWF0aW9uIGluIHVuZXZlbiByb3dzKQ0Kc29jX25hbWVzIDwtIHNvY19zdGFmZltmb2RkKDE6bnN0YWZmKV0gDQojIG5lZWRzIHRvIGJlIDA6bnN0YWZmIGluc3RlYWQgb2YgMTpuc3RhZmYgDQogICMoYmVjYXVzZSB0aGUgbGlzdCBwb3NpdGlvbnMgc3RhcnQgd2l0aCAwIE5PVCB3aXRoIDEpDQojT1IgaW5zZXJ0IHRoZSBmT0REIGZ1bmN0aW9uIGhlcmUgDQogICMgYmVjYXVzZSB0aGUgbmFtZXMgYXJlIGFjdHVhbGx5IGluIHRoZSB1bmV2ZW4gcm93cywgYXMgb3Bwb3NlZCB0byB0aGUgU05BU1MgZXhhbXBsZSB3aGVyZSB0aGV5IGFyZSBpbiBldmVuLW51bWJlcmVkIHJvd3MgDQpoZWFkKHNvY19uYW1lcykNCg0KDQojDQpzb2NfZXhwZXJ0aXNlIDwtIHNvY19zdGFmZltmZXZlbigxOm5zdGFmZildICAjaW4gdGhlIDEgdW50aWwgOTRzdCBudW1iZXIsIGdldCB0aGUgZXZlbiBlbGVtZW50cw0KaGVhZChzb2NfZXhwZXJ0aXNlKQ0KDQoNCiNwdXQgdGhlIHR3byB2ZWN0b3JzIFt2YXJpYWJsZXMgaW4gVmVybydzIG1pbmRdIChuYW1lcyBhbmQgZXhwdGVydGlzZSkgdG9nZXRoZXIgaW4gYSBkYXRhIGZyYW1lIChsaXN0KSANCnNvY19kZiA8LSBkYXRhLmZyYW1lKGNiaW5kKHNvY19uYW1lcywgc29jX2V4cGVydGlzZSkpICAjY29sdW1uYmluZCB0aG9zZSBhbmQgd2UgaGF2ZSBhIERGIGZvciBzb2Mgc3RhZmYhDQoNCiMgaW5zcGVjdCBpbiBlbnZpcm9ubWVudCAtPiBEYXRhIA0KDQoNCiNpbnNwZWN0IGFnYWluLCBhbmQgcmVtb3ZlIHRoZSByb3dzIHdlIGRvbid0IG5lZWQgKGNoZWNrIGZvciB5b3Vyc2VsZiB0byBiZSBjZXJ0YWluISkNCmRlbHJvd3MgPC0gd2hpY2goc29jX2RmJHNvY19uYW1lcyA9PSAiU3RhZmY6IiB8IHNvY19kZiRzb2NfbmFtZXMgPT0gIlBoRDoiIHwgc29jX2RmJHNvY19uYW1lcyA9PSAiRXh0ZXJuYWwgUGhEOiIgfA0KICAgIHNvY19kZiRzb2NfbmFtZXMgPT0gIkd1ZXN0IHJlc2VhcmNoZXJzOiIgfCBzb2NfZGYkc29jX25hbWVzID09ICJPdGhlciByZXNlYXJjaGVyczoiKQ0KDQpzb2NfZGYgPC0gc29jX2RmWy1kZWxyb3dzLCBdDQoNCiMgaW5zcGVjdCBpbiBlbnZpcm9ubWVudCAtPiBEYXRhDQoNCmBgYA0KDQojIEV4dHJhY3QgbmFtZXMgYW5kIGxhc3QgbmFtZXMgDQpgYGB7ciwgbmFtZSBleHRyYWN0aW9ufQ0KIyBnc3ViICAgaXMgYSBmdW5jdGlvbiB0aGF0IHJlbW92ZSBzb21ldGhpbmcgYW5kIHJlcGxhY2VzIGl0IHdpdGggc29tZXRoaW5nIGVsc2UNCg0KIyBzZWxlY3Qgb25seSBsYXN0IG5hbWVzIGFrYS4gREVMRVRFIGV2ZXJ5dGhpbmcgQkVISU5EIGEgY29tbWEgDQojIFtiZWNhdXNlIHRoZSBzdGFmZiBpcyBsaXN0ZWQgd2l0aCB0aGUgbGFzdCBuYW1lIGluIGZpcnN0IHBsYWNlIGxpa2UgZS5nLjogTcO8bGxlciwgSy4gKEthdHJpbikgTVNjXQ0KDQogICNMYXN0IG5hbWUgc2VlbXMgdG8gYmUgZXZlcnl0aGluZyBiZWZvcmUgdGhlIGNvbW1hDQpzb2NfZGYkbGFzdF9uYW1lIDwtIGdzdWIoIiwuKiQiLCAiIiwgc29jX2RmJHNvY19uYW1lcykNCg0KIyBmaXJzdCBuYW1lIGlzIGV2ZXJ5dGhpbmcgYmV0d2VlbiBicmFja2V0cw0KDQoNCiMgc3RyaW5nciBQQUNLQUdFIE5FRURFRA0KIyBpbnN0YWxsLnBhY2thZ2VzKCJzdHJpbmdyIikNCiMgU1RJTEwgRE9FU05UIFdPUksgQkMgTkVXRVNUIHN0cmluZ3IgUEFDS0FHRSBGVUNLUyBTSElUIFVQIA0KIyBJTlNUQUxMIEFOIE9MREVSIFZFUlNJT04gT0YgVEhFIFBBQ0tBR0U6DQoNCiAgIyBpbnN0YWxsLnBhY2thZ2VzKCJkZXZ0b29scyIpDQogICMgZGV2dG9vbHM6Omluc3RhbGxfdmVyc2lvbigic3RyaW5nciIsIHZlcnNpb24gPSAiMS40LjEiKQ0KIyBzb2NfZGYkZmlyc3RfbmFtZSA8LSBzdHJfZXh0cmFjdF9hbGwoc29jX2RmJHNvY19uYW1lcywgIig/PD1cXCgpLis/KD89XFwpKSIsIHNpbXBsaWZ5ID0gVFJVRSkNCg0KIyBzdGlsbCBkb2VzIG5vdCB3b3JrIA0KI015IG93biBhdHRlbXB0IGF0IGZpeGluZyBhYm92ZSBtaXN0YWtlOg0KICMgc29jX2RmJGZpcnN0X25hbWVfVFJZIDwtc3Vic3RyKHNvY19kZiRzb2NfbmFtZXMsIHN0YXJ0ID0gIigiLCBzdG9wID0gIikiKQ0KDQpyZXF1aXJlKHRpZHl2ZXJzZSkNCnNvY19kZiRmaXJzdF9uYW1lIDwtIHN0cl9leHRyYWN0X2FsbChzb2NfZGYkc29jX25hbWVzLCAiKD88PVxcKCkuKz8oPz1cXCkpIiwgc2ltcGxpZnkgPSBUUlVFKQ0KDQogDQogdmlldyhzb2NfZGYpDQoNCmBgYA0KDQoNCg0KIyMgY2xlYW4gdXAgbmFtZXMgDQpgYGB7ciwgY2xlYW4gdXAgbmFtZXMgfQ0KDQpzb2NfZGYkbGFzdF9uYW1lIDwtIGdzdWIoIiBKLiBcXChKYW5zamVcXCkgdmFuIE1TYyIsICIiLCBzb2NfZGYkbGFzdF9uYW1lKQ0Kc29jX2RmJGZpcnN0X25hbWUgPC0gdG9sb3dlcihzb2NfZGYkZmlyc3RfbmFtZSkgICMgZXZlcnl0aGluZyB0byBsb3dlciENCnNvY19kZiRsYXN0X25hbWUgPC0gdG9sb3dlcihzb2NfZGYkbGFzdF9uYW1lKQ0KIyB0cmltd3MoKSBsb29zZXMgYWxsIHNwYWNpbmcgYmVmb3JlIGFuZCBhZnRlciAoaWYgeW91IHNwZWNpZnkgJ2JvdGgnKSBhIGNoYXJhY3RlciBzdHJpbmcNCnNvY19kZiRsYXN0X25hbWUgPC0gdHJpbXdzKHNvY19kZiRsYXN0X25hbWUsIHdoaWNoID0gYygiYm90aCIpLCB3aGl0ZXNwYWNlID0gIlsgXHRcclxuXSIpDQpzb2NfZGYkZmlyc3RfbmFtZSA8LSB0cmltd3Moc29jX2RmJGZpcnN0X25hbWUsIHdoaWNoID0gYygiYm90aCIpLCB3aGl0ZXNwYWNlID0gIlsgXHRcclxuXSIpDQpzb2NfZGYkc29jX2V4cGVydGlzZSA8LSB0cmltd3Moc29jX2RmJHNvY19leHBlcnRpc2UsIHdoaWNoID0gYygiYm90aCIpLCB3aGl0ZXNwYWNlID0gIlsgXHRcclxuXSIpDQpzb2NfZGYkc29jX25hbWVzIDwtIHRyaW13cyhzb2NfZGYkc29jX25hbWVzLCB3aGljaCA9IGMoImJvdGgiKSwgd2hpdGVzcGFjZSA9ICJbIFx0XHJcbl0iKQ0KYGBgDQoNCiMjIG1ha2UgbmV3IHZhcmlhYmxlIChzdGFmZiBiZWluZyBmcm9tIFJhZGJvdWQpDQoNCmBgYHtyLCBuZXcgdmFyaWFibGV9DQojIGNyZWF0ZSBhIHZhcmlhYmxlIHRoYXQgY29udGFpbnMgYSBjaGFyYWN0ZXIgc3RyaW5nIOKAnHJhZGJvdWQgdW5pdmVyc2l0eeKAnSBmb3IgYWxsLg0Kc29jX2RmJGFmZmlsaWF0aW9uIDwtICJyYWRib3VkIHVuaXZlcnNpdHkiDQp2aWV3KHNvY19kZikNCg0KYGBgDQoNCiMgR29vZ2xlIFNjaG9sYXIgUHJvZmlsZXMgYW5kIFB1YmxpY2F0aW9uDQojIyByZW1pbmRlcjogZm9yIGxvb3BzIA0KYGBge3IsIGZvciBsb29wfQ0KIyBUaGUgJ2ZvciBsb29wJzogZm9yIGV2ZXJ5IGkgaW4gYSB2ZWN0b3IgKGNhbiBiZSBudW1iZXJzLCBzdHJpbmdzLCBldGMuKSwgc2F5IDEgdG8gMTAsIHlvdSBjYW4gZG8NCiMgJ3NvbWV0aGluZycNCmZvciAoaSBpbiAxOjEwKSB7DQogICAgcHJpbnQoaSkgICMgU28gZm9yIGV2ZXJ5IGkgZnJvbSAxIHRvIDEwLCB3ZSBwcmludCBpLCBzZWUgd2hhdCBoYXBwZW5zIQ0KfQ0KDQojICMgb3IgZG8gc29tZXRoaW5nIG1vcmUgY29tcGxpY2F0ZWQgcCA8LSBybm9ybSgxMCwgMCwgMSkgIyBkcmF3IDEwIG5vcm1hbGx5IGRpc3RyaWJ1dGVkIG51bWJlcnMNCiMgd2l0aCBtZWFuIDAgYW5kIFNEIDEgKHNvIHotc2NvcmVzLCBlc3NlbnRpYWxseSkgcGxvdChkZW5zaXR5KHApKSAjIHJlbGF0aXZlbHksIG5vcm1hbCwgcmlnaHQ/ICB1DQojIDwtIDAgIyBtYWtlIGFuIGVsZW1lbnQgd2UgY2FuIGZpbGwgdXAgaW4gdGhlIGxvb3AgYmVsb3cgZm9yIChpIGluIDE6MTApIHsgdVtpXSA8LSBwW2ldKnBbaV0gIyBnZXQNCiMgcC1zcXVhcmVkIGZvciBldmVyeSBpLXRoIGVsZW1lbnQgaW4gdmVjdG9yIHAgcHJpbnQodVtpXSkgIyBhbmQgcHJpbnQgdGhhdCBzcXVhcmVkIGVsZW1lbnQgfQ0KYGBgDQojIyBsaW5raW5nIGEgU0lOR0xFIHN0YWZmIG1lbWJlciB0byB0aGVpciBnb29nbGUgc2Nob2xhciBsaW5rIA0KYGBge3J9DQoNCnNvY19kZiRnc19pZCA8LSAiIiAgIyB3ZSBzZXQgYW4gZW1wdHkgaWRlbnRpZmllcg0KDQoNCiMgdXNpbmcgZ2V0X3NjaG9sYXJfaWQoKQ0KIyBUaGUgZnVuY3Rpb24gZ2V0X3NjaG9sYXJfaWQgbmVlZHMgYSBsYXN0IG5hbWUsIGZpcnN0IG5hbWUsIGFuZCBhZmZpbGlhdGlvbi4NCg0KDQpyZXF1aXJlKHNjaG9sYXIpDQojZG93bmxvYWRlZCBmdW5jdGlvbjoNCmdldF9zY2hvbGFyX2lkX2ZpeCA8LSBmdW5jdGlvbiAobGFzdF9uYW1lID0gIiIsIGZpcnN0X25hbWUgPSAiIiwgYWZmaWxpYXRpb24gPSBOQSkNCnsNCiAgaWYgKCFhbnkobnpjaGFyKGMoZmlyc3RfbmFtZSwgbGFzdF9uYW1lKSkpKQ0KICAgIHN0b3AoIkF0IGxlYXN0IG9uZSBvZiBmaXJzdCBhbmQgbGFzdCBuYW1lIG11c3QgYmUgc3BlY2lmaWVkISIpDQogIHNpdGUgPC0gZ2V0T3B0aW9uKCJzY2hvbGFyX3NpdGUiKQ0KICB1cmwgPC0gcGFzdGUwKHNpdGUsICIvY2l0YXRpb25zP3ZpZXdfb3A9c2VhcmNoX2F1dGhvcnMmbWF1dGhvcnM9IiwNCiAgICAgICAgICAgICAgICBmaXJzdF9uYW1lLCAiKyIsIGxhc3RfbmFtZSwgIiZobD1lbiZvaT1hbyIpDQogIHBhZ2UgPC0gZ2V0X3NjaG9sYXJfcmVzcCh1cmwpDQogIGlmIChpcy5udWxsKHBhZ2UpKQ0KICAgIHJldHVybihOQSkNCiAgYWEgPC0gaHR0cjo6Y29udGVudChwYWdlLCBhcyA9ICJ0ZXh0IikNCiAgIyBhZGRlZCBieSBCYXMgSG9mc3RyYTogYnVnZml4IGZvciBJRHMgdGhhdCBoYXZlIGEgZGFzaCAoIi0iKQ0KICBpZHMgPC0gc3Vic3RyaW5nKGFhLCByZWdleHByKCI7dXNlcj0iLCBhYSkpDQogIGlkcyA8LSBzdWJzdHIoaWRzLCAxLCAxOSkgIyBlcnJvciBwcm9uZSwgYnV0IHVuc3VyZSBob3cgdG8gc29sdmUgb3RoZXJ3aXNlDQogICMgaWYgKG5jaGFyKHN0cmluZ3I6OnN0cl9leHRyYWN0X2FsbChzdHJpbmcgPSBhYSwgcGF0dGVybiA9ICI7dXNlcj1bWzphbG51bTpdXStbWzpwdW5jdDpdXSIpW1sxXV1bMV0pIDwgMTgpIHsNCiAgIyAgIGlkcyA8LSBzdHJpbmdyOjpzdHJfZXh0cmFjdF9hbGwoc3RyaW5nID0gYWEsIHBhdHRlcm4gPSAiO3VzZXI9W1s6YWxudW06XV0rW1s6cHVuY3Q6XV0rW1s6YWxudW06XV0rW1s6cHVuY3Q6XV0iKQ0KICAjIH0gZWxzZSB7DQogICMgICBpZHMgPC0gc3RyaW5ncjo6c3RyX2V4dHJhY3RfYWxsKHN0cmluZyA9IGFhLCBwYXR0ZXJuID0gIjt1c2VyPVtbOmFsbnVtOl1dK1tbOnB1bmN0Ol1dIikNCiAgIyB9DQogIGlmIChsZW5ndGgodW5saXN0KGlkcykpID09IDApIHsNCiAgICBtZXNzYWdlKCJObyBTY2hvbGFyIElEIGZvdW5kLiIpDQogICAgcmV0dXJuKE5BKQ0KICB9DQogIGlkcyA8LSBpZHMgJT4lIHVubGlzdCAlPiUgZ3N1YigiO3VzZXI9fFtbOnB1bmN0Ol1dJCIsICIiLA0KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgLikgJT4lIHVuaXF1ZQ0KICBpZiAobGVuZ3RoKGlkcykgPiAxKSB7DQogICAgcHJvZmlsZXMgPC0gbGFwcGx5KGlkcywgc2Nob2xhcjo6Z2V0X3Byb2ZpbGUpDQogICAgaWYgKGlzLm5hKGFmZmlsaWF0aW9uKSkgew0KICAgICAgeF9wcm9maWxlIDwtIHByb2ZpbGVzW1sxXV0NCiAgICAgIHdhcm5pbmcoIlNlbGVjdGluZyBmaXJzdCBvdXQgb2YgIiwgbGVuZ3RoKHByb2ZpbGVzKSwNCiAgICAgICAgICAgICAgIiBjYW5kaWRhdGUgbWF0Y2hlcy4iKQ0KICAgIH0NCiAgICBlbHNlIHsNCiAgICAgIHdoaWNoX3Byb2ZpbGUgPC0gc2FwcGx5KHByb2ZpbGVzLCBmdW5jdGlvbih4KSB7DQogICAgICAgIHN0cmluZ3I6OnN0cl9jb3VudChzdHJpbmcgPSB4JGFmZmlsaWF0aW9uLCBwYXR0ZXJuID0gc3RyaW5ncjo6Y29sbChhZmZpbGlhdGlvbiwNCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGlnbm9yZV9jYXNlID0gVFJVRSkpDQogICAgICB9KQ0KICAgICAgaWYgKGFsbCh3aGljaF9wcm9maWxlID09IDApKSB7DQogICAgICAgIHdhcm5pbmcoIk5vIHJlc2VhcmNoZXIgZm91bmQgYXQgdGhlIGluZGljYXRlZCBhZmZpbGlhdGlvbi4iKQ0KICAgICAgICByZXR1cm4oTkEpDQogICAgICB9DQogICAgICBlbHNlIHsNCiAgICAgICAgeF9wcm9maWxlIDwtIHByb2ZpbGVzW1t3aGljaCh3aGljaF9wcm9maWxlICE9DQogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAwKV1dDQogICAgICB9DQogICAgfQ0KICB9DQogIGVsc2Ugew0KICAgIHhfcHJvZmlsZSA8LSBzY2hvbGFyOjpnZXRfcHJvZmlsZShpZCA9IGlkcykNCiAgfQ0KICByZXR1cm4oeF9wcm9maWxlJGlkKQ0KfQ0KDQoNCiNUUllJTkcgZ2V0X3NjaG9sYXJfaWQgZnJvbSBPTkUgc3RhZmYgbWVtYmVyIGZpcnN0IA0KDQojIFNFVFRJTkcgU09VUkNFOg0KI3NvdXJjZSgiQzovVXNlcnMvVmVyby9PbmVEcml2ZSAtIFJhZGJvdWQgVW5pdmVyc2l0ZWl0L0RvY3VtZW50cy9HaXRIdWIvbGFiam91cm5hbCIpICANCiMgRE9FUyBOT1QgV09SSyBCVVQgV09SS1MgSUYgWU9VIERFRklORSBGVU5DVElPTiBJTiBUSEUgU0FNRSBTQ1JJUFQgWU9VIEFSRSBXT1JLSU5HSU4gDQojIFB1dCB0aGUgZnVuY3Rpb25fZml4LlIgaW4geW91ciB3b3JraW5nIGRpcmVjdG9yeSwgd2UgbmVlZCB0aGlzIGZpcnN0IGxpbmUuDQojIFZlcm86IEkgcHV0IHRoZSBmdW5jdGlvbiBpbiBhbiBSLVNjcmlwdCBhbmQgc2F2ZWQgaXQgaW4gdGhlIHNhbWUgZm9sZGVyIGFzIHRoZSBzY3JpcHQgSSBoYXZlIG9wZW4gcm4uIA0KDQoNCmdldF9zY2hvbGFyX2lkX2ZpeChsYXN0X25hbWUgPSAidG9sc21hIiwgZmlyc3RfbmFtZSA9ICJqb2NoZW0iLCBhZmZpbGlhdGlvbiA9ICJyYWRib3VkIHVuaXZlcnNpdHkiKQ0KDQpnZXRfcHJvZmlsZSgiSXUyMy05MEFBQUFKIikgICMgSm9jaGVtJ3MgcHJvZmlsZQ0KDQpgYGANCiMjIyBnZXQgc2Nob2xhciBwdWJsaWNhdGlvbnMsIGNpdGF0aW9ucw0KYGBge3IsIHB1YnMgYW5kIGNpdGF0aW9uc30NCmdldF9wdWJsaWNhdGlvbnMoIkl1MjMtOTBBQUFBSiIpICAjIEpvY2hlbSdzIHB1YnMNCg0KDQpnZXRfY2l0YXRpb25faGlzdG9yeSgiSXUyMy05MEFBQUFKIikgICMgSm9jaGVtJ3MgY2l0YXRpb24gaGlzdG9yeQ0KYGBgDQojIyMgZ2V0IGNvbGxhYm9yYXRvcnMgDQpgYGB7ciwgY29sbGFib3JhdG9yc30NCmpvY2hlbV9jb2F1dGhvcnMgPC0gZ2V0X2NvYXV0aG9ycygiSXUyMy05MEFBQUFKIiwgbl9jb2F1dGhvcnMgPSA1MCwgbl9kZWVwID0gMSkgIA0KIyBKb2NoZW0ncyBjb2xsYWJvcmF0b3JzIGFuZCB0aGVpciBjby1hdXRob3JzIQ0KDQpgYGANCg0KIyMgcGxvdCBuZXR3b3JrIG9mIHNpbmdsZSBzdGFmZiBtZW1iZXIgDQpgYGB7ciwgcGxvdH0NCnBsb3RfY29hdXRob3JzKGdldF9jb2F1dGhvcnMoIkl1MjMtOTBBQUFBSiIsIG5fY29hdXRob3JzID0gMjAsIG5fZGVlcCA9IDEpLCBzaXplX2xhYmVscyA9IDIpICANCiMgRG9lc24ndCBsb29rIGxpa2UgbXVjaCB5ZXQsIGJ1dCB3ZSdsbCBtYWtlIGl0IHByZXR0aWVyIGxhdGVyLg0KDQpgYGANCiMgbGluayBzY2hvbGFyIHByb2ZpbGVzIG9mIEFMTCBTVEFGRiANCmBgYHtyLCBzdGFmZiB0b3RhbCBzY2hvbGFyIGxpbmssIGV2YWw9RkFMU0UsIGluY2x1ZGU9RkFMU0V9DQojIExvb2sgdGhyb3VnaHQgZ2V0X3NjaG9sYXJfaWRfZml4KGxhc3RfbmFtZSwgZmlyc3RfbmFtZSwgYWZmaWxpYXRpb24pIA0KIyBpZiB3ZSBjYW4gZmluZCBnb29nbGUgc2Nob2xhciBwcm9maWxlcyBvZiBzb2Npb2xvZ3kgc3RhZmYhDQpmb3IgKGkgaW4gMTpucm93KHNvY19kZikpIHsNCiAgDQogIHRpbWUgPC0gcnVuaWYoMSwgMCwgOCkgIyByYW5kb21pemVkIHJlcXVlc3QgdGltZXMgYmMgc2Nob2xhciBoYXMgYSAidHJpcCBzd2l0Y2giIGFnYWluc3Qgc3BhbSAocmF0ZSBsaW1pdCkNCiAgU3lzLnNsZWVwKHRpbWUpDQojIGZvciBldmVyeSBudW1iZXIgZnJvbSAxIHRvIDEwIHdlIGRyYXcgb25lIG51bWJlciBmcm9tIDAgdG8gOCBmcm9tIGEgdW5pZm9ybSBkaXN0cmlidXRpb24gd2UgcHV0DQojIHRoZSB3cmFwcGVyIHN5cy5zbGVlcCBhcm91bmQgaXQgdGhhdCB3ZSBwdXQgUiB0byBzbGVlcCBmb3IgdGhlIGRyYXduIG51bWJlcg0KICANCiAgDQogIHRyeUNhdGNoKHsNCiAgICAgc29jX2RmW2ksYygiZ3NfaWQiKV0gPC0gZ2V0X3NjaG9sYXJfaWRfZml4KGxhc3RfbmFtZSA9IHNvY19kZltpLCBjKCJsYXN0X25hbWUiKV0sICMgc28gc2VhcmNoIG9uIGxhc3RfbmFtZSBvZiBzdGFmZiAodGhpcmQgY29sdW1uKQ0KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgZmlyc3RfbmFtZSA9IHNvY19kZltpLCBjKCJmaXJzdF9uYW1lIildLCAgIyBzZWFyY2ggb24gZmlyc3RfbmFtZSBvZiBzdGFmZiAoZm91cnRoIGNvbHVtbikNCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGFmZmlsaWF0aW9uID0gc29jX2RmW2ksYygiYWZmaWxpYXRpb24iKV0pICMgc2VhcmNoIG9uIGFmZmlsaWF0aW9uIG9mIGVhY2ggc3RhZmYgKGZpZnRoIGNvbHVtbikNCg0KICAgIH0sIGVycm9yPWZ1bmN0aW9uKGUpe2NhdCgiRVJST1IgOiIsIGNvbmRpdGlvbk1lc3NhZ2UoZSksICJcbiIpfSkgIyBjb250aW51ZSBvbiBlcnJvciwgYnV0IHByaW50IHRoZSBlcnJvcg0KICB9DQoNCiMgcmVtb3ZlIHRob3NlIHdpdGhvdXQgcHVicyBmcm9tIHRoZSBkZg0KIyBzZWVtcyB3ZSdyZSBsZWZ0IHdpdGggYWJvdXQgMzQgc29jaW9sb2d5IHN0YWZmIG1lbWJlcnMhDQpzb2NfZGYgPC0gc29jX2RmWyFzb2NfZGYkZ3NfaWQgPT0gIiIsIF0NCnNvY19kZg0KYGBgDQojIyBnZXQgcHVibGljYXRpb25zIChhbGwgc3RhZmYpDQpgYGB7ciBldmFsPUZBTFNFLCBpbmNsdWRlPUZBTFNFfQ0KI0NVUlJFTlRMWTogQ09ERSBJTiBUSElTIENIVU5LIElTIE5PVCBSVU4gKGNoYW5nZSBpbiBsaXR0bGUgc2V0dGluZyB3ZWVsIGF0IHRoZSB0b3AgcmlnaHRvZiB0aGlzIGNodW5rKQ0KDQojIGdhdGhlciB0aGUgcHJvZmlsZXMgYW5kIHB1YmxpY2F0aW9ucyBhbmQgc3RvcmUgdGhlbSBpbiBhIExJU1QgDQoNCnNvY19saXN0X3Byb2ZpbGVzIDwtIGxpc3QoKSAgIyBmaXJzdCB3ZSBjcmVhdGUgYW4gZW1wdHkgbGlzdCB0aGF0IHdlIHRoZW4gZmlsbCB1cCB3aXRoIHRoZSBmb3IgbG9vcA0Kc29jX2xpc3RfcHVibGljYXRpb25zIDwtIGxpc3QoKQ0KDQpmb3IgKGkgaW4gMTpucm93KHNvY19kZikpIHsNCg0KICAgIHRpbWUgPC0gcnVuaWYoMSwgMCwgMTApICMgcmFuZG9taXplZCByZXF1ZXN0cz8gDQogICAgU3lzLnNsZWVwKHRpbWUpDQoNCiAgICAjIG5vdGUgaG93IHlvdSBjYWxsIGRpZmZlcmVudCBlbGVtZW50cyBpbiBhIGxpc3QgJ1tbXV0nLCBmaWxsIGluIHRoZSBpLXRoIGVsZW1lbnQNCiAgICBzb2NfbGlzdF9wcm9maWxlc1tbaV1dIDwtIGdldF9wcm9maWxlKHNvY19kZltpLCBjKCJnc19pZCIpXSkgICMgTm90ZSBob3cgd2UgY2FsbCByb3cgaSAocmVtZW1iZXIgaG93IHRvIGNhbGwgcm93cyBpbiBhIERGL01hdHJpeCkgYW5kIHRoZW4gdGhlIGFzc29jaWF0ZWQgc2Nob2xhciBpZA0KICAgIHNvY19saXN0X3B1YmxpY2F0aW9uc1tbaV1dIDwtIGdldF9wdWJsaWNhdGlvbnMoc29jX2RmW2ksIGMoImdzX2lkIildKQ0KICAgIHNvY19saXN0X3B1YmxpY2F0aW9uc1tbaV1dWywgYygiZ3NfaWQiKV0gPC0gc29jX2RmW2ksIGMoImdzX2lkIildICAjIG5vdGUgdGhhdCB3ZSBhZ2FpbiBhdHRhY2ggYW4gaWQNCiAgICAjIHNvIGJvdGggZnVuY3Rpb25zIGhlcmUgY2FsbCB0aGUgZW50aXJlIHByb2ZpbGUgYW5kIHB1YnMgZm9yIGFuIGF1dGhvciwgYmFzZWQgb24gZ29vZ2xlIHNjaG9sYXIgaWRzDQoNCn0NCiMgTm90aWNlIGhvdyBmYXN0IHRoZSBkYXRhIGJsb3cgdXAhIFRoZSAzNCBSVSBzb2Npb2xvZ3kgc2Nob2xhcnMgcHVibGlzaCB+MzAwMCBwYXBlcnMNCnNvY19kZl9wdWJsaWNhdGlvbnMgPC0gYmluZF9yb3dzKHNvY19saXN0X3B1YmxpY2F0aW9ucykNCg0KDQoNCmBgYA0KIyMgZ29vZ2xlIHNjaG9sYXIgc2F5cyBOTyA6KCAgKHRvbyBtYW55IHJlcXVlc3RzIGRlc3BpdGUgcmFuZG9tIHJlcXVlc3RzKQ0KLT4gY2Fubm90IG1ha2UgbGlzdHMgd2l0aCBwdWJsaWNhdGlvbnMgYW5kIHByb2ZpbGVzIGFzIG9mIG5vdyAoZXZlbmluZyBvZiAxN3RoIFNlcHRlbWJlcikgOi8NCg0KIyBjb250aW51ZSBzaG9ydGx5IGJlZm9yZSAiZ2V0dGluZyBjb2xsYWJvcmF0b3JzIiBhdCBDaGFwdGVyIDguNi40DQpzZWFyY2ggYW5kIGZpbmQ6IG5vdGUgaG93IHNvY19saXN0X3Byb2ZpbGVzDQoNCg0KDQojIGdlbmRlciBmcm9tIG5hbWVzIA0KYGBge3J9DQojIHZvb3JuYW1lbmJhbmsgTWFhcnRlbnMgaW5zaXR1dGUgDQojIGUuZy4gVmVybzoNCiMgaHR0cHM6Ly9udmIubWVlcnRlbnMua25hdy5ubC9uYWFtL2lzL1Zlcm8NCg0KIyB1c2UgdGhlIGNvbmNhdGVuYXRlIGZ1bmN0aW9uIGNhdCANCiMgYW5kIG1ha2UgYSBsb29wIHRoYXQganVzdCBmaWxscyBpbiB0aGUgbmFtZSBpbiBxdWVzdGlvbiBpbiB0aGUgbGluayANCg0KIyBJTlNFUlQgQ09ERSBIRVJFIA0KDQoNCg0KIyBMYXN0IG5hbWVzOiBodHRwczovL2NiZ2ZhbWlsaWVuYW1lbi5ubC9uZmIvDQpgYGANCg0KDQoNCiMgY3VzdG9tIGZ1bmN0aW9ucyBjaHVuayBmb3IgZnVuY3Rpb25zIHRvIHJ1biBsYXRlciBvbiANCmBgYHtyfQ0KZnBhY2thZ2UuY2hlY2sgPC0gZnVuY3Rpb24ocGFja2FnZXMpIHsNCiAgICBsYXBwbHkocGFja2FnZXMsIEZVTiA9IGZ1bmN0aW9uKHgpIHsNCiAgICAgICAgaWYgKCFyZXF1aXJlKHgsIGNoYXJhY3Rlci5vbmx5ID0gVFJVRSkpIHsNCiAgICAgICAgICAgIGluc3RhbGwucGFja2FnZXMoeCwgZGVwZW5kZW5jaWVzID0gVFJVRSkNCiAgICAgICAgICAgIGxpYnJhcnkoeCwgY2hhcmFjdGVyLm9ubHkgPSBUUlVFKQ0KICAgICAgICB9DQogICAgfSkNCn0NCg0KZnNhdmUgPC0gZnVuY3Rpb24oeCwgZmlsZSA9IE5VTEwsIGxvY2F0aW9uID0gIi4vZGF0YS9wcm9jZXNzZWQvIikgew0KICAgIGlmZWxzZSghZGlyLmV4aXN0cygiZGF0YSIpLCBkaXIuY3JlYXRlKCJkYXRhIiksIEZBTFNFKQ0KICAgIGlmZWxzZSghZGlyLmV4aXN0cygiZGF0YS9wcm9jZXNzZWQiKSwgZGlyLmNyZWF0ZSgiZGF0YS9wcm9jZXNzZWQiKSwgRkFMU0UpDQogICAgaWYgKGlzLm51bGwoZmlsZSkpDQogICAgICAgIGZpbGUgPSBkZXBhcnNlKHN1YnN0aXR1dGUoeCkpDQogICAgZGF0ZW5hbWUgPC0gc3Vic3RyKGdzdWIoIls6LV0iLCAiIiwgU3lzLnRpbWUoKSksIDEsIDgpDQogICAgdG90YWxuYW1lIDwtIHBhc3RlKGxvY2F0aW9uLCBkYXRlbmFtZSwgZmlsZSwgIi5yZGEiLCBzZXAgPSAiIikNCiAgICBzYXZlKHgsIGZpbGUgPSB0b3RhbG5hbWUpICAjbmVlZCB0byBmaXggaWYgZmlsZSBpcyByZWxvYWRlZCBhcyBpbnB1dCBuYW1lLCBub3QgYXMgeC4gDQp9DQoNCmZsb2FkIDwtIGZ1bmN0aW9uKGZpbGVuYW1lKSB7DQogICAgbG9hZChmaWxlbmFtZSkNCiAgICBnZXQobHMoKVtscygpICE9ICJmaWxlbmFtZSJdKQ0KfQ0KDQojaW5zdGFsbC5wYWNrYWdlcygia2FibGVFeHRyYSIpDQpsaWJyYXJ5KGthYmxlRXh0cmEpDQoNCmZzaG93ZGYgPC0gZnVuY3Rpb24oeCwgLi4uKSB7DQogICAga25pdHI6OmthYmxlKHgsIGRpZ2l0cyA9IDIsICJodG1sIiwgLi4uKSAlPiUNCiAgICAgICAga2FibGVFeHRyYTo6a2FibGVfc3R5bGluZyhib290c3RyYXBfb3B0aW9ucyA9IGMoInN0cmlwZWQiLCAiaG92ZXIiKSkgJT4lDQogICAgICAgIGthYmxlRXh0cmE6OnNjcm9sbF9ib3god2lkdGggPSAiMTAwJSIsIGhlaWdodCA9ICIzMDBweCIpDQp9DQpgYGANCiMgT3BlbiBhbGV4IA0KYGBge3J9DQojIFNFRSBTVU5CRUxUIFdFQlNJVEU6IEF0dHJpYnV0ZXMgdGFiIA0KIyBpZiB5b3UgcHV0IGh0bWwgZnJvbSBvcGVuIGFsZXggYXBpIGludG8gdGhlIHJlYWQgaHRtbCBmdW5jdGlvbiB0aGVuIHlvdSBuZWVkIHRvIHJlcGxhY2UgYW55IHNwYWNlcyB3aXRoIGEgKyBzeW1ib2wNCg0KIyBnZXQgSlNPTiBwYWNrYWdlIHNvIGl0IGNhbiByZWFkIHRoZSBKU09OIG9iamVjdCANCg0KDQpgYGANCiMgUiBQYWNrYWdlIG9wZW5hbGV4UiAodXNpbmcgciB3cmFwcGVyICkNCmBgYHtyfQ0KIyBtYWtlIEpTT04gb2JqZWN0IGVhc2llciB0byB1c2UNCg0KI2luc3RhbGwucGFja2FnZXMoIm9wZW5hbGV4UiIpDQpsaWJyYXJ5KG9wZW5hbGV4UikNCg0Kb3B0aW9ucyhvcGVuYWxleFIubWFpbHRvID0gInBhbG10cmVlc2R1ZGVAZ21haWwuY29tIikNCg0KZGYgPC0gb2FfZmV0Y2goZW50aXR5PSAiYXV0aG9yIiwgc2VhcmNoID0gIkpvY2hlbSBUb2xzbWEiKQ0KDQpmc2hvd2RmKGRmKQ0KDQojc2Vjb25kIGFmZmlsaWF0aW9uIG9mSm9jaGVtIGlzIGxvc3Qgd2hlbiB1c2luZyB0aGlzIHdyYXBwZXIgDQojIFNPTUVUSU1FUyBJTkZPUk1BVElPTiBDQU4gR0VUIExPU1QgDQpkZl9wYXBlcnMgPC0gb2FfZmV0Y2goZW50aXR5ID0gIndvcmtzIiwgYXV0aG9yLmlkID0gZGYkaWQpDQpkZl9wYXBlcnMkYXV0aG9yWzFdICMgc2VsZWN0aW5nIGZpcnN0IGl0ZW0gaW4gY29sdW1uICJhdXRob3IiIHdoaWNoIGluIHRoaXMgY2FzZSBpcyBhIGZ1bGwgZGF0YSBiYXNlIA0KIyBPVXRwdXQgZ2l2ZXMgdXMgaWQgZnJvbSBhdXRob3IgQU5EIENPLWF1dGhvciANCg0KDQojIFRvIHByZXZlbnQgZG91YmxlcyBmb3IgYXV0aG9ycyB0aGF0IGhhdmUgY29tbW9uIG5hbWVzIHdlIGNhbiB1c2UgTVVMVElQTEUgRklMVEVSUzogZWcuIGluc3RpdHV0aW9uIFJhZGJvdWQgVW5pdmVyc2l0eSBhbmQgY291bnRyeSBOTCBhbmQgc28gb24uLi4gDQoNCiMgZmluZCBpbnN0aXR1dGlvbiBpZHMgZmlyc3QgdG8gdGhlbiBmaWx0ZXJmb3JpbnN0aXR1dGlvbnM6DQpvYV9mZXRjaChlbnRpdHkgPSAiaW5zdGl0dXRpb25zIiwgc2VhcmNoID0gIlJhZGJvdWQgVW5pdmVyc2l0eSIpDQojb3V0cHV0IHdpbGwgc2hvdyBpZDogaHR0cHM6Ly9vcGVuYWxleC5vcmcvSTE0NTg3MjQyNwkgZm9yIFJhZGJvdWQgVW5pdmVyc2l0eSBOaWptZWdlbg0KDQojIGluIGNvZGUgb24gSm9jaGVtcyBpbiBsaW5lIDE2MiBmaWxlIHRpdGxlIDQ1IHB1YmxpY2F0aW9uc09wZW5BbGV4LnJtZA0KDQpvYV9mZXRjaChlbnRpdHk9ICJhdXRob3IiLCBzZWFyY2ggPSAiSm9jaGVtIFRvbHNtYSIsIGFmZmlsaWF0aW9ucy5pbnN0aXR1dGlvbi5pZCA9ICJodHRwczovL29wZW5hbGV4Lm9yZy9JMTQ1ODcyNDI3IikNCiNwdXRwdXQgYWxyZWFkeSBoYXMgYSBsb3Qgb2YgaW5mb3JtYXRpb24gb24gSm9jaGVtIA0KDQoNCiMgTkVYVDogZmluZCBhbGwgcGFwZXJzIEpvY2hlbSB3cm90ZSANCg0Kb2FfZmV0Y2ggKGVudGl0eSA9ICJ3b3JrcyIsIGF1dGhvci5pZCA9ICdodHRwczovL29wZW5hbGV4Lm9yZy9BNTA4NzM4MDgwMycpDQogIyBpZCBpcyB0aGUgYXV0aG9yIGlkICBmcm9tIHNvbWV3aGVyZSBwcmlvciBpbiBKb2NoZW1zIHNjcmlwdCANCg0KDQpgYGANCiMjIEFkamFjZW5jeSBtYXRyaXggZm9yIDQgYXV0aG9ycyANCmBgYHtyfQ0KcGFja2FnZXMgPC0gYygidGlkeXZlcnNlIiwgInNjaG9sYXIiLCAib3BlbmFsZXhSIiwgInJ2ZXN0IiwgImpzb25saXRlIikNCmZwYWNrYWdlLmNoZWNrKHBhY2thZ2VzKQ0KIyBtYWtlIGFkamFjZW5jeSBtYXRyaXggZm9yIHRoZXNlIGZvdXIgcGVvcGxlIA0KDQojSm9jaGVtIHRvbHNtYQ0KIyBUb20gdmFuIGRlIE1lZXINCiMgTWF1cmljZSBHZXN0aHVpemVuIA0KIyBNaWNoYWVsIFNhdmVsa291bCAgDQoNCiMgV2hhdCBkYXRhIGRvIHdlIG5lZWQ/IA0KICAjIEF1dGhvcnMsIFVuaXZlcnNpdHksIHdvcmtzLCBhbmQgY28tYXV0aG9ycyANCiAgIyBBbGwgaW4gb25lIGRhdGEgZnJhbWUgDQoNCg0KIyBKb2NoZW0gVG9sc21hIA0KZGZfam9jaGVtIDwtIG9hX2ZldGNoKGVudGl0eT0gImF1dGhvciIsIHNlYXJjaCA9ICJKb2NoZW0gVG9sc21hIiwgYWZmaWxpYXRpb25zLmluc3RpdHV0aW9uLmlkID0gImh0dHBzOi8vb3BlbmFsZXgub3JnL0kxNDU4NzI0MjciKQ0KDQpmc2hvd2RmKGRmX2pvY2hlbSkNCg0KIyBNYXVyaWNlIEdlc3RodWl6ZW4NCmRmX21hdXJpY2UgPC0gb2FfZmV0Y2goZW50aXR5PSAiYXV0aG9yIiwgc2VhcmNoID0gIk1hdXJpY2UgR2VzdGh1aXplbiIsIGFmZmlsaWF0aW9ucy5pbnN0aXR1dGlvbi5pZCA9ICJodHRwczovL29wZW5hbGV4Lm9yZy9JMTQ1ODcyNDI3IikNCg0KZnNob3dkZihkZl9tYXVyaWNlKQ0KDQojIE1pY2hhZWwgU2F2ZWxrb3VsDQpkZl9taWNoYWVsIDwtIG9hX2ZldGNoKGVudGl0eT0gImF1dGhvciIsIHNlYXJjaCA9ICJNaWNoYWVsIFNhdmVsa291bCIsIGFmZmlsaWF0aW9ucy5pbnN0aXR1dGlvbi5pZCA9ICJodHRwczovL29wZW5hbGV4Lm9yZy9JMTQ1ODcyNDI3IikNCg0KZnNob3dkZihkZl9taWNoYWVsKQ0KDQojIFRvbSB2YW4gZGVyIE1lZXINCmRmX3RvbSA8LSBvYV9mZXRjaChlbnRpdHk9ICJhdXRob3IiLCBzZWFyY2ggPSAiVG9tIHZhbiBkZXIgTWVlciIsIGFmZmlsaWF0aW9ucy5pbnN0aXR1dGlvbi5pZCA9ICJodHRwczovL29wZW5hbGV4Lm9yZy9JMTQ1ODcyNDI3IilbMSxdDQoNCmZzaG93ZGYoZGZfdG9tKQ0KI2lmIG91dHB1dCB0d28gaWQnczogbWFrZSBkZWNpc2lvbiBydWxlDQojIGhlcmUgc2F2ZXN0IGJldCBpc3RvIGNvbGxlY3QgYWxsIDUgdG9tJ3MgdGhlcmUgYXJlIGJjIHdlIG1ha2UgYSBtYXRyaXgNCiMgaWYgd2Ugd2FudCB0byBsb29rIGF0IGNpdGF0aW9uIHNjb3Jlcywgd2UgaGF2ZSB0byBwcm9iYWJseSBvbmx5IHRha2UgdGhlIGZpcnN0IGlkIA0KDQojb25lIHZlY3RvciB3aXRoIGFsbCBhdXRob3JzIA0KYWxsX2F1dGhvcnMgPC0gcmJpbmQoZGZfam9jaGVtLCBkZl9tYXVyaWNlLCBkZl9taWNoYWVsLCBkZl90b20pDQoNCmBgYA0KIyMjIHdvcmtzDQoNCmBgYHtyfQ0KIyBKb2NoZW0ncyB3b3JrIA0KZGZfd29ya3Nfam9jaGVtIDwtIG9hX2ZldGNoIChlbnRpdHkgPSAid29ya3MiLCBhdXRob3IuaWQgPSAiaHR0cHM6Ly9vcGVuYWxleC5vcmcvQTUwODczODA4MDMiKQ0KDQojIE1hdXJpY2UgR2VzdGh1aXplbg0KZGZfd29ya3NfbWF1cmljZSA8LSBvYV9mZXRjaCAoZW50aXR5ID0gIndvcmtzIiwgYXV0aG9yLmlkID0gImh0dHBzOi8vb3BlbmFsZXgub3JnL0E1MDA3NjczNDkyIikNCg0KIyBNaWNoYWVsIFNhdmVsa291bA0KZGZfd29ya3NfbWljaGFlbCA8LSBvYV9mZXRjaCAoZW50aXR5ID0gIndvcmtzIiwgYXV0aG9yLmlkID0gImh0dHBzOi8vb3BlbmFsZXgub3JnL0E1MDQ4OTg4NzQzIikNCg0KIyBUb20gdmFuIGRlciBNZWVyDQpkZl93b3Jrc190b20gPC0gb2FfZmV0Y2ggKGVudGl0eSA9ICJ3b3JrcyIsIGF1dGhvci5pZCA9ICJodHRwczovL29wZW5hbGV4Lm9yZy9BNTAxMDc4MDM2MyIpDQoNCg0KIyB2ZWN0b3Igd2l0aCBhbGwgd29ya3MNCmFsbF93b3JrcyA8LSByYmluZChkZl93b3Jrc190b20sIGRmX3dvcmtzX21pY2hhZWwsIGRmX3dvcmtzX21hdXJpY2UsIGRmX3dvcmtzX2pvY2hlbSkNCg0KDQpgYGANCiMjIG1ha2UgbWF0cml4IA0KYGBge3J9DQojIEFMVCArIE1JTlVTIG1ha2UgdGhlIEFSUk9XUyA8LSANCiMgU1RSICsgU0hJRlQgKyBNIG1ha2VzIHRoZSAlPiUgDQojIFNUUiArIFNISUZUICsgQyBjYW4gbWFrZSBhIGNvbW1lbnQgb2YgbXVsdGlwbGUgbGluZXMgeW91IGhpZ2hsaWdodGVkDQoNCiMgdXNlIGNvbHVtbiAnYXV0aG9yJyBmcm9tIHdvcmtzIG92ZXJ2aWV3IA0KIyA0eDQgbWF0cml4DQojIGRlY2lkZSBmb3Igd2hpY2ggdGltZSBwZXJpb2QgDQogICMgMiB3YXZlcyBvZiA0IHllYXJzOiAyMDE5LTIwMjMsIDIwMTQtMjAxOCANCiAgIyBzZWxlY3QgcGFwZXJzIHdpdGggcHVibGljYXRpb24gZGF0ZSBpbiB0aGlzIGRhdGUgZnJhbWUgDQogICAgIyBwdWJsaWNhdGlvbiB5ZWFyIHZhcmlhYmxlIA0KDQojIG1ha2Ugc2VsZWN0aW9uIG9mIGRhdGVzDQojd2F2ZSAxDQp3b3Jrc193YXZlMSA8LSBhbGxfd29ya3MgJT4lIGZpbHRlcihwdWJsaWNhdGlvbl95ZWFyID49IDIwMTQgJiBwdWJsaWNhdGlvbl95ZWFyIDw9IDIwMTgpDQojd2F2ZSAyDQp3b3Jrc193YXZlMiA8LSBhbGxfd29ya3MgJT4lIGZpbHRlcihwdWJsaWNhdGlvbl95ZWFyID49IDIwMTkgJiBwdWJsaWNhdGlvbl95ZWFyIDw9IDIwMjMpDQoNCiMgbWFrZSBlbXB0eSA0eDQgbWF0cml4DQogICMgbmFtZSBlYWNoIHJvdyBhbmQgY29sdW1uIHdpdGggdGhlIGlkZW50aWZpZXJzIG9mIHNjaG9sYXJzDQoNCm1hdHJpeF93YXZlMSA8LSBtYXRyaXgoMCwgbnJvdyA9IDQsIG5jb2wgPSA0KQ0KDQpyb3duYW1lcyhtYXRyaXhfd2F2ZTEpIDwtIGMoImh0dHBzOi8vb3BlbmFsZXgub3JnL0E1MDg3MzgwODAzIiwgImh0dHBzOi8vb3BlbmFsZXgub3JnL0E1MDA3NjczNDkyIiwgImh0dHBzOi8vb3BlbmFsZXgub3JnL0E1MDQ4OTg4NzQzIiwgImh0dHBzOi8vb3BlbmFsZXgub3JnL0E1MDEwNzgwMzYzIikNCg0KY29sbmFtZXMobWF0cml4X3dhdmUxKTwtIGMoImh0dHBzOi8vb3BlbmFsZXgub3JnL0E1MDg3MzgwODAzIiwgImh0dHBzOi8vb3BlbmFsZXgub3JnL0E1MDA3NjczNDkyIiwgImh0dHBzOi8vb3BlbmFsZXgub3JnL0E1MDQ4OTg4NzQzIiwgImh0dHBzOi8vb3BlbmFsZXgub3JnL0E1MDEwNzgwMzYzIikNCg0KcHJpbnQobWF0cml4X3dhdmUxKQ0KDQoNCiMgbG9vcCB0aHJvdWdoIHdvcmtzDQoNCiAgIyByb3cgMTogDQogICAgIyB3b3Jrc1sxLF0gIyBpbiB0aGUgbG9vcCBpdCB3b3VsZCBiZSAnaScNCg0KICAjIG91dHB1dCBzaG93cyB3ZSB3YW50IGluZm9ybWF0aW9uIGZyb20gY29sdW1uImF1X2lkIg0KICAgIHdvcmtzX3dhdmUxWzEsXSRhdXRob3JbWzFdXSRhdV9pZA0KICAgIA0KICAgICMgb3V0cHV0OiBmaXJzdCBsaXN0ZWQgaXMgdGhlIFNFTkRFUg0KICAgIGVnbyA8LSB3b3Jrc193YXZlMVsxLF0kYXV0aG9yW1sxXV0kYXVfaWRbMV0NCiAgICANCiAgICAjIHRoZSBSRUNFSVZFUlMgYXJlIGV2ZXJ5b25lIEJVVCB0aGUgZWdvIGFrYS4gdGhlIGZpcnN0IG9uZQ0KICAgIGFsdGVycyA8LSB3b3Jrc193YXZlMVsxLF0kYXV0aG9yW1sxXV0kYXVfaWRbLTFdDQogICAgDQogICMgQ0hFQ0sgaWYgZWdvIGlzIHBhcnQgb2YgYXV0aG9ycyANCiAgIyBGaWx0ZXIgb25seSB0aGUgYXV0aG9yIHdobyBhcmUgcGFydCBvZiB0aGUgb3RoZXIgYXV0aG9ycyANCiAgICAjIENoZWNrIGlmIGF1dGhvciBpcyBpbiBsaXN0IA0KICAgICAgIyB0W3QgJWluJSBhdXRob3JzXQ0KICANCg0KICBtYXRyaXhfd2F2ZTFbZWdvLGFsdGVyc10gPC0gMQ0KICAjd29ya3Nfd2F2ZTFbZWdvLGFsdGVyc10gPC0gd29ya3Nfd2F2ZTFbZWdvLGFsdGVyc10gKyAxIA0KDQoNCg0KIyBDcmVhdGUgYSA0eDQgbWF0cml4IGZpbGxlZCB3aXRoIDAncw0KbWF0cml4X3dhdmUyIDwtIG1hdHJpeCgwLCBucm93ID0gNCwgbmNvbCA9IDQpDQoNCnJvd25hbWVzKG1hdHJpeF93YXZlMikgPC0gYygiaHR0cHM6Ly9vcGVuYWxleC5vcmcvQTUwODczODA4MDMiLCAiaHR0cHM6Ly9vcGVuYWxleC5vcmcvQTUwMDc2NzM0OTIiLCAiaHR0cHM6Ly9vcGVuYWxleC5vcmcvQTUwNDg5ODg3NDMiLCAiaHR0cHM6Ly9vcGVuYWxleC5vcmcvQTUwMTA3ODAzNjMiKQ0KDQpjb2xuYW1lcyhtYXRyaXhfd2F2ZTIpPC0gYygiaHR0cHM6Ly9vcGVuYWxleC5vcmcvQTUwODczODA4MDMiLCAiaHR0cHM6Ly9vcGVuYWxleC5vcmcvQTUwMDc2NzM0OTIiLCAiaHR0cHM6Ly9vcGVuYWxleC5vcmcvQTUwNDg5ODg3NDMiLCAiaHR0cHM6Ly9vcGVuYWxleC5vcmcvQTUwMTA3ODAzNjMiKQ0KDQpwcmludChtYXRyaXhfd2F2ZTIpDQoNCiMgb2xkIGNvZGUgZnJvbSB3ZWVrIDIgDQojIG1hdHJpeF9ncmFwaCA8LSBncmFwaC5hZGphY2VuY3kobWF0cml4X3dhdmUxKQ0KDQojIHByaW50KG1hdHJpeF9ncmFwaCkNCmBgYA0KDQo=</div>
 
 
 </div>

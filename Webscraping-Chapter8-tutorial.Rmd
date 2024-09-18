@@ -42,7 +42,7 @@ library(dplyr)
 
 ```
 
-# Get anchor data
+# Get anchor data -RU sociology 
 
 goal: get to know \
 (i) who the Radboud University Department of Sociology staff is, \
@@ -60,14 +60,63 @@ class(soc_staff)
 #so we need to find WHERE the table is located in the html 'inspect element' in mozilla firefox or
 # view page source' and you see that everything AFTER /td in the 'body' of the page seems to be
 # the table we do need
+
+# soc_staff_0 <- soc_staff %>%
+#     rvest::html_nodes("body") %>%
+#     xml2::xml_find_all("//td") %>% # xml2 here looks across multiple layers/ child-elements (hence the // !!! )
+#     rvest::html_text()
+# 
+# 
+# # BETTER?
+# # using html_elements to ONLY USE ONE PACKAGE (RVEST)
 soc_staff <- soc_staff %>%
-    rvest::html_nodes("body") %>%
-    xml2::xml_find_all("//td") %>%
+    rvest::html_elements("body") %>%
+    rvest::html_elements ("td") %>%
+    rvest::html_text()
+#   
+#     
+# view(soc_staff)
+# 
+# # Get whole table at once? 
+# soc_staff_1 <- soc_staff %>%
+#     rvest::html_elements("body") %>%
+#     rvest::html_table()
+
+#view(soc_staff_1)
+#class(soc_staff_1) # list (you can turn into a data frame to use it for further data manipulatino fromhere on)
+
+# (fshowdf) to make output look pretty (but i probably misunderstood what exactly Jochem said)
+
+
+```
+
+# get anchor data - Leiden University - PolSci 
+```{r}
+
+#do it for Leiden University 
+leiden_polsci_staff <- read_html("https://www.universiteitleiden.nl/en/academic-staff/overview?pageNumber=1&faculty=social-and-behavioural-sciences&facultyinstitute=institute-of-political-science") #extracts the source html of a webpage
+
+# div id content 
+# section 
+# ul class table list
+
+
+leiden_polsci_staff_2 <- leiden_polsci_staff %>%
+    rvest::html_elements("body") %>%
+    rvest::html_elements("li")  %>%
+    rvest::html_elements("strong") %>%
     rvest::html_text()
 
-soc_staff
+view(leiden_polsci_staff_2)
 
 
+
+```
+
+
+
+# sort rows into names and expertise 
+```{r}
 #Assigning even and odd rows to 'fodd' and 'feven' (bc the output just lists the left and right side of the table interchangably)
 fodd <- function(x) x%%2 != 0
 feven <- function(x) x%%2 == 0
@@ -335,3 +384,242 @@ soc_df_publications <- bind_rows(soc_list_publications)
 
 # continue shortly before "getting collaborators" at Chapter 8.6.4
 search and find: note how soc_list_profiles
+
+
+
+# gender from names 
+```{r}
+# voornamenbank Maartens insitute 
+# e.g. Vero:
+# https://nvb.meertens.knaw.nl/naam/is/Vero
+
+# use the concatenate function cat 
+# and make a loop that just fills in the name in question in the link 
+
+# INSERT CODE HERE 
+
+
+
+# Last names: https://cbgfamilienamen.nl/nfb/
+```
+
+
+
+# custom functions chunk for functions to run later on 
+```{r}
+fpackage.check <- function(packages) {
+    lapply(packages, FUN = function(x) {
+        if (!require(x, character.only = TRUE)) {
+            install.packages(x, dependencies = TRUE)
+            library(x, character.only = TRUE)
+        }
+    })
+}
+
+fsave <- function(x, file = NULL, location = "./data/processed/") {
+    ifelse(!dir.exists("data"), dir.create("data"), FALSE)
+    ifelse(!dir.exists("data/processed"), dir.create("data/processed"), FALSE)
+    if (is.null(file))
+        file = deparse(substitute(x))
+    datename <- substr(gsub("[:-]", "", Sys.time()), 1, 8)
+    totalname <- paste(location, datename, file, ".rda", sep = "")
+    save(x, file = totalname)  #need to fix if file is reloaded as input name, not as x. 
+}
+
+fload <- function(filename) {
+    load(filename)
+    get(ls()[ls() != "filename"])
+}
+
+#install.packages("kableExtra")
+library(kableExtra)
+
+fshowdf <- function(x, ...) {
+    knitr::kable(x, digits = 2, "html", ...) %>%
+        kableExtra::kable_styling(bootstrap_options = c("striped", "hover")) %>%
+        kableExtra::scroll_box(width = "100%", height = "300px")
+}
+```
+# Open alex 
+```{r}
+# SEE SUNBELT WEBSITE: Attributes tab 
+# if you put html from open alex api into the read html function then you need to replace any spaces with a + symbol
+
+# get JSON package so it can read the JSON object 
+
+
+```
+# R Package openalexR (using r wrapper )
+```{r}
+# make JSON object easier to use
+
+#install.packages("openalexR")
+library(openalexR)
+
+options(openalexR.mailto = "palmtreesdude@gmail.com")
+
+df <- oa_fetch(entity= "author", search = "Jochem Tolsma")
+
+fshowdf(df)
+
+#second affiliation ofJochem is lost when using this wrapper 
+# SOMETIMES INFORMATION CAN GET LOST 
+df_papers <- oa_fetch(entity = "works", author.id = df$id)
+df_papers$author[1] # selecting first item in column "author" which in this case is a full data base 
+# OUtput gives us id from author AND CO-author 
+
+
+# To prevent doubles for authors that have common names we can use MULTIPLE FILTERS: eg. institution Radboud University and country NL and so on... 
+
+# find institution ids first to then filterforinstitutions:
+oa_fetch(entity = "institutions", search = "Radboud University")
+#output will show id: https://openalex.org/I145872427	 for Radboud University Nijmegen
+
+# in code on Jochems in line 162 file title 45 publicationsOpenAlex.rmd
+
+oa_fetch(entity= "author", search = "Jochem Tolsma", affiliations.institution.id = "https://openalex.org/I145872427")
+#putput already has a lot of information on Jochem 
+
+
+# NEXT: find all papers Jochem wrote 
+
+oa_fetch (entity = "works", author.id = 'https://openalex.org/A5087380803')
+ # id is the author id  from somewhere prior in Jochems script 
+
+
+```
+## Adjacency matrix for 4 authors 
+```{r}
+packages <- c("tidyverse", "scholar", "openalexR", "rvest", "jsonlite")
+fpackage.check(packages)
+# make adjacency matrix for these four people 
+
+#Jochem tolsma
+# Tom van de Meer
+# Maurice Gesthuizen 
+# Michael Savelkoul  
+
+# What data do we need? 
+  # Authors, University, works, and co-authors 
+  # All in one data frame 
+
+
+# Jochem Tolsma 
+df_jochem <- oa_fetch(entity= "author", search = "Jochem Tolsma", affiliations.institution.id = "https://openalex.org/I145872427")
+
+fshowdf(df_jochem)
+
+# Maurice Gesthuizen
+df_maurice <- oa_fetch(entity= "author", search = "Maurice Gesthuizen", affiliations.institution.id = "https://openalex.org/I145872427")
+
+fshowdf(df_maurice)
+
+# Michael Savelkoul
+df_michael <- oa_fetch(entity= "author", search = "Michael Savelkoul", affiliations.institution.id = "https://openalex.org/I145872427")
+
+fshowdf(df_michael)
+
+# Tom van der Meer
+df_tom <- oa_fetch(entity= "author", search = "Tom van der Meer", affiliations.institution.id = "https://openalex.org/I145872427")[1,]
+
+fshowdf(df_tom)
+#if output two id's: make decision rule
+# here savest bet isto collect all 5 tom's there are bc we make a matrix
+# if we want to look at citation scores, we have to probably only take the first id 
+
+#one vector with all authors 
+all_authors <- rbind(df_jochem, df_maurice, df_michael, df_tom)
+
+```
+### works
+
+```{r}
+# Jochem's work 
+df_works_jochem <- oa_fetch (entity = "works", author.id = "https://openalex.org/A5087380803")
+
+# Maurice Gesthuizen
+df_works_maurice <- oa_fetch (entity = "works", author.id = "https://openalex.org/A5007673492")
+
+# Michael Savelkoul
+df_works_michael <- oa_fetch (entity = "works", author.id = "https://openalex.org/A5048988743")
+
+# Tom van der Meer
+df_works_tom <- oa_fetch (entity = "works", author.id = "https://openalex.org/A5010780363")
+
+
+# vector with all works
+all_works <- rbind(df_works_tom, df_works_michael, df_works_maurice, df_works_jochem)
+
+
+```
+## make matrix 
+```{r}
+# ALT + MINUS make the ARROWS <- 
+# STR + SHIFT + M makes the %>% 
+# STR + SHIFT + C can make a comment of multiple lines you highlighted
+
+# use column 'author' from works overview 
+# 4x4 matrix
+# decide for which time period 
+  # 2 waves of 4 years: 2019-2023, 2014-2018 
+  # select papers with publication date in this date frame 
+    # publication year variable 
+
+# make selection of dates
+#wave 1
+works_wave1 <- all_works %>% filter(publication_year >= 2014 & publication_year <= 2018)
+#wave 2
+works_wave2 <- all_works %>% filter(publication_year >= 2019 & publication_year <= 2023)
+
+# make empty 4x4 matrix
+  # name each row and column with the identifiers of scholars
+
+matrix_wave1 <- matrix(0, nrow = 4, ncol = 4)
+
+rownames(matrix_wave1) <- c("https://openalex.org/A5087380803", "https://openalex.org/A5007673492", "https://openalex.org/A5048988743", "https://openalex.org/A5010780363")
+
+colnames(matrix_wave1)<- c("https://openalex.org/A5087380803", "https://openalex.org/A5007673492", "https://openalex.org/A5048988743", "https://openalex.org/A5010780363")
+
+print(matrix_wave1)
+
+
+# loop through works
+
+  # row 1: 
+    # works[1,] # in the loop it would be 'i'
+
+  # output shows we want information from column"au_id"
+    works_wave1[1,]$author[[1]]$au_id
+    
+    # output: first listed is the SENDER
+    ego <- works_wave1[1,]$author[[1]]$au_id[1]
+    
+    # the RECEIVERS are everyone BUT the ego aka. the first one
+    alters <- works_wave1[1,]$author[[1]]$au_id[-1]
+    
+  # CHECK if ego is part of authors 
+  # Filter only the author who are part of the other authors 
+    # Check if author is in list 
+      # t[t %in% authors]
+  
+
+  matrix_wave1[ego,alters] <- 1
+  #works_wave1[ego,alters] <- works_wave1[ego,alters] + 1 
+
+
+
+# Create a 4x4 matrix filled with 0's
+matrix_wave2 <- matrix(0, nrow = 4, ncol = 4)
+
+rownames(matrix_wave2) <- c("https://openalex.org/A5087380803", "https://openalex.org/A5007673492", "https://openalex.org/A5048988743", "https://openalex.org/A5010780363")
+
+colnames(matrix_wave2)<- c("https://openalex.org/A5087380803", "https://openalex.org/A5007673492", "https://openalex.org/A5048988743", "https://openalex.org/A5010780363")
+
+print(matrix_wave2)
+
+# old code from week 2 
+# matrix_graph <- graph.adjacency(matrix_wave1)
+
+# print(matrix_graph)
+```
+
