@@ -24,10 +24,71 @@ klippy::klippy(position = c('top', 'right'))
 #klippy::klippy(color = 'darkred')
 #klippy::klippy(tooltip_message = 'Click to copy', tooltip_success = 'Done')
 ```
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+# Research Questions
 
+**RQ1a:**
 
+-   To what extent does gender homophily occur across all co-publications of the staff of the Sociology Department and Political Science Department at Radboud University?
 
+**RQ1b:**
+
+-   To what extent do the two departments differ in their gender homophily?
+
+**RQ2:**
+
+-   How to does gender homophily affect collaboration differently for collaborations between staff who have published in low vs. high prestige journals?
+
+# Overview:
+
+-   Sample:
+
+    -   Radboud Sociology Dptm.
+
+    -   Radboud Pol Sci Dptm.
+
+-   Time frame: 2019 - 2023 ( Why? Well... because. )
+
+-   Data:
+
+    -   names
+
+    -   publications
+
+        -   connected to authors (for collaborations)
+
+    -   initiator: position in list ofcollaborators
+
+    -   sex/gender (f,m/w,m)
+
+        -   using name data bank
+
+    -   journals of the publications
+
+        -   prestige: their ?-Index
+
+        -   --\> categorize ? scale?
+
+-   age
+
+    -   time since first publication
+
+        -   **until last publication? until present?**
+
+# Questions
+
+-   How scrape position of name in list of collaborators?
+
+-   
+
+# To-Do 
+
+-   Read up on G-index, H-index, prestige indicators of journals
+
+    -   decide which one as indicator
+
+-   

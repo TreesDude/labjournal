@@ -363,9 +363,6 @@ div.tocify {
     <li>
       <a href="week3RSelenium.html">Week 3 - RSelenium (see Ch.8 tab tho)</a>
     </li>
-    <li>
-      <a href="webscraping1.html">Webscraping my data 1</a>
-    </li>
   </ul>
 </li>
 <li class="dropdown">
@@ -379,7 +376,7 @@ div.tocify {
       <a href="RQdraft1.html">1st draft</a>
     </li>
     <li>
-      <a href="RQdraft2.html">2nd draft</a>
+      <a href="RQdraft2.html">2nd draft - w Intro &amp; data types</a>
     </li>
     <li>
       <a href="RQdraft3.html">3rd draft</a>
@@ -430,13 +427,13 @@ rm(list = ls())
 # install.packages(&#39;data.table&#39;)
 library(data.table)  # mainly for faster data handling
 library(tidyverse)  # I assume you already installed this one!</code></pre>
-<pre><code>## ── Attaching core tidyverse packages ─────────────
+<pre><code>## ── Attaching core tidyverse pa
 ## ✔ dplyr     1.1.4     ✔ readr     2.1.5
 ## ✔ forcats   1.0.0     ✔ stringr   1.4.1
 ## ✔ ggplot2   3.5.1     ✔ tibble    3.2.1
 ## ✔ lubridate 1.9.3     ✔ tidyr     1.3.1
 ## ✔ purrr     1.0.2     
-## ── Conflicts ──────────── tidyverse_conflicts() ──
+## ── Conflicts ─────────────────
 ## ✖ dplyr::between()     masks data.table::between()
 ## ✖ dplyr::filter()      masks stats::filter()
 ## ✖ dplyr::first()       masks data.table::first()
@@ -499,10 +496,10 @@ sociology</h1>
 
 head(soc_staff)</code></pre>
 <pre><code>## $node
-## &lt;pointer: 0x000001d5dadcd250&gt;
+## &lt;pointer: 0x0000024b518e4350&gt;
 ## 
 ## $doc
-## &lt;pointer: 0x000001d5d67513c0&gt;</code></pre>
+## &lt;pointer: 0x0000024b51dfd0d0&gt;</code></pre>
 <pre class="r"><code>#which object? 
 class(soc_staff)</code></pre>
 <pre><code>## [1] &quot;xml_document&quot; &quot;xml_node&quot;</code></pre>
@@ -1409,8 +1406,10 @@ number="6.3">
 <h2><span class="header-section-number">6.3</span> plot network of
 single staff member</h2>
 <pre class="r"><code>plot_coauthors(get_coauthors(&quot;Iu23-90AAAAJ&quot;, n_coauthors = 20, n_deep = 1), size_labels = 2)  </code></pre>
-<pre><code>## Warning: Removed 150 rows containing missing values or
-## values outside the scale range (`geom_point()`).</code></pre>
+<pre><code>## Warning: Removed 150 rows containing
+## missing values or values
+## outside the scale range
+## (`geom_point()`).</code></pre>
 <pre><code>## Warning: ggrepel: 5 unlabeled data points (too many overlaps). Consider increasing max.overlaps</code></pre>
 <p><img src="Webscraping-Chapter8-tutorial_files/figure-html/plot-1.png" width="672" /></p>
 <pre class="r"><code># Doesn&#39;t look like much yet, but we&#39;ll make it prettier later.</code></pre>

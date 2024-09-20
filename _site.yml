@@ -22,13 +22,13 @@ navbar:
         href: Webscraping-Chapter8-tutorial.html
       - text: "Week 3 - RSelenium (see Ch.8 tab tho)"
         href: week3RSelenium.html
-      - text: "Webscraping my data 1"
-        href: webscraping1.html
+      # - text: "Webscraping my data 1"
+      #   href: webscraping1.html
     - text: "RQs"
       menu:
       - text: "1st draft"
         href: RQdraft1.html
-      - text: "2nd draft"
+      - text: "2nd draft - w Intro & data types"
         href: RQdraft2.html
       - text: "3rd draft"
         href: RQdraft3.html

@@ -365,9 +365,6 @@ div.tocify {
     <li>
       <a href="week3RSelenium.html">Week 3 - RSelenium (see Ch.8 tab tho)</a>
     </li>
-    <li>
-      <a href="webscraping1.html">Webscraping my data 1</a>
-    </li>
   </ul>
 </li>
 <li class="dropdown">
@@ -381,7 +378,7 @@ div.tocify {
       <a href="RQdraft1.html">1st draft</a>
     </li>
     <li>
-      <a href="RQdraft2.html">2nd draft</a>
+      <a href="RQdraft2.html">2nd draft - w Intro &amp; data types</a>
     </li>
     <li>
       <a href="RQdraft3.html">3rd draft</a>
@@ -426,8 +423,81 @@ div.tocify {
   addClassKlippyTo("pre.r, pre.markdown");
   addKlippy('right', 'top', 'auto', '1', 'Copy code', 'Copied!');
 </script>
+<div id="research-questions" class="section level1" number="1">
+<h1><span class="header-section-number">1</span> Research Questions</h1>
+<p><strong>RQ1a:</strong></p>
+<ul>
+<li>To what extent does gender homophily occur across all
+co-publications of the staff of the Sociology Department and Political
+Science Department at Radboud University?</li>
+</ul>
+<p><strong>RQ1b:</strong></p>
+<ul>
+<li>To what extent do the two departments differ in their gender
+homophily?</li>
+</ul>
+<p><strong>RQ2:</strong></p>
+<ul>
+<li>How to does gender homophily affect collaboration differently for
+collaborations between staff who have published in low vs. high prestige
+journals?</li>
+</ul>
+</div>
+<div id="overview" class="section level1" number="2">
+<h1><span class="header-section-number">2</span> Overview:</h1>
+<ul>
+<li><p>Sample:</p>
+<ul>
+<li><p>Radboud Sociology Dptm.</p></li>
+<li><p>Radboud Pol Sci Dptm.</p></li>
+</ul></li>
+<li><p>Time frame: 2019 - 2023 ( Why? Well… because. )</p></li>
+<li><p>Data:</p>
+<ul>
+<li><p>names</p></li>
+<li><p>publications</p>
+<ul>
+<li>connected to authors (for collaborations)</li>
+</ul></li>
+<li><p>initiator: position in list ofcollaborators</p></li>
+<li><p>sex/gender (f,m/w,m)</p>
+<ul>
+<li>using name data bank</li>
+</ul></li>
+<li><p>journals of the publications</p>
+<ul>
+<li><p>prestige: their ?-Index</p></li>
+<li><p>–&gt; categorize ? scale?</p></li>
+</ul></li>
+</ul></li>
+<li><p>age</p>
+<ul>
+<li><p>time since first publication</p>
+<ul>
+<li><strong>until last publication? until present?</strong></li>
+</ul></li>
+</ul></li>
+</ul>
+</div>
+<div id="questions" class="section level1" number="3">
+<h1><span class="header-section-number">3</span> Questions</h1>
+<ul>
+<li><p>How scrape position of name in list of collaborators?</p></li>
+<li></li>
+</ul>
+</div>
+<div id="to-do" class="section level1" number="4">
+<h1><span class="header-section-number">4</span> To-Do</h1>
+<ul>
+<li><p>Read up on G-index, H-index, prestige indicators of journals</p>
+<ul>
+<li>decide which one as indicator</li>
+</ul></li>
+<li></li>
+</ul>
+</div>
 
-<div id="rmd-source-code">LS0tDQp0aXRsZTogIlJRIGRyYWZ0IDMiDQphdXRob3I6ICJWZXJvb28iDQpkYXRlOiAiMjAyNC0wOS0yMCINCm91dHB1dDogaHRtbF9kb2N1bWVudA0KLS0tDQoNCmBgYHtyLCBnbG9iYWxzZXR0aW5ncywgZWNobz1GQUxTRSwgd2FybmluZz1GQUxTRSwgcmVzdWx0cz0naGlkZSd9DQpsaWJyYXJ5KGtuaXRyKQ0KDQprbml0cjo6b3B0c19jaHVuayRzZXQoZWNobyA9IFRSVUUpDQpvcHRzX2NodW5rJHNldCh0aWR5Lm9wdHM9bGlzdCh3aWR0aC5jdXRvZmY9MTAwKSx0aWR5PVRSVUUsIHdhcm5pbmcgPSBGQUxTRSwgbWVzc2FnZSA9IEZBTFNFLGNvbW1lbnQgPSAiIz4iLCBjYWNoZT1UUlVFLCBjbGFzcy5zb3VyY2U9YygidGVzdCIpLCBjbGFzcy5vdXRwdXQ9YygidGVzdDIiKSkNCm9wdGlvbnMod2lkdGggPSAxMDApDQpyZ2w6OnNldHVwS25pdHIoKQ0KDQoNCg0KY29sb3JpemUgPC0gZnVuY3Rpb24oeCwgY29sb3IpIHtzcHJpbnRmKCI8c3BhbiBzdHlsZT0nY29sb3I6ICVzOyc+JXM8L3NwYW4+IiwgY29sb3IsIHgpIH0NCg0KYGBgDQoNCmBgYHtyIGtsaXBweSwgZWNobz1GQUxTRSwgaW5jbHVkZT1UUlVFfQ0Ka2xpcHB5OjprbGlwcHkocG9zaXRpb24gPSBjKCd0b3AnLCAncmlnaHQnKSkNCiNrbGlwcHk6OmtsaXBweShjb2xvciA9ICdkYXJrcmVkJykNCiNrbGlwcHk6OmtsaXBweSh0b29sdGlwX21lc3NhZ2UgPSAnQ2xpY2sgdG8gY29weScsIHRvb2x0aXBfc3VjY2VzcyA9ICdEb25lJykNCmBgYA0KYGBge3Igc2V0dXAsIGluY2x1ZGU9RkFMU0V9DQprbml0cjo6b3B0c19jaHVuayRzZXQoZWNobyA9IFRSVUUpDQpgYGANCg0KDQoNCg0K</div>
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIlJRIGRyYWZ0IDMiDQphdXRob3I6ICJWZXJvb28iDQpkYXRlOiAiMjAyNC0wOS0yMCINCm91dHB1dDogaHRtbF9kb2N1bWVudA0KLS0tDQoNCmBgYHtyLCBnbG9iYWxzZXR0aW5ncywgZWNobz1GQUxTRSwgd2FybmluZz1GQUxTRSwgcmVzdWx0cz0naGlkZSd9DQpsaWJyYXJ5KGtuaXRyKQ0KDQprbml0cjo6b3B0c19jaHVuayRzZXQoZWNobyA9IFRSVUUpDQpvcHRzX2NodW5rJHNldCh0aWR5Lm9wdHM9bGlzdCh3aWR0aC5jdXRvZmY9MTAwKSx0aWR5PVRSVUUsIHdhcm5pbmcgPSBGQUxTRSwgbWVzc2FnZSA9IEZBTFNFLGNvbW1lbnQgPSAiIz4iLCBjYWNoZT1UUlVFLCBjbGFzcy5zb3VyY2U9YygidGVzdCIpLCBjbGFzcy5vdXRwdXQ9YygidGVzdDIiKSkNCm9wdGlvbnMod2lkdGggPSAxMDApDQpyZ2w6OnNldHVwS25pdHIoKQ0KDQoNCg0KY29sb3JpemUgPC0gZnVuY3Rpb24oeCwgY29sb3IpIHtzcHJpbnRmKCI8c3BhbiBzdHlsZT0nY29sb3I6ICVzOyc+JXM8L3NwYW4+IiwgY29sb3IsIHgpIH0NCg0KYGBgDQoNCmBgYHtyIGtsaXBweSwgZWNobz1GQUxTRSwgaW5jbHVkZT1UUlVFfQ0Ka2xpcHB5OjprbGlwcHkocG9zaXRpb24gPSBjKCd0b3AnLCAncmlnaHQnKSkNCiNrbGlwcHk6OmtsaXBweShjb2xvciA9ICdkYXJrcmVkJykNCiNrbGlwcHk6OmtsaXBweSh0b29sdGlwX21lc3NhZ2UgPSAnQ2xpY2sgdG8gY29weScsIHRvb2x0aXBfc3VjY2VzcyA9ICdEb25lJykNCmBgYA0KDQpgYGB7ciBzZXR1cCwgaW5jbHVkZT1GQUxTRX0NCmtuaXRyOjpvcHRzX2NodW5rJHNldChlY2hvID0gVFJVRSkNCmBgYA0KDQojIFJlc2VhcmNoIFF1ZXN0aW9ucw0KDQoqKlJRMWE6KioNCg0KLSAgIFRvIHdoYXQgZXh0ZW50IGRvZXMgZ2VuZGVyIGhvbW9waGlseSBvY2N1ciBhY3Jvc3MgYWxsIGNvLXB1YmxpY2F0aW9ucyBvZiB0aGUgc3RhZmYgb2YgdGhlIFNvY2lvbG9neSBEZXBhcnRtZW50IGFuZCBQb2xpdGljYWwgU2NpZW5jZSBEZXBhcnRtZW50IGF0IFJhZGJvdWQgVW5pdmVyc2l0eT8NCg0KKipSUTFiOioqDQoNCi0gICBUbyB3aGF0IGV4dGVudCBkbyB0aGUgdHdvIGRlcGFydG1lbnRzIGRpZmZlciBpbiB0aGVpciBnZW5kZXIgaG9tb3BoaWx5Pw0KDQoqKlJRMjoqKg0KDQotICAgSG93IHRvIGRvZXMgZ2VuZGVyIGhvbW9waGlseSBhZmZlY3QgY29sbGFib3JhdGlvbiBkaWZmZXJlbnRseSBmb3IgY29sbGFib3JhdGlvbnMgYmV0d2VlbiBzdGFmZiB3aG8gaGF2ZSBwdWJsaXNoZWQgaW4gbG93IHZzLsKgaGlnaCBwcmVzdGlnZSBqb3VybmFscz8NCg0KIyBPdmVydmlldzoNCg0KLSAgIFNhbXBsZToNCg0KICAgIC0gICBSYWRib3VkIFNvY2lvbG9neSBEcHRtLg0KDQogICAgLSAgIFJhZGJvdWQgUG9sIFNjaSBEcHRtLg0KDQotICAgVGltZSBmcmFtZTogMjAxOSAtIDIwMjMgKCBXaHk/IFdlbGwuLi4gYmVjYXVzZS4gKQ0KDQotICAgRGF0YToNCg0KICAgIC0gICBuYW1lcw0KDQogICAgLSAgIHB1YmxpY2F0aW9ucw0KDQogICAgICAgIC0gICBjb25uZWN0ZWQgdG8gYXV0aG9ycyAoZm9yIGNvbGxhYm9yYXRpb25zKQ0KDQogICAgLSAgIGluaXRpYXRvcjogcG9zaXRpb24gaW4gbGlzdCBvZmNvbGxhYm9yYXRvcnMNCg0KICAgIC0gICBzZXgvZ2VuZGVyIChmLG0vdyxtKQ0KDQogICAgICAgIC0gICB1c2luZyBuYW1lIGRhdGEgYmFuaw0KDQogICAgLSAgIGpvdXJuYWxzIG9mIHRoZSBwdWJsaWNhdGlvbnMNCg0KICAgICAgICAtICAgcHJlc3RpZ2U6IHRoZWlyID8tSW5kZXgNCg0KICAgICAgICAtICAgLS1cPiBjYXRlZ29yaXplID8gc2NhbGU/DQoNCi0gICBhZ2UNCg0KICAgIC0gICB0aW1lIHNpbmNlIGZpcnN0IHB1YmxpY2F0aW9uDQoNCiAgICAgICAgLSAgICoqdW50aWwgbGFzdCBwdWJsaWNhdGlvbj8gdW50aWwgcHJlc2VudD8qKg0KDQojIFF1ZXN0aW9ucw0KDQotICAgSG93IHNjcmFwZSBwb3NpdGlvbiBvZiBuYW1lIGluIGxpc3Qgb2YgY29sbGFib3JhdG9ycz8NCg0KLSAgIA0KDQojIFRvLURvIA0KDQotICAgUmVhZCB1cCBvbiBHLWluZGV4LCBILWluZGV4LCBwcmVzdGlnZSBpbmRpY2F0b3JzIG9mIGpvdXJuYWxzDQoNCiAgICAtICAgZGVjaWRlIHdoaWNoIG9uZSBhcyBpbmRpY2F0b3INCg0KLSAgIA0K</div>
 
 
 </div>
