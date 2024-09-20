@@ -361,7 +361,10 @@ div.tocify {
       <a href="Webscraping-Chapter8-tutorial.html">Chapter 8 - Webscraping tutorial</a>
     </li>
     <li>
-      <a href="week3RSelenium.html">Week 3 - RSelenium</a>
+      <a href="week3RSelenium.html">Week 3 - RSelenium (see Ch.8 tab tho)</a>
+    </li>
+    <li>
+      <a href="webscraping1.html">Webscraping my data 1</a>
     </li>
   </ul>
 </li>
@@ -377,6 +380,9 @@ div.tocify {
     </li>
     <li>
       <a href="RQdraft2.html">2nd draft</a>
+    </li>
+    <li>
+      <a href="RQdraft3.html">3rd draft</a>
     </li>
   </ul>
 </li>
@@ -493,10 +499,10 @@ sociology</h1>
 
 head(soc_staff)</code></pre>
 <pre><code>## $node
-## &lt;pointer: 0x0000018822fe1ed0&gt;
+## &lt;pointer: 0x000001d5dadcd250&gt;
 ## 
 ## $doc
-## &lt;pointer: 0x00000188200e90d0&gt;</code></pre>
+## &lt;pointer: 0x000001d5d67513c0&gt;</code></pre>
 <pre class="r"><code>#which object? 
 class(soc_staff)</code></pre>
 <pre><code>## [1] &quot;xml_document&quot; &quot;xml_node&quot;</code></pre>
@@ -764,7 +770,7 @@ get_scholar_id_fix(last_name = &quot;tolsma&quot;, first_name = &quot;jochem&quo
 ## [1] &quot;Professor, Radboud University Nijmegen / University of Groningen&quot;
 ## 
 ## $total_cites
-## [1] 3399
+## [1] 3402
 ## 
 ## $h_index
 ## [1] 27
@@ -1142,8 +1148,8 @@ publications, citations</h3>
 ## 113                                                                Book of Abstracts
 ## 114                                                                                 
 ##                                                                    number cites year
-## 1                                                                           712 2014
-## 2                                                         27 (6), 741-758   373 2011
+## 1                                                                           713 2014
+## 2                                                         27 (6), 741-758   374 2011
 ## 3                                                                  44 (3)   331 2009
 ## 4                                                         27 (3), 291-306   158 2011
 ## 5                                                           35 (1), 51-61   154 2013
@@ -1155,7 +1161,7 @@ publications, citations</h3>
 ## 11                                                        26 (2), 235-252    82 2010
 ## 12                                                          27 (1), 20-33    69 2017
 ## 13                                                        33 (2), 209-224    68 2017
-## 14                                                             98, 104185    54 2019
+## 14                                                             98, 104185    55 2019
 ## 15                                                                           53 2016
 ## 16                                                      34 (5-6), 888-906    51 2013
 ## 17                                                          42 (1), 59-83    44 2013
@@ -1387,9 +1393,9 @@ publications, citations</h3>
 ## 12 2019   311
 ## 13 2020   300
 ## 14 2021   329
-## 15 2022   335
+## 15 2022   336
 ## 16 2023   333
-## 17 2024   265</code></pre>
+## 17 2024   267</code></pre>
 </div>
 <div id="get-collaborators" class="section level3" number="6.2.2">
 <h3><span class="header-section-number">6.2.2</span> get
@@ -1587,7 +1593,7 @@ Jochem Tolsma
 J. Tolsma , Jochem Tolsma, J L Tolsma
 </td>
 <td style="text-align:right;">
-8869.57
+8764.71
 </td>
 <td style="text-align:left;">
 <a href="https://openalex.org/A5087380803"
@@ -1959,7 +1965,7 @@ oa_fetch(entity= &quot;author&quot;, search = &quot;Jochem Tolsma&quot;, affilia
 <pre><code>## # A tibble: 1 × 18
 ##   id      display_name display_name_alterna…¹ relevance_score ids   orcid works_count cited_by_count
 ##   &lt;chr&gt;   &lt;chr&gt;        &lt;list&gt;                           &lt;dbl&gt; &lt;lis&gt; &lt;chr&gt;       &lt;int&gt;          &lt;int&gt;
-## 1 https:… Jochem Tols… &lt;chr [3]&gt;                        8870. &lt;chr&gt; http…          85           1996
+## 1 https:… Jochem Tols… &lt;chr [3]&gt;                        8765. &lt;chr&gt; http…          85           1996
 ## # ℹ abbreviated name: ¹​display_name_alternatives
 ## # ℹ 10 more variables: counts_by_year &lt;list&gt;, affiliation_display_name &lt;chr&gt;, affiliation_id &lt;chr&gt;,
 ## #   affiliation_ror &lt;chr&gt;, affiliation_country_code &lt;chr&gt;, affiliation_type &lt;chr&gt;,
@@ -1970,7 +1976,7 @@ oa_fetch(entity= &quot;author&quot;, search = &quot;Jochem Tolsma&quot;, affilia
 # NEXT: find all papers Jochem wrote 
 
 oa_fetch (entity = &quot;works&quot;, author.id = &#39;https://openalex.org/A5087380803&#39;)</code></pre>
-<pre><code>## # A tibble: 87 × 38
+<pre><code>## # A tibble: 90 × 38
 ##    id    title display_name author ab    publication_date so    so_id host_organization issn_l url  
 ##    &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;        &lt;list&gt; &lt;chr&gt; &lt;chr&gt;            &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;             &lt;chr&gt;  &lt;chr&gt;
 ##  1 http… Ethn… Ethnic Dive… &lt;df&gt;   Rece… 2014-06-27       Annu… http… Annual Reviews    0360-… http…
@@ -1983,7 +1989,7 @@ oa_fetch (entity = &quot;works&quot;, author.id = &#39;https://openalex.org/A508
 ##  8 http… Ethn… Ethnic Comp… &lt;df&gt;   Jour… 2007-11-25       Euro… http… Oxford Universit… 0266-… http…
 ##  9 http… Educ… Education a… &lt;df&gt;   Abst… 2012-05-01       Jour… http… Taylor &amp; Francis  1369-… http…
 ## 10 http… Co-o… Co-occurren… &lt;df&gt;   Alth… 2019-12-01       Chil… http… Elsevier BV       0145-… http…
-## # ℹ 77 more rows
+## # ℹ 80 more rows
 ## # ℹ 27 more variables: pdf_url &lt;chr&gt;, license &lt;chr&gt;, version &lt;chr&gt;, first_page &lt;chr&gt;,
 ## #   last_page &lt;chr&gt;, volume &lt;chr&gt;, issue &lt;chr&gt;, is_oa &lt;lgl&gt;, is_oa_anywhere &lt;lgl&gt;, oa_status &lt;chr&gt;,
 ## #   oa_url &lt;chr&gt;, any_repository_has_fulltext &lt;lgl&gt;, language &lt;chr&gt;, grants &lt;list&gt;,
@@ -2107,7 +2113,7 @@ Jochem Tolsma
 J. Tolsma , Jochem Tolsma, J L Tolsma
 </td>
 <td style="text-align:right;">
-8869.57
+8764.71
 </td>
 <td style="text-align:left;">
 <a href="https://openalex.org/A5087380803"
@@ -2513,7 +2519,7 @@ Maurice Johannes Wilhelmus Gesthuizen, M. Gesthuizen , Maurice
 Gesthuizen , M.J.W. Gesthuizen , Maurice J.W. Gesthuizen
 </td>
 <td style="text-align:right;">
-8262.18
+8251.21
 </td>
 <td style="text-align:left;">
 <a href="https://openalex.org/A5007673492"
@@ -2919,7 +2925,7 @@ Michael Savelkoul
 M.J. Savelkoul , M. Savelkoul , Michael Savelkoul
 </td>
 <td style="text-align:right;">
-4028.22
+4039.53
 </td>
 <td style="text-align:left;">
 <a href="https://openalex.org/A5048988743"
@@ -3321,7 +3327,7 @@ T.W.G. Tom van der Meer, Tom W. G. van der Meer , Tom Van Der Meer , T.
 Van Der Meer , TOM W.G. VAN DER MEER
 </td>
 <td style="text-align:right;">
-17008.72
+17024.54
 </td>
 <td style="text-align:left;">
 <a href="https://openalex.org/A5010780363"
