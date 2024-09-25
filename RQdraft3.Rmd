@@ -85,7 +85,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 -   
 
-# To-Do 
+# To-Do
 
 -   Read up on G-index, H-index, prestige indicators of journals
 

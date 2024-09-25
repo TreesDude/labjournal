@@ -1,16 +1,10 @@
 ---
-title: "Webscraping my data 1"
+title: "Network Visualisation Practice"
 author: "Verooo"
-date: "2024-09-20"
+date: "2024-09-25"
 output: html_document
 ---
 
----
-title: "RQ draft 3"
-author: "Verooo"
-date: "2024-09-20"
-output: html_document
----
 
 ```{r, globalsettings, echo=FALSE, warning=FALSE, results='hide'}
 library(knitr)
