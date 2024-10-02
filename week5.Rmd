@@ -3,9 +3,6 @@ title: "Week 5 - Chapter 7 pt.1 - Analysis"
 author: "Verooo"
 date: "2024-10-02"
 output: html_document
-editor_options: 
-  markdown: 
-    wrap: 72
 ---
 
 ```{r, globalsettings, echo=FALSE, warning=FALSE, results='hide'}
@@ -47,7 +44,10 @@ Or just remove all isolates lol
 
 Something I really need a grasp of (bc very poor prioritization)!
 
-## data were scraped at author level bceasier if you want to look at author "characteristics"
+***data were scraped at author level bc easier if you want to look at
+author "characteristics"***
+
+---
 
 # Analysing data - Chapter 7 (SNASS)
 
@@ -85,7 +85,7 @@ fshowdf <- function(x, ...) {
 }
 ```
 
-## packages
+## Packages
 
 RSiena RsienaTwoStep: this packages assesses the ministep assumption of
 RSiena but is useful for this tutorial devtools: to load from github
@@ -323,7 +323,7 @@ this:^[19](https://snass.netlify.app/socionetsm#fn19)^
     (there is plenty of maths on this but in our case manually: our
     network density was too low, we looked at degree and reciprocity. We
     can increase the value of degree and try to approximate a value
-    where changes in degree don't really make a change anymore. \
+    where changes in degree don't really make a change anymore.\
     Then we would change reciprocity parameter, in our case: increase
     it. We will have more reciprocity but also automatically increasing
     ties because reciprocity DEPENDS on ties\
@@ -375,7 +375,7 @@ the following:
 
 ## 7.8 Interpretation of parameters
 
-### Network statistics 
+### Network statistics
 
 positive parameter = " i like"
 
@@ -399,13 +399,13 @@ degrees increase
 if stat, for reciprocity is 2 and degree is 1, then they are of the same
 unit (as opposed to other units like age, or years etc. )
 
-#### in paper report: 
+# in paper report:
 
 descriptives, statistics
 
 simple: higher scores = more positive
 
-and recalculate in probability ratio: take exponent of parameter value \
+and recalculate in probability ratio: take exponent of parameter value\
 "if netw. increases in this stats by one the probability ration is
 this."
 
