@@ -22,8 +22,11 @@ navbar:
         href: Webscraping-Chapter8-tutorial.html
       - text: "Week 3 - RSelenium (see Ch.8 tab tho)"
         href: week3RSelenium.html
-      - text: "Week 4 - Netw. Visualisation"
+      - text: "Chapter 9 - Netw. Visualisation tutorial"
         href: networkvis.html
+      - text: "Week 5"
+        href: week5.html
+        
     - text: "RQs"
       menu:
       - text: "1st draft"

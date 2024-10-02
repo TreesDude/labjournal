@@ -1,10 +1,9 @@
 ---
-title: "Network Visualisation Practice"
+title: "Chapter 9 - Network Visualisation Practice"
 author: "Verooo"
 date: "2024-09-25"
 output: html_document
 ---
-
 
 ```{r, globalsettings, echo=FALSE, warning=FALSE, results='hide'}
 library(knitr)
@@ -25,6 +24,165 @@ klippy::klippy(position = c('top', 'right'))
 #klippy::klippy(color = 'darkred')
 #klippy::klippy(tooltip_message = 'Click to copy', tooltip_success = 'Done')
 ```
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+
+# 9.1 Zachary’s karate club
+
+```{r }
+require(igraph)
+g <- make_graph("Zachary")
+plot(g)
+
+# adjacentcy matrix 
+gmat <- as_adjacency_matrix(g, type = "both", sparse = FALSE)
+gmat
+```
+
+## 9.1.1. Descriptive statistics
+
+### Size
+
+```{r}
+# number of nodes
+vcount(g)
+# number of edges
+ecount(g)
+```
+
+#### degree
+
+In-degree = how many ties come “towards you”
+
+```{r}
+igraph::degree(g)
+
+hist(table(degree(g)), xlab='indegree', main= 'Histogram of indegree')
+```
+
+#### transitivity
+
+For undirected networks, the clustering coefficient is the same as the **transitivity index:\
+**the number of transitive triads divided by all possible transitive triads.\
+For directed graphs not so.
+
+```{r}
+# be aware that directed graphs are considered as undirected. but g is undirected.
+igraph::transitivity(g, type = c("localundirected"), isolates = c("NaN", "zero"))
+
+```
+
+see also: 9.1.3 triad-census
+
+#### betweenness
+
+For all dyads: testing shortest path.
+
+Number of shortest path between two nodes\
+divided by\
+How many of those shortest paths is "i" part of ?
+
+```{r}
+igraph::betweenness(g, directed = FALSE)
+```
+
+## 9.1.2 dyad-census
+
+```{r}
+igraph::dyad_census(g)
+```
+
+##9.1.3 triad-census
+
+```{r}
+igraph::triad_census(g)
+# I will use sna because it shows the names of the triads as well.
+sna::triad.census(gmat)
+
+unloadNamespace("sna")  #I will detach this package again, otherwise it will interfere with all kind of functions from igraph, and my students will hate me for that.
+
+
+# calculate transitivity 
+igraph::transitivity(g, type = "global")
+sna::gtrans(gmat)
+
+triad_g <- data.frame(sna::triad.census(gmat))
+
+transitivity_g <- (3 * triad_g$X300)/(triad_g$X201 + 3 * triad_g$X300)
+transitivity_g
+# 0.2556818
+
+```
+
+## 9.1.4 Network visualisation
+
+### proportional betweenness score
+
+```{r}
+# changing V
+V(g)$size = betweenness(g, normalized = T, directed = FALSE) * 60 + 10  #after some trial and error
+plot(g, mode = "undirected")
+```
+
+placing node 33 and 34 further apart:
+
+```{r}
+set.seed(2345)
+l <- layout_with_mds(g)  #https://igraph.org/r/doc/layout_with_mds.html
+plot(g, layout = l)
+```
+
+place 33 and 34 even further apart:
+
+```{r}
+l  #let us take a look at the coordinates
+l[1, 1] <- 4
+l[34, 1] <- -3.5
+plot(g, layout = l)
+```
+
+***CAUTION!!***
+
+"In the last step we manipulated our data. The coordinates of two nodes have been altered manually and are no longer determined by some ‘objective’ algorithm. Is this not the same as slightly changing an inconvenient correlation in a correlation matrix or as removing some outliers from our dataset? At the very minimum, make sure to tell your readers what you have done! Add a note/legend to your graph."
+
+```{r}
+plot(g, layout = l, margin = c(0, 0, 0, 0))
+legend(x = -2.5, y = -1.5, c("Note: the position of nodes 1 and 34 have been set by Jochem Tolsma \n for visualisation purposes only and do not reflect network properties"), bty = "n", cex = 0.8, xpd=TRUE)
+
+```
+
+PROBLEM: Note is not visible in my output
+
+SOLUTION: added the "xpd = TRUE" to legend
+
+## 9.2 Twittersphere in the Dutch HoP
+
+```{r}
+load("twitter_20190919.RData")  #change to your working directory
+str(twitter_20190919, 1)
+keyf <- twitter_20190919[[1]]
+mydata <- twitter_20190919[[2]]
+seats <- twitter_20190919[[3]]
+```
+
+So, what do we have?
+
+-   `keyf`: a data.frame on 147 Dutch MPs.
+
+-   `mydata`: This an object which is ready to analyze in RSiena. It is actually a quite complicated object. For now three things are important:
+
+    1.  The nodes in `mydata` are the same as in `keyf` and in `seats`.
+
+    2.  It contains the twitter data at three timepoints (in `mydata$depvars`). We have three layers:
+
+        -   fnet: who follows whom
+
+        -   atmnet: who atmentions whom
+
+        -   rtnet: who retweats whom
+
+    3.  It also contains time invariant information on the nodes (in `mydata$cCovars`)
+
+-   `seats`: a dataset which contains the coordinates of the seats in the House of Parliament in the Netherlands.

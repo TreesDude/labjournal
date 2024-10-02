@@ -1,0 +1,52 @@
+---
+title: "Week 5"
+author: "Verooo"
+date: "2024-10-02"
+output: html_document
+---
+
+
+
+
+
+
+```{r, globalsettings, echo=FALSE, warning=FALSE, results='hide'}
+library(knitr)
+
+knitr::opts_chunk$set(echo = TRUE)
+opts_chunk$set(tidy.opts=list(width.cutoff=100),tidy=TRUE, warning = FALSE, message = FALSE,comment = "#>", cache=TRUE, class.source=c("test"), class.output=c("test2"))
+options(width = 100)
+rgl::setupKnitr()
+
+
+
+colorize <- function(x, color) {sprintf("<span style='color: %s;'>%s</span>", color, x) }
+
+```
+
+```{r klippy, echo=FALSE, include=FALSE}
+klippy::klippy(position = c('top', 'right'))
+#klippy::klippy(color = 'darkred')
+#klippy::klippy(tooltip_message = 'Click to copy', tooltip_success = 'Done')
+```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Notes while discussing other peeps plots
+Using RSiena for evolutin of network 
+Wave, Ego alters 
+RSciena: Ego, alter, wave 
+Reorganize into an array for RSciena 
+
+
+Set size of isolates to SMALL 
+put all isolates in one place 
+then you have enough room left to have a more "zoomed in" frame for the actual collaborator networks 
+
+Or just remove all isolates lol 
+```{r}
+
+```
+

@@ -42,11 +42,11 @@ library(dplyr)
 
 ```
 
-# Get anchor data -RU sociology 
+# Get anchor data -RU sociology
 
-goal: get to know \
-(i) who the Radboud University Department of Sociology staff is, \
-(ii) what they publish with respect to scientific work, and \
+goal: get to know\
+(i) who the Radboud University Department of Sociology staff is,\
+(ii) what they publish with respect to scientific work, and\
 (iii) who they collaborate with.
 
 ```{r, Anchor data}
@@ -90,7 +90,8 @@ soc_staff <- soc_staff %>%
 
 ```
 
-# get anchor data - Leiden University - PolSci 
+# get anchor data - Leiden University - PolSci
+
 ```{r}
 
 #do it for Leiden University 
@@ -113,9 +114,8 @@ view(leiden_polsci_staff_2)
 
 ```
 
+# sort rows into names and expertise
 
-
-# sort rows into names and expertise 
 ```{r}
 #Assigning even and odd rows to 'fodd' and 'feven' (bc the output just lists the left and right side of the table interchangably)
 fodd <- function(x) x%%2 != 0
@@ -155,7 +155,8 @@ soc_df <- soc_df[-delrows, ]
 
 ```
 
-# Extract names and last names 
+# Extract names and last names
+
 ```{r, name extraction}
 # gsub   is a function that remove something and replaces it with something else
 
@@ -189,9 +190,8 @@ soc_df$first_name <- str_extract_all(soc_df$soc_names, "(?<=\\().+?(?=\\))", sim
 
 ```
 
+## clean up names
 
-
-## clean up names 
 ```{r, clean up names }
 
 soc_df$last_name <- gsub(" J. \\(Jansje\\) van MSc", "", soc_df$last_name)
@@ -214,7 +214,9 @@ view(soc_df)
 ```
 
 # Google Scholar Profiles and Publication
-## reminder: for loops 
+
+## reminder: for loops
+
 ```{r, for loop}
 # The 'for loop': for every i in a vector (can be numbers, strings, etc.), say 1 to 10, you can do
 # 'something'
@@ -227,7 +229,9 @@ for (i in 1:10) {
 # <- 0 # make an element we can fill up in the loop below for (i in 1:10) { u[i] <- p[i]*p[i] # get
 # p-squared for every i-th element in vector p print(u[i]) # and print that squared element }
 ```
-## linking a SINGLE staff member to their google scholar link 
+
+## linking a SINGLE staff member to their google scholar link
+
 ```{r}
 
 soc_df$gs_id <- ""  # we set an empty identifier
@@ -307,27 +311,34 @@ get_scholar_id_fix(last_name = "tolsma", first_name = "jochem", affiliation = "r
 get_profile("Iu23-90AAAAJ")  # Jochem's profile
 
 ```
+
 ### get scholar publications, citations
+
 ```{r, pubs and citations}
 get_publications("Iu23-90AAAAJ")  # Jochem's pubs
 
 
 get_citation_history("Iu23-90AAAAJ")  # Jochem's citation history
 ```
-### get collaborators 
+
+### get collaborators
+
 ```{r, collaborators}
 jochem_coauthors <- get_coauthors("Iu23-90AAAAJ", n_coauthors = 50, n_deep = 1)  
 # Jochem's collaborators and their co-authors!
 
 ```
 
-## plot network of single staff member 
+## plot network of single staff member
+
 ```{r, plot}
 plot_coauthors(get_coauthors("Iu23-90AAAAJ", n_coauthors = 20, n_deep = 1), size_labels = 2)  
 # Doesn't look like much yet, but we'll make it prettier later.
 
 ```
-# link scholar profiles of ALL STAFF 
+
+# link scholar profiles of ALL STAFF
+
 ```{r, staff total scholar link, eval=FALSE, include=FALSE}
 # Look throught get_scholar_id_fix(last_name, first_name, affiliation) 
 # if we can find google scholar profiles of sociology staff!
@@ -352,7 +363,9 @@ for (i in 1:nrow(soc_df)) {
 soc_df <- soc_df[!soc_df$gs_id == "", ]
 soc_df
 ```
+
 ## get publications (all staff)
+
 ```{r eval=FALSE, include=FALSE}
 #CURRENTLY: CODE IN THIS CHUNK IS NOT RUN (change in little setting weel at the top rightof this chunk)
 
@@ -379,15 +392,17 @@ soc_df_publications <- bind_rows(soc_list_publications)
 
 
 ```
-## google scholar says NO :(  (too many requests despite random requests)
--> cannot make lists with publications and profiles as of now (evening of 17th September) :/
+
+## google scholar says NO :( (too many requests despite random requests)
+
+-\> cannot make lists with publications and profiles as of now (evening of 17th September) :/
 
 # continue shortly before "getting collaborators" at Chapter 8.6.4
+
 search and find: note how soc_list_profiles
 
+# gender from names
 
-
-# gender from names 
 ```{r}
 # voornamenbank Maartens insitute 
 # e.g. Vero:
@@ -403,9 +418,8 @@ search and find: note how soc_list_profiles
 # Last names: https://cbgfamilienamen.nl/nfb/
 ```
 
+# custom functions chunk for functions to run later on
 
-
-# custom functions chunk for functions to run later on 
 ```{r}
 fpackage.check <- function(packages) {
     lapply(packages, FUN = function(x) {
@@ -440,7 +454,9 @@ fshowdf <- function(x, ...) {
         kableExtra::scroll_box(width = "100%", height = "300px")
 }
 ```
-# Open alex 
+
+# Open alex
+
 ```{r}
 # SEE SUNBELT WEBSITE: Attributes tab 
 # if you put html from open alex api into the read html function then you need to replace any spaces with a + symbol
@@ -449,7 +465,9 @@ fshowdf <- function(x, ...) {
 
 
 ```
+
 # R Package openalexR (using r wrapper )
+
 ```{r}
 # make JSON object easier to use
 
@@ -488,7 +506,9 @@ oa_fetch (entity = "works", author.id = 'https://openalex.org/A5087380803')
 
 
 ```
-## Adjacency matrix for 4 authors 
+
+## Adjacency matrix for 4 authors
+
 ```{r}
 packages <- c("tidyverse", "scholar", "openalexR", "rvest", "jsonlite")
 fpackage.check(packages)
@@ -531,6 +551,7 @@ fshowdf(df_tom)
 all_authors <- rbind(df_jochem, df_maurice, df_michael, df_tom)
 
 ```
+
 ### works
 
 ```{r}
@@ -552,7 +573,9 @@ all_works <- rbind(df_works_tom, df_works_michael, df_works_maurice, df_works_jo
 
 
 ```
-## make matrix 
+
+## make matrix
+
 ```{r}
 # ALT + MINUS make the ARROWS <- 
 # STR + SHIFT + M makes the %>% 
@@ -622,4 +645,3 @@ print(matrix_wave2)
 
 # print(matrix_graph)
 ```
-

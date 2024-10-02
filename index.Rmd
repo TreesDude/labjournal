@@ -2,17 +2,12 @@
 title: "Lab journal"
 author: "by: Verooo"
 bibliography: references.bib
-
- 
 ---
-
-
-
 
 ```{r, install remotely, globalsettings, echo=FALSE, warning=FALSE, results='hide'}
 # install.packages("remotes")
 # remotes::install_github("rlesur/klippy") # is what makes it possible to hover over top right of code on website to COPY AND PASTE it 
-``` 
+```
 
 ```{r, globalsettings, echo=FALSE, warning=FALSE, results='hide'}
 library(knitr)
@@ -34,86 +29,59 @@ klippy::klippy(position = c('top', 'right'))
 #klippy::klippy(tooltip_message = 'Click to copy', tooltip_success = 'Done')
 ```
 
-```{r token}
+```{r token, include=FALSE}
 #install.packages("gitcreds")
 # gitcreds::gitcreds_set()
 ```
 
-```{r}
-# ctrl + Alt + i  to MAKE CHUNKS
+# First page of something totally awesome yes. 
 
-```
+[CTRL + ALT + I to make new chunks]{.smallcaps}
 
-----
+[ALT + MINUS makes \<-]{.smallcaps}
 
+[STR + SHIFT + M makes the %\>%]{.smallcaps}
+
+[STR + SHIFT + C can make a comment of multiple lines you highlighted]{.smallcaps}
+
+------------------------------------------------------------------------
+
+```{=html}
 <!--- The ---- is a visual line (page break looking mf) on the 
 website 
 Always ADD A SPACE BETWEEN A PAGE BREAK AND the next comment, otherwise it will appear on page --->
-
-
+```
+```{=html}
 <!--- This is the best way to write a comment. 
-It also demonstrates, you can add html directly in your rmarkdown file. See: https://www.w3schools.com/html/html_comments.asp ---> 
-
-
+It also demonstrates, you can add html directly in your rmarkdown file. See: https://www.w3schools.com/html/html_comments.asp --->
+```
+```{=html}
 <!--- to use a multi column page we use Pandoc's fenced Div. 
 see here: https://bookdown.org/yihui/rmarkdown-cookbook/multi-column.html 
-But please note, we are not here to make a beautiful website, our intention is just to have a quick lab journal up and running ---> 
-
-:::: {.columns}
+But please note, we are not here to make a beautiful website, our intention is just to have a quick lab journal up and running --->
+```
+::: columns
 ::: {.column width="50%"}
+# Lab Journal
 
-
-# My Lab Journal
-Last compiled on `r format(Sys.time(), '%B, %Y')`  
+Last compiled on `r format(Sys.time(), '%B, %Y')`
 
 *Description: Very cool lab journal. Yes, yes.*
 
 <br>
 
-----
+------------------------------------------------------------------------
 
-## Open Science  
+## Open Science 
 
-Everyone can fork this repository. Use this example to journal your lab work and assignments. 
+Everyone can fork this repository. Use this example to journal your lab work and assignments.
 
 We, Jochem Tolsma and Bas Hofstra, use this repository for our Social Network Analysis For Social Scientists course [@SNASS]. <!--- this is a reference, stored in references.bib. It will be automatically added at the bottom of the page --->
 
-treeeeees 
-
+treeeeees
 :::
 
 ::: {.column width="50%"}
-
-
-
-
-![](images/cover.jpg)
-
-
+![](images/krill-issue.jpg)
 :::
-::::
-
-
-## How to use
-
-1. Fork the repository for this website and follow instructions on `README` to get started [here](https://github.com/JochemTolsma/labjournal).  
-
-2. Journal your work, by editing the .Rmd-files
-
-3. ...
-
-4. Change everything to make it your own!
-
-
-<br>
-
-Use the top menu to navigate through the journal.
-
-
-----
-
-# References
-
-
-
-
+:::
