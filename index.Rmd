@@ -34,7 +34,9 @@ klippy::klippy(position = c('top', 'right'))
 # gitcreds::gitcreds_set()
 ```
 
-# First page of something totally awesome yes. 
+::: columns
+::: {.column width="50%"}
+# First page of something totally awesome yes.
 
 [CTRL + ALT + I to make new chunks]{.smallcaps}
 
@@ -44,7 +46,9 @@ klippy::klippy(position = c('top', 'right'))
 
 [STR + SHIFT + C can make a comment of multiple lines you highlighted]{.smallcaps}
 
-------------------------------------------------------------------------
+Last compiled on `r format(Sys.time(), '%B, %Y')`
+
+*Description: Very cool lab journal. Yes, yes.*
 
 ```{=html}
 <!--- The ---- is a visual line (page break looking mf) on the 
@@ -60,19 +64,7 @@ It also demonstrates, you can add html directly in your rmarkdown file. See: htt
 see here: https://bookdown.org/yihui/rmarkdown-cookbook/multi-column.html 
 But please note, we are not here to make a beautiful website, our intention is just to have a quick lab journal up and running --->
 ```
-::: columns
-::: {.column width="50%"}
-# Lab Journal
-
-Last compiled on `r format(Sys.time(), '%B, %Y')`
-
-*Description: Very cool lab journal. Yes, yes.*
-
-<br>
-
-------------------------------------------------------------------------
-
-## Open Science 
+## Open Science
 
 Everyone can fork this repository. Use this example to journal your lab work and assignments.
 

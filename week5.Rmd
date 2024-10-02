@@ -6,10 +6,6 @@ output: html_document
 ---
 
 
-
-
-
-
 ```{r, globalsettings, echo=FALSE, warning=FALSE, results='hide'}
 library(knitr)
 
@@ -46,7 +42,20 @@ put all isolates in one place
 then you have enough room left to have a more "zoomed in" frame for the actual collaborator networks 
 
 Or just remove all isolates lol 
+
+## decision tree . order!
+
+Something I really need a grasp of (bc very poor prioritization)! 
+
+## data were scraped at author level bceasier if you want to look at author "characteristics"
+
+
+
+# Analysing data - Chapter 7 (SNASS)
+RSiena 
 ```{r}
+
+
 
 ```
 
