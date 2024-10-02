@@ -28,8 +28,12 @@ klippy::klippy(position = c('top', 'right'))
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+::: {.column width="50%"}
+![](images/krill-yourself.jpg)
+:::
 
-# Notes while discussing other peeps plots
+
+# Notes while discussing other peeps' plots
 
 Using RSiena for evolutin of network Wave, Ego alters RSciena: Ego,
 alter, wave Reorganize into an array for RSciena
