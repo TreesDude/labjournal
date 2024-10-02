@@ -13,7 +13,7 @@
 
 <meta name="date" content="2024-10-02" />
 
-<title>Week 5</title>
+<title>Week 5 - Chapter 7 pt.1 - Analysis</title>
 
 <script src="site_libs/header-attrs-2.28/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -366,7 +366,10 @@ div.tocify {
       <a href="networkvis.html">Chapter 9 - Netw. Visualisation tutorial</a>
     </li>
     <li>
-      <a href="week5.html">Week 5</a>
+      <a href="week5.html">Week 5/Chapter 7 - Analysis pt.1</a>
+    </li>
+    <li>
+      <a href="week5-2.html">Week 5/Chapter 7 - Analysis pt.2</a>
     </li>
   </ul>
 </li>
@@ -415,7 +418,7 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Week 5</h1>
+<h1 class="title toc-ignore">Week 5 - Chapter 7 pt.1 - Analysis</h1>
 <h4 class="author">Verooo</h4>
 <h4 class="date">2024-10-02</h4>
 
@@ -449,10 +452,450 @@ author level bceasier if you want to look at author
 number="2">
 <h1><span class="header-section-number">2</span> Analysing data -
 Chapter 7 (SNASS)</h1>
-<p>RSiena</p>
+<div id="custom-functions" class="section level2" number="2.1">
+<h2><span class="header-section-number">2.1</span> custom functions</h2>
+<pre class="r test"><code>fpackage.check &lt;- function(packages) {
+    lapply(packages, FUN = function(x) {
+        if (!require(x, character.only = TRUE)) {
+            install.packages(x, dependencies = TRUE)
+            library(x, character.only = TRUE)
+        }
+    })
+}
+
+fsave &lt;- function(x, file = NULL, location = &quot;./data/processed/&quot;) {
+    ifelse(!dir.exists(&quot;data&quot;), dir.create(&quot;data&quot;), FALSE)
+    ifelse(!dir.exists(&quot;data/processed&quot;), dir.create(&quot;data/processed&quot;), FALSE)
+    if (is.null(file))
+        file = deparse(substitute(x))
+    datename &lt;- substr(gsub(&quot;[:-]&quot;, &quot;&quot;, Sys.time()), 1, 8)
+    totalname &lt;- paste(location, datename, file, &quot;.rda&quot;, sep = &quot;&quot;)
+    save(x, file = totalname)  #need to fix if file is reloaded as input name, not as x. 
+}
+
+fload &lt;- function(filename) {
+    load(filename)
+    get(ls()[ls() != &quot;filename&quot;])
+}
+
+fshowdf &lt;- function(x, ...) {
+    knitr::kable(x, digits = 2, &quot;html&quot;, ...) %&gt;%
+        kableExtra::kable_styling(bootstrap_options = c(&quot;striped&quot;, &quot;hover&quot;)) %&gt;%
+        kableExtra::scroll_box(width = &quot;100%&quot;, height = &quot;300px&quot;)
+}</code></pre>
+</div>
+<div id="packages" class="section level2" number="2.2">
+<h2><span class="header-section-number">2.2</span> packages</h2>
+<p>RSiena RsienaTwoStep: this packages assesses the ministep assumption
+of RSiena but is useful for this tutorial devtools: to load from github
+igraph: plotting tools. For a tutorial on plotting networks, see 8</p>
+<pre class="r test"><code>packages = c(&quot;RSiena&quot;, &quot;devtools&quot;, &quot;igraph&quot;)
+fpackage.check(packages)</code></pre>
+<pre class="test2"><code>#&gt; [[1]]
+#&gt; NULL
+#&gt; 
+#&gt; [[2]]
+#&gt; NULL
+#&gt; 
+#&gt; [[3]]
+#&gt; NULL</code></pre>
+<pre class="r test"><code>devtools::install_github(&quot;JochemTolsma/RsienaTwoStep&quot;, build_vignettes = TRUE)
+packages = c(&quot;RsienaTwoStep&quot;)
+fpackage.check(packages)</code></pre>
+<pre class="test2"><code>#&gt; [[1]]
+#&gt; NULL</code></pre>
+</div>
+<div id="rsiena-as-abm" class="section level2" number="2.3">
+<h2><span class="header-section-number">2.3</span> RSiena as ABM</h2>
+<div id="stochastic-actor-oriented-modelsaka.-saom-see-snass-book"
+class="section level3" number="2.3.1">
+<h3><span class="header-section-number">2.3.1</span> Stochastic
+Actor-Oriented Models,aka. SAOM (see SNASS book)</h3>
+</div>
+<div id="sample-an-ego" class="section level3" number="2.3.2">
+<h3><span class="header-section-number">2.3.2</span> 7.5.1 Sample an
+ego</h3>
+<pre class="r test"><code>ts_net1</code></pre>
+<pre class="test2"><code>#&gt;       [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10]
+#&gt;  [1,]    0    0    0    0    0    0    0    0    0     0
+#&gt;  [2,]    0    0    1    0    0    0    0    0    0     0
+#&gt;  [3,]    1    0    0    0    0    1    0    0    0     0
+#&gt;  [4,]    0    0    0    0    0    0    0    0    1     0
+#&gt;  [5,]    0    0    0    0    0    0    0    0    0     0
+#&gt;  [6,]    0    0    0    0    0    0    0    0    1     1
+#&gt;  [7,]    1    0    0    0    0    0    0    0    0     0
+#&gt;  [8,]    0    0    0    0    0    0    0    0    0     1
+#&gt;  [9,]    0    0    0    1    0    0    0    1    0     0
+#&gt; [10,]    0    0    0    0    0    0    0    1    1     0</code></pre>
+<pre class="r test"><code># plot the network
+net1g &lt;- graph_from_adjacency_matrix(ts_net1, mode = &quot;directed&quot;)
+coords &lt;- layout_(net1g, nicely())  #let us keep the layout
+par(mar = c(0.1, 0.1, 0.1, 0.1))
+{
+    plot.igraph(net1g, layout = coords)
+    graphics::box()
+}</code></pre>
+<p><img src="week5_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p>randomly select/sample an agent.</p>
+<pre class="r test"><code>set.seed(24553253)
+ego &lt;- ts_select(net = ts_net1, steps = 1)  #in rsienatwostep two actors may make a change together but here not
+ego</code></pre>
+<pre class="test2"><code>#&gt; [1] 4</code></pre>
+</div>
+<div id="possible-networks-after-ministep" class="section level3"
+number="2.3.3">
+<h3><span class="header-section-number">2.3.3</span> possible networks
+after ministep</h3>
+<pre class="r test"><code>options &lt;- ts_alternatives_ministep(net = ts_net1, ego = ego)
+# options
+plots &lt;- lapply(options, graph_from_adjacency_matrix, mode = &quot;directed&quot;)
+par(mar = c(0, 0, 0, 0) + 0.1)
+par(mfrow = c(1, 2))
+
+fplot &lt;- function(x) {
+    plot.igraph(x, layout = coords, margin = 0)
+    graphics::box()
+}
+
+lapply(plots, fplot)</code></pre>
+<p><img src="week5_files/figure-html/unnamed-chunk-5-1.png" width="672" /><img src="week5_files/figure-html/unnamed-chunk-5-2.png" width="672" /><img src="week5_files/figure-html/unnamed-chunk-5-3.png" width="672" /><img src="week5_files/figure-html/unnamed-chunk-5-4.png" width="672" /><img src="week5_files/figure-html/unnamed-chunk-5-5.png" width="672" /></p>
+<pre class="test2"><code>#&gt; [[1]]
+#&gt; NULL
+#&gt; 
+#&gt; [[2]]
+#&gt; NULL
+#&gt; 
+#&gt; [[3]]
+#&gt; NULL
+#&gt; 
+#&gt; [[4]]
+#&gt; NULL
+#&gt; 
+#&gt; [[5]]
+#&gt; NULL
+#&gt; 
+#&gt; [[6]]
+#&gt; NULL
+#&gt; 
+#&gt; [[7]]
+#&gt; NULL
+#&gt; 
+#&gt; [[8]]
+#&gt; NULL
+#&gt; 
+#&gt; [[9]]
+#&gt; NULL
+#&gt; 
+#&gt; [[10]]
+#&gt; NULL</code></pre>
+<p>###7.5.3 Network statistics (see chapter 9 for more)</p>
+<pre class="r test"><code># count the number of ties ego sends to alters
+ts_degree(net = options[[1]], ego = ego)</code></pre>
+<pre class="test2"><code>#&gt; [1] 2</code></pre>
+<pre class="r test"><code># or for all options
+lapply(options, ts_degree, ego = ego)</code></pre>
+<pre class="test2"><code>#&gt; [[1]]
+#&gt; [1] 2
+#&gt; 
+#&gt; [[2]]
+#&gt; [1] 2
+#&gt; 
+#&gt; [[3]]
+#&gt; [1] 2
+#&gt; 
+#&gt; [[4]]
+#&gt; [1] 1
+#&gt; 
+#&gt; [[5]]
+#&gt; [1] 2
+#&gt; 
+#&gt; [[6]]
+#&gt; [1] 2
+#&gt; 
+#&gt; [[7]]
+#&gt; [1] 2
+#&gt; 
+#&gt; [[8]]
+#&gt; [1] 2
+#&gt; 
+#&gt; [[9]]
+#&gt; [1] 0
+#&gt; 
+#&gt; [[10]]
+#&gt; [1] 2</code></pre>
+<pre class="r test"><code># count the number of reciprocated ties
+lapply(options, ts_recip, ego = ego)</code></pre>
+<pre class="test2"><code>#&gt; [[1]]
+#&gt; [1] 1
+#&gt; 
+#&gt; [[2]]
+#&gt; [1] 1
+#&gt; 
+#&gt; [[3]]
+#&gt; [1] 1
+#&gt; 
+#&gt; [[4]]
+#&gt; [1] 1
+#&gt; 
+#&gt; [[5]]
+#&gt; [1] 1
+#&gt; 
+#&gt; [[6]]
+#&gt; [1] 1
+#&gt; 
+#&gt; [[7]]
+#&gt; [1] 1
+#&gt; 
+#&gt; [[8]]
+#&gt; [1] 1
+#&gt; 
+#&gt; [[9]]
+#&gt; [1] 0
+#&gt; 
+#&gt; [[10]]
+#&gt; [1] 1</code></pre>
+<p>In the package RsienaTwoStep there are functions for the following
+network statistics <em>s</em> :</p>
+<p><strong>degree:</strong> ts_degree()<br />
+<strong>reciprocity</strong>: ts_recip()<br />
+<strong>outdegree activity</strong>: ts_outAct()<br />
+<strong>indegree activity</strong>: ts_inAct(<strong>)</strong><br />
+<strong>outdegree popularity:</strong> ts_outPop()<br />
+<strong>indegree popularity:</strong> ts_inPop()<br />
+<strong>transitivity:</strong> ts_transTrip()<br />
+<strong>mediated transitivity</strong>: ts_transMedTrip()<br />
+<strong>transitive reciprocated triplets</strong>:
+ts_transRecTrip()<br />
+<strong>number of three-cycles</strong>: ts_cycle3()</p>
+</div>
+<div id="evaluation-function" class="section level3" number="2.3.4">
+<h3><span class="header-section-number">2.3.4</span> 7.5.4 Evaluation
+function</h3>
+<p>fi(x)=Σkβksik(x),</p>
+<p>x= network</p>
+<p>f = evaluation function (how we evaluate the nework)</p>
+<p>i = the ego “i”</p>
+<p>summing over k (k are diff. statistics (in our case degree and
+reciprocity))</p>
+<p>beta = value of the statistic</p>
+<p>s = the specific statistic for ego i for network statistics k for our
+network x</p>
+<p>we are basically counting for each stats how many we have and
+multipyling it by…</p>
+<pre class="r test"><code>option &lt;- 4  # example of prior 4th option of the network of ego 4 
+ts_degree(options[[option]], ego = ego) * -1 + ts_recip(options[[option]], ego = ego) * 1.5</code></pre>
+<pre class="test2"><code>#&gt; [1] 0.5</code></pre>
+<p>Value for the network OF ego FOUR is 0.5 (coming from (-1*1) +
+(1*1.5) = 0.5)</p>
+<p>Or you could use the <code>ts_eval()</code>.</p>
+<pre class="r test"><code>eval &lt;- sapply(options, FUN = ts_eval, ego = ego, statistics = list(ts_degree, ts_recip), parameters = c(-1,
+    1.5))
+eval</code></pre>
+<pre class="test2"><code>#&gt;  [1] -0.5 -0.5 -0.5  0.5 -0.5 -0.5 -0.5 -0.5  0.0 -0.5</code></pre>
+<pre class="r test"><code>print(&quot;network with maximum evaluation score:&quot;)</code></pre>
+<pre class="test2"><code>#&gt; [1] &quot;network with maximum evaluation score:&quot;</code></pre>
+<pre class="r test"><code>which.max(eval)</code></pre>
+<pre class="test2"><code>#&gt; [1] 4</code></pre>
+<p>calculate the evaluation of all possible networks (10) of ego 4 :</p>
+<pre class="r test"><code>eval &lt;- sapply(options, FUN = ts_eval, ego = ego, statistics = list(ts_degree, ts_recip), parameters = c(-1,
+    1.5))
+eval</code></pre>
+<pre class="test2"><code>#&gt;  [1] -0.5 -0.5 -0.5  0.5 -0.5 -0.5 -0.5 -0.5  0.0 -0.5</code></pre>
+<pre class="r test"><code>print(&quot;network with maximum evaluation score:&quot;)</code></pre>
+<pre class="test2"><code>#&gt; [1] &quot;network with maximum evaluation score:&quot;</code></pre>
+<pre class="r test"><code>which.max(eval)</code></pre>
+<pre class="test2"><code>#&gt; [1] 4</code></pre>
+<p>higher evaluation score means ego 4 is more likely to have this kind
+of network (option 4)</p>
+<p>Translating the evaluation scores we just got into probabilities.</p>
+<p>we know all probabilities will be between 0 and 1</p>
+<p>and we know all the statistics (in our case the 10) will sum up to
+1</p>
+<p>1/e^-0.5 “e to the power of -0.5” = 0.6065306 (idk how to write this
+in R so I do not get an error that object e was not found :(</p>
+</div>
+<div id="choice-function" class="section level3" number="2.3.5">
+<h3><span class="header-section-number">2.3.5</span> 7.5.5 Choice
+function</h3>
+<p>We sum all the evaluation scores e to power of (0.6 etc.)</p>
+<pre class="r test"><code># forcing ego to make a choice
+choice &lt;- sample(1:length(eval), size = 1, prob = exp(eval)/sum(exp(eval)))
+print(&quot;choice:&quot;)</code></pre>
+<pre class="test2"><code>#&gt; [1] &quot;choice:&quot;</code></pre>
+<pre class="r test"><code>choice</code></pre>
+<pre class="test2"><code>#&gt; [1] 10</code></pre>
+<pre class="r test"><code># print(&#39;network:&#39;) options[[choice]]</code></pre>
+<p>When you run it multiple times, it is different one every time. (this
+is related to the see we set in the beginning. usually you would want to
+set the seed in a way that multiple people all get the same number)
+<strong>This example should ideally be 10</strong>.</p>
+<p>–&gt; This is how to perform ONE MINI STEP</p>
+<p>If we want to do it for next ego (e.g. ego ) in the network, that
+ego’s network depends on our prior ego’s network (here it was ego/person
+4)</p>
+<p>Network changes of ego 2 depend on changes of ego 1. WHo is ego 1 and
+who is ego 2 is random.</p>
+<p>–&gt; Monte Carlo simulation</p>
+<p>This is Agent-based modeling (if you do not use this for estimation).
+Aka. setting rules and seeing if the output is like what we expected and
+then trial and error to simulate the output as close as possible.</p>
+</div>
+</div>
+<div id="simulation-example" class="section level2" number="2.4">
+<h2><span class="header-section-number">2.4</span> 7.6 Simulation
+example</h2>
+<p>Let us now simulate how the network <strong>could</strong> evolve
+given:<sup><a
+href="https://snass.netlify.app/socionetsm#fn18">18</a></sup></p>
+<ul>
+<li><p>starting point at T1T1 is <code>ts_net1</code></p></li>
+<li><p>rate is set to 2</p></li>
+<li><p>we as scientists think only network statistics degree and
+reciprocity are important</p></li>
+<li><p><code>RSiena::siena07</code> has determined the parameters for
+these statistics are -1 and 1.5 respectively</p></li>
+<li><p>We adhere to the ministep assumption and hence set
+<code>p2step</code> to <code>c(1,0,0)</code></p></li>
+</ul>
+<pre class="r test"><code>rate &lt;- 2
+degree &lt;- -1
+recip &lt;- 1.5
+ts_sims(nsims = 1, net = ts_net1, startvalues = c(rate, degree, recip), statistics = list(ts_degree,
+    ts_recip), p2step = c(1, 0, 0), chain = FALSE)  #not that rate parameter is automatically included. </code></pre>
+<pre class="test2"><code>#&gt; [1] &quot;nsim: 1&quot;</code></pre>
+<pre class="test2"><code>#&gt; [[1]]
+#&gt;       [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10]
+#&gt;  [1,]    0    0    0    0    1    1    0    0    0     0
+#&gt;  [2,]    0    0    1    0    0    1    0    0    0     0
+#&gt;  [3,]    0    0    0    0    1    1    0    0    0     0
+#&gt;  [4,]    0    0    0    0    0    1    0    0    1     1
+#&gt;  [5,]    0    0    0    0    0    0    0    0    0     0
+#&gt;  [6,]    0    0    0    0    0    0    0    0    1     1
+#&gt;  [7,]    0    0    0    0    0    0    0    0    0     0
+#&gt;  [8,]    0    0    0    0    0    0    0    0    0     0
+#&gt;  [9,]    1    0    0    1    0    0    0    0    0     0
+#&gt; [10,]    0    0    0    0    0    0    0    1    0     0</code></pre>
+<p>This is one of the possible outputs from all the choices the egos
+made in the networks in this simulation.</p>
+<p>If we repeat this thousands of times, we can approximate a likely
+network constellation.</p>
+</div>
+<div id="estimation-logic" class="section level2" number="2.5">
+<h2><span class="header-section-number">2.5</span> 7.7 Estimation
+logic</h2>
+<p><em>How does the estimation work?</em></p>
+<p>Well, that is quite complicated. But it goes something like
+this:<sup><a
+href="https://snass.netlify.app/socionetsm#fn19">19</a></sup></p>
+<ol style="list-style-type: decimal">
+<li><p>Define model: researcher includes effects</p></li>
+<li><p>initial parameter values of effects (commonly ‘0’)</p></li>
+<li><p>simulate an outcome network based on these parameter
+values</p></li>
+<li><p><u>compare</u> the network statistics of the <u>simulated</u>
+outcome network with the <u>observed</u> outcome network at (i.e. the
+<em>target values</em>)</p>
+<ul>
+<li>based on the included effects. Thus the simulated network may
+contain 10 ties, but the observed network may contain 20 ties.
+Apparently, with the current parameter values we underestimate the
+density of the outcome network.</li>
+</ul></li>
+<li><p>tweak/update parameter values in <em>some smart way</em></p>
+<p>(there is plenty of maths on this but in our case manually: our
+network density was too low, we looked at degree and reciprocity. We can
+increase the value of degree and try to approximate a value where
+changes in degree don’t really make a change anymore.<br />
+Then we would change reciprocity parameter, in our case: increase it. We
+will have more reciprocity but also automatically increasing ties
+because reciprocity DEPENDS on ties<br />
+Thus, we need to find a way to do this automatically that can adjust
+both numbers at the same time.<br />
+We do not go about this ourselves though bc [as one may see] this is not
+very efficient)<br />
+<br />
+</p></li>
+<li><p>GOTO 3 (BREAK RULE: until parameter values cannot be improved
+anymore / or reached good fit)</p></li>
+<li><p>simulate a bunch of outcome networks with the obtained parameter
+values and compare the <em>expected values</em> of statistics of the
+simulated outcome networks with the <em>target values</em> of the actual
+observed outcome network.</p>
+<ul>
+<li><p>[Estimate a TARGET VALUE (outcome network). In an example we did
+it class: degree= 4, reciprocity 1]</p></li>
+<li><p>we can assess the fit</p></li>
+<li><p>estimate SE of the parameters</p></li>
+</ul></li>
+</ol>
+<p>Let us suppose network <code>s501</code> developed into
+<code>s502</code>. For more information on these networks see
+<code>?s501</code>.</p>
+<p>To estimate this network with <code>ts_estim</code><sup><a
+href="https://snass.netlify.app/socionetsm#fn20">20</a></sup>, we can do
+the following:</p>
+<pre class="r test"><code># we do not calculate SE for now.  ans &lt;- ts_estim(net1 = s501, net2 = s502, statistics =
+# list(ts_degree, ts_recip), p2step = c(1, 0, 0), # used two different networks conv = 0.01, phase3
+# = TRUE, itef3 = 50, verbose = TRUE)
+
+# looking at final result ans</code></pre>
+<p>#output:</p>
+<pre><code>#&gt;            estim        SE 
+#&gt; rate    5.122247 1.1833275 
+#&gt; degree -2.258332 0.1371387 
+#&gt; recip   2.428552 0.2102846</code></pre>
+</div>
+<div id="interpretation-of-parameters" class="section level2"
+number="2.6">
+<h2><span class="header-section-number">2.6</span> 7.8 Interpretation of
+parameters</h2>
+<div id="network-statistics" class="section level3" number="2.6.1">
+<h3><span class="header-section-number">2.6.1</span> Network
+statistics</h3>
+<p>positive parameter = ” i like”</p>
+<p>positive degrees? people like degrees (higher degrees)</p>
+<p>Sometimes it’s easier to look at <strong>Ratios</strong></p>
+<p>Dividing two probabilities</p>
+<p>when probability <u>statistics of one network</u> is <u><em>one more
+than</em> another network,</u> the answer is the exponential of the
+parameter value in your model (the value we got for the network)</p>
+<p>(given that alllllll other things are same between two things =
+ceterus paribus condition)</p>
+<p>ceterus paribusis not fulfilledif we look at degrees and reciprocity
+htough, since reciprocity increasing also automatically makes the
+degrees increase</p>
+<p>if stat, for reciprocity is 2 and degree is 1, then they are of the
+same unit (as opposed to other units like age, or years etc. )</p>
+<div id="in-paper-report" class="section level4" number="2.6.1.1">
+<h4><span class="header-section-number">2.6.1.1</span> in paper
+report:</h4>
+<p>descriptives, statistics</p>
+<p>simple: higher scores = more positive</p>
+<p>and recalculate in probability ratio: take exponent of parameter
+value<br />
+“if netw. increases in this stats by one the probability ration is
+this.”</p>
+<p>(you could have HUGE parameters but they might not be relevant at all
+for the macro level change in networks)</p>
+<p>Model of RSiena is modeling on EGO LEVEL only</p>
+<ul>
+<li>statements like gender homphiliy is more important in my network
+than educational homophily</li>
+</ul>
+<p>do smth similar</p>
+<p>test with Rsiena:</p>
+<ul>
+<li><p>for egos: Given a choice, gender homphily is more important than
+education…</p></li>
+<li><p>more nuanced: GIVEN the network at T1, …</p></li>
+</ul>
+<p>MATCH YOUR HYPOTHESIS TO YOUR METHODS</p>
+</div>
+</div>
+</div>
 </div>
 
-<div id="rmd-source-code">LS0tDQp0aXRsZTogIldlZWsgNSINCmF1dGhvcjogIlZlcm9vbyINCmRhdGU6ICIyMDI0LTEwLTAyIg0Kb3V0cHV0OiBodG1sX2RvY3VtZW50DQotLS0NCg0KDQpgYGB7ciwgZ2xvYmFsc2V0dGluZ3MsIGVjaG89RkFMU0UsIHdhcm5pbmc9RkFMU0UsIHJlc3VsdHM9J2hpZGUnfQ0KbGlicmFyeShrbml0cikNCg0Ka25pdHI6Om9wdHNfY2h1bmskc2V0KGVjaG8gPSBUUlVFKQ0Kb3B0c19jaHVuayRzZXQodGlkeS5vcHRzPWxpc3Qod2lkdGguY3V0b2ZmPTEwMCksdGlkeT1UUlVFLCB3YXJuaW5nID0gRkFMU0UsIG1lc3NhZ2UgPSBGQUxTRSxjb21tZW50ID0gIiM+IiwgY2FjaGU9VFJVRSwgY2xhc3Muc291cmNlPWMoInRlc3QiKSwgY2xhc3Mub3V0cHV0PWMoInRlc3QyIikpDQpvcHRpb25zKHdpZHRoID0gMTAwKQ0KcmdsOjpzZXR1cEtuaXRyKCkNCg0KDQoNCmNvbG9yaXplIDwtIGZ1bmN0aW9uKHgsIGNvbG9yKSB7c3ByaW50ZigiPHNwYW4gc3R5bGU9J2NvbG9yOiAlczsnPiVzPC9zcGFuPiIsIGNvbG9yLCB4KSB9DQoNCmBgYA0KDQpgYGB7ciBrbGlwcHksIGVjaG89RkFMU0UsIGluY2x1ZGU9RkFMU0V9DQprbGlwcHk6OmtsaXBweShwb3NpdGlvbiA9IGMoJ3RvcCcsICdyaWdodCcpKQ0KI2tsaXBweTo6a2xpcHB5KGNvbG9yID0gJ2RhcmtyZWQnKQ0KI2tsaXBweTo6a2xpcHB5KHRvb2x0aXBfbWVzc2FnZSA9ICdDbGljayB0byBjb3B5JywgdG9vbHRpcF9zdWNjZXNzID0gJ0RvbmUnKQ0KYGBgDQoNCmBgYHtyIHNldHVwLCBpbmNsdWRlPUZBTFNFfQ0Ka25pdHI6Om9wdHNfY2h1bmskc2V0KGVjaG8gPSBUUlVFKQ0KYGBgDQoNCiMgTm90ZXMgd2hpbGUgZGlzY3Vzc2luZyBvdGhlciBwZWVwcyBwbG90cw0KVXNpbmcgUlNpZW5hIGZvciBldm9sdXRpbiBvZiBuZXR3b3JrIA0KV2F2ZSwgRWdvIGFsdGVycyANClJTY2llbmE6IEVnbywgYWx0ZXIsIHdhdmUgDQpSZW9yZ2FuaXplIGludG8gYW4gYXJyYXkgZm9yIFJTY2llbmEgDQoNCg0KU2V0IHNpemUgb2YgaXNvbGF0ZXMgdG8gU01BTEwgDQpwdXQgYWxsIGlzb2xhdGVzIGluIG9uZSBwbGFjZSANCnRoZW4geW91IGhhdmUgZW5vdWdoIHJvb20gbGVmdCB0byBoYXZlIGEgbW9yZSAiem9vbWVkIGluIiBmcmFtZSBmb3IgdGhlIGFjdHVhbCBjb2xsYWJvcmF0b3IgbmV0d29ya3MgDQoNCk9yIGp1c3QgcmVtb3ZlIGFsbCBpc29sYXRlcyBsb2wgDQoNCiMjIGRlY2lzaW9uIHRyZWUgLiBvcmRlciENCg0KU29tZXRoaW5nIEkgcmVhbGx5IG5lZWQgYSBncmFzcCBvZiAoYmMgdmVyeSBwb29yIHByaW9yaXRpemF0aW9uKSEgDQoNCiMjIGRhdGEgd2VyZSBzY3JhcGVkIGF0IGF1dGhvciBsZXZlbCBiY2Vhc2llciBpZiB5b3Ugd2FudCB0byBsb29rIGF0IGF1dGhvciAiY2hhcmFjdGVyaXN0aWNzIg0KDQoNCg0KIyBBbmFseXNpbmcgZGF0YSAtIENoYXB0ZXIgNyAoU05BU1MpDQpSU2llbmEgDQpgYGB7cn0NCg0KDQoNCmBgYA0KDQo=</div>
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIldlZWsgNSAtIENoYXB0ZXIgNyBwdC4xIC0gQW5hbHlzaXMiDQphdXRob3I6ICJWZXJvb28iDQpkYXRlOiAiMjAyNC0xMC0wMiINCm91dHB1dDogaHRtbF9kb2N1bWVudA0KZWRpdG9yX29wdGlvbnM6IA0KICBtYXJrZG93bjogDQogICAgd3JhcDogNzINCi0tLQ0KDQpgYGB7ciwgZ2xvYmFsc2V0dGluZ3MsIGVjaG89RkFMU0UsIHdhcm5pbmc9RkFMU0UsIHJlc3VsdHM9J2hpZGUnfQ0KbGlicmFyeShrbml0cikNCg0Ka25pdHI6Om9wdHNfY2h1bmskc2V0KGVjaG8gPSBUUlVFKQ0Kb3B0c19jaHVuayRzZXQodGlkeS5vcHRzPWxpc3Qod2lkdGguY3V0b2ZmPTEwMCksdGlkeT1UUlVFLCB3YXJuaW5nID0gRkFMU0UsIG1lc3NhZ2UgPSBGQUxTRSxjb21tZW50ID0gIiM+IiwgY2FjaGU9VFJVRSwgY2xhc3Muc291cmNlPWMoInRlc3QiKSwgY2xhc3Mub3V0cHV0PWMoInRlc3QyIikpDQpvcHRpb25zKHdpZHRoID0gMTAwKQ0KcmdsOjpzZXR1cEtuaXRyKCkNCg0KDQoNCmNvbG9yaXplIDwtIGZ1bmN0aW9uKHgsIGNvbG9yKSB7c3ByaW50ZigiPHNwYW4gc3R5bGU9J2NvbG9yOiAlczsnPiVzPC9zcGFuPiIsIGNvbG9yLCB4KSB9DQoNCmBgYA0KDQpgYGB7ciBrbGlwcHksIGVjaG89RkFMU0UsIGluY2x1ZGU9RkFMU0V9DQprbGlwcHk6OmtsaXBweShwb3NpdGlvbiA9IGMoJ3RvcCcsICdyaWdodCcpKQ0KI2tsaXBweTo6a2xpcHB5KGNvbG9yID0gJ2RhcmtyZWQnKQ0KI2tsaXBweTo6a2xpcHB5KHRvb2x0aXBfbWVzc2FnZSA9ICdDbGljayB0byBjb3B5JywgdG9vbHRpcF9zdWNjZXNzID0gJ0RvbmUnKQ0KYGBgDQoNCmBgYHtyIHNldHVwLCBpbmNsdWRlPUZBTFNFfQ0Ka25pdHI6Om9wdHNfY2h1bmskc2V0KGVjaG8gPSBUUlVFKQ0KYGBgDQoNCiMgTm90ZXMgd2hpbGUgZGlzY3Vzc2luZyBvdGhlciBwZWVwcyBwbG90cw0KDQpVc2luZyBSU2llbmEgZm9yIGV2b2x1dGluIG9mIG5ldHdvcmsgV2F2ZSwgRWdvIGFsdGVycyBSU2NpZW5hOiBFZ28sDQphbHRlciwgd2F2ZSBSZW9yZ2FuaXplIGludG8gYW4gYXJyYXkgZm9yIFJTY2llbmENCg0KU2V0IHNpemUgb2YgaXNvbGF0ZXMgdG8gU01BTEwgcHV0IGFsbCBpc29sYXRlcyBpbiBvbmUgcGxhY2UgdGhlbiB5b3UNCmhhdmUgZW5vdWdoIHJvb20gbGVmdCB0byBoYXZlIGEgbW9yZSAiem9vbWVkIGluIiBmcmFtZSBmb3IgdGhlIGFjdHVhbA0KY29sbGFib3JhdG9yIG5ldHdvcmtzDQoNCk9yIGp1c3QgcmVtb3ZlIGFsbCBpc29sYXRlcyBsb2wNCg0KIyMgZGVjaXNpb24gdHJlZSAuIG9yZGVyIQ0KDQpTb21ldGhpbmcgSSByZWFsbHkgbmVlZCBhIGdyYXNwIG9mIChiYyB2ZXJ5IHBvb3IgcHJpb3JpdGl6YXRpb24pIQ0KDQojIyBkYXRhIHdlcmUgc2NyYXBlZCBhdCBhdXRob3IgbGV2ZWwgYmNlYXNpZXIgaWYgeW91IHdhbnQgdG8gbG9vayBhdCBhdXRob3IgImNoYXJhY3RlcmlzdGljcyINCg0KIyBBbmFseXNpbmcgZGF0YSAtIENoYXB0ZXIgNyAoU05BU1MpDQoNCiMjIGN1c3RvbSBmdW5jdGlvbnMNCg0KYGBge3J9DQpmcGFja2FnZS5jaGVjayA8LSBmdW5jdGlvbihwYWNrYWdlcykgew0KICAgIGxhcHBseShwYWNrYWdlcywgRlVOID0gZnVuY3Rpb24oeCkgew0KICAgICAgICBpZiAoIXJlcXVpcmUoeCwgY2hhcmFjdGVyLm9ubHkgPSBUUlVFKSkgew0KICAgICAgICAgICAgaW5zdGFsbC5wYWNrYWdlcyh4LCBkZXBlbmRlbmNpZXMgPSBUUlVFKQ0KICAgICAgICAgICAgbGlicmFyeSh4LCBjaGFyYWN0ZXIub25seSA9IFRSVUUpDQogICAgICAgIH0NCiAgICB9KQ0KfQ0KDQpmc2F2ZSA8LSBmdW5jdGlvbih4LCBmaWxlID0gTlVMTCwgbG9jYXRpb24gPSAiLi9kYXRhL3Byb2Nlc3NlZC8iKSB7DQogICAgaWZlbHNlKCFkaXIuZXhpc3RzKCJkYXRhIiksIGRpci5jcmVhdGUoImRhdGEiKSwgRkFMU0UpDQogICAgaWZlbHNlKCFkaXIuZXhpc3RzKCJkYXRhL3Byb2Nlc3NlZCIpLCBkaXIuY3JlYXRlKCJkYXRhL3Byb2Nlc3NlZCIpLCBGQUxTRSkNCiAgICBpZiAoaXMubnVsbChmaWxlKSkNCiAgICAgICAgZmlsZSA9IGRlcGFyc2Uoc3Vic3RpdHV0ZSh4KSkNCiAgICBkYXRlbmFtZSA8LSBzdWJzdHIoZ3N1YigiWzotXSIsICIiLCBTeXMudGltZSgpKSwgMSwgOCkNCiAgICB0b3RhbG5hbWUgPC0gcGFzdGUobG9jYXRpb24sIGRhdGVuYW1lLCBmaWxlLCAiLnJkYSIsIHNlcCA9ICIiKQ0KICAgIHNhdmUoeCwgZmlsZSA9IHRvdGFsbmFtZSkgICNuZWVkIHRvIGZpeCBpZiBmaWxlIGlzIHJlbG9hZGVkIGFzIGlucHV0IG5hbWUsIG5vdCBhcyB4LiANCn0NCg0KZmxvYWQgPC0gZnVuY3Rpb24oZmlsZW5hbWUpIHsNCiAgICBsb2FkKGZpbGVuYW1lKQ0KICAgIGdldChscygpW2xzKCkgIT0gImZpbGVuYW1lIl0pDQp9DQoNCmZzaG93ZGYgPC0gZnVuY3Rpb24oeCwgLi4uKSB7DQogICAga25pdHI6OmthYmxlKHgsIGRpZ2l0cyA9IDIsICJodG1sIiwgLi4uKSAlPiUNCiAgICAgICAga2FibGVFeHRyYTo6a2FibGVfc3R5bGluZyhib290c3RyYXBfb3B0aW9ucyA9IGMoInN0cmlwZWQiLCAiaG92ZXIiKSkgJT4lDQogICAgICAgIGthYmxlRXh0cmE6OnNjcm9sbF9ib3god2lkdGggPSAiMTAwJSIsIGhlaWdodCA9ICIzMDBweCIpDQp9DQpgYGANCg0KIyMgcGFja2FnZXMNCg0KUlNpZW5hIFJzaWVuYVR3b1N0ZXA6IHRoaXMgcGFja2FnZXMgYXNzZXNzZXMgdGhlIG1pbmlzdGVwIGFzc3VtcHRpb24gb2YNClJTaWVuYSBidXQgaXMgdXNlZnVsIGZvciB0aGlzIHR1dG9yaWFsIGRldnRvb2xzOiB0byBsb2FkIGZyb20gZ2l0aHViDQppZ3JhcGg6IHBsb3R0aW5nIHRvb2xzLiBGb3IgYSB0dXRvcmlhbCBvbiBwbG90dGluZyBuZXR3b3Jrcywgc2VlIDgNCg0KYGBge3J9DQpwYWNrYWdlcyA9IGMoIlJTaWVuYSIsICJkZXZ0b29scyIsICJpZ3JhcGgiKQ0KZnBhY2thZ2UuY2hlY2socGFja2FnZXMpDQpkZXZ0b29sczo6aW5zdGFsbF9naXRodWIoJ0pvY2hlbVRvbHNtYS9Sc2llbmFUd29TdGVwJywgYnVpbGRfdmlnbmV0dGVzPVRSVUUpDQpwYWNrYWdlcyA9IGMoIlJzaWVuYVR3b1N0ZXAiKQ0KZnBhY2thZ2UuY2hlY2socGFja2FnZXMpDQoNCmBgYA0KDQojIyBSU2llbmEgYXMgQUJNDQoNCiMjIyBTdG9jaGFzdGljIEFjdG9yLU9yaWVudGVkIE1vZGVscyxha2EuIFNBT00gKHNlZSBTTkFTUyBib29rKQ0KDQojIyMgNy41LjEgU2FtcGxlIGFuIGVnbw0KDQpgYGB7cn0NCnRzX25ldDENCg0KDQojIHBsb3QgdGhlIG5ldHdvcmsgDQpuZXQxZyA8LSBncmFwaF9mcm9tX2FkamFjZW5jeV9tYXRyaXgodHNfbmV0MSwgbW9kZSA9ICJkaXJlY3RlZCIpDQpjb29yZHMgPC0gbGF5b3V0XyhuZXQxZywgbmljZWx5KCkpICAjbGV0IHVzIGtlZXAgdGhlIGxheW91dA0KcGFyKG1hciA9IGMoMC4xLCAwLjEsIDAuMSwgMC4xKSkNCnsNCiAgICBwbG90LmlncmFwaChuZXQxZywgbGF5b3V0ID0gY29vcmRzKQ0KICAgIGdyYXBoaWNzOjpib3goKQ0KfQ0KYGBgDQoNCnJhbmRvbWx5IHNlbGVjdC9zYW1wbGUgYW4gYWdlbnQuDQoNCmBgYHtyfQ0KDQpzZXQuc2VlZCgyNDU1MzI1MykNCmVnbyA8LSB0c19zZWxlY3QobmV0ID0gdHNfbmV0MSwgc3RlcHMgPSAxKSAgI2luIHJzaWVuYXR3b3N0ZXAgdHdvIGFjdG9ycyBtYXkgbWFrZSBhIGNoYW5nZSB0b2dldGhlciBidXQgaGVyZSBub3QNCmVnbw0KYGBgDQoNCiMjIyBwb3NzaWJsZSBuZXR3b3JrcyBhZnRlciBtaW5pc3RlcA0KDQpgYGB7cn0NCm9wdGlvbnMgPC0gdHNfYWx0ZXJuYXRpdmVzX21pbmlzdGVwKG5ldCA9IHRzX25ldDEsIGVnbyA9IGVnbykNCiMgb3B0aW9ucw0KcGxvdHMgPC0gbGFwcGx5KG9wdGlvbnMsIGdyYXBoX2Zyb21fYWRqYWNlbmN5X21hdHJpeCwgbW9kZSA9ICJkaXJlY3RlZCIpDQpwYXIobWFyID0gYygwLCAwLCAwLCAwKSArIDAuMSkNCnBhcihtZnJvdyA9IGMoMSwgMikpDQoNCmZwbG90IDwtIGZ1bmN0aW9uKHgpIHsNCiAgICBwbG90LmlncmFwaCh4LCBsYXlvdXQgPSBjb29yZHMsIG1hcmdpbiA9IDApDQogICAgZ3JhcGhpY3M6OmJveCgpDQp9DQoNCmxhcHBseShwbG90cywgZnBsb3QpDQpgYGANCg0KIyMjNy41LjMgTmV0d29yayBzdGF0aXN0aWNzIChzZWUgY2hhcHRlciA5IGZvciBtb3JlKQ0KDQpgYGB7cn0NCiMgY291bnQgdGhlIG51bWJlciBvZiB0aWVzIGVnbyBzZW5kcyB0byBhbHRlcnMNCnRzX2RlZ3JlZShuZXQgPSBvcHRpb25zW1sxXV0sIGVnbyA9IGVnbykNCiMgb3IgZm9yIGFsbCBvcHRpb25zDQpsYXBwbHkob3B0aW9ucywgdHNfZGVncmVlLCBlZ28gPSBlZ28pDQoNCiMgY291bnQgdGhlIG51bWJlciBvZiByZWNpcHJvY2F0ZWQgdGllcw0KbGFwcGx5KG9wdGlvbnMsIHRzX3JlY2lwLCBlZ28gPSBlZ28pDQpgYGANCg0KSW4gdGhlIHBhY2thZ2UgUnNpZW5hVHdvU3RlcCB0aGVyZSBhcmUgZnVuY3Rpb25zIGZvciB0aGUgZm9sbG93aW5nDQpuZXR3b3JrIHN0YXRpc3RpY3MgKnMqIDoNCg0KKipkZWdyZWU6KiogdHNfZGVncmVlKClcDQoqKnJlY2lwcm9jaXR5Kio6IHRzX3JlY2lwKClcDQoqKm91dGRlZ3JlZSBhY3Rpdml0eSoqOiB0c19vdXRBY3QoKVwNCioqaW5kZWdyZWUgYWN0aXZpdHkqKjogdHNfaW5BY3QoKiopKipcDQoqKm91dGRlZ3JlZSBwb3B1bGFyaXR5OioqIHRzX291dFBvcCgpXA0KKippbmRlZ3JlZSBwb3B1bGFyaXR5OioqIHRzX2luUG9wKClcDQoqKnRyYW5zaXRpdml0eToqKiB0c190cmFuc1RyaXAoKVwNCioqbWVkaWF0ZWQgdHJhbnNpdGl2aXR5Kio6IHRzX3RyYW5zTWVkVHJpcCgpXA0KKip0cmFuc2l0aXZlIHJlY2lwcm9jYXRlZCB0cmlwbGV0cyoqOiB0c190cmFuc1JlY1RyaXAoKVwNCioqbnVtYmVyIG9mIHRocmVlLWN5Y2xlcyoqOiB0c19jeWNsZTMoKQ0KDQojIyMgNy41LjQgRXZhbHVhdGlvbiBmdW5jdGlvbg0KDQpmaSh4KT3Oo2vOsmtzaWsoeCksDQoNCng9IG5ldHdvcmsNCg0KZiA9IGV2YWx1YXRpb24gZnVuY3Rpb24gKGhvdyB3ZSBldmFsdWF0ZSB0aGUgbmV3b3JrKQ0KDQppID0gdGhlIGVnbyAiaSINCg0Kc3VtbWluZyBvdmVyIGsgKGsgYXJlIGRpZmYuIHN0YXRpc3RpY3MgKGluIG91ciBjYXNlIGRlZ3JlZSBhbmQNCnJlY2lwcm9jaXR5KSkNCg0KYmV0YSA9IHZhbHVlIG9mIHRoZSBzdGF0aXN0aWMNCg0KcyA9IHRoZSBzcGVjaWZpYyBzdGF0aXN0aWMgZm9yIGVnbyBpIGZvciBuZXR3b3JrIHN0YXRpc3RpY3MgayBmb3Igb3VyDQpuZXR3b3JrIHgNCg0Kd2UgYXJlIGJhc2ljYWxseSBjb3VudGluZyBmb3IgZWFjaCBzdGF0cyBob3cgbWFueSB3ZSBoYXZlIGFuZA0KbXVsdGlweWxpbmcgaXQgYnkuLi4NCg0KYGBge3J9DQpvcHRpb24gPC0gNCAjIGV4YW1wbGUgb2YgcHJpb3IgNHRoIG9wdGlvbiBvZiB0aGUgbmV0d29yayBvZiBlZ28gNCANCnRzX2RlZ3JlZShvcHRpb25zW1tvcHRpb25dXSwgZWdvID0gZWdvKSAqIC0xICsgdHNfcmVjaXAob3B0aW9uc1tbb3B0aW9uXV0sIGVnbyA9IGVnbykgKiAxLjUNCmBgYA0KDQpWYWx1ZSBmb3IgdGhlIG5ldHdvcmsgT0YgZWdvIEZPVVIgaXMgMC41IChjb21pbmcgZnJvbSAoLTFcKjEpICsgKDFcKjEuNSkNCj0gMC41KQ0KDQpPciB5b3UgY291bGQgdXNlIHRoZcKgYHRzX2V2YWwoKWAuDQoNCmBgYHtyfQ0KZXZhbCA8LSBzYXBwbHkob3B0aW9ucywgRlVOID0gdHNfZXZhbCwgZWdvID0gZWdvLCBzdGF0aXN0aWNzID0gbGlzdCh0c19kZWdyZWUsIHRzX3JlY2lwKSwgcGFyYW1ldGVycyA9IGMoLTEsDQogICAgMS41KSkNCmV2YWwNCnByaW50KCJuZXR3b3JrIHdpdGggbWF4aW11bSBldmFsdWF0aW9uIHNjb3JlOiIpDQp3aGljaC5tYXgoZXZhbCkNCmBgYA0KDQpjYWxjdWxhdGUgdGhlIGV2YWx1YXRpb24gb2YgYWxsIHBvc3NpYmxlIG5ldHdvcmtzICgxMCkgb2YgZWdvIDQgOg0KDQpgYGB7cn0NCmV2YWwgPC0gc2FwcGx5KG9wdGlvbnMsIEZVTiA9IHRzX2V2YWwsIGVnbyA9IGVnbywgc3RhdGlzdGljcyA9IGxpc3QodHNfZGVncmVlLCB0c19yZWNpcCksIHBhcmFtZXRlcnMgPSBjKC0xLA0KICAgIDEuNSkpDQpldmFsDQpwcmludCgibmV0d29yayB3aXRoIG1heGltdW0gZXZhbHVhdGlvbiBzY29yZToiKQ0Kd2hpY2gubWF4KGV2YWwpDQpgYGANCg0KaGlnaGVyIGV2YWx1YXRpb24gc2NvcmUgbWVhbnMgZWdvIDQgaXMgbW9yZSBsaWtlbHkgdG8gaGF2ZSB0aGlzIGtpbmQgb2YNCm5ldHdvcmsgKG9wdGlvbiA0KQ0KDQpUcmFuc2xhdGluZyB0aGUgZXZhbHVhdGlvbiBzY29yZXMgd2UganVzdCBnb3QgaW50byBwcm9iYWJpbGl0aWVzLg0KDQp3ZSBrbm93IGFsbCBwcm9iYWJpbGl0aWVzIHdpbGwgYmUgYmV0d2VlbiAwIGFuZCAxDQoNCmFuZCB3ZSBrbm93IGFsbCB0aGUgc3RhdGlzdGljcyAoaW4gb3VyIGNhc2UgdGhlIDEwKSB3aWxsIHN1bSB1cCB0byAxDQoNCjEvZVxeLTAuNSAiZSB0byB0aGUgcG93ZXIgb2YgLTAuNSIgPSAwLjYwNjUzMDYgKGlkayBob3cgdG8gd3JpdGUgdGhpcyBpbg0KUiBzbyBJIGRvIG5vdCBnZXQgYW4gZXJyb3IgdGhhdCBvYmplY3QgZSB3YXMgbm90IGZvdW5kIDooDQoNCiMjIyA3LjUuNSBDaG9pY2UgZnVuY3Rpb24NCg0KV2Ugc3VtIGFsbCB0aGUgZXZhbHVhdGlvbiBzY29yZXMgZSB0byBwb3dlciBvZiAoMC42IGV0Yy4pDQoNCmBgYHtyfQ0KIyBmb3JjaW5nIGVnbyB0byBtYWtlIGEgY2hvaWNlIA0KY2hvaWNlIDwtIHNhbXBsZSgxOmxlbmd0aChldmFsKSwgc2l6ZSA9IDEsIHByb2IgPSBleHAoZXZhbCkvc3VtKGV4cChldmFsKSkpDQpwcmludCgiY2hvaWNlOiIpDQpjaG9pY2UNCiMgcHJpbnQoJ25ldHdvcms6Jykgb3B0aW9uc1tbY2hvaWNlXV0NCmBgYA0KDQpXaGVuIHlvdSBydW4gaXQgbXVsdGlwbGUgdGltZXMsIGl0IGlzIGRpZmZlcmVudCBvbmUgZXZlcnkgdGltZS4gKHRoaXMgaXMNCnJlbGF0ZWQgdG8gdGhlIHNlZSB3ZSBzZXQgaW4gdGhlIGJlZ2lubmluZy4gdXN1YWxseSB5b3Ugd291bGQgd2FudCB0bw0Kc2V0IHRoZSBzZWVkIGluIGEgd2F5IHRoYXQgbXVsdGlwbGUgcGVvcGxlIGFsbCBnZXQgdGhlIHNhbWUgbnVtYmVyKQ0KKipUaGlzIGV4YW1wbGUgc2hvdWxkIGlkZWFsbHkgYmUgMTAqKi4NCg0KLS1cPiBUaGlzIGlzIGhvdyB0byBwZXJmb3JtIE9ORSBNSU5JIFNURVANCg0KSWYgd2Ugd2FudCB0byBkbyBpdCBmb3IgbmV4dCBlZ28gKGUuZy4gZWdvICkgaW4gdGhlIG5ldHdvcmssIHRoYXQgZWdvJ3MNCm5ldHdvcmsgZGVwZW5kcyBvbiBvdXIgcHJpb3IgZWdvJ3MgbmV0d29yayAoaGVyZSBpdCB3YXMgZWdvL3BlcnNvbiA0KQ0KDQpOZXR3b3JrIGNoYW5nZXMgb2YgZWdvIDIgZGVwZW5kIG9uIGNoYW5nZXMgb2YgZWdvIDEuIFdIbyBpcyBlZ28gMSBhbmQNCndobyBpcyBlZ28gMiBpcyByYW5kb20uDQoNCi0tXD4gTW9udGUgQ2FybG8gc2ltdWxhdGlvbg0KDQpUaGlzIGlzIEFnZW50LWJhc2VkIG1vZGVsaW5nIChpZiB5b3UgZG8gbm90IHVzZSB0aGlzIGZvciBlc3RpbWF0aW9uKS4NCkFrYS4gc2V0dGluZyBydWxlcyBhbmQgc2VlaW5nIGlmIHRoZSBvdXRwdXQgaXMgbGlrZSB3aGF0IHdlIGV4cGVjdGVkIGFuZA0KdGhlbiB0cmlhbCBhbmQgZXJyb3IgdG8gc2ltdWxhdGUgdGhlIG91dHB1dCBhcyBjbG9zZSBhcyBwb3NzaWJsZS4NCg0KIyMgNy42IFNpbXVsYXRpb24gZXhhbXBsZQ0KDQpMZXQgdXMgbm93IHNpbXVsYXRlIGhvdyB0aGUgbmV0d29yayAqKmNvdWxkKiogZXZvbHZlDQpnaXZlbjpeWzE4XShodHRwczovL3NuYXNzLm5ldGxpZnkuYXBwL3NvY2lvbmV0c20jZm4xOCleDQoNCi0gICBzdGFydGluZyBwb2ludCBhdCBUMVQxIGlzIGB0c19uZXQxYA0KDQotICAgcmF0ZSBpcyBzZXQgdG8gMg0KDQotICAgd2UgYXMgc2NpZW50aXN0cyB0aGluayBvbmx5IG5ldHdvcmsgc3RhdGlzdGljcyBkZWdyZWUgYW5kDQogICAgcmVjaXByb2NpdHkgYXJlIGltcG9ydGFudA0KDQotICAgYFJTaWVuYTo6c2llbmEwN2AgaGFzIGRldGVybWluZWQgdGhlIHBhcmFtZXRlcnMgZm9yIHRoZXNlIHN0YXRpc3RpY3MNCiAgICBhcmUgLTEgYW5kIDEuNSByZXNwZWN0aXZlbHkNCg0KLSAgIFdlIGFkaGVyZSB0byB0aGUgbWluaXN0ZXAgYXNzdW1wdGlvbiBhbmQgaGVuY2Ugc2V0IGBwMnN0ZXBgIHRvDQogICAgYGMoMSwwLDApYA0KDQpgYGB7cn0NCnJhdGUgPC0gMg0KZGVncmVlIDwtIC0xDQpyZWNpcCA8LSAxLjUNCnRzX3NpbXMobnNpbXMgPSAxLCBuZXQgPSB0c19uZXQxLCBzdGFydHZhbHVlcyA9IGMocmF0ZSwgZGVncmVlLCByZWNpcCksIHN0YXRpc3RpY3MgPSBsaXN0KHRzX2RlZ3JlZSwNCiAgICB0c19yZWNpcCksIHAyc3RlcCA9IGMoMSwgMCwgMCksIGNoYWluID0gRkFMU0UpICAjbm90IHRoYXQgcmF0ZSBwYXJhbWV0ZXIgaXMgYXV0b21hdGljYWxseSBpbmNsdWRlZC4gDQpgYGANCg0KVGhpcyBpcyBvbmUgb2YgdGhlIHBvc3NpYmxlIG91dHB1dHMgZnJvbSBhbGwgdGhlIGNob2ljZXMgdGhlIGVnb3MgbWFkZQ0KaW4gdGhlIG5ldHdvcmtzIGluIHRoaXMgc2ltdWxhdGlvbi4NCg0KSWYgd2UgcmVwZWF0IHRoaXMgdGhvdXNhbmRzIG9mIHRpbWVzLCB3ZSBjYW4gYXBwcm94aW1hdGUgYSBsaWtlbHkNCm5ldHdvcmsgY29uc3RlbGxhdGlvbi4NCg0KIyMgNy43IEVzdGltYXRpb24gbG9naWMNCg0KKkhvdyBkb2VzIHRoZSBlc3RpbWF0aW9uIHdvcms/Kg0KDQpXZWxsLCB0aGF0IGlzIHF1aXRlIGNvbXBsaWNhdGVkLiBCdXQgaXQgZ29lcyBzb21ldGhpbmcgbGlrZQ0KdGhpczpeWzE5XShodHRwczovL3NuYXNzLm5ldGxpZnkuYXBwL3NvY2lvbmV0c20jZm4xOSleDQoNCjEuICBEZWZpbmUgbW9kZWw6IHJlc2VhcmNoZXIgaW5jbHVkZXMgZWZmZWN0cw0KDQoyLiAgaW5pdGlhbCBwYXJhbWV0ZXIgdmFsdWVzIG9mIGVmZmVjdHMgKGNvbW1vbmx5IOKAmDDigJkpDQoNCjMuICBzaW11bGF0ZSBhbiBvdXRjb21lIG5ldHdvcmsgYmFzZWQgb24gdGhlc2UgcGFyYW1ldGVyIHZhbHVlcw0KDQo0LiAgW2NvbXBhcmVdey51bmRlcmxpbmV9IHRoZSBuZXR3b3JrIHN0YXRpc3RpY3Mgb2YgdGhlDQogICAgW3NpbXVsYXRlZF17LnVuZGVybGluZX0gb3V0Y29tZSBuZXR3b3JrIHdpdGggdGhlDQogICAgW29ic2VydmVkXXsudW5kZXJsaW5lfSBvdXRjb21lIG5ldHdvcmsgYXQgKGkuZS7CoHRoZSAqdGFyZ2V0IHZhbHVlcyopDQoNCiAgICAtICAgYmFzZWQgb24gdGhlIGluY2x1ZGVkIGVmZmVjdHMuIFRodXMgdGhlIHNpbXVsYXRlZCBuZXR3b3JrIG1heQ0KICAgICAgICBjb250YWluIDEwIHRpZXMsIGJ1dCB0aGUgb2JzZXJ2ZWQgbmV0d29yayBtYXkgY29udGFpbiAyMCB0aWVzLg0KICAgICAgICBBcHBhcmVudGx5LCB3aXRoIHRoZSBjdXJyZW50IHBhcmFtZXRlciB2YWx1ZXMgd2UgdW5kZXJlc3RpbWF0ZQ0KICAgICAgICB0aGUgZGVuc2l0eSBvZiB0aGUgb3V0Y29tZSBuZXR3b3JrLg0KDQo1LiAgdHdlYWsvdXBkYXRlIHBhcmFtZXRlciB2YWx1ZXMgaW4gKnNvbWUgc21hcnQgd2F5Kg0KDQogICAgKHRoZXJlIGlzIHBsZW50eSBvZiBtYXRocyBvbiB0aGlzIGJ1dCBpbiBvdXIgY2FzZSBtYW51YWxseTogb3VyDQogICAgbmV0d29yayBkZW5zaXR5IHdhcyB0b28gbG93LCB3ZSBsb29rZWQgYXQgZGVncmVlIGFuZCByZWNpcHJvY2l0eS4gV2UNCiAgICBjYW4gaW5jcmVhc2UgdGhlIHZhbHVlIG9mIGRlZ3JlZSBhbmQgdHJ5IHRvIGFwcHJveGltYXRlIGEgdmFsdWUNCiAgICB3aGVyZSBjaGFuZ2VzIGluIGRlZ3JlZSBkb24ndCByZWFsbHkgbWFrZSBhIGNoYW5nZSBhbnltb3JlLiBcDQogICAgVGhlbiB3ZSB3b3VsZCBjaGFuZ2UgcmVjaXByb2NpdHkgcGFyYW1ldGVyLCBpbiBvdXIgY2FzZTogaW5jcmVhc2UNCiAgICBpdC4gV2Ugd2lsbCBoYXZlIG1vcmUgcmVjaXByb2NpdHkgYnV0IGFsc28gYXV0b21hdGljYWxseSBpbmNyZWFzaW5nDQogICAgdGllcyBiZWNhdXNlIHJlY2lwcm9jaXR5IERFUEVORFMgb24gdGllc1wNCiAgICBUaHVzLCB3ZSBuZWVkIHRvIGZpbmQgYSB3YXkgdG8gZG8gdGhpcyBhdXRvbWF0aWNhbGx5IHRoYXQgY2FuIGFkanVzdA0KICAgIGJvdGggbnVtYmVycyBhdCB0aGUgc2FtZSB0aW1lLlwNCiAgICBXZSBkbyBub3QgZ28gYWJvdXQgdGhpcyBvdXJzZWx2ZXMgdGhvdWdoIGJjIFthcyBvbmUgbWF5IHNlZV0gdGhpcyBpcw0KICAgIG5vdCB2ZXJ5IGVmZmljaWVudClcDQogICAgXA0KDQo2LiAgR09UTyAzIChCUkVBSyBSVUxFOiB1bnRpbCBwYXJhbWV0ZXIgdmFsdWVzIGNhbm5vdCBiZSBpbXByb3ZlZA0KICAgIGFueW1vcmUgLyBvciByZWFjaGVkIGdvb2QgZml0KQ0KDQo3LiAgc2ltdWxhdGUgYSBidW5jaCBvZiBvdXRjb21lIG5ldHdvcmtzIHdpdGggdGhlIG9idGFpbmVkIHBhcmFtZXRlcg0KICAgIHZhbHVlcyBhbmQgY29tcGFyZSB0aGUgKmV4cGVjdGVkIHZhbHVlcyogb2Ygc3RhdGlzdGljcyBvZiB0aGUNCiAgICBzaW11bGF0ZWQgb3V0Y29tZSBuZXR3b3JrcyB3aXRoIHRoZSAqdGFyZ2V0IHZhbHVlcyogb2YgdGhlIGFjdHVhbA0KICAgIG9ic2VydmVkIG91dGNvbWUgbmV0d29yay4NCg0KICAgIC0gICBbRXN0aW1hdGUgYSBUQVJHRVQgVkFMVUUgKG91dGNvbWUgbmV0d29yaykuIEluIGFuIGV4YW1wbGUgd2UgZGlkDQogICAgICAgIGl0IGNsYXNzOiBkZWdyZWU9IDQsIHJlY2lwcm9jaXR5IDFdDQoNCiAgICAtICAgd2UgY2FuIGFzc2VzcyB0aGUgZml0DQoNCiAgICAtICAgZXN0aW1hdGUgU0Ugb2YgdGhlIHBhcmFtZXRlcnMNCg0KTGV0IHVzIHN1cHBvc2UgbmV0d29yayBgczUwMWAgZGV2ZWxvcGVkIGludG8gYHM1MDJgLiBGb3IgbW9yZQ0KaW5mb3JtYXRpb24gb24gdGhlc2UgbmV0d29ya3Mgc2VlIGA/czUwMWAuDQoNClRvIGVzdGltYXRlIHRoaXMgbmV0d29yayB3aXRoDQpgdHNfZXN0aW1gXlsyMF0oaHR0cHM6Ly9zbmFzcy5uZXRsaWZ5LmFwcC9zb2Npb25ldHNtI2ZuMjApXiwgd2UgY2FuIGRvDQp0aGUgZm9sbG93aW5nOg0KDQpgYGB7cn0NCiMgd2UgZG8gbm90IGNhbGN1bGF0ZSBTRSBmb3Igbm93Lg0KIyBhbnMgPC0gdHNfZXN0aW0obmV0MSA9IHM1MDEsIG5ldDIgPSBzNTAyLCBzdGF0aXN0aWNzID0gbGlzdCh0c19kZWdyZWUsIHRzX3JlY2lwKSwgcDJzdGVwID0gYygxLCAwLCAwKSwgIyB1c2VkIHR3byBkaWZmZXJlbnQgbmV0d29ya3MgDQojICAgIGNvbnYgPSAwLjAxLCBwaGFzZTMgPSBUUlVFLCBpdGVmMyA9IDUwLCB2ZXJib3NlID0gVFJVRSkNCg0KIyBsb29raW5nIGF0IGZpbmFsIHJlc3VsdCANCiMgYW5zDQpgYGANCg0KI291dHB1dDoNCg0KYGBgICAgICAgICAgDQojPiAgICAgICAgICAgIGVzdGltICAgICAgICBTRSANCiM+IHJhdGUgICAgNS4xMjIyNDcgMS4xODMzMjc1IA0KIz4gZGVncmVlIC0yLjI1ODMzMiAwLjEzNzEzODcgDQojPiByZWNpcCAgIDIuNDI4NTUyIDAuMjEwMjg0Ng0KYGBgDQoNCiMjIDcuOCBJbnRlcnByZXRhdGlvbiBvZiBwYXJhbWV0ZXJzDQoNCiMjIyBOZXR3b3JrIHN0YXRpc3RpY3MgDQoNCnBvc2l0aXZlIHBhcmFtZXRlciA9ICIgaSBsaWtlIg0KDQpwb3NpdGl2ZSBkZWdyZWVzPyBwZW9wbGUgbGlrZSBkZWdyZWVzIChoaWdoZXIgZGVncmVlcykNCg0KU29tZXRpbWVzIGl0J3MgZWFzaWVyIHRvIGxvb2sgYXQgKipSYXRpb3MqKg0KDQpEaXZpZGluZyB0d28gcHJvYmFiaWxpdGllcw0KDQp3aGVuIHByb2JhYmlsaXR5IFtzdGF0aXN0aWNzIG9mIG9uZSBuZXR3b3JrXXsudW5kZXJsaW5lfSBpcyBbKm9uZSBtb3JlDQp0aGFuKiBhbm90aGVyIG5ldHdvcmssXXsudW5kZXJsaW5lfSB0aGUgYW5zd2VyIGlzIHRoZSBleHBvbmVudGlhbCBvZiB0aGUNCnBhcmFtZXRlciB2YWx1ZSBpbiB5b3VyIG1vZGVsICh0aGUgdmFsdWUgd2UgZ290IGZvciB0aGUgbmV0d29yaykNCg0KKGdpdmVuIHRoYXQgYWxsbGxsbGwgb3RoZXIgdGhpbmdzIGFyZSBzYW1lIGJldHdlZW4gdHdvIHRoaW5ncyA9IGNldGVydXMNCnBhcmlidXMgY29uZGl0aW9uKQ0KDQpjZXRlcnVzIHBhcmlidXNpcyBub3QgZnVsZmlsbGVkaWYgd2UgbG9vayBhdCBkZWdyZWVzIGFuZCByZWNpcHJvY2l0eQ0KaHRvdWdoLCBzaW5jZSByZWNpcHJvY2l0eSBpbmNyZWFzaW5nIGFsc28gYXV0b21hdGljYWxseSBtYWtlcyB0aGUNCmRlZ3JlZXMgaW5jcmVhc2UNCg0KaWYgc3RhdCwgZm9yIHJlY2lwcm9jaXR5IGlzIDIgYW5kIGRlZ3JlZSBpcyAxLCB0aGVuIHRoZXkgYXJlIG9mIHRoZSBzYW1lDQp1bml0IChhcyBvcHBvc2VkIHRvIG90aGVyIHVuaXRzIGxpa2UgYWdlLCBvciB5ZWFycyBldGMuICkNCg0KIyMjIyBpbiBwYXBlciByZXBvcnQ6IA0KDQpkZXNjcmlwdGl2ZXMsIHN0YXRpc3RpY3MNCg0Kc2ltcGxlOiBoaWdoZXIgc2NvcmVzID0gbW9yZSBwb3NpdGl2ZQ0KDQphbmQgcmVjYWxjdWxhdGUgaW4gcHJvYmFiaWxpdHkgcmF0aW86IHRha2UgZXhwb25lbnQgb2YgcGFyYW1ldGVyIHZhbHVlIFwNCiJpZiBuZXR3LiBpbmNyZWFzZXMgaW4gdGhpcyBzdGF0cyBieSBvbmUgdGhlIHByb2JhYmlsaXR5IHJhdGlvbiBpcw0KdGhpcy4iDQoNCih5b3UgY291bGQgaGF2ZSBIVUdFIHBhcmFtZXRlcnMgYnV0IHRoZXkgbWlnaHQgbm90IGJlIHJlbGV2YW50IGF0IGFsbA0KZm9yIHRoZSBtYWNybyBsZXZlbCBjaGFuZ2UgaW4gbmV0d29ya3MpDQoNCk1vZGVsIG9mIFJTaWVuYSBpcyBtb2RlbGluZyBvbiBFR08gTEVWRUwgb25seQ0KDQotICAgc3RhdGVtZW50cyBsaWtlIGdlbmRlciBob21waGlsaXkgaXMgbW9yZSBpbXBvcnRhbnQgaW4gbXkgbmV0d29yaw0KICAgIHRoYW4gZWR1Y2F0aW9uYWwgaG9tb3BoaWx5DQoNCmRvIHNtdGggc2ltaWxhcg0KDQp0ZXN0IHdpdGggUnNpZW5hOg0KDQotICAgZm9yIGVnb3M6IEdpdmVuIGEgY2hvaWNlLCBnZW5kZXIgaG9tcGhpbHkgaXMgbW9yZSBpbXBvcnRhbnQgdGhhbg0KICAgIGVkdWNhdGlvbi4uLg0KDQotICAgbW9yZSBudWFuY2VkOiBHSVZFTiB0aGUgbmV0d29yayBhdCBUMSwgLi4uDQoNCk1BVENIIFlPVVIgSFlQT1RIRVNJUyBUTyBZT1VSIE1FVEhPRFMNCg==</div>
 
 
 </div>

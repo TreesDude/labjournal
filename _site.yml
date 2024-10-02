@@ -22,8 +22,10 @@ navbar:
         href: week3RSelenium.html
       - text: "Chapter 9 - Netw. Visualisation tutorial"
         href: networkvis.html
-      - text: "Week 5"
+      - text: "Week 5/Chapter 7 - Analysis pt.1"
         href: week5.html
+      - text: "Week 5/Chapter 7 - Analysis pt.2"
+        href: week5-2.html
         
     - text: "RQs"
       menu:
