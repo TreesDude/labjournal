@@ -1,0 +1,44 @@
+---
+title: "Week 6"
+author: "Verooo"
+date: "2024-10-09"
+output: html_document
+---
+
+```{r, globalsettings, echo=FALSE, warning=FALSE, results='hide'}
+library(knitr)
+
+knitr::opts_chunk$set(echo = TRUE)
+opts_chunk$set(tidy.opts=list(width.cutoff=100),tidy=TRUE, warning = FALSE, message = FALSE,comment = "#>", cache=TRUE, class.source=c("test"), class.output=c("test2"))
+options(width = 100)
+rgl::setupKnitr()
+
+
+
+colorize <- function(x, color) {sprintf("<span style='color: %s;'>%s</span>", color, x) }
+
+```
+
+```{r klippy, echo=FALSE, include=FALSE}
+klippy::klippy(position = c('top', 'right'))
+#klippy::klippy(color = 'darkred')
+#klippy::klippy(tooltip_message = 'Click to copy', tooltip_success = 'Done')
+```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+::: {.column width="50%"} ![](images/krill-yourself.jpg)
+
+# "Kudos make you run!" - paper discussion
+
+Franken, R., Bekhuis, H., & Tolsma, J. (2022). Kudos make you run! How runners influence each other on the online social network Strava. Social Networks, 72, 151–164. <https://doi.org/10.1016/j.socnet.2022.10.001>
+
+## Event vs. relation 
+
+-   Giving a like (aka. a "kudos" on the Strava platform) is an *event* but RSiena looks at *relationships,* which are more constant.
+
+```{r}
+
+```

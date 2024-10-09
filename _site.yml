@@ -28,6 +28,8 @@ navbar:
         href: week5-2.html
       - text: "Week 5 - Practice data 1"
         href: datapractice1.html
+      - text: "Week 6"
+        href: week6.html
         
     - text: "RQs"
       menu:
