@@ -4,7 +4,7 @@ author: "Verooo"
 date: "2024-10-09"
 output: html_document
 ---
-
+# Week 6
 ```{r, globalsettings, echo=FALSE, warning=FALSE, results='hide'}
 library(knitr)
 

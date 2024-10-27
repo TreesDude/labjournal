@@ -29,7 +29,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Brainstorm
 
-## Parts fo project 
+## Project parts
 
 ### Research Design
 
@@ -75,6 +75,69 @@ knitr::opts_chunk$set(echo = TRUE)
 
 -   Afterwards: Discussion and Conclusion
 
-## Timeline 
+## Timeline
 
-tentative deadline: Saturday, 16.11.24
+tentative deadline: Saturday, 23.11.24
+
++--------------------------------------------------------------------+------------------------------------------------+---------------------------------------------------------------+-----------------------------------------------------------------------+--------------------------------------------------------------------------+-----------------------------------------------------------------------------------------+------------------------------------------+
+| Mon                                                                | Tue                                            | Wed                                                           | Thu                                                                   | Fri                                                                      | Sat                                                                                     | Sun                                      |
++:===================================================================+:===============================================+:==============================================================+:======================================================================+:=========================================================================+:========================================================================================+:=========================================+
+| 28\.                                                               | 29\.                                           | 30\.                                                          | 31\.                                                                  | 01.11.                                                                   | 02\.                                                                                    | 03\.                                     |
+|                                                                    |                                                |                                                               |                                                                       |                                                                          |                                                                                         |                                          |
+| ![](images/used_arson%20frog.jpg)                                  | ![](images/used_arson%20frog.jpg){width="952"} | ![](images/socialnetworking.jpg){width="800"}Clarify RQs [D]\ | ![](images/socialnetworking_meh.jpg){width="800"}Intro and theory [W] | ![](images/socialnetworking.jpg){width="800"}Intro and theory [W]\       | ![](images/socialnetworking_meh.jpg){width="800"}Define data [S1]                       | ![](images/Trixie-joke.jpg){width="800"} |
+|                                                                    |                                                | & Clarify design [D]                                          |                                                                       | Clarify [D] & define data [S1]                                           |                                                                                         |                                          |
++--------------------------------------------------------------------+------------------------------------------------+---------------------------------------------------------------+-----------------------------------------------------------------------+--------------------------------------------------------------------------+-----------------------------------------------------------------------------------------+------------------------------------------+
+| 04\.                                                               | 05\.                                           | 06\.                                                          | 07\.                                                                  | 08\.                                                                     | 09\.                                                                                    | 10\.                                     |
+|                                                                    |                                                |                                                               |                                                                       |                                                                          |                                                                                         |                                          |
+| ![](images/socialnetworking_meh.jpg){width="800"}Define data [S1]\ | ![](images/used_arson%20frog.jpg){width="952"} | ![](images/used_arson%20frog.jpg)                             | ![](images/socialnetworking_meh.jpg){width="800"}\                    | ![](images/socialnetworking.jpg){width="800"}Initial description [S3]\   | ![](images/socialnetworking.jpg){width="800"}Plotting                                   | ![](images/Trixie-joke.jpg){width="800"} |
+| & create effects structure [S2]                                    |                                                |                                                               | Create effects structure [S2]\                                        | & plotting                                                               |                                                                                         |                                          |
++--------------------------------------------------------------------+------------------------------------------------+---------------------------------------------------------------+-----------------------------------------------------------------------+--------------------------------------------------------------------------+-----------------------------------------------------------------------------------------+------------------------------------------+
+| 11\.                                                               | 12\.                                           | 13\.                                                          | 14\.                                                                  | 15\.                                                                     | 16\.                                                                                    | 17\.                                     |
+|                                                                    |                                                |                                                               |                                                                       |                                                                          |                                                                                         |                                          |
+| ![](images/socialnetworking_meh.jpg){width="800"}Plotting          | ![](images/used_arson%20frog.jpg){width="952"} | ![](images/used_arson%20frog.jpg)                             | ![](images/socialnetworking.jpg){width="800"}Specify model [S4]\      | ![](images/socialnetworking.jpg){width="800"}Data & methods [W]          | ![](images/socialnetworking.jpg){width="800"}Estimate model [S5] & goodness of fit [S6] | ![](images/Trixie-joke.jpg){width="800"} |
+|                                                                    |                                                |                                                               | Data & methods part [W]                                               |                                                                          |                                                                                         |                                          |
++--------------------------------------------------------------------+------------------------------------------------+---------------------------------------------------------------+-----------------------------------------------------------------------+--------------------------------------------------------------------------+-----------------------------------------------------------------------------------------+------------------------------------------+
+| 18\.                                                               | 19\.                                           | 20\.                                                          | 21\.                                                                  | 22\.                                                                     | **23.**                                                                                 | 24\.                                     |
+|                                                                    |                                                |                                                               |                                                                       |                                                                          |                                                                                         |                                          |
+| ![](images/socialnetworking_meh.jpg){width="800"}Results [W]       | ![](images/used_arson%20frog.jpg){width="952"} | ![](images/used_arson%20frog.jpg)                             | ![](images/socialnetworking_meh.jpg){width="800"}Finish results [W]   | ![](images/socialnetworking.jpg){width="800"}Discussion & conclusion [W] | ![](images/socialnetworking.jpg){width="800"}Read over project & hand in!               | ![](images/Trixie-joke.jpg){width="800"} |
++--------------------------------------------------------------------+------------------------------------------------+---------------------------------------------------------------+-----------------------------------------------------------------------+--------------------------------------------------------------------------+-----------------------------------------------------------------------------------------+------------------------------------------+
+
+: Days overview
+
+**Legend**
+
+::: columns
+::: {.column width="50%"}
+![social network plot (color) = time for SNA (obvious... or not?)](images/socialnetworking.jpg){width="80"}
+
+![social network plot (muted) = not a lot of time for SNA, but SOME](images/socialnetworking_meh.jpg){width="80"}
+:::
+
+::: {.column width="50%"}
+![arson = otherwise busy/NO time for SNA](images/used_arson%20frog.jpg){width="80"}
+
+![you think this is a joke? = chores, admin work, and mental breakdowns/ NO time for SNA](images/Trixie-joke.jpg){width="80"}
+:::
+:::
+
+[D] = task refers to research design
+
+[S#] = task refers to step of analysis
+
+[W] = task refers to writing the report
+
+### Timeline Question
+
+When is plotting done in this progression? At the initial description part or earlier?
+
+## Project Planning 
+
+I have decided to drop another course I was taking and focus on the deadline of this course.
+
+I think the workload of both courses' deadlines exceeds my capacities, especially since the courses of PER 3 already start on 04.11. and I also have duties relating to my board year simultaneously.
+
+### Suggestions for Jochem:
+
+I will update you once a week to inform you of my progress. This can act as an "accountability-measure" and pushes me to face some struggles head-on, that I would otherwise try to avoid. It also creates a predesignated time to discuss the project, which can help me ask questions I would otherwise deem "not important enough to reach out to you". \
+I propose that I write you an email about the **current state of affairs on Mondays**, since I cannot work on the project on Tuesday and Wednesday anyways and that gives you some time to reply. Please let me know if this is okay for you. \
+In your reply I would appreciate input on how to move on in case I am facing a hurdle that "stalls" the project's progress, and I also welcome redirection if I seem to get "lost in the sauce". Any hints on how to take "shortcuts" that I was not aware of are also very much invited (e.g. "I know of this online resource that is about *exactly* this issue.").
