@@ -26,7 +26,9 @@ require(rvest)
 # rvest:This is the explanation the writers of the package give: “rvest is new package that makes it easy to scrape (or harvest) data from html web pages.” Seems like something we need, a package that stores information from webpages into relatively structured data that we can then query/manipulate.
 
 #install.packages("xml2")
+
 require(xml2)
+
 #xml2:This is what the writers of the package say about it: “Work with XML files using a simple, consistent interface.” So we can manipulate the data scraped with rvest, using the xml2 package functions
 
 #Note we're doing something different here. We're installing a *latest* version directly from
@@ -42,12 +44,14 @@ library(dplyr)
 
 ```
 
+
 # Get anchor data -RU sociology
 
 goal: get to know\
 (i) who the Radboud University Department of Sociology staff is,\
 (ii) what they publish with respect to scientific work, and\
 (iii) who they collaborate with.
+
 
 ```{r, Anchor data}
 soc_staff <- read_html("https://web.archive.org/web/20230528153336/https://www.ru.nl/sociology/research/staff/") #extracts the source html of a webpage

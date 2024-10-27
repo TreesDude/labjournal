@@ -1,0 +1,80 @@
+---
+title: "week getbackontrack"
+author: "Verooo"
+date: "2024-10-27"
+output: html_document
+---
+
+```{r, globalsettings, echo=FALSE, warning=FALSE, results='hide'}
+library(knitr)
+
+knitr::opts_chunk$set(echo = TRUE)
+opts_chunk$set(tidy.opts=list(width.cutoff=100),tidy=TRUE, warning = FALSE, message = FALSE,comment = "#>", cache=TRUE, class.source=c("test"), class.output=c("test2"))
+options(width = 100)
+rgl::setupKnitr()
+
+colorize <- function(x, color) {sprintf("<span style='color: %s;'>%s</span>", color, x) }
+
+```
+
+```{r klippy, echo=FALSE, include=FALSE}
+klippy::klippy(position = c('top', 'right'))
+#klippy::klippy(color = 'darkred')
+#klippy::klippy(tooltip_message = 'Click to copy', tooltip_success = 'Done')
+```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Brainstorm
+
+## Parts fo project 
+
+### Research Design
+
+-   Clarify Research Questions
+
+-   Clarify design to answer this question
+
+-   Clarify which data is needed in the design
+
+### Steps to analysis
+
+-   Step 1: Define data
+
+-   Step 2: Create effects structure
+
+-   Step 3: Get initial description
+
+-   Step 4: Specify model
+
+-   Step 5: Estimate model
+
+-   Step 6: Goodness of Fit
+
+### Report writing
+
+-   Introduction
+
+-   Theory
+
+-   Data & Methods
+
+-   Results
+
+-   Discussion & Conclusion
+
+### Simultaneously possible
+
+-   Clarify RQs and Design \<-\> Writing introduction and theory
+
+-   Defining Data & effects structure, initial description and model specification \<-\> Data & Methods part
+
+-   Estimate Model & Goodness of fit \<-\> Results section
+
+-   Afterwards: Discussion and Conclusion
+
+## Timeline 
+
+tentative deadline: Saturday, 16.11.24

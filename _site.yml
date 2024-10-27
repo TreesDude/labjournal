@@ -30,6 +30,8 @@ navbar:
         href: datapractice1.html
       - text: "Week 6"
         href: week6.html
+      - text: "Week Nr. getbackontrack"
+        href: weekbacktrack.html
         
     - text: "RQs"
       menu:
