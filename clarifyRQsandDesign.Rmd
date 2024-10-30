@@ -1,0 +1,112 @@
+---
+title: "Clarify RQ and Design"
+author: "Verooo"
+date: "2024-10-30"
+output: html_document
+---
+
+```{r, globalsettings, echo=FALSE, warning=FALSE, results='hide'}
+library(knitr)
+
+knitr::opts_chunk$set(echo = TRUE)
+opts_chunk$set(tidy.opts=list(width.cutoff=100),tidy=TRUE, warning = FALSE, message = FALSE,comment = "#>", cache=TRUE, class.source=c("test"), class.output=c("test2"))
+options(width = 100)
+rgl::setupKnitr()
+
+colorize <- function(x, color) {sprintf("<span style='color: %s;'>%s</span>", color, x) }
+
+```
+
+```{r klippy, echo=FALSE, include=FALSE}
+klippy::klippy(position = c('top', 'right'))
+#klippy::klippy(color = 'darkred')
+#klippy::klippy(tooltip_message = 'Click to copy', tooltip_success = 'Done')
+```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Clarify Research Questions
+
+**RQ1a:**
+
+To what extent does gender homophily occur across all co-publications of the staff of the Sociology Department and Political Science Department at Radboud University?
+
+aka. looking at whole sample: do we see homophiliy? how much ?
+
+**RQ1b:**
+
+To what extent do the two departments differ in their gender homophily?
+
+aka. looking at Sociology Department and extent of homphily in there \
+and comparing it with Political Science Department and extent of homophily in there.
+
+**RQ2:**
+
+Jochem's input: insert here another RQ before last RQ
+
+Do we observe gender homophily (preferences) in collaboration networks...
+
+Questions:
+
+-   Does this question need to ask whether we observe gender homophily in collaboration networks to begin with?
+
+    -   Isn't that the same question as RQ1a then?
+
+-   Does the question need to ask whether we observe gender homophily in collaborations over time?
+
+    -   Did not intent to look at changes over time. this would change things up.
+
+-   Or should it be about the prestige variable in some way? \
+    e.g. whether we observe gender homophily within collaboration networks of high prestige scholars and within collaboration networks of lower prestige scholars
+
+    -   but that presupposes that we have pre-established that there are collaboration networks of high-prestige scholars and low prestige scholars
+
+    -   also doesn't this question take away from RQ3?
+
+-   Concern: Overall, I want to keep things simple. Adding a RQ might be needed to help set up the last RQ here but I wonder if there is a way to simplify the project design then?
+
+**RQ3:**
+
+How to does gender homophily affect collaboration differently for collaborations between staff who have published in low vs. high prestige journals?
+
+aka. looking at whole sample: does the gender homophily in collaboration networks look different depending on the scholars' publishing prestige?
+
+# Design 
+
+# Project parts
+
+## Research Design
+
+-   Clarify Research Questions
+
+-   Clarify design to answer this question
+
+-   Clarify which data is needed in the design
+
+## Steps to analysis
+
+-   Step 1: Define data
+
+-   Step 2: Create effects structure
+
+-   Step 3: Get initial description
+
+-   Step 4: Specify model
+
+-   Step 5: Estimate model
+
+-   Step 6: Goodness of Fit
+
+## Report writing
+
+-   Introduction
+
+-   Theory
+
+-   Data & Methods
+
+-   Results
+
+-   Discussion & Conclusion

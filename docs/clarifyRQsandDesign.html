@@ -9,11 +9,11 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
-<meta name="author" content="Veroooo" />
+<meta name="author" content="Verooo" />
 
-<meta name="date" content="2024-09-10" />
+<meta name="date" content="2024-10-30" />
 
-<title>Week2 - Descriptives</title>
+<title>Clarify RQ and Design</title>
 
 <script src="site_libs/header-attrs-2.28/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -489,164 +489,105 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Week2 - Descriptives</h1>
-<h4 class="author">Veroooo</h4>
-<h4 class="date">2024-09-10</h4>
+<h1 class="title toc-ignore">Clarify RQ and Design</h1>
+<h4 class="author">Verooo</h4>
+<h4 class="date">2024-10-30</h4>
 
 </div>
 
 
-<script>
-  addClassKlippyTo("pre.r, pre.markdown");
-  addKlippy('right', 'top', 'auto', '1', 'Copy code', 'Copied!');
-</script>
-<div id="triads---4x4-matrix" class="section level1" number="1">
-<h1><span class="header-section-number">1</span> Triads - 4x4
-matrix</h1>
-<pre class="r test"><code># install.packages(&#39;igraph&#39;)
-library(igraph)
-# install.packages(&#39;sna&#39;)
-library(sna)
-
-
-# Create a 4x4 matrix filled with 0&#39;s
-matrix_zeros &lt;- matrix(0, nrow = 4, ncol = 4)
-
-# Add a tie between node 1 and node 3 by placing a 1
-matrix_zeros[1, 3] &lt;- 1  # From node 1 to node 3
-
-# Print the matrix
-print(matrix_zeros)</code></pre>
-<pre class="test2"><code>#&gt;      [,1] [,2] [,3] [,4]
-#&gt; [1,]    0    0    1    0
-#&gt; [2,]    0    0    0    0
-#&gt; [3,]    0    0    0    0
-#&gt; [4,]    0    0    0    0</code></pre>
-<pre class="r test"><code>matrix_graph &lt;- graph.adjacency(matrix_zeros)
-sna::triad.census(matrix_zeros)</code></pre>
-<pre class="test2"><code>#&gt;      003 012 102 021D 021U 021C 111D 111U 030T 030C 201 120D 120U 120C 210 300
-#&gt; [1,]   2   2   0    0    0    0    0    0    0    0   0    0    0    0   0   0</code></pre>
-<pre class="r test"><code># output shows the count of each of the 16 possible configurations of triads so if below 003 it
-# says e.g. 2, that means that the configuration 003 (A,B,C, the empty graph) is possible 2 times</code></pre>
-<div id="triad-census-output" class="section level2" number="1.1">
-<h2><span class="header-section-number">1.1</span> Triad census
-output</h2>
-<pre class="r test"><code># 003 A,B,C, the empty graph.
-
-# 012 A-&gt;B, C, the graph with a single directed edge.
-
-# 102 A&lt;-&gt;B, C, the graph with a mutual connection between two vertices.
-
-# 021D A&lt;-B-&gt;C, the out-star.
-
-# 021U A-&gt;B&lt;-C, the in-star.
-
-# 021C A-&gt;B-&gt;C, directed line.
-
-# 111D A&lt;-&gt;B&lt;-C.
-
-# 111U A&lt;-&gt;B-&gt;C.
-
-# 030T A-&gt;B&lt;-C, A-&gt;C.
-
-# 030C A&lt;-B&lt;-C, A-&gt;C.
-
-# 201 A&lt;-&gt;B&lt;-&gt;C.
-
-# 120D A&lt;-B-&gt;C, A&lt;-&gt;C.
-
-# 120U A-&gt;B&lt;-C, A&lt;-&gt;C.
-
-# 120C A-&gt;B-&gt;C, A&lt;-&gt;C.
-
-# 210 A-&gt;B&lt;-&gt;C, A&lt;-&gt;C.
-
-# 300 A&lt;-&gt;B&lt;-&gt;C, A&lt;-&gt;C, the complete graph.</code></pre>
-</div>
-</div>
-<div id="centrality-measures-practice-with-a-network"
-class="section level1" number="2">
-<h1><span class="header-section-number">2</span> Centrality measures
-(practice with a network)</h1>
-<pre class="r test"><code># install.packages(&#39;RSiena&#39;)
-library(RSiena)
-# install.packages(&#39;igraph&#39;) library(igraph) install.packages(&#39;sna&#39;)
-library(sna)
-
-`?`(s501  # Network 1 data: excerpt from &#39;Teenage Friends and Lifestyle Study&#39; data.
-)
-dim(s501)  # get dimensions of data</code></pre>
-<pre class="test2"><code>#&gt; [1] 50 50</code></pre>
-<pre class="r test"><code>tenxten &lt;- s501[1:10, 1:10]  # select a 10 x 10 matrix [rows and columns are divided by comma])
-
-tenxten_graph &lt;- graph.adjacency(tenxten)  # make matrixa graph object 
-plot(tenxten_graph)  # make plot of network </code></pre>
-<p><img src="week2_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
-<pre class="r test"><code>sna::triad.census(tenxten)</code></pre>
-<pre class="test2"><code>#&gt;      003 012 102 021D 021U 021C 111D 111U 030T 030C 201 120D 120U 120C 210 300
-#&gt; [1,]  82   0  37    0    0    0    0    0    0    0   0    0    0    0   0   1</code></pre>
-<pre class="r test"><code># Nr. of possible Triad compositions: 10*9*8 / 6 =
-
-
-# Play around with Centrality Measures</code></pre>
-</div>
-<div id="hw-start-writing-intro-update-research-questions"
-class="section level1" number="3">
-<h1><span class="header-section-number">3</span> HW: START WRITING INTRO
-(UPDATE RESEARCH QUESTIONS)</h1>
-<p>Try to be specific show that you UNDERSTAND INTER-DEPENDENCIES</p>
-<p>MAKE A LIST OF THE TYPE OF DATA YOU WILL NEED Relational attributes,
-etc.</p>
-<p>Update Lab journal</p>
-<p>Also still redo what i missed in class: make centrality measures of
-the 10x10 matrix</p>
-</div>
-<div id="useful-keybinds" class="section level1" number="4">
-<h1><span class="header-section-number">4</span> USEFUL KEYBINDS</h1>
-<p>ALT + MINUS for the ARROWS &lt;-</p>
-<p>STR + SHIFT + M for the %&gt;%</p>
-<p>STR + SHIFT + C for making a comment of multiple lines you
-highlighted</p>
-</div>
-<div id="heading-learning-to-take-notes-with-r" class="section level1"
-number="5">
-<h1><span class="header-section-number">5</span> heading (learning to
-take notes with R)</h1>
-<p>note:</p>
-<ol style="list-style-type: decimal">
-<li>kjhg<br />
-</li>
-<li>lkjh
+<div id="clarify-research-questions" class="section level1" number="1">
+<h1><span class="header-section-number">1</span> Clarify Research
+Questions</h1>
+<p><strong>RQ1a:</strong></p>
+<p>To what extent does gender homophily occur across all co-publications
+of the staff of the Sociology Department and Political Science
+Department at Radboud University?</p>
+<p>aka. looking at whole sample: do we see homophiliy? how much ?</p>
+<p><strong>RQ1b:</strong></p>
+<p>To what extent do the two departments differ in their gender
+homophily?</p>
+<p>aka. looking at Sociology Department and extent of homphily in
+there<br />
+and comparing it with Political Science Department and extent of
+homophily in there.</p>
+<p><strong>RQ2:</strong></p>
+<p>Jochem’s input: insert here another RQ before last RQ</p>
+<p>Do we observe gender homophily (preferences) in collaboration
+networks…</p>
+<p>Questions:</p>
 <ul>
-<li>kjh</li>
-<li>kjhgf</li>
+<li><p>Does this question need to ask whether we observe gender
+homophily in collaboration networks to begin with?</p>
+<ul>
+<li>Isn’t that the same question as RQ1a then?</li>
 </ul></li>
-</ol>
-<p>text here <span class="math display">\[
-N = ß \Sigma lss \sqrt {sd }
-\]</span> text again</p>
-<p>text here <span class="math display">\[
-N = 1
-\]</span> text again</p>
+<li><p>Does the question need to ask whether we observe gender homophily
+in collaborations over time?</p>
+<ul>
+<li>Did not intent to look at changes over time. this would change
+things up.</li>
+</ul></li>
+<li><p>Or should it be about the prestige variable in some way?<br />
+e.g. whether we observe gender homophily within collaboration networks
+of high prestige scholars and within collaboration networks of lower
+prestige scholars</p>
+<ul>
+<li><p>but that presupposes that we have pre-established that there are
+collaboration networks of high-prestige scholars and low prestige
+scholars</p></li>
+<li><p>also doesn’t this question take away from RQ3?</p></li>
+</ul></li>
+<li><p>Concern: Overall, I want to keep things simple. Adding a RQ might
+be needed to help set up the last RQ here but I wonder if there is a way
+to simplify the project design then?</p></li>
+</ul>
+<p><strong>RQ3:</strong></p>
+<p>How to does gender homophily affect collaboration differently for
+collaborations between staff who have published in low vs. high prestige
+journals?</p>
+<p>aka. looking at whole sample: does the gender homophily in
+collaboration networks look different depending on the scholars’
+publishing prestige?</p>
 </div>
-<div id="using-the-references" class="section level1" number="6">
-<h1><span class="header-section-number">6</span> USING THE
-REFERENCES</h1>
-<p>Open: references.bib</p>
-<p>take “bibTex Citation” from online and put it in there</p>
-<p>if you want to use it, use @ - symbol and use the word behind the ” {
-“<br />
-In this example, it would be @”rmarkdown2018” (without the quotation
-marks)</p>
-<p><span class="citation">@Book</span>{rmarkdown2018, title = {R
-Markdown: The Definitive Guide}, author = {Yihui Xie and J.J. Allaire
-and Garrett Grolemund}, publisher = {Chapman and Hall/CRC}, address =
-{Boca Raton, Florida}, year = {2018}, note = {ISBN 9781138359338}, url =
-{<a href="https://bookdown.org/yihui/rmarkdown"
-class="uri">https://bookdown.org/yihui/rmarkdown</a>}, }</p>
+<div id="design" class="section level1" number="2">
+<h1><span class="header-section-number">2</span> Design</h1>
+</div>
+<div id="project-parts" class="section level1" number="3">
+<h1><span class="header-section-number">3</span> Project parts</h1>
+<div id="research-design" class="section level2" number="3.1">
+<h2><span class="header-section-number">3.1</span> Research Design</h2>
+<ul>
+<li><p>Clarify Research Questions</p></li>
+<li><p>Clarify design to answer this question</p></li>
+<li><p>Clarify which data is needed in the design</p></li>
+</ul>
+</div>
+<div id="steps-to-analysis" class="section level2" number="3.2">
+<h2><span class="header-section-number">3.2</span> Steps to
+analysis</h2>
+<ul>
+<li><p>Step 1: Define data</p></li>
+<li><p>Step 2: Create effects structure</p></li>
+<li><p>Step 3: Get initial description</p></li>
+<li><p>Step 4: Specify model</p></li>
+<li><p>Step 5: Estimate model</p></li>
+<li><p>Step 6: Goodness of Fit</p></li>
+</ul>
+</div>
+<div id="report-writing" class="section level2" number="3.3">
+<h2><span class="header-section-number">3.3</span> Report writing</h2>
+<ul>
+<li><p>Introduction</p></li>
+<li><p>Theory</p></li>
+<li><p>Data &amp; Methods</p></li>
+<li><p>Results</p></li>
+<li><p>Discussion &amp; Conclusion</p></li>
+</ul>
+</div>
 </div>
 
-<div id="rmd-source-code">LS0tDQp0aXRsZTogIldlZWsyIC0gRGVzY3JpcHRpdmVzIg0KYXV0aG9yOiAiVmVyb29vbyINCmRhdGU6ICIyMDI0LTA5LTEwIg0Kb3V0cHV0OiBodG1sX2RvY3VtZW50DQotLS0NCg0KYGBge3IsIGdsb2JhbHNldHRpbmdzLCBlY2hvPUZBTFNFLCB3YXJuaW5nPUZBTFNFLCByZXN1bHRzPSdoaWRlJ30NCmxpYnJhcnkoa25pdHIpDQoNCmtuaXRyOjpvcHRzX2NodW5rJHNldChlY2hvID0gVFJVRSkNCm9wdHNfY2h1bmskc2V0KHRpZHkub3B0cz1saXN0KHdpZHRoLmN1dG9mZj0xMDApLHRpZHk9VFJVRSwgd2FybmluZyA9IEZBTFNFLCBtZXNzYWdlID0gRkFMU0UsY29tbWVudCA9ICIjPiIsIGNhY2hlPVRSVUUsIGNsYXNzLnNvdXJjZT1jKCJ0ZXN0IiksIGNsYXNzLm91dHB1dD1jKCJ0ZXN0MiIpKQ0Kb3B0aW9ucyh3aWR0aCA9IDEwMCkNCnJnbDo6c2V0dXBLbml0cigpDQoNCg0KDQpjb2xvcml6ZSA8LSBmdW5jdGlvbih4LCBjb2xvcikge3NwcmludGYoIjxzcGFuIHN0eWxlPSdjb2xvcjogJXM7Jz4lczwvc3Bhbj4iLCBjb2xvciwgeCkgfQ0KDQpgYGANCg0KYGBge3Iga2xpcHB5LCBlY2hvPUZBTFNFLCBpbmNsdWRlPVRSVUV9DQprbGlwcHk6OmtsaXBweShwb3NpdGlvbiA9IGMoJ3RvcCcsICdyaWdodCcpKQ0KI2tsaXBweTo6a2xpcHB5KGNvbG9yID0gJ2RhcmtyZWQnKQ0KI2tsaXBweTo6a2xpcHB5KHRvb2x0aXBfbWVzc2FnZSA9ICdDbGljayB0byBjb3B5JywgdG9vbHRpcF9zdWNjZXNzID0gJ0RvbmUnKQ0KYGBgDQoNCiMgVHJpYWRzIC0gNHg0IG1hdHJpeA0KDQpgYGB7cn0NCiMgaW5zdGFsbC5wYWNrYWdlcygiaWdyYXBoIikNCmxpYnJhcnkoaWdyYXBoKQ0KI2luc3RhbGwucGFja2FnZXMoInNuYSIpDQpsaWJyYXJ5KHNuYSkNCg0KDQojIENyZWF0ZSBhIDR4NCBtYXRyaXggZmlsbGVkIHdpdGggMCdzDQptYXRyaXhfemVyb3MgPC0gbWF0cml4KDAsIG5yb3cgPSA0LCBuY29sID0gNCkNCg0KIyBBZGQgYSB0aWUgYmV0d2VlbiBub2RlIDEgYW5kIG5vZGUgMyBieSBwbGFjaW5nIGEgMQ0KbWF0cml4X3plcm9zWzEsIDNdIDwtIDEgICMgRnJvbSBub2RlIDEgdG8gbm9kZSAzDQoNCiMgUHJpbnQgdGhlIG1hdHJpeA0KcHJpbnQobWF0cml4X3plcm9zKQ0KDQptYXRyaXhfZ3JhcGggPC0gZ3JhcGguYWRqYWNlbmN5KG1hdHJpeF96ZXJvcykNCnNuYTo6dHJpYWQuY2Vuc3VzKG1hdHJpeF96ZXJvcykNCg0KIyBvdXRwdXQgc2hvd3MgdGhlIGNvdW50IG9mIGVhY2ggb2YgdGhlIDE2IHBvc3NpYmxlIGNvbmZpZ3VyYXRpb25zIG9mIHRyaWFkcyAgDQogICAgIyBzbyBpZiBiZWxvdyAwMDMgaXQgc2F5cyBlLmcuIDIsIHRoYXQgbWVhbnMgdGhhdCB0aGUgY29uZmlndXJhdGlvbiAwMDMgKEEsQixDLCB0aGUgZW1wdHkgZ3JhcGgpIGlzIHBvc3NpYmxlIDIgdGltZXMNCg0KDQpgYGANCg0KIyMgVHJpYWQgY2Vuc3VzIG91dHB1dA0KDQpgYGB7cn0NCg0KIyAwMDMNCiMgQSxCLEMsIHRoZSBlbXB0eSBncmFwaC4NCg0KIyAwMTINCiMgQS0+QiwgQywgdGhlIGdyYXBoIHdpdGggYSBzaW5nbGUgZGlyZWN0ZWQgZWRnZS4NCg0KIyAxMDINCiMgQTwtPkIsIEMsIHRoZSBncmFwaCB3aXRoIGEgbXV0dWFsIGNvbm5lY3Rpb24gYmV0d2VlbiB0d28gdmVydGljZXMuDQoNCiMgMDIxRA0KIyBBPC1CLT5DLCB0aGUgb3V0LXN0YXIuDQoNCiMgMDIxVQ0KIyBBLT5CPC1DLCB0aGUgaW4tc3Rhci4NCg0KIyAwMjFDDQojIEEtPkItPkMsIGRpcmVjdGVkIGxpbmUuDQoNCiMgMTExRA0KIyBBPC0+QjwtQy4NCg0KIyAxMTFVDQojIEE8LT5CLT5DLg0KDQojIDAzMFQNCiMgQS0+QjwtQywgQS0+Qy4NCg0KIyAwMzBDDQojIEE8LUI8LUMsIEEtPkMuDQoNCiMgMjAxDQojIEE8LT5CPC0+Qy4NCg0KIyAxMjBEDQojIEE8LUItPkMsIEE8LT5DLg0KDQojIDEyMFUNCiMgQS0+QjwtQywgQTwtPkMuDQoNCiMgMTIwQw0KIyBBLT5CLT5DLCBBPC0+Qy4NCg0KIyAyMTANCiMgQS0+QjwtPkMsIEE8LT5DLg0KDQojIDMwMA0KIyBBPC0+QjwtPkMsIEE8LT5DLCB0aGUgY29tcGxldGUgZ3JhcGguDQoNCmBgYA0KDQojIENlbnRyYWxpdHkgbWVhc3VyZXMgKHByYWN0aWNlIHdpdGggYSBuZXR3b3JrKQ0KDQpgYGB7cn0NCiMgaW5zdGFsbC5wYWNrYWdlcygiUlNpZW5hIikNCmxpYnJhcnkoUlNpZW5hKQ0KI2luc3RhbGwucGFja2FnZXMoImlncmFwaCIpDQojIGxpYnJhcnkoaWdyYXBoKQ0KI2luc3RhbGwucGFja2FnZXMoInNuYSIpDQpsaWJyYXJ5KHNuYSkNCg0KP3M1MDEgIyBOZXR3b3JrIDEgZGF0YTogZXhjZXJwdCBmcm9tICJUZWVuYWdlIEZyaWVuZHMgYW5kIExpZmVzdHlsZSBTdHVkeSIgZGF0YS4NCmRpbShzNTAxKSAjIGdldCBkaW1lbnNpb25zIG9mIGRhdGENCg0KdGVueHRlbiA8LSBzNTAxWzE6MTAsMToxMF0gIyBzZWxlY3QgYSAxMCB4IDEwIG1hdHJpeCBbcm93cyBhbmQgY29sdW1ucyBhcmUgZGl2aWRlZCBieSBjb21tYV0pDQoNCnRlbnh0ZW5fZ3JhcGggPC0gZ3JhcGguYWRqYWNlbmN5KHRlbnh0ZW4pICMgbWFrZSBtYXRyaXhhIGdyYXBoIG9iamVjdCANCnBsb3QodGVueHRlbl9ncmFwaCkgIyBtYWtlIHBsb3Qgb2YgbmV0d29yayANCg0Kc25hOjp0cmlhZC5jZW5zdXModGVueHRlbikNCg0KDQojIE5yLiBvZiBwb3NzaWJsZSBUcmlhZCBjb21wb3NpdGlvbnM6DQogICMgMTAqOSo4IC8gNiA9IA0KDQoNCiMgUGxheSBhcm91bmQgd2l0aCBDZW50cmFsaXR5IE1lYXN1cmVzIA0KYGBgDQoNCiMgSFc6IFNUQVJUIFdSSVRJTkcgSU5UUk8gKFVQREFURSBSRVNFQVJDSCBRVUVTVElPTlMpDQoNClRyeSB0byBiZSBzcGVjaWZpYyBzaG93IHRoYXQgeW91IFVOREVSU1RBTkQgSU5URVItREVQRU5ERU5DSUVTDQoNCk1BS0UgQSBMSVNUIE9GIFRIRSBUWVBFIE9GIERBVEEgWU9VIFdJTEwgTkVFRCBSZWxhdGlvbmFsIGF0dHJpYnV0ZXMsIGV0Yy4NCg0KVXBkYXRlIExhYiBqb3VybmFsDQoNCkFsc28gc3RpbGwgcmVkbyB3aGF0IGkgbWlzc2VkIGluIGNsYXNzOiBtYWtlIGNlbnRyYWxpdHkgbWVhc3VyZXMgb2YgdGhlIDEweDEwIG1hdHJpeCANCg0KIyBVU0VGVUwgS0VZQklORFMgDQpBTFQgKyBNSU5VUyBmb3IgdGhlIEFSUk9XUyA8LSANCg0KU1RSICsgU0hJRlQgKyBNIGZvciB0aGUgJT4lIA0KDQpTVFIgKyBTSElGVCArIEMgZm9yIG1ha2luZyBhIGNvbW1lbnQgb2YgbXVsdGlwbGUgbGluZXMgeW91IGhpZ2hsaWdodGVkDQoNCiMgaGVhZGluZyAobGVhcm5pbmcgdG8gdGFrZSBub3RlcyB3aXRoIFIpDQoNCm5vdGU6DQoNCjEuICBramhnXA0KMi4gIGxramgNCiAgICAtICAga2poDQogICAgLSAgIGtqaGdmDQoNCnRleHQgaGVyZQ0KJCQNCk4gPSDDnyBcU2lnbWEgbHNzIFxzcXJ0IHtzZCB9DQokJA0KdGV4dCBhZ2Fpbg0KDQoNCnRleHQgaGVyZQ0KJCQNCk4gPSAxIA0KJCQNCnRleHQgYWdhaW4NCg0KDQoNCiMgVVNJTkcgVEhFIFJFRkVSRU5DRVMNCg0KT3BlbjogcmVmZXJlbmNlcy5iaWINCg0KdGFrZSAiYmliVGV4IENpdGF0aW9uIiBmcm9tIG9ubGluZSBhbmQgcHV0IGl0IGluIHRoZXJlDQoNCmlmIHlvdSB3YW50IHRvIHVzZSBpdCwgdXNlIFxAIC0gc3ltYm9sIGFuZCB1c2UgdGhlIHdvcmQgYmVoaW5kIHRoZSAiIHsgIlwNCkluIHRoaXMgZXhhbXBsZSwgaXQgd291bGQgYmUgXEAgInJtYXJrZG93bjIwMTgiICh3aXRob3V0IHRoZSBxdW90YXRpb24gbWFya3MpDQoNCkBCb29re3JtYXJrZG93bjIwMTgsIHRpdGxlID0ge1IgTWFya2Rvd246IFRoZSBEZWZpbml0aXZlIEd1aWRlfSwgYXV0aG9yID0ge1lpaHVpIFhpZSBhbmQgSi5KLiBBbGxhaXJlIGFuZCBHYXJyZXR0IEdyb2xlbXVuZH0sIHB1Ymxpc2hlciA9IHtDaGFwbWFuIGFuZCBIYWxsL0NSQ30sIGFkZHJlc3MgPSB7Qm9jYSBSYXRvbiwgRmxvcmlkYX0sIHllYXIgPSB7MjAxOH0sIG5vdGUgPSB7SVNCTiA5NzgxMTM4MzU5MzM4fSwgdXJsID0gezxodHRwczovL2Jvb2tkb3duLm9yZy95aWh1aS9ybWFya2Rvd24+fSwgfQ0K</div>
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIkNsYXJpZnkgUlEgYW5kIERlc2lnbiINCmF1dGhvcjogIlZlcm9vbyINCmRhdGU6ICIyMDI0LTEwLTMwIg0Kb3V0cHV0OiBodG1sX2RvY3VtZW50DQotLS0NCg0KYGBge3IsIGdsb2JhbHNldHRpbmdzLCBlY2hvPUZBTFNFLCB3YXJuaW5nPUZBTFNFLCByZXN1bHRzPSdoaWRlJ30NCmxpYnJhcnkoa25pdHIpDQoNCmtuaXRyOjpvcHRzX2NodW5rJHNldChlY2hvID0gVFJVRSkNCm9wdHNfY2h1bmskc2V0KHRpZHkub3B0cz1saXN0KHdpZHRoLmN1dG9mZj0xMDApLHRpZHk9VFJVRSwgd2FybmluZyA9IEZBTFNFLCBtZXNzYWdlID0gRkFMU0UsY29tbWVudCA9ICIjPiIsIGNhY2hlPVRSVUUsIGNsYXNzLnNvdXJjZT1jKCJ0ZXN0IiksIGNsYXNzLm91dHB1dD1jKCJ0ZXN0MiIpKQ0Kb3B0aW9ucyh3aWR0aCA9IDEwMCkNCnJnbDo6c2V0dXBLbml0cigpDQoNCmNvbG9yaXplIDwtIGZ1bmN0aW9uKHgsIGNvbG9yKSB7c3ByaW50ZigiPHNwYW4gc3R5bGU9J2NvbG9yOiAlczsnPiVzPC9zcGFuPiIsIGNvbG9yLCB4KSB9DQoNCmBgYA0KDQpgYGB7ciBrbGlwcHksIGVjaG89RkFMU0UsIGluY2x1ZGU9RkFMU0V9DQprbGlwcHk6OmtsaXBweShwb3NpdGlvbiA9IGMoJ3RvcCcsICdyaWdodCcpKQ0KI2tsaXBweTo6a2xpcHB5KGNvbG9yID0gJ2RhcmtyZWQnKQ0KI2tsaXBweTo6a2xpcHB5KHRvb2x0aXBfbWVzc2FnZSA9ICdDbGljayB0byBjb3B5JywgdG9vbHRpcF9zdWNjZXNzID0gJ0RvbmUnKQ0KYGBgDQoNCmBgYHtyIHNldHVwLCBpbmNsdWRlPUZBTFNFfQ0Ka25pdHI6Om9wdHNfY2h1bmskc2V0KGVjaG8gPSBUUlVFKQ0KYGBgDQoNCiMgQ2xhcmlmeSBSZXNlYXJjaCBRdWVzdGlvbnMNCg0KKipSUTFhOioqDQoNClRvIHdoYXQgZXh0ZW50IGRvZXMgZ2VuZGVyIGhvbW9waGlseSBvY2N1ciBhY3Jvc3MgYWxsIGNvLXB1YmxpY2F0aW9ucyBvZiB0aGUgc3RhZmYgb2YgdGhlIFNvY2lvbG9neSBEZXBhcnRtZW50IGFuZCBQb2xpdGljYWwgU2NpZW5jZSBEZXBhcnRtZW50IGF0IFJhZGJvdWQgVW5pdmVyc2l0eT8NCg0KYWthLiBsb29raW5nIGF0IHdob2xlIHNhbXBsZTogZG8gd2Ugc2VlIGhvbW9waGlsaXk/IGhvdyBtdWNoID8NCg0KKipSUTFiOioqDQoNClRvIHdoYXQgZXh0ZW50IGRvIHRoZSB0d28gZGVwYXJ0bWVudHMgZGlmZmVyIGluIHRoZWlyIGdlbmRlciBob21vcGhpbHk/DQoNCmFrYS4gbG9va2luZyBhdCBTb2Npb2xvZ3kgRGVwYXJ0bWVudCBhbmQgZXh0ZW50IG9mIGhvbXBoaWx5IGluIHRoZXJlIFwNCmFuZCBjb21wYXJpbmcgaXQgd2l0aCBQb2xpdGljYWwgU2NpZW5jZSBEZXBhcnRtZW50IGFuZCBleHRlbnQgb2YgaG9tb3BoaWx5IGluIHRoZXJlLg0KDQoqKlJRMjoqKg0KDQpKb2NoZW0ncyBpbnB1dDogaW5zZXJ0IGhlcmUgYW5vdGhlciBSUSBiZWZvcmUgbGFzdCBSUQ0KDQpEbyB3ZSBvYnNlcnZlIGdlbmRlciBob21vcGhpbHkgKHByZWZlcmVuY2VzKSBpbiBjb2xsYWJvcmF0aW9uIG5ldHdvcmtzLi4uDQoNClF1ZXN0aW9uczoNCg0KLSAgIERvZXMgdGhpcyBxdWVzdGlvbiBuZWVkIHRvIGFzayB3aGV0aGVyIHdlIG9ic2VydmUgZ2VuZGVyIGhvbW9waGlseSBpbiBjb2xsYWJvcmF0aW9uIG5ldHdvcmtzIHRvIGJlZ2luIHdpdGg/DQoNCiAgICAtICAgSXNuJ3QgdGhhdCB0aGUgc2FtZSBxdWVzdGlvbiBhcyBSUTFhIHRoZW4/DQoNCi0gICBEb2VzIHRoZSBxdWVzdGlvbiBuZWVkIHRvIGFzayB3aGV0aGVyIHdlIG9ic2VydmUgZ2VuZGVyIGhvbW9waGlseSBpbiBjb2xsYWJvcmF0aW9ucyBvdmVyIHRpbWU/DQoNCiAgICAtICAgRGlkIG5vdCBpbnRlbnQgdG8gbG9vayBhdCBjaGFuZ2VzIG92ZXIgdGltZS4gdGhpcyB3b3VsZCBjaGFuZ2UgdGhpbmdzIHVwLg0KDQotICAgT3Igc2hvdWxkIGl0IGJlIGFib3V0IHRoZSBwcmVzdGlnZSB2YXJpYWJsZSBpbiBzb21lIHdheT8gXA0KICAgIGUuZy4gd2hldGhlciB3ZSBvYnNlcnZlIGdlbmRlciBob21vcGhpbHkgd2l0aGluIGNvbGxhYm9yYXRpb24gbmV0d29ya3Mgb2YgaGlnaCBwcmVzdGlnZSBzY2hvbGFycyBhbmQgd2l0aGluIGNvbGxhYm9yYXRpb24gbmV0d29ya3Mgb2YgbG93ZXIgcHJlc3RpZ2Ugc2Nob2xhcnMNCg0KICAgIC0gICBidXQgdGhhdCBwcmVzdXBwb3NlcyB0aGF0IHdlIGhhdmUgcHJlLWVzdGFibGlzaGVkIHRoYXQgdGhlcmUgYXJlIGNvbGxhYm9yYXRpb24gbmV0d29ya3Mgb2YgaGlnaC1wcmVzdGlnZSBzY2hvbGFycyBhbmQgbG93IHByZXN0aWdlIHNjaG9sYXJzDQoNCiAgICAtICAgYWxzbyBkb2Vzbid0IHRoaXMgcXVlc3Rpb24gdGFrZSBhd2F5IGZyb20gUlEzPw0KDQotICAgQ29uY2VybjogT3ZlcmFsbCwgSSB3YW50IHRvIGtlZXAgdGhpbmdzIHNpbXBsZS4gQWRkaW5nIGEgUlEgbWlnaHQgYmUgbmVlZGVkIHRvIGhlbHAgc2V0IHVwIHRoZSBsYXN0IFJRIGhlcmUgYnV0IEkgd29uZGVyIGlmIHRoZXJlIGlzIGEgd2F5IHRvIHNpbXBsaWZ5IHRoZSBwcm9qZWN0IGRlc2lnbiB0aGVuPw0KDQoqKlJRMzoqKg0KDQpIb3cgdG8gZG9lcyBnZW5kZXIgaG9tb3BoaWx5IGFmZmVjdCBjb2xsYWJvcmF0aW9uIGRpZmZlcmVudGx5IGZvciBjb2xsYWJvcmF0aW9ucyBiZXR3ZWVuIHN0YWZmIHdobyBoYXZlIHB1Ymxpc2hlZCBpbiBsb3cgdnMuIGhpZ2ggcHJlc3RpZ2Ugam91cm5hbHM/DQoNCmFrYS4gbG9va2luZyBhdCB3aG9sZSBzYW1wbGU6IGRvZXMgdGhlIGdlbmRlciBob21vcGhpbHkgaW4gY29sbGFib3JhdGlvbiBuZXR3b3JrcyBsb29rIGRpZmZlcmVudCBkZXBlbmRpbmcgb24gdGhlIHNjaG9sYXJzJyBwdWJsaXNoaW5nIHByZXN0aWdlPw0KDQojIERlc2lnbiANCg0KIyBQcm9qZWN0IHBhcnRzDQoNCiMjIFJlc2VhcmNoIERlc2lnbg0KDQotICAgQ2xhcmlmeSBSZXNlYXJjaCBRdWVzdGlvbnMNCg0KLSAgIENsYXJpZnkgZGVzaWduIHRvIGFuc3dlciB0aGlzIHF1ZXN0aW9uDQoNCi0gICBDbGFyaWZ5IHdoaWNoIGRhdGEgaXMgbmVlZGVkIGluIHRoZSBkZXNpZ24NCg0KIyMgU3RlcHMgdG8gYW5hbHlzaXMNCg0KLSAgIFN0ZXAgMTogRGVmaW5lIGRhdGENCg0KLSAgIFN0ZXAgMjogQ3JlYXRlIGVmZmVjdHMgc3RydWN0dXJlDQoNCi0gICBTdGVwIDM6IEdldCBpbml0aWFsIGRlc2NyaXB0aW9uDQoNCi0gICBTdGVwIDQ6IFNwZWNpZnkgbW9kZWwNCg0KLSAgIFN0ZXAgNTogRXN0aW1hdGUgbW9kZWwNCg0KLSAgIFN0ZXAgNjogR29vZG5lc3Mgb2YgRml0DQoNCiMjIFJlcG9ydCB3cml0aW5nDQoNCi0gICBJbnRyb2R1Y3Rpb24NCg0KLSAgIFRoZW9yeQ0KDQotICAgRGF0YSAmIE1ldGhvZHMNCg0KLSAgIFJlc3VsdHMNCg0KLSAgIERpc2N1c3Npb24gJiBDb25jbHVzaW9uDQo=</div>
 
 
 </div>
@@ -684,7 +625,7 @@ $(document).ready(function () {
 <!-- code folding -->
 <script>
 $(document).ready(function () {
-  window.initializeSourceEmbed("week2.Rmd");
+  window.initializeSourceEmbed("clarifyRQsandDesign.Rmd");
   window.initializeCodeFolding("show" === "show");
 });
 </script>

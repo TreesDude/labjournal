@@ -32,6 +32,7 @@ navbar:
         href: week6.html
       - text: "Week Nr. getbackontrack"
         href: weekbacktrack.html
+
         
     - text: "RQs"
       menu:
@@ -41,8 +42,68 @@ navbar:
         href: RQdraft2.html
       - text: "3rd draft"
         href: RQdraft3.html
+
+    - text: "Project design"
+      menu:
+      - text: "Clarify RQs"
+        href: clarifyRQsandDesign.html   
+      - text: "Clarify design & hypotheses"
+        href: 
+      - text: "page"
+        href:  
+      - text: "page"
+        href: 
         
-        # here, other .Rmds can be added
+    - text: "Step-by-step analysis"
+      menu:
+      - text: "Step 1: Define data"
+        href: 
+      - text: "Step 2: Create effects structure"
+        href:  
+      - text: "Step 3: Get initial description"
+        href: 
+      - text: "Step 4: Specify model"
+        href: 
+      - text: "Step 5: Estimate model"
+        href:  
+      - text: "Step 6: Goodness of Fit"
+        href: 
+
+
+    - text: "Draft report"
+      menu:
+      - text: "Introduction"
+        href:    
+      - text: "Theory"
+        href: 
+      - text: "Data"
+        href:  
+      - text: "Methods"
+        href:  
+      - text: "Results"
+        href: 
+      - text: "Discussion & Conclusion"
+        href: 
+      - text: "Appendices"
+        href:         
+
+
+    - text: "Final report"
+      menu:
+      - text: "Introduction"
+        href:    
+      - text: "Theory"
+        href: 
+      - text: "Data"
+        href:  
+      - text: "Methods"
+        href:  
+      - text: "Results"
+        href: 
+      - text: "Discussion & Conclusion"
+        href: 
+      - text: "Appendices"
+        href:         
 
 
   right:
