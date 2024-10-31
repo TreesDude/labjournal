@@ -35,12 +35,16 @@ To what extent does gender homophily occur across all co-publications of the sta
 
 aka. looking at whole sample: do we see homophiliy? how much ?
 
+*yes perfect. just a descriptive question at the macro-level. keep it as it is.*
+
 **RQ1b:**
 
 To what extent do the two departments differ in their gender homophily?
 
-aka. looking at Sociology Department and extent of homphily in there \
+aka. looking at Sociology Department and extent of homphily in there\
 and comparing it with Political Science Department and extent of homophily in there.
+
+*also okay. still a descriptive question at the macro-level. keep it as it is.*
 
 **RQ2:**
 
@@ -53,12 +57,15 @@ Questions:
 -   Does this question need to ask whether we observe gender homophily in collaboration networks to begin with?
 
     -   Isn't that the same question as RQ1a then?
+    -   *yes and no. ;-)  this is your hypothesis for your RSiena models. whether within a dyad men tend to (or 'prefer') work with men and women with women, (controlled for structural network effects). \
+        I hope that you understand that this **dyadic preferences does not necessarily translates to your macro-outcome** (because of all structural effects possibly at play and other covariate-effects).*
 
 -   Does the question need to ask whether we observe gender homophily in collaborations over time?
 
     -   Did not intent to look at changes over time. this would change things up.
+    -   *okay, simply do not do this then.*
 
--   Or should it be about the prestige variable in some way? \
+-   Or should it be about the prestige variable in some way?\
     e.g. whether we observe gender homophily within collaboration networks of high prestige scholars and within collaboration networks of lower prestige scholars
 
     -   but that presupposes that we have pre-established that there are collaboration networks of high-prestige scholars and low prestige scholars
@@ -67,8 +74,21 @@ Questions:
 
 -   Concern: Overall, I want to keep things simple. Adding a RQ might be needed to help set up the last RQ here but I wonder if there is a way to simplify the project design then?
 
+-   *keep it simple! completely agree.*
+
+    *so far we simply have a descriptive question on gender homophily at the network-level (RQ1) and one at the dyad-level (after controlling for structural network effects and covariate-effects) (RQ2).*
+
 **RQ3:**
 
 How to does gender homophily affect collaboration differently for collaborations between staff who have published in low vs. high prestige journals?
 
 aka. looking at whole sample: does the gender homophily in collaboration networks look different depending on the scholars' publishing prestige?
+
+*Try to reformulate this to your RSiena model and not at your macro-level. I let you struggle a little bit on this last one okay. \
+But the idea is fine; whether prestige (of ego/alter/dyad) impacts gender homophily in some way.*
+
+*Thus **start with your descriptives and modelling \
+**and rephrase RQ3 later.*
+
+*try to **plot asap in the process**. \
+and update plots after descriptives and multivariate analyses along the way. it is an iterative process.*
