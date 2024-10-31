@@ -1,0 +1,43 @@
+---
+title: "Daft-Introduction"
+author: "Verooo"
+date: "2024-10-31"
+output: html_document
+bibliography: references.bib
+---
+
+```{r, globalsettings, echo=FALSE, warning=FALSE, results='hide'}
+library(knitr)
+
+knitr::opts_chunk$set(echo = TRUE)
+opts_chunk$set(tidy.opts=list(width.cutoff=100),tidy=TRUE, warning = FALSE, message = FALSE,comment = "#>", cache=TRUE, class.source=c("test"), class.output=c("test2"))
+options(width = 100)
+rgl::setupKnitr()
+
+colorize <- function(x, color) {sprintf("<span style='color: %s;'>%s</span>", color, x) }
+
+```
+
+```{r klippy, echo=FALSE, include=FALSE}
+klippy::klippy(position = c('top', 'right'))
+#klippy::klippy(color = 'darkred')
+#klippy::klippy(tooltip_message = 'Click to copy', tooltip_success = 'Done')
+```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Introduction draft
+
+Collaboration has become an essential part of modern academia, with scholars increasingly engaging in joint research efforts. Co-authorship allows researchers to combine expertise, share resources, and enhance their scholarly output (@Cheong2009). However, the dynamics of academic collaboration are not free from social patterns, and gender homophily—where individuals prefer to collaborate with others of the same gender—may play a significant role. Understanding how gender affects co-authorship networks, particularly in terms of homophily, can reveal important insights into how academic opportunities and achievements are distributed across genders.
+
+Previous studies have found that male researchers often prefer collaborating with other men, while female researchers tend to collaborate with other women, albeit to a lesser extent (@Horta2022). This raises critical questions about the structure and inclusiveness of academic networks. In fields such as Sociology and Political Science, where collaboration is crucial for scholarly success, gender-based patterns could shape the career trajectories of researchers (@Cheong2009). Furthermore, as Kwiek and Roszka (@Kwiek2021) point out, all-male authorship is far more prevalent than all-female authorship, indicating that male-dominated collaboration networks may reinforce existing gender imbalances in academia.
+
+Another influential factor in collaboration between scholars seems to be the scholars' 'prestige', namely whether they have published in renowned journals. **SOURCE** found that .....PART ABOUT JOURNAL PRESTIGE
+
+In this study, I explore the extent to which gender homophily influences co-authorship networks among faculty in the Sociology and Political Science Departments at Radboud University. Specifically, I aim to examine whether there are differences in gender homophily between the two departments, and how homophily patterns vary depending on the prestige of the journals in which researchers publish.
+
+This research will contribute to a growing body of literature that seeks to understand the social dynamics underlying academic collaboration. By analyzing gender homophily and network structures in two different academic disciplines, this study will shed light on how gender shapes collaboration opportunities and how these dynamics may differ across scholarly fields. Moreover, exploring the role of journal prestige in shaping homophily will offer insights into whether gender-based preferences shift in response to career-enhancing factors like publishing in high-prestige journals.
+
+# References

@@ -73,9 +73,9 @@ navbar:
     - text: "Draft report"
       menu:
       - text: "Introduction"
-        href:    
+        href: draftintro.html  
       - text: "Theory"
-        href: 
+        href: drafttheory.html
       - text: "Data"
         href:  
       - text: "Methods"
