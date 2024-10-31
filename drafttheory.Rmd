@@ -42,31 +42,29 @@ knitr::opts_chunk$set(echo = TRUE)
 
 -   Due to bias that social jobs are more feminine and politics are related to rationality, which is often stereotyped to be masculine: Expect less gender homophily in sociology than in pol.sci. department.
 
+-   (logical error: yeah but that only makes sense if men are the only ones initiating and breaking ties, right?)
+
 ```{=html}
 <!-- -->
 ```
--   Hypothesis 2: between the collaboration networks of both departments (pol. sci & soc.) scholars in the sociology department prefer to collaborate with same-sex scholars less strongly than scholars from the pol. sci. department
+-   **Hypothesis 2**: between the collaboration networks of both departments (pol. sci & soc.) scholars in the sociology department prefer to collaborate with same-sex scholars less strongly than scholars from the pol. sci. department
 
     -   [RQ2: To what extent do the two departments differ in their gender homophily?*descriptive, at the dyad-level (after controlling for structural network effects and covariate-effects].*
 
-RQ2 b? Do we observe gender homophily (preferences) in collaboration networks...
+```{=html}
+<!-- -->
+```
+-   *hypothesis for your RSiena models: whether within a dyad men tend to (or 'prefer') work with men and women with women, (controlled for structural network effects).*
 
-Questions:
+    -   **confusion: where would the comparison between depatments be here? this wold fit rq one more, but that one is supposed to be on the network level but this is about dyads...**
 
--   Does this question need to ask whether we observe gender homophily in collaboration networks to begin with?
+-   
 
-    -   Isn't that the same question as RQ1a then?
+```{=html}
+<!-- -->
+```
+-   **Hypothesis 3:** On the ego level, the preference of *men to work with men and women with women, (controlled for structural network effects), is less influential in the choice to collaborate if the alter is someone who published in a high-prestige journal.*
 
-    -   *yes and no. ;-) this is your hypothesis for your RSiena models. whether within a dyad men tend to (or 'prefer') work with men and women with women, (controlled for structural network effects).\
-        I hope that you understand that this **dyadic preferences does not necessarily translates to your macro-outcome** (because of all structural effects possibly at play and other covariate-effects).*
-
-Hypothesis 3:
-
-RQ3: How to does gender homophily affect collaboration differently for collaborations between staff who have published in low vs. high prestige journals?
-
-aka. looking at whole sample: does the gender homophily in collaboration networks look different depending on the scholars' publishing prestige?
-
-*Try to **reformulate this to your RSiena model** and not at your macro-level. I let you struggle a little bit on this last one okay.\
-But the idea is fine; whether prestige (of ego/alter/dyad) impacts gender homophily in some way.*
+    -   [RQ3: How to does gender homophily affect collaboration differently for collaborations between staff who have published in low vs. high prestige journals? ego-level] *idea: whether prestige (of ego/alter/dyad) impacts gender homophily in some way.*
 
 # References
