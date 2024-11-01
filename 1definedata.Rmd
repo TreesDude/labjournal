@@ -67,7 +67,7 @@ require(tidyverse)
 
 **I don't know how to view the data set BEFORE we include only those scholars that have discipline = sociology. I cannot view the data**
 
-I tried removing the discipline = "sociology" part in the fcolnet and all following functions that select data BUT SINCE 'discipline' is also relevant in the rest of the functions' code, it does not end up doing what I hoped (having a dataset with scholars of no specific discipline because then I could hopefully check how the department is named in the data and then find out how to add that to the data set initially).
+I tried removing the discipline = "sociology" part in the f_pubnets, fcolnet and all following functions that select data BUT SINCE 'discipline' is also relevant in the rest of the functions' code, it does not end up doing what I hoped (having a dataset with scholars of no specific discipline because then I could hopefully check how the department is named in the data and then find out how to add that to the data set initially).
 
 ```{r}
 
@@ -106,7 +106,7 @@ fshowdf <- function(x, ...) {
 # f_pubnets <- function(df_scholars = df, list_publications = publications, discip = "sociology", affiliation = "RU",
 #     wave = list(wave1 = c(2018, 2019, 2020), wave2 = c(2021, 2022, 2023)))
 
-#after taking out discipline= "sociology" in this first part    
+#after taking out discip = "sociology" in this first part    
 f_pubnets <- function(df_scholars = df, list_publications = publications, affiliation = "RU",
     wave = list(wave1 = c(2018, 2019, 2020), wave2 = c(2021, 2022, 2023))) {
 
@@ -322,11 +322,12 @@ str(net_soc_array1)  #now we basically restructured this
 dim(test$nets)
 ```
 
+## My data 
+
 not using net_soc_array for now since I am unsure about its use due to question above
 
 ```{r}
 # dependent
-    # not using net_soc_array for now since I am unsure about its use due to question above
 # net <- sienaDependent(net_soc_array)
 
 
@@ -388,7 +389,7 @@ view(df_ego[c('Naam', 'gender', 'au_id')])
 
 Inspired by Lucan's code:
 
-```{r, include=FALSE}
+```{r}
 # Add h-index and i10-index columns to df_ego
 df_ego <- df_ego %>%
   mutate(h_index = NA_real_, i10_index = NA_real_)
@@ -430,9 +431,4 @@ view(df_ego[c('au_id','Naam','gender','h_index','i10_index')])
 
 #covariate 
 # h_index <- coCovar(df_ego$h_index)
-```
-
-```{r}
-
-view(data('discipline'))
 ```
