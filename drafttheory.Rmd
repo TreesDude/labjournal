@@ -26,45 +26,41 @@ klippy::klippy(position = c('top', 'right'))
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+
 ```
 
-# Theory
+# Theory Draft 
 
 -   Explanation of gender homophily in scholarship
 
--   often: Males publishing with males, females publishing with females
+-   often: Males publishing with males, females publishing with females (@Horta2022)
 
 -   **Hypothesis 1**: across the collaboration networks of both departments (pol. sci & soc.) scholars prefer to collaborate with same-sex scholars over different-sex scholars (gender homophily is present).
 
     -   [RQ1: To what extent does gender homophily occur across all co-publications of the staff of the Sociology Department and Political Science Department at Radboud University? descriptive, at network level]\
 
-[**look at descriptives: how many men how many women in each department]**
+[\*\*look at descriptives: how many men how many women in each department]\*\*
 
 -   Due to bias that social jobs are more feminine and politics are related to rationality, which is often stereotyped to be masculine: Expect less gender homophily in sociology than in pol.sci. department.
 
 -   (logical error: yeah but that only makes sense if men are the only ones initiating and breaking ties, right?)
 
-```{=html}
 <!-- -->
-```
+
 -   **Hypothesis 2**: between the collaboration networks of both departments (pol. sci & soc.) scholars in the sociology department prefer to collaborate with same-sex scholars less strongly than scholars from the pol. sci. department
 
-    -   [RQ2: To what extent do the two departments differ in their gender homophily?*descriptive, at the dyad-level (after controlling for structural network effects and covariate-effects].*
+    -   [RQ2: To what extent do the two departments differ in their gender homophily?\*descriptive, at the dyad-level (after controlling for structural network effects and covariate-effects].\*
 
-```{=html}
 <!-- -->
-```
+
 -   *hypothesis for your RSiena models: whether within a dyad men tend to (or 'prefer') work with men and women with women, (controlled for structural network effects).*
 
     -   **confusion: where would the comparison between depatments be here? this wold fit rq one more, but that one is supposed to be on the network level but this is about dyads...**
 
--   
-
-```{=html}
 <!-- -->
-```
+
 -   **Hypothesis 3:** On the ego level, the preference of *men to work with men and women with women, (controlled for structural network effects), is less influential in the choice to collaborate if the alter is someone who published in a high-prestige journal.*
 
-    -   [RQ3: How to does gender homophily affect collaboration differently for collaborations between staff who have published in low vs. high prestige journals? ego-level] *idea: whether prestige (of ego/alter/dyad) impacts gender homophily in some way.*
+    -   [RQ3: How does gender homophily in collaborations between staff differ depending on scholars having published in low vs. high prestige journals? ego-level] *idea: whether prestige (of ego/alter/dyad) impacts gender homophily in some way.*
 
 # References

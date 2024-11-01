@@ -420,7 +420,9 @@ div.tocify {
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
-    <li class="dropdown-header">Step 1: Define data</li>
+    <li>
+      <a href="1definedata.html">Step 1: Define data</a>
+    </li>
     <li class="dropdown-header">Step 2: Create effects structure</li>
     <li class="dropdown-header">Step 3: Get initial description</li>
     <li class="dropdown-header">Step 4: Specify model</li>
@@ -441,7 +443,9 @@ div.tocify {
     <li>
       <a href="drafttheory.html">Theory</a>
     </li>
-    <li class="dropdown-header">Data</li>
+    <li>
+      <a href="draftdata.html">Data</a>
+    </li>
     <li class="dropdown-header">Methods</li>
     <li class="dropdown-header">Results</li>
     <li class="dropdown-header">Discussion &amp; Conclusion</li>
@@ -506,45 +510,30 @@ div.tocify {
 rm(list = ls())
 
 # install.packages(&#39;data.table&#39;)
-library(data.table)  # mainly for faster data handling
-library(tidyverse)  # I assume you already installed this one!</code></pre>
-<pre><code>## ── Attaching core tidyverse pa
-## ✔ dplyr     1.1.4     ✔ readr     2.1.5
-## ✔ forcats   1.0.0     ✔ stringr   1.5.1
-## ✔ ggplot2   3.5.1     ✔ tibble    3.2.1
-## ✔ lubridate 1.9.3     ✔ tidyr     1.3.1
-## ✔ purrr     1.0.2     
-## ── Conflicts ─────────────────
-## ✖ dplyr::between()     masks data.table::between()
-## ✖ dplyr::filter()      masks stats::filter()
-## ✖ dplyr::first()       masks data.table::first()
-## ✖ lubridate::hour()    masks data.table::hour()
-## ✖ lubridate::isoweek() masks data.table::isoweek()
-## ✖ dplyr::lag()         masks stats::lag()
-## ✖ dplyr::last()        masks data.table::last()
-## ✖ lubridate::mday()    masks data.table::mday()
-## ✖ lubridate::minute()  masks data.table::minute()
-## ✖ lubridate::month()   masks data.table::month()
-## ✖ lubridate::quarter() masks data.table::quarter()
-## ✖ lubridate::second()  masks data.table::second()
-## ✖ purrr::transpose()   masks data.table::transpose()
-## ✖ lubridate::wday()    masks data.table::wday()
-## ✖ lubridate::week()    masks data.table::week()
-## ✖ lubridate::yday()    masks data.table::yday()
-## ✖ lubridate::year()    masks data.table::year()
-## ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
-<pre class="r"><code>#install.packages(&#39;httr&#39;) # we don&#39;t need this for now require(httr)
+library(data.table)  # mainly for faster data handling</code></pre>
+<pre><code>## 
+## Attaching package: &#39;data.table&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:lubridate&#39;:
+## 
+##     hour, isoweek, mday, minute, month, quarter, second, wday, week, yday, year</code></pre>
+<pre><code>## The following objects are masked from &#39;package:dplyr&#39;:
+## 
+##     between, first, last</code></pre>
+<pre><code>## The following object is masked from &#39;package:purrr&#39;:
+## 
+##     transpose</code></pre>
+<pre class="r"><code>library(tidyverse)  # I assume you already installed this one!
+#install.packages(&#39;httr&#39;) # we don&#39;t need this for now require(httr)
 #install.packages(&quot;devtools&quot;)
 require(devtools)</code></pre>
-<pre><code>## Loading required package: devtools
-## Loading required package: usethis</code></pre>
+<pre><code>## Loading required package: devtools</code></pre>
+<pre><code>## Loading required package: usethis</code></pre>
 <pre class="r"><code>#install.packages(&quot;rvest&quot;)
 require(rvest)</code></pre>
-<pre><code>## Loading required package: rvest
-## 
-## Attaching package: &#39;rvest&#39;
-## 
-## The following object is masked from &#39;package:readr&#39;:
+<pre><code>## Loading required package: rvest</code></pre>
+<pre><code>## 
+## Attaching package: &#39;rvest&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:readr&#39;:
 ## 
 ##     guess_encoding</code></pre>
 <pre class="r"><code># rvest:This is the explanation the writers of the package give: “rvest is new package that makes it easy to scrape (or harvest) data from html web pages.” Seems like something we need, a package that stores information from webpages into relatively structured data that we can then query/manipulate.
@@ -558,8 +547,8 @@ require(xml2)</code></pre>
 #Note we&#39;re doing something different here. We&#39;re installing a *latest* version directly from
 #GitHub This is because the released version of this packages contains some errors!
 devtools::install_github(&quot;jkeirstead/scholar&quot;)</code></pre>
-<pre><code>## Using GitHub PAT from the git credential store.
-## Skipping install of &#39;scholar&#39; from a github remote, the SHA1 (2d38dcc3) has not changed since last install.
+<pre><code>## Using GitHub PAT from the git credential store.</code></pre>
+<pre><code>## Skipping install of &#39;scholar&#39; from a github remote, the SHA1 (2d38dcc3) has not changed since last install.
 ##   Use `force = TRUE` to force installation</code></pre>
 <pre class="r"><code>require(scholar)</code></pre>
 <pre><code>## Loading required package: scholar</code></pre>
@@ -578,10 +567,10 @@ sociology</h1>
 
 head(soc_staff)</code></pre>
 <pre><code>## $node
-## &lt;pointer: 0x000002992a6fec50&gt;
+## &lt;pointer: 0x000001f617cfe8d0&gt;
 ## 
 ## $doc
-## &lt;pointer: 0x0000029927cfec00&gt;</code></pre>
+## &lt;pointer: 0x000001f619bfee10&gt;</code></pre>
 <pre class="r"><code>#which object? 
 class(soc_staff)</code></pre>
 <pre><code>## [1] &quot;xml_document&quot; &quot;xml_node&quot;</code></pre>
@@ -849,7 +838,7 @@ get_scholar_id_fix(last_name = &quot;tolsma&quot;, first_name = &quot;jochem&quo
 ## [1] &quot;Professor, Radboud University Nijmegen / University of Groningen&quot;
 ## 
 ## $total_cites
-## [1] 3441
+## [1] 3446
 ## 
 ## $h_index
 ## [1] 27
@@ -904,18 +893,18 @@ publications, citations</h3>
 ## 20                                                                                                              The NEtherlands Longitudinal Lifecourse Study (NELLS, Panel): Codebook
 ## 21     Onderwijs als nieuwe sociale scheidslijn? De gevolgen van onderwijsexpansie voor sociale mobiliteit, de waarde van diploma&#39;s en het relatieve belang van opleiding in Nederland
 ## 22                                                                               Explaining monetary donations to international development organisations: A factorial survey approach
-## 23                                                                                       How, when and where can spatial segregation induce opinion polarization? Two competing models
-## 24                                                                                                                                                          Naar een open samenleving?
+## 23                                                                                                                                                          Naar een open samenleving?
+## 24                                                                                       How, when and where can spatial segregation induce opinion polarization? Two competing models
 ## 25                                                    Where does ethnic concentration matter for populist radical right support? An analysis of geographical scale and the halo effect
 ## 26                                                                                           Social origin and occupational success at labour market entry in The Netherlands, 1931–80
 ## 27  Ethnic hostility among ethnic majority and minority groups in the Netherlands: an investigation into the impact of social mobility experiences, the local living environment and …
 ## 28                                                                                            Kudos make you run! How runners influence each other on the online social network Strava
 ## 29                      Perceptions as the crucial link? The mediating role of neighborhood perceptions in the relationship between the neighborhood context and neighborhood cohesion
 ## 30      Under what conditions do ethnic minority candidates attract the ethnic minority vote? How neighbourhood and candidate characteristics affected ethnic affinity voting in the …
-## 31                                                       Combating hooliganism in the Netherlands: An evaluation of measures to combat hooliganism with longitudinal registration data
-## 32                                                                                                                     Preferences for work arrangements: A discrete choice experiment
-## 33                                                                                                 Trust and contact in diverse neighbourhoods: An interplay of four ethnicity effects
-## 34                                                                                          Explaining natives&#39; interethnic friendship and contact with colleagues in European regions
+## 31                                                                                          Explaining natives&#39; interethnic friendship and contact with colleagues in European regions
+## 32                                                       Combating hooliganism in the Netherlands: An evaluation of measures to combat hooliganism with longitudinal registration data
+## 33                                                                                                                     Preferences for work arrangements: A discrete choice experiment
+## 34                                                                                                 Trust and contact in diverse neighbourhoods: An interplay of four ethnicity effects
 ## 35                                                                                                                                                               De burger als rechter
 ## 36                                                                                                         Opleiding als sociale scheidslijn. Een nieuw perspectief op een oude kloof.
 ## 37       Size is in the eye of the beholder: How differences between neighbourhoods and individuals explain variation in estimations of the ethnic out-group size in the neighbourhood
@@ -926,9 +915,9 @@ publications, citations</h3>
 ## 42                                                                            Aangiftebereidheid: Welke overwegingen spelen een rol bij de beslissing om wel of niet aangifte te doen?
 ## 43                                                                                                                              Running together: How sports partners keep you running
 ## 44                                                                                                             Variation in the educational consequences of parental death and divorce
-## 45                                                                                                                        Taakstraffen langs de lat: strafopvattingen van Nederlanders
-## 46                                                                                                         Household dysfunction and child development: Do financial resources matter?
-## 47                                                                                                                De aangifte van delicten bij de multichannelstrategie van de politie
+## 45                                                                                                                De aangifte van delicten bij de multichannelstrategie van de politie
+## 46                                                                                                                        Taakstraffen langs de lat: strafopvattingen van Nederlanders
+## 47                                                                                                         Household dysfunction and child development: Do financial resources matter?
 ## 48                                                        Parents, television and children&#39;s weight status: On lasting effects of parental television socialization in the Netherlands
 ## 49                                                                                                       The social outcomes of psychosocial support: A grey literature scoping review
 ## 50                                                                                                      Social origin and inequality in educational returns in the Dutch labour market
@@ -1019,18 +1008,18 @@ publications, citations</h3>
 ## 20  J Tolsma, GLM Kraaykamp, PM De Graaf, M Kalmijn, CWS Monden
 ## 21                                        J Tolsma, MHJ Wolbers
 ## 22                                       S Kinsbergen, J Tolsma
-## 23                              T Feliciani, A Flache, J Tolsma
-## 24                                        J Tolsma, MHJ Wolbers
+## 23                                        J Tolsma, MHJ Wolbers
+## 24                              T Feliciani, A Flache, J Tolsma
 ## 25                                 D van Wijk, G Bolt, J Tolsma
 ## 26                                        J Tolsma, MHJ Wolbers
 ## 27                                                     J Tolsma
 ## 28                               R Franken, H Bekhuis, J Tolsma
 ## 29                                 J Laméris, JR Hipp, J Tolsma
 ## 30                          R Van der Zwan, J Tolsma, M Lubbers
-## 31                       D Schaap, M Postma, L Jansen, J Tolsma
-## 32                                   P Valet, C Sauer, J Tolsma
-## 33                                   J Tolsma, TWG Van der Meer
-## 34                           M Savelkoul, J Tolsma, P Scheepers
+## 31                           M Savelkoul, J Tolsma, P Scheepers
+## 32                       D Schaap, M Postma, L Jansen, J Tolsma
+## 33                                   P Valet, C Sauer, J Tolsma
+## 34                                   J Tolsma, TWG Van der Meer
 ## 35                S Ruiter, J Tolsma, M Hoon, H Elffers, P Laan
 ## 36                            M De Lange, J Tolsma, MHJ Wolbers
 ## 37                   J Laméris, G Kraaykamp, S Ruiter, J Tolsma
@@ -1041,9 +1030,9 @@ publications, citations</h3>
 ## 42                                                     J Tolsma
 ## 43                               R Franken, H Bekhuis, J Tolsma
 ## 44                         C Bussemakers, G Kraaykamp, J Tolsma
-## 45                                           S Ruiter, J Tolsma
-## 46               C Bussemakers, G Kraaykamp, I Schoon, J Tolsma
-## 47                                      PFM Boekhoorn, J Tolsma
+## 45                                      PFM Boekhoorn, J Tolsma
+## 46                                           S Ruiter, J Tolsma
+## 47               C Bussemakers, G Kraaykamp, I Schoon, J Tolsma
 ## 48                              N Notten, G Kraaykamp, J Tolsma
 ## 49                     T Ubels, S Kinsbergen, J Tolsma, DJ Koch
 ## 50                                        J Tolsma, MHJ Wolbers
@@ -1134,18 +1123,18 @@ publications, citations</h3>
 ## 20              Nijmegen; Tilburg; Amsterdam: Radboud University Nijmegen; Tilburg …
 ## 21                                                       Tijdschrift voor Sociologie
 ## 22                                                           Social science research
-## 23                             Journal of Artificial Societies and Social Simulation
-## 24                                                                                  
+## 23                                                                                  
+## 24                             Journal of Artificial Societies and Social Simulation
 ## 25                                                               Political Geography
 ## 26                                                                  Acta Sociologica
 ## 27                                                                                  
 ## 28                                                                   Social Networks
 ## 29                                                           Social Science Research
 ## 30                                                               Political Geography
-## 31                                  European Journal on Criminal Policy and Research
-## 32                                                                          PloS one
-## 33                                                           Social science research
-## 34                                           Journal of Ethnic and Migration Studies
+## 31                                           Journal of Ethnic and Migration Studies
+## 32                                  European Journal on Criminal Policy and Research
+## 33                                                                          PloS one
+## 34                                                           Social science research
 ## 35                                                                              NSCR
 ## 36                                                                             Maklu
 ## 37                                  International Journal of Intercultural Relations
@@ -1156,9 +1145,9 @@ publications, citations</h3>
 ## 42                                  Proces-verbaal, aangifte en forensisch onderzoek
 ## 43                                             Frontiers in Sports and Active Living
 ## 44                                                              Demographic Research
-## 45                                                                                  
-## 46                                                  Advances in Life Course Research
-## 47           Apeldoorn; Nijmegen: Politie &amp; Wetenschap; BBSO en Radboud Universiteit
+## 45           Apeldoorn; Nijmegen: Politie &amp; Wetenschap; BBSO en Radboud Universiteit
+## 46                                                                                  
+## 47                                                  Advances in Life Course Research
 ## 48                                                     Journal of Children and Media
 ## 49                                                                 SSM-mental health
 ## 50                                           Education, Occupation and Social Origin
@@ -1228,8 +1217,8 @@ publications, citations</h3>
 ## 114                                                                                 
 ##                                                                    number cites year
 ## 1                                                                           722 2014
-## 2                                                         27 (6), 741-758   377 2011
-## 3                                                                  44 (3)   335 2009
+## 2                                                         27 (6), 741-758   378 2011
+## 3                                                                  44 (3)   336 2009
 ## 4                                                         27 (3), 291-306   159 2011
 ## 5                                                           35 (1), 51-61   154 2013
 ## 6                                                         24 (2), 215-230   135 2008
@@ -1249,18 +1238,18 @@ publications, citations</h3>
 ## 20                                                                           38 2014
 ## 21                                                        31 (3), 239-259    38 2010
 ## 22                                                      42 (6), 1571-1586    37 2013
-## 23                                                              20 (2), 6    33 2017
-## 24                                                                           33 2010
+## 23                                                                           34 2010
+## 24                                                              20 (2), 6    33 2017
 ## 25                                                             77, 102097    31 2020
 ## 26                                                        57 (3), 253-269    30 2014
 ## 27                                                                           28 2009
 ## 28                                                            72, 151-164    26 2023
 ## 29                                                              72, 53-68    25 2018
 ## 30                                                             77, 102098    24 2020
-## 31                                                              21, 83-97    23 2015
-## 32                                                       16 (7), e0254483    22 2021
-## 33                                                             73, 92-106    22 2018
-## 34                                                        41 (5), 683-709    22 2015
+## 31                                                        41 (5), 683-709    23 2015
+## 32                                                              21, 83-97    23 2015
+## 33                                                       16 (7), e0254483    22 2021
+## 34                                                             73, 92-106    22 2018
 ## 35                                                                           20 2011
 ## 36                                                                           19 2015
 ## 37                                                              63, 80-94    17 2018
@@ -1271,9 +1260,9 @@ publications, citations</h3>
 ## 42                                                                     11    12 2011
 ## 43                                                              4, 643150    10 2022
 ## 44                                                            46, 581-618     9 2022
-## 45                                                                            9 2010
-## 46                                                             51, 100447     8 2022
-## 47                                                                            8 2016
+## 45                                                                            9 2016
+## 46                                                                            9 2010
+## 47                                                             51, 100447     8 2022
 ## 48                                                         7 (2), 235-252     8 2013
 ## 49                                                              2, 100074     5 2022
 ## 50                                                                114-131     5 2016
@@ -1364,18 +1353,18 @@ publications, citations</h3>
 ## 20                                             8792123396141403739 xtRiw3GOFMkC
 ## 21                                            17130607869100522312 YsMSGLbcyi4C
 ## 22                                            10149692484122806616 aqlVkmm33-oC
-## 23                                             6880814424039971499 g5m5HwL7SMYC
-## 24                                             2539524527836644253 Y0pCki6q_DkC
+## 23                                             2539524527836644253 Y0pCki6q_DkC
+## 24                                             6880814424039971499 g5m5HwL7SMYC
 ## 25                                             4092382021694339447 SP6oXDckpogC
 ## 26                                             8248470043986462984 M3ejUd6NZC8C
 ## 27                                            10378332126833599949 IjCSPb-OGe4C
 ## 28                                            12114155743971894213 9Nmd_mFXekcC
 ## 29                                            16357054384393453824 D03iK_w7-QYC
 ## 30                                             7114430646392466648 uWQEDVKXjbEC
-## 31                                             9528443224826780083 ZeXyd9-uunAC
-## 32                                            14800116132549688497 tKAzc9rXhukC
-## 33                                             8349908030823257502 pyW8ca7W8N0C
-## 34                                            18182577779862774305 -f6ydRqryjwC
+## 31                                            18182577779862774305 -f6ydRqryjwC
+## 32                                             9528443224826780083 ZeXyd9-uunAC
+## 33                                            14800116132549688497 tKAzc9rXhukC
+## 34                                             8349908030823257502 pyW8ca7W8N0C
 ## 35                                            16411127097378483929 KlAtU1dfN6UC
 ## 36                        6027896113597554400,15089097845718498290 O3NaXMp0MMsC
 ## 37                                             1627288244325129498 a0OBvERweLwC
@@ -1386,9 +1375,9 @@ publications, citations</h3>
 ## 42                                            10745397192148013810 LkGwnXOMwfcC
 ## 43                                             6762471506678500061 evX43VCCuoAC
 ## 44                                            18414208192975515577 35r97b3x0nAC
-## 45                                            15258532569899652859 W7OEmFMy1HYC
-## 46                                             3664663685279702514 ZfRJV9d4-WMC
-## 47                                            14256154602665082067 JV2RwH3_ST0C
+## 45                                            14256154602665082067 JV2RwH3_ST0C
+## 46                                            15258532569899652859 W7OEmFMy1HYC
+## 47                                             3664663685279702514 ZfRJV9d4-WMC
 ## 48                                              818925813101569366 Se3iqnhoufwC
 ## 49                                            12792330965359094918 2KloaMYe4IUC
 ## 50                                            10107474183324844052 YFjsv_pBGBYC
@@ -1466,15 +1455,15 @@ publications, citations</h3>
 ## 6  2013   124
 ## 7  2014   167
 ## 8  2015   218
-## 9  2016   226
+## 9  2016   227
 ## 10 2017   228
 ## 11 2018   290
 ## 12 2019   311
 ## 13 2020   300
 ## 14 2021   330
-## 15 2022   336
-## 16 2023   334
-## 17 2024   302</code></pre>
+## 15 2022   337
+## 16 2023   333
+## 17 2024   306</code></pre>
 </div>
 <div id="get-collaborators" class="section level3" number="6.2.2">
 <h3><span class="header-section-number">6.2.2</span> get
@@ -1488,10 +1477,8 @@ number="6.3">
 <h2><span class="header-section-number">6.3</span> plot network of
 single staff member</h2>
 <pre class="r"><code>plot_coauthors(get_coauthors(&quot;Iu23-90AAAAJ&quot;, n_coauthors = 20, n_deep = 1), size_labels = 2)  </code></pre>
-<pre><code>## Warning: Removed 148 rows containing
-## missing values or values
-## outside the scale range
-## (`geom_point()`).</code></pre>
+<pre><code>## Warning: Removed 148 rows containing missing values or values
+## outside the scale range (`geom_point()`).</code></pre>
 <pre><code>## Warning: ggrepel: 3 unlabeled data points (too many overlaps). Consider increasing max.overlaps</code></pre>
 <p><img src="Webscraping-Chapter8-tutorial_files/figure-html/plot-1.png" width="672" /></p>
 <pre class="r"><code># Doesn&#39;t look like much yet, but we&#39;ll make it prettier later.</code></pre>
@@ -1674,7 +1661,7 @@ Jochem Tolsma
 J. Tolsma , Jochem Tolsma, J L Tolsma
 </td>
 <td style="text-align:right;">
-8920.49
+8926.1
 </td>
 <td style="text-align:left;">
 <a href="https://openalex.org/A5087380803"
@@ -2046,7 +2033,7 @@ oa_fetch(entity= &quot;author&quot;, search = &quot;Jochem Tolsma&quot;, affilia
 <pre><code>## # A tibble: 1 × 18
 ##   id      display_name display_name_alterna…¹ relevance_score ids   orcid works_count cited_by_count
 ##   &lt;chr&gt;   &lt;chr&gt;        &lt;list&gt;                           &lt;dbl&gt; &lt;lis&gt; &lt;chr&gt;       &lt;int&gt;          &lt;int&gt;
-## 1 https:… Jochem Tols… &lt;chr [3]&gt;                        8920. &lt;chr&gt; http…          85           2049
+## 1 https:… Jochem Tols… &lt;chr [3]&gt;                        8926. &lt;chr&gt; http…          85           2049
 ## # ℹ abbreviated name: ¹​display_name_alternatives
 ## # ℹ 10 more variables: counts_by_year &lt;list&gt;, affiliation_display_name &lt;chr&gt;, affiliation_id &lt;chr&gt;,
 ## #   affiliation_ror &lt;chr&gt;, affiliation_country_code &lt;chr&gt;, affiliation_type &lt;chr&gt;,
@@ -2064,7 +2051,7 @@ oa_fetch (entity = &quot;works&quot;, author.id = &#39;https://openalex.org/A508
 ##  2 http… Anti… Anti-Muslim… &lt;df&gt;   Jour… 2010-07-25       Euro… http… Oxford Universit… 0266-… http…
 ##  3 http… The … The impact … &lt;df&gt;   Up t… 2009-07-01       Acta… http… Palgrave Macmill… 0001-… http…
 ##  4 http… Who … Who is bull… &lt;df&gt;   This… 2013-01-01       Soci… http… Elsevier BV       0378-… http…
-##  5 http… A Ma… A Matter of… &lt;df&gt;   Abst… 2024-04-12       Quan… http… The MIT Press     2641-… http…
+##  5 http… A ma… A matter of… &lt;df&gt;   Abst… 2024-01-01       Quan… http… The MIT Press     2641-… http…
 ##  6 http… Ethn… Ethnic Comp… &lt;df&gt;   Jour… 2007-11-15       Euro… http… Oxford Universit… 0266-… http…
 ##  7 http… Educ… Education a… &lt;df&gt;   Abst… 2012-04-19       Jour… http… Taylor &amp; Francis  1369-… http…
 ##  8 http… Neig… Neighbourho… &lt;df&gt;   Supp… 2016-11-09       Euro… http… Oxford Universit… 0266-… http…
@@ -2194,7 +2181,7 @@ Jochem Tolsma
 J. Tolsma , Jochem Tolsma, J L Tolsma
 </td>
 <td style="text-align:right;">
-8920.49
+8926.1
 </td>
 <td style="text-align:left;">
 <a href="https://openalex.org/A5087380803"
@@ -2600,7 +2587,7 @@ Maurice Johannes Wilhelmus Gesthuizen, M. Gesthuizen , Maurice
 Gesthuizen , M.J.W. Gesthuizen , Maurice J.W. Gesthuizen
 </td>
 <td style="text-align:right;">
-8428.64
+8367.26
 </td>
 <td style="text-align:left;">
 <a href="https://openalex.org/A5007673492"
@@ -2616,11 +2603,11 @@ class="uri">https://orcid.org/0000-0002-5286-3989</a>
 112
 </td>
 <td style="text-align:right;">
-1865
+1867
 </td>
 <td style="text-align:left;">
 2024, 2023, 2022, 2021, 2020, 2019, 2018, 2017, 2016, 2015, 2014, 2013,
-2012, 0, 3, 1, 3, 3, 10, 2, 6, 5, 6, 5, 10, 4, 82, 159, 134, 176, 151,
+2012, 0, 3, 1, 3, 3, 10, 2, 6, 5, 6, 5, 10, 4, 85, 160, 134, 176, 151,
 126, 125, 119, 125, 141, 117, 137, 84
 </td>
 <td style="text-align:left;">
@@ -3008,7 +2995,7 @@ Michael Savelkoul
 M.J. Savelkoul , M. Savelkoul , Michael Savelkoul
 </td>
 <td style="text-align:right;">
-4049.51
+4053.26
 </td>
 <td style="text-align:left;">
 <a href="https://openalex.org/A5048988743"
@@ -3413,7 +3400,7 @@ T.W.G. Tom van der Meer, Tom W. G. van der Meer , Tom Van Der Meer , T.
 Van Der Meer , TOM W.G. VAN DER MEER
 </td>
 <td style="text-align:right;">
-17134.66
+17136.99
 </td>
 <td style="text-align:left;">
 <a href="https://openalex.org/A5010780363"

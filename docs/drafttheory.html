@@ -75,6 +75,29 @@ if (window.hljs) {
 }
 </style>
 
+<style type="text/css">
+/* for pandoc --citeproc since 2.11 */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
 
 <link rel="stylesheet" href="tweaks.css" type="text/css" />
 
@@ -422,7 +445,9 @@ div.tocify {
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
-    <li class="dropdown-header">Step 1: Define data</li>
+    <li>
+      <a href="1definedata.html">Step 1: Define data</a>
+    </li>
     <li class="dropdown-header">Step 2: Create effects structure</li>
     <li class="dropdown-header">Step 3: Get initial description</li>
     <li class="dropdown-header">Step 4: Specify model</li>
@@ -443,7 +468,9 @@ div.tocify {
     <li>
       <a href="drafttheory.html">Theory</a>
     </li>
-    <li class="dropdown-header">Data</li>
+    <li>
+      <a href="draftdata.html">Data</a>
+    </li>
     <li class="dropdown-header">Methods</li>
     <li class="dropdown-header">Results</li>
     <li class="dropdown-header">Discussion &amp; Conclusion</li>
@@ -500,12 +527,13 @@ div.tocify {
 </div>
 
 
-<div id="theory" class="section level1" number="1">
-<h1><span class="header-section-number">1</span> Theory</h1>
+<div id="theory-draft" class="section level1" number="1">
+<h1><span class="header-section-number">1</span> Theory Draft</h1>
 <ul>
 <li><p>Explanation of gender homophily in scholarship</p></li>
 <li><p>often: Males publishing with males, females publishing with
-females</p></li>
+females (<span class="citation">Horta, Feng, and Santos
+(2022)</span>)</p></li>
 <li><p><strong>Hypothesis 1</strong>: across the collaboration networks
 of both departments (pol. sci &amp; soc.) scholars prefer to collaborate
 with same-sex scholars over different-sex scholars (gender homophily is
@@ -550,7 +578,6 @@ for structural network effects).</em></p>
 here? this wold fit rq one more, but that one is supposed to be on the
 network level but this is about dyads…</strong></li>
 </ul></li>
-<li></li>
 </ul>
 <!-- -->
 <ul>
@@ -560,18 +587,27 @@ structural network effects), is less influential in the choice to
 collaborate if the alter is someone who published in a high-prestige
 journal.</em></p>
 <ul>
-<li>[RQ3: How to does gender homophily affect collaboration differently
-for collaborations between staff who have published in low vs. high
-prestige journals? ego-level] <em>idea: whether prestige (of
-ego/alter/dyad) impacts gender homophily in some way.</em></li>
+<li>[RQ3: How does gender homophily in collaborations between staff
+differ depending on scholars having published in low vs. high prestige
+journals? ego-level] <em>idea: whether prestige (of ego/alter/dyad)
+impacts gender homophily in some way.</em></li>
 </ul></li>
 </ul>
 </div>
-<div id="references" class="section level1" number="2">
-<h1><span class="header-section-number">2</span> References</h1>
+<div id="references" class="section level1 unnumbered">
+<h1 class="unnumbered">References</h1>
+<div id="refs" class="references csl-bib-body hanging-indent"
+entry-spacing="0">
+<div id="ref-Horta2022" class="csl-entry">
+Horta, Hugo, Shihui Feng, and João M. Santos. 2022. <span>“Homophily in
+Higher Education Research: A Perspective Based on
+Co-Authorships.”</span> <em>Scientometrics</em> 127: 523–43. <a
+href="https://api.semanticscholar.org/CorpusID:246167101">https://api.semanticscholar.org/CorpusID:246167101</a>.
+</div>
+</div>
 </div>
 
-<div id="rmd-source-code">LS0tDQp0aXRsZTogIkRyYWZ0LVRoZW9yeSINCmF1dGhvcjogIlZlcm9vbyINCmRhdGU6ICIyMDI0LTEwLTMxIg0Kb3V0cHV0OiBodG1sX2RvY3VtZW50DQpiaWJsaW9ncmFwaHk6IHJlZmVyZW5jZXMuYmliDQotLS0NCg0KYGBge3IsIGdsb2JhbHNldHRpbmdzLCBlY2hvPUZBTFNFLCB3YXJuaW5nPUZBTFNFLCByZXN1bHRzPSdoaWRlJ30NCmxpYnJhcnkoa25pdHIpDQoNCmtuaXRyOjpvcHRzX2NodW5rJHNldChlY2hvID0gVFJVRSkNCm9wdHNfY2h1bmskc2V0KHRpZHkub3B0cz1saXN0KHdpZHRoLmN1dG9mZj0xMDApLHRpZHk9VFJVRSwgd2FybmluZyA9IEZBTFNFLCBtZXNzYWdlID0gRkFMU0UsY29tbWVudCA9ICIjPiIsIGNhY2hlPVRSVUUsIGNsYXNzLnNvdXJjZT1jKCJ0ZXN0IiksIGNsYXNzLm91dHB1dD1jKCJ0ZXN0MiIpKQ0Kb3B0aW9ucyh3aWR0aCA9IDEwMCkNCnJnbDo6c2V0dXBLbml0cigpDQoNCmNvbG9yaXplIDwtIGZ1bmN0aW9uKHgsIGNvbG9yKSB7c3ByaW50ZigiPHNwYW4gc3R5bGU9J2NvbG9yOiAlczsnPiVzPC9zcGFuPiIsIGNvbG9yLCB4KSB9DQoNCmBgYA0KDQpgYGB7ciBrbGlwcHksIGVjaG89RkFMU0UsIGluY2x1ZGU9RkFMU0V9DQprbGlwcHk6OmtsaXBweShwb3NpdGlvbiA9IGMoJ3RvcCcsICdyaWdodCcpKQ0KI2tsaXBweTo6a2xpcHB5KGNvbG9yID0gJ2RhcmtyZWQnKQ0KI2tsaXBweTo6a2xpcHB5KHRvb2x0aXBfbWVzc2FnZSA9ICdDbGljayB0byBjb3B5JywgdG9vbHRpcF9zdWNjZXNzID0gJ0RvbmUnKQ0KYGBgDQoNCmBgYHtyIHNldHVwLCBpbmNsdWRlPUZBTFNFfQ0Ka25pdHI6Om9wdHNfY2h1bmskc2V0KGVjaG8gPSBUUlVFKQ0KYGBgDQoNCiMgVGhlb3J5DQoNCi0gICBFeHBsYW5hdGlvbiBvZiBnZW5kZXIgaG9tb3BoaWx5IGluIHNjaG9sYXJzaGlwDQoNCi0gICBvZnRlbjogTWFsZXMgcHVibGlzaGluZyB3aXRoIG1hbGVzLCBmZW1hbGVzIHB1Ymxpc2hpbmcgd2l0aCBmZW1hbGVzDQoNCi0gICAqKkh5cG90aGVzaXMgMSoqOiBhY3Jvc3MgdGhlIGNvbGxhYm9yYXRpb24gbmV0d29ya3Mgb2YgYm90aCBkZXBhcnRtZW50cyAocG9sLiBzY2kgJiBzb2MuKSBzY2hvbGFycyBwcmVmZXIgdG8gY29sbGFib3JhdGUgd2l0aCBzYW1lLXNleCBzY2hvbGFycyBvdmVyIGRpZmZlcmVudC1zZXggc2Nob2xhcnMgKGdlbmRlciBob21vcGhpbHkgaXMgcHJlc2VudCkuDQoNCiAgICAtICAgW1JRMTogVG8gd2hhdCBleHRlbnQgZG9lcyBnZW5kZXIgaG9tb3BoaWx5IG9jY3VyIGFjcm9zcyBhbGwgY28tcHVibGljYXRpb25zIG9mIHRoZSBzdGFmZiBvZiB0aGUgU29jaW9sb2d5IERlcGFydG1lbnQgYW5kIFBvbGl0aWNhbCBTY2llbmNlIERlcGFydG1lbnQgYXQgUmFkYm91ZCBVbml2ZXJzaXR5PyBkZXNjcmlwdGl2ZSwgYXQgbmV0d29yayBsZXZlbF1cDQoNClsqKmxvb2sgYXQgZGVzY3JpcHRpdmVzOiBob3cgbWFueSBtZW4gaG93IG1hbnkgd29tZW4gaW4gZWFjaCBkZXBhcnRtZW50XSoqDQoNCi0gICBEdWUgdG8gYmlhcyB0aGF0IHNvY2lhbCBqb2JzIGFyZSBtb3JlIGZlbWluaW5lIGFuZCBwb2xpdGljcyBhcmUgcmVsYXRlZCB0byByYXRpb25hbGl0eSwgd2hpY2ggaXMgb2Z0ZW4gc3RlcmVvdHlwZWQgdG8gYmUgbWFzY3VsaW5lOiBFeHBlY3QgbGVzcyBnZW5kZXIgaG9tb3BoaWx5IGluIHNvY2lvbG9neSB0aGFuIGluIHBvbC5zY2kuIGRlcGFydG1lbnQuDQoNCi0gICAobG9naWNhbCBlcnJvcjogeWVhaCBidXQgdGhhdCBvbmx5IG1ha2VzIHNlbnNlIGlmIG1lbiBhcmUgdGhlIG9ubHkgb25lcyBpbml0aWF0aW5nIGFuZCBicmVha2luZyB0aWVzLCByaWdodD8pDQoNCmBgYHs9aHRtbH0NCjwhLS0gLS0+DQpgYGANCi0gICAqKkh5cG90aGVzaXMgMioqOiBiZXR3ZWVuIHRoZSBjb2xsYWJvcmF0aW9uIG5ldHdvcmtzIG9mIGJvdGggZGVwYXJ0bWVudHMgKHBvbC4gc2NpICYgc29jLikgc2Nob2xhcnMgaW4gdGhlIHNvY2lvbG9neSBkZXBhcnRtZW50IHByZWZlciB0byBjb2xsYWJvcmF0ZSB3aXRoIHNhbWUtc2V4IHNjaG9sYXJzIGxlc3Mgc3Ryb25nbHkgdGhhbiBzY2hvbGFycyBmcm9tIHRoZSBwb2wuIHNjaS4gZGVwYXJ0bWVudA0KDQogICAgLSAgIFtSUTI6IFRvIHdoYXQgZXh0ZW50IGRvIHRoZSB0d28gZGVwYXJ0bWVudHMgZGlmZmVyIGluIHRoZWlyIGdlbmRlciBob21vcGhpbHk/KmRlc2NyaXB0aXZlLCBhdCB0aGUgZHlhZC1sZXZlbCAoYWZ0ZXIgY29udHJvbGxpbmcgZm9yIHN0cnVjdHVyYWwgbmV0d29yayBlZmZlY3RzIGFuZCBjb3ZhcmlhdGUtZWZmZWN0c10uKg0KDQpgYGB7PWh0bWx9DQo8IS0tIC0tPg0KYGBgDQotICAgKmh5cG90aGVzaXMgZm9yIHlvdXIgUlNpZW5hIG1vZGVsczogd2hldGhlciB3aXRoaW4gYSBkeWFkIG1lbiB0ZW5kIHRvIChvciAncHJlZmVyJykgd29yayB3aXRoIG1lbiBhbmQgd29tZW4gd2l0aCB3b21lbiwgKGNvbnRyb2xsZWQgZm9yIHN0cnVjdHVyYWwgbmV0d29yayBlZmZlY3RzKS4qDQoNCiAgICAtICAgKipjb25mdXNpb246IHdoZXJlIHdvdWxkIHRoZSBjb21wYXJpc29uIGJldHdlZW4gZGVwYXRtZW50cyBiZSBoZXJlPyB0aGlzIHdvbGQgZml0IHJxIG9uZSBtb3JlLCBidXQgdGhhdCBvbmUgaXMgc3VwcG9zZWQgdG8gYmUgb24gdGhlIG5ldHdvcmsgbGV2ZWwgYnV0IHRoaXMgaXMgYWJvdXQgZHlhZHMuLi4qKg0KDQotICAgDQoNCmBgYHs9aHRtbH0NCjwhLS0gLS0+DQpgYGANCi0gICAqKkh5cG90aGVzaXMgMzoqKiBPbiB0aGUgZWdvIGxldmVsLCB0aGUgcHJlZmVyZW5jZSBvZiAqbWVuIHRvIHdvcmsgd2l0aCBtZW4gYW5kIHdvbWVuIHdpdGggd29tZW4sIChjb250cm9sbGVkIGZvciBzdHJ1Y3R1cmFsIG5ldHdvcmsgZWZmZWN0cyksIGlzIGxlc3MgaW5mbHVlbnRpYWwgaW4gdGhlIGNob2ljZSB0byBjb2xsYWJvcmF0ZSBpZiB0aGUgYWx0ZXIgaXMgc29tZW9uZSB3aG8gcHVibGlzaGVkIGluIGEgaGlnaC1wcmVzdGlnZSBqb3VybmFsLioNCg0KICAgIC0gICBbUlEzOiBIb3cgdG8gZG9lcyBnZW5kZXIgaG9tb3BoaWx5IGFmZmVjdCBjb2xsYWJvcmF0aW9uIGRpZmZlcmVudGx5IGZvciBjb2xsYWJvcmF0aW9ucyBiZXR3ZWVuIHN0YWZmIHdobyBoYXZlIHB1Ymxpc2hlZCBpbiBsb3cgdnMuIGhpZ2ggcHJlc3RpZ2Ugam91cm5hbHM/IGVnby1sZXZlbF0gKmlkZWE6IHdoZXRoZXIgcHJlc3RpZ2UgKG9mIGVnby9hbHRlci9keWFkKSBpbXBhY3RzIGdlbmRlciBob21vcGhpbHkgaW4gc29tZSB3YXkuKg0KDQojIFJlZmVyZW5jZXMNCg==</div>
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIkRyYWZ0LVRoZW9yeSINCmF1dGhvcjogIlZlcm9vbyINCmRhdGU6ICIyMDI0LTEwLTMxIg0Kb3V0cHV0OiBodG1sX2RvY3VtZW50DQpiaWJsaW9ncmFwaHk6IHJlZmVyZW5jZXMuYmliDQotLS0NCg0KYGBge3IsIGdsb2JhbHNldHRpbmdzLCBlY2hvPUZBTFNFLCB3YXJuaW5nPUZBTFNFLCByZXN1bHRzPSdoaWRlJ30NCmxpYnJhcnkoa25pdHIpDQoNCmtuaXRyOjpvcHRzX2NodW5rJHNldChlY2hvID0gVFJVRSkNCm9wdHNfY2h1bmskc2V0KHRpZHkub3B0cz1saXN0KHdpZHRoLmN1dG9mZj0xMDApLHRpZHk9VFJVRSwgd2FybmluZyA9IEZBTFNFLCBtZXNzYWdlID0gRkFMU0UsY29tbWVudCA9ICIjPiIsIGNhY2hlPVRSVUUsIGNsYXNzLnNvdXJjZT1jKCJ0ZXN0IiksIGNsYXNzLm91dHB1dD1jKCJ0ZXN0MiIpKQ0Kb3B0aW9ucyh3aWR0aCA9IDEwMCkNCnJnbDo6c2V0dXBLbml0cigpDQoNCmNvbG9yaXplIDwtIGZ1bmN0aW9uKHgsIGNvbG9yKSB7c3ByaW50ZigiPHNwYW4gc3R5bGU9J2NvbG9yOiAlczsnPiVzPC9zcGFuPiIsIGNvbG9yLCB4KSB9DQoNCmBgYA0KDQpgYGB7ciBrbGlwcHksIGVjaG89RkFMU0UsIGluY2x1ZGU9RkFMU0V9DQprbGlwcHk6OmtsaXBweShwb3NpdGlvbiA9IGMoJ3RvcCcsICdyaWdodCcpKQ0KI2tsaXBweTo6a2xpcHB5KGNvbG9yID0gJ2RhcmtyZWQnKQ0KI2tsaXBweTo6a2xpcHB5KHRvb2x0aXBfbWVzc2FnZSA9ICdDbGljayB0byBjb3B5JywgdG9vbHRpcF9zdWNjZXNzID0gJ0RvbmUnKQ0KYGBgDQoNCmBgYHtyIHNldHVwLCBpbmNsdWRlPUZBTFNFfQ0Ka25pdHI6Om9wdHNfY2h1bmskc2V0KGVjaG8gPSBUUlVFKQ0KDQpgYGANCg0KIyBUaGVvcnkgRHJhZnQgDQoNCi0gICBFeHBsYW5hdGlvbiBvZiBnZW5kZXIgaG9tb3BoaWx5IGluIHNjaG9sYXJzaGlwDQoNCi0gICBvZnRlbjogTWFsZXMgcHVibGlzaGluZyB3aXRoIG1hbGVzLCBmZW1hbGVzIHB1Ymxpc2hpbmcgd2l0aCBmZW1hbGVzIChASG9ydGEyMDIyKQ0KDQotICAgKipIeXBvdGhlc2lzIDEqKjogYWNyb3NzIHRoZSBjb2xsYWJvcmF0aW9uIG5ldHdvcmtzIG9mIGJvdGggZGVwYXJ0bWVudHMgKHBvbC4gc2NpICYgc29jLikgc2Nob2xhcnMgcHJlZmVyIHRvIGNvbGxhYm9yYXRlIHdpdGggc2FtZS1zZXggc2Nob2xhcnMgb3ZlciBkaWZmZXJlbnQtc2V4IHNjaG9sYXJzIChnZW5kZXIgaG9tb3BoaWx5IGlzIHByZXNlbnQpLg0KDQogICAgLSAgIFtSUTE6IFRvIHdoYXQgZXh0ZW50IGRvZXMgZ2VuZGVyIGhvbW9waGlseSBvY2N1ciBhY3Jvc3MgYWxsIGNvLXB1YmxpY2F0aW9ucyBvZiB0aGUgc3RhZmYgb2YgdGhlIFNvY2lvbG9neSBEZXBhcnRtZW50IGFuZCBQb2xpdGljYWwgU2NpZW5jZSBEZXBhcnRtZW50IGF0IFJhZGJvdWQgVW5pdmVyc2l0eT8gZGVzY3JpcHRpdmUsIGF0IG5ldHdvcmsgbGV2ZWxdXA0KDQpbXCpcKmxvb2sgYXQgZGVzY3JpcHRpdmVzOiBob3cgbWFueSBtZW4gaG93IG1hbnkgd29tZW4gaW4gZWFjaCBkZXBhcnRtZW50XVwqXCoNCg0KLSAgIER1ZSB0byBiaWFzIHRoYXQgc29jaWFsIGpvYnMgYXJlIG1vcmUgZmVtaW5pbmUgYW5kIHBvbGl0aWNzIGFyZSByZWxhdGVkIHRvIHJhdGlvbmFsaXR5LCB3aGljaCBpcyBvZnRlbiBzdGVyZW90eXBlZCB0byBiZSBtYXNjdWxpbmU6IEV4cGVjdCBsZXNzIGdlbmRlciBob21vcGhpbHkgaW4gc29jaW9sb2d5IHRoYW4gaW4gcG9sLnNjaS4gZGVwYXJ0bWVudC4NCg0KLSAgIChsb2dpY2FsIGVycm9yOiB5ZWFoIGJ1dCB0aGF0IG9ubHkgbWFrZXMgc2Vuc2UgaWYgbWVuIGFyZSB0aGUgb25seSBvbmVzIGluaXRpYXRpbmcgYW5kIGJyZWFraW5nIHRpZXMsIHJpZ2h0PykNCg0KPCEtLSAtLT4NCg0KLSAgICoqSHlwb3RoZXNpcyAyKio6IGJldHdlZW4gdGhlIGNvbGxhYm9yYXRpb24gbmV0d29ya3Mgb2YgYm90aCBkZXBhcnRtZW50cyAocG9sLiBzY2kgJiBzb2MuKSBzY2hvbGFycyBpbiB0aGUgc29jaW9sb2d5IGRlcGFydG1lbnQgcHJlZmVyIHRvIGNvbGxhYm9yYXRlIHdpdGggc2FtZS1zZXggc2Nob2xhcnMgbGVzcyBzdHJvbmdseSB0aGFuIHNjaG9sYXJzIGZyb20gdGhlIHBvbC4gc2NpLiBkZXBhcnRtZW50DQoNCiAgICAtICAgW1JRMjogVG8gd2hhdCBleHRlbnQgZG8gdGhlIHR3byBkZXBhcnRtZW50cyBkaWZmZXIgaW4gdGhlaXIgZ2VuZGVyIGhvbW9waGlseT9cKmRlc2NyaXB0aXZlLCBhdCB0aGUgZHlhZC1sZXZlbCAoYWZ0ZXIgY29udHJvbGxpbmcgZm9yIHN0cnVjdHVyYWwgbmV0d29yayBlZmZlY3RzIGFuZCBjb3ZhcmlhdGUtZWZmZWN0c10uXCoNCg0KPCEtLSAtLT4NCg0KLSAgICpoeXBvdGhlc2lzIGZvciB5b3VyIFJTaWVuYSBtb2RlbHM6IHdoZXRoZXIgd2l0aGluIGEgZHlhZCBtZW4gdGVuZCB0byAob3IgJ3ByZWZlcicpIHdvcmsgd2l0aCBtZW4gYW5kIHdvbWVuIHdpdGggd29tZW4sIChjb250cm9sbGVkIGZvciBzdHJ1Y3R1cmFsIG5ldHdvcmsgZWZmZWN0cykuKg0KDQogICAgLSAgICoqY29uZnVzaW9uOiB3aGVyZSB3b3VsZCB0aGUgY29tcGFyaXNvbiBiZXR3ZWVuIGRlcGF0bWVudHMgYmUgaGVyZT8gdGhpcyB3b2xkIGZpdCBycSBvbmUgbW9yZSwgYnV0IHRoYXQgb25lIGlzIHN1cHBvc2VkIHRvIGJlIG9uIHRoZSBuZXR3b3JrIGxldmVsIGJ1dCB0aGlzIGlzIGFib3V0IGR5YWRzLi4uKioNCg0KPCEtLSAtLT4NCg0KLSAgICoqSHlwb3RoZXNpcyAzOioqIE9uIHRoZSBlZ28gbGV2ZWwsIHRoZSBwcmVmZXJlbmNlIG9mICptZW4gdG8gd29yayB3aXRoIG1lbiBhbmQgd29tZW4gd2l0aCB3b21lbiwgKGNvbnRyb2xsZWQgZm9yIHN0cnVjdHVyYWwgbmV0d29yayBlZmZlY3RzKSwgaXMgbGVzcyBpbmZsdWVudGlhbCBpbiB0aGUgY2hvaWNlIHRvIGNvbGxhYm9yYXRlIGlmIHRoZSBhbHRlciBpcyBzb21lb25lIHdobyBwdWJsaXNoZWQgaW4gYSBoaWdoLXByZXN0aWdlIGpvdXJuYWwuKg0KDQogICAgLSAgIFtSUTM6IEhvdyBkb2VzIGdlbmRlciBob21vcGhpbHkgaW4gY29sbGFib3JhdGlvbnMgYmV0d2VlbiBzdGFmZiBkaWZmZXIgZGVwZW5kaW5nIG9uIHNjaG9sYXJzIGhhdmluZyBwdWJsaXNoZWQgaW4gbG93IHZzLiBoaWdoIHByZXN0aWdlIGpvdXJuYWxzPyBlZ28tbGV2ZWxdICppZGVhOiB3aGV0aGVyIHByZXN0aWdlIChvZiBlZ28vYWx0ZXIvZHlhZCkgaW1wYWN0cyBnZW5kZXIgaG9tb3BoaWx5IGluIHNvbWUgd2F5LioNCg0KIyBSZWZlcmVuY2VzDQo=</div>
 
 
 </div>

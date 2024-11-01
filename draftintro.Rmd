@@ -3,7 +3,11 @@ title: "Daft-Introduction"
 author: "Verooo"
 date: "2024-10-31"
 output: html_document
+
+citation_package: apacite
 bibliography: references.bib
+biblio-style: apacite
+natbiboptions: round
 ---
 
 ```{r, globalsettings, echo=FALSE, warning=FALSE, results='hide'}
@@ -20,8 +24,8 @@ colorize <- function(x, color) {sprintf("<span style='color: %s;'>%s</span>", co
 
 ```{r klippy, echo=FALSE, include=FALSE}
 klippy::klippy(position = c('top', 'right'))
-#klippy::klippy(color = 'darkred')
-#klippy::klippy(tooltip_message = 'Click to copy', tooltip_success = 'Done')
+klippy::klippy(color = 'darkred')
+klippy::klippy(tooltip_message = 'Click to copy', tooltip_success = 'Done')
 ```
 
 ```{r setup, include=FALSE}

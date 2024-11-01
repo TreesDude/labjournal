@@ -57,7 +57,7 @@ Questions:
 -   Does this question need to ask whether we observe gender homophily in collaboration networks to begin with?
 
     -   Isn't that the same question as RQ1a then?
-    -   *yes and no. ;-)  this is your hypothesis for your RSiena models. whether within a dyad men tend to (or 'prefer') work with men and women with women, (controlled for structural network effects). \
+    -   *yes and no. ;-)  this is your hypothesis for your RSiena models. whether within a dyad men tend to (or 'prefer') work with men and women with women, (controlled for structural network effects).\
         I hope that you understand that this **dyadic preferences does not necessarily translates to your macro-outcome** (because of all structural effects possibly at play and other covariate-effects).*
 
 -   Does the question need to ask whether we observe gender homophily in collaborations over time?
@@ -84,11 +84,11 @@ How to does gender homophily affect collaboration differently for collaborations
 
 aka. looking at whole sample: does the gender homophily in collaboration networks look different depending on the scholars' publishing prestige?
 
-*Try to reformulate this to your RSiena model and not at your macro-level. I let you struggle a little bit on this last one okay. \
+*Try to reformulate this to your RSiena model and not at your macro-level. I let you struggle a little bit on this last one okay.\
 But the idea is fine; whether prestige (of ego/alter/dyad) impacts gender homophily in some way.*
 
-*Thus **start with your descriptives and modelling \
+*Thus **start with your descriptives and modelling\
 **and rephrase RQ3 later.*
 
-*try to **plot asap in the process**. \
+*try to **plot asap in the process**.\
 and update plots after descriptives and multivariate analyses along the way. it is an iterative process.*

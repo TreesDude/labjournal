@@ -6,6 +6,10 @@ exclude:
   - "data"
   - "_test"
 bibliography: references.bib
+citation_package: natbib
+biblio-style: apalike
+natbiboptions: round
+
 navbar:
   left:
     - icon: fa-home
@@ -57,7 +61,7 @@ navbar:
     - text: "Step-by-step analysis"
       menu:
       - text: "Step 1: Define data"
-        href: 
+        href: 1definedata.html
       - text: "Step 2: Create effects structure"
         href:  
       - text: "Step 3: Get initial description"
@@ -77,7 +81,7 @@ navbar:
       - text: "Theory"
         href: drafttheory.html
       - text: "Data"
-        href:  
+        href: draftdata.html 
       - text: "Methods"
         href:  
       - text: "Results"
