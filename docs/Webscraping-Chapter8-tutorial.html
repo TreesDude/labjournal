@@ -421,9 +421,8 @@ div.tocify {
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="1definedata.html">Step 1: Define data</a>
+      <a href="1definedata.html">Step 1&amp;2: Define data&amp;effects structure</a>
     </li>
-    <li class="dropdown-header">Step 2: Create effects structure</li>
     <li class="dropdown-header">Step 3: Get initial description</li>
     <li class="dropdown-header">Step 4: Specify model</li>
     <li class="dropdown-header">Step 5: Estimate model</li>
@@ -567,10 +566,10 @@ sociology</h1>
 
 head(soc_staff)</code></pre>
 <pre><code>## $node
-## &lt;pointer: 0x0000024cbb8fe0d0&gt;
+## &lt;pointer: 0x0000016554ffe8d0&gt;
 ## 
 ## $doc
-## &lt;pointer: 0x0000024cb9ffe7e0&gt;</code></pre>
+## &lt;pointer: 0x00000165537ff020&gt;</code></pre>
 <pre class="r"><code>#which object? 
 class(soc_staff)</code></pre>
 <pre><code>## [1] &quot;xml_document&quot; &quot;xml_node&quot;</code></pre>
@@ -838,7 +837,7 @@ get_scholar_id_fix(last_name = &quot;tolsma&quot;, first_name = &quot;jochem&quo
 ## [1] &quot;Professor, Radboud University Nijmegen / University of Groningen&quot;
 ## 
 ## $total_cites
-## [1] 3446
+## [1] 3451
 ## 
 ## $h_index
 ## [1] 27
@@ -890,8 +889,8 @@ publications, citations</h3>
 ## 17                                                                                                   How friends’ involvement in crime affects the risk of offending and victimization
 ## 18                                                                        Bringing the beneficiary closer: Explanations for volunteering time in Dutch private development initiatives
 ## 19                                                                                           At which geographic scale does ethnic diversity affect intra-neighborhood social capital?
-## 20                                                                                                              The NEtherlands Longitudinal Lifecourse Study (NELLS, Panel): Codebook
-## 21     Onderwijs als nieuwe sociale scheidslijn? De gevolgen van onderwijsexpansie voor sociale mobiliteit, de waarde van diploma&#39;s en het relatieve belang van opleiding in Nederland
+## 20     Onderwijs als nieuwe sociale scheidslijn? De gevolgen van onderwijsexpansie voor sociale mobiliteit, de waarde van diploma&#39;s en het relatieve belang van opleiding in Nederland
+## 21                                                                                                              The NEtherlands Longitudinal Lifecourse Study (NELLS, Panel): Codebook
 ## 22                                                                               Explaining monetary donations to international development organisations: A factorial survey approach
 ## 23                                                                                                                                                          Naar een open samenleving?
 ## 24                                                                                       How, when and where can spatial segregation induce opinion polarization? Two competing models
@@ -901,10 +900,10 @@ publications, citations</h3>
 ## 28                                                                                            Kudos make you run! How runners influence each other on the online social network Strava
 ## 29                      Perceptions as the crucial link? The mediating role of neighborhood perceptions in the relationship between the neighborhood context and neighborhood cohesion
 ## 30      Under what conditions do ethnic minority candidates attract the ethnic minority vote? How neighbourhood and candidate characteristics affected ethnic affinity voting in the …
-## 31                                                                                          Explaining natives&#39; interethnic friendship and contact with colleagues in European regions
-## 32                                                       Combating hooliganism in the Netherlands: An evaluation of measures to combat hooliganism with longitudinal registration data
-## 33                                                                                                                     Preferences for work arrangements: A discrete choice experiment
-## 34                                                                                                 Trust and contact in diverse neighbourhoods: An interplay of four ethnicity effects
+## 31                                                                                                                     Preferences for work arrangements: A discrete choice experiment
+## 32                                                                                                 Trust and contact in diverse neighbourhoods: An interplay of four ethnicity effects
+## 33                                                                                          Explaining natives&#39; interethnic friendship and contact with colleagues in European regions
+## 34                                                       Combating hooliganism in the Netherlands: An evaluation of measures to combat hooliganism with longitudinal registration data
 ## 35                                                                                                                                                               De burger als rechter
 ## 36                                                                                                         Opleiding als sociale scheidslijn. Een nieuw perspectief op een oude kloof.
 ## 37       Size is in the eye of the beholder: How differences between neighbourhoods and individuals explain variation in estimations of the ethnic out-group size in the neighbourhood
@@ -1005,8 +1004,8 @@ publications, citations</h3>
 ## 17                     JJ Rokven, G de Boer, J Tolsma, S Ruiter
 ## 18                             S Kinsbergen, J Tolsma, S Ruiter
 ## 19                             R Sluiter, J Tolsma, P Scheepers
-## 20  J Tolsma, GLM Kraaykamp, PM De Graaf, M Kalmijn, CWS Monden
-## 21                                        J Tolsma, MHJ Wolbers
+## 20                                        J Tolsma, MHJ Wolbers
+## 21  J Tolsma, GLM Kraaykamp, PM De Graaf, M Kalmijn, CWS Monden
 ## 22                                       S Kinsbergen, J Tolsma
 ## 23                                        J Tolsma, MHJ Wolbers
 ## 24                              T Feliciani, A Flache, J Tolsma
@@ -1016,10 +1015,10 @@ publications, citations</h3>
 ## 28                               R Franken, H Bekhuis, J Tolsma
 ## 29                                 J Laméris, JR Hipp, J Tolsma
 ## 30                          R Van der Zwan, J Tolsma, M Lubbers
-## 31                           M Savelkoul, J Tolsma, P Scheepers
-## 32                       D Schaap, M Postma, L Jansen, J Tolsma
-## 33                                   P Valet, C Sauer, J Tolsma
-## 34                                   J Tolsma, TWG Van der Meer
+## 31                                   P Valet, C Sauer, J Tolsma
+## 32                                   J Tolsma, TWG Van der Meer
+## 33                           M Savelkoul, J Tolsma, P Scheepers
+## 34                       D Schaap, M Postma, L Jansen, J Tolsma
 ## 35                S Ruiter, J Tolsma, M Hoon, H Elffers, P Laan
 ## 36                            M De Lange, J Tolsma, MHJ Wolbers
 ## 37                   J Laméris, G Kraaykamp, S Ruiter, J Tolsma
@@ -1120,8 +1119,8 @@ publications, citations</h3>
 ## 17                                                   European journal of criminology
 ## 18                                          Nonprofit and Voluntary Sector Quarterly
 ## 19                                                           Social science research
-## 20              Nijmegen; Tilburg; Amsterdam: Radboud University Nijmegen; Tilburg …
-## 21                                                       Tijdschrift voor Sociologie
+## 20                                                       Tijdschrift voor Sociologie
+## 21              Nijmegen; Tilburg; Amsterdam: Radboud University Nijmegen; Tilburg …
 ## 22                                                           Social science research
 ## 23                                                                                  
 ## 24                             Journal of Artificial Societies and Social Simulation
@@ -1131,10 +1130,10 @@ publications, citations</h3>
 ## 28                                                                   Social Networks
 ## 29                                                           Social Science Research
 ## 30                                                               Political Geography
-## 31                                           Journal of Ethnic and Migration Studies
-## 32                                  European Journal on Criminal Policy and Research
-## 33                                                                          PloS one
-## 34                                                           Social science research
+## 31                                                                          PloS one
+## 32                                                           Social science research
+## 33                                           Journal of Ethnic and Migration Studies
+## 34                                  European Journal on Criminal Policy and Research
 ## 35                                                                              NSCR
 ## 36                                                                             Maklu
 ## 37                                  International Journal of Intercultural Relations
@@ -1216,7 +1215,7 @@ publications, citations</h3>
 ## 113                                                                Book of Abstracts
 ## 114                                                                                 
 ##                                                                    number cites year
-## 1                                                                           722 2014
+## 1                                                                           723 2014
 ## 2                                                         27 (6), 741-758   378 2011
 ## 3                                                                  44 (3)   336 2009
 ## 4                                                         27 (3), 291-306   159 2011
@@ -1227,7 +1226,7 @@ publications, citations</h3>
 ## 9                                                         23 (3), 325-339    87 2007
 ## 10                                                        60 (2), 257-277    86 2009
 ## 11                                                        26 (2), 235-252    82 2010
-## 12                                                          27 (1), 20-33    70 2017
+## 12                                                          27 (1), 20-33    71 2017
 ## 13                                                        33 (2), 209-224    68 2017
 ## 14                                                             98, 104185    58 2019
 ## 15                                                                           53 2016
@@ -1235,8 +1234,8 @@ publications, citations</h3>
 ## 17                                                        14 (6), 697-719    44 2017
 ## 18                                                          42 (1), 59-83    44 2013
 ## 19                                                              54, 80-95    40 2015
-## 20                                                                           38 2014
-## 21                                                        31 (3), 239-259    38 2010
+## 20                                                        31 (3), 239-259    39 2010
+## 21                                                                           38 2014
 ## 22                                                      42 (6), 1571-1586    37 2013
 ## 23                                                                           34 2010
 ## 24                                                              20 (2), 6    33 2017
@@ -1246,10 +1245,10 @@ publications, citations</h3>
 ## 28                                                            72, 151-164    26 2023
 ## 29                                                              72, 53-68    25 2018
 ## 30                                                             77, 102098    24 2020
-## 31                                                        41 (5), 683-709    23 2015
-## 32                                                              21, 83-97    23 2015
-## 33                                                       16 (7), e0254483    22 2021
-## 34                                                             73, 92-106    22 2018
+## 31                                                       16 (7), e0254483    23 2021
+## 32                                                             73, 92-106    23 2018
+## 33                                                        41 (5), 683-709    23 2015
+## 34                                                              21, 83-97    23 2015
 ## 35                                                                           20 2011
 ## 36                                                                           19 2015
 ## 37                                                              63, 80-94    17 2018
@@ -1350,8 +1349,8 @@ publications, citations</h3>
 ## 17                                            13322468554278639475 vV6vV6tmYwMC
 ## 18                                             2112276567018030922 _FxGoFyzp5QC
 ## 19                                             7670225499012303854 e5wmG9Sq2KIC
-## 20                                             8792123396141403739 xtRiw3GOFMkC
-## 21                                            17130607869100522312 YsMSGLbcyi4C
+## 20                                            17130607869100522312 YsMSGLbcyi4C
+## 21                                             8792123396141403739 xtRiw3GOFMkC
 ## 22                                            10149692484122806616 aqlVkmm33-oC
 ## 23                                             2539524527836644253 Y0pCki6q_DkC
 ## 24                                             6880814424039971499 g5m5HwL7SMYC
@@ -1361,10 +1360,10 @@ publications, citations</h3>
 ## 28                                            12114155743971894213 9Nmd_mFXekcC
 ## 29                                            16357054384393453824 D03iK_w7-QYC
 ## 30                                             7114430646392466648 uWQEDVKXjbEC
-## 31                                            18182577779862774305 -f6ydRqryjwC
-## 32                                             9528443224826780083 ZeXyd9-uunAC
-## 33                                            14800116132549688497 tKAzc9rXhukC
-## 34                                             8349908030823257502 pyW8ca7W8N0C
+## 31                                            14800116132549688497 tKAzc9rXhukC
+## 32                                             8349908030823257502 pyW8ca7W8N0C
+## 33                                            18182577779862774305 -f6ydRqryjwC
+## 34                                             9528443224826780083 ZeXyd9-uunAC
 ## 35                                            16411127097378483929 KlAtU1dfN6UC
 ## 36                        6027896113597554400,15089097845718498290 O3NaXMp0MMsC
 ## 37                                             1627288244325129498 a0OBvERweLwC
@@ -1450,20 +1449,20 @@ publications, citations</h3>
 ## 1  2008    12
 ## 2  2009    23
 ## 3  2010    32
-## 4  2011    77
-## 5  2012    81
+## 4  2011    78
+## 5  2012    80
 ## 6  2013   124
 ## 7  2014   167
 ## 8  2015   218
 ## 9  2016   227
 ## 10 2017   228
-## 11 2018   290
+## 11 2018   289
 ## 12 2019   311
 ## 13 2020   300
-## 14 2021   330
+## 14 2021   331
 ## 15 2022   337
-## 16 2023   333
-## 17 2024   306</code></pre>
+## 16 2023   334
+## 17 2024   310</code></pre>
 </div>
 <div id="get-collaborators" class="section level3" number="6.2.2">
 <h3><span class="header-section-number">6.2.2</span> get
@@ -1479,7 +1478,7 @@ single staff member</h2>
 <pre class="r"><code>plot_coauthors(get_coauthors(&quot;Iu23-90AAAAJ&quot;, n_coauthors = 20, n_deep = 1), size_labels = 2)  </code></pre>
 <pre><code>## Warning: Removed 148 rows containing missing values or values
 ## outside the scale range (`geom_point()`).</code></pre>
-<pre><code>## Warning: ggrepel: 3 unlabeled data points (too many overlaps). Consider increasing max.overlaps</code></pre>
+<pre><code>## Warning: ggrepel: 2 unlabeled data points (too many overlaps). Consider increasing max.overlaps</code></pre>
 <p><img src="Webscraping-Chapter8-tutorial_files/figure-html/plot-1.png" width="672" /></p>
 <pre class="r"><code># Doesn&#39;t look like much yet, but we&#39;ll make it prettier later.</code></pre>
 </div>
@@ -1661,7 +1660,7 @@ Jochem Tolsma
 J. Tolsma , Jochem Tolsma, J L Tolsma
 </td>
 <td style="text-align:right;">
-8926.1
+8909.23
 </td>
 <td style="text-align:left;">
 <a href="https://openalex.org/A5087380803"
@@ -1681,7 +1680,7 @@ class="uri">https://orcid.org/0000-0002-4411-6932</a>
 </td>
 <td style="text-align:left;">
 2024, 2023, 2022, 2021, 2020, 2019, 2018, 2017, 2016, 2015, 2014, 2013,
-2012, 7, 5, 4, 4, 0, 4, 3, 3, 13, 4, 8, 6, 2, 225, 269, 199, 253, 233,
+2012, 7, 5, 4, 4, 0, 4, 3, 3, 13, 4, 8, 6, 2, 225, 269, 199, 253, 234,
 190, 200, 126, 186, 156, 128, 99, 68
 </td>
 <td style="text-align:left;">
@@ -2033,7 +2032,7 @@ oa_fetch(entity= &quot;author&quot;, search = &quot;Jochem Tolsma&quot;, affilia
 <pre><code>## # A tibble: 1 × 18
 ##   id      display_name display_name_alterna…¹ relevance_score ids   orcid works_count cited_by_count
 ##   &lt;chr&gt;   &lt;chr&gt;        &lt;list&gt;                           &lt;dbl&gt; &lt;lis&gt; &lt;chr&gt;       &lt;int&gt;          &lt;int&gt;
-## 1 https:… Jochem Tols… &lt;chr [3]&gt;                        8926. &lt;chr&gt; http…          85           2049
+## 1 https:… Jochem Tols… &lt;chr [3]&gt;                        8925. &lt;chr&gt; http…          85           2049
 ## # ℹ abbreviated name: ¹​display_name_alternatives
 ## # ℹ 10 more variables: counts_by_year &lt;list&gt;, affiliation_display_name &lt;chr&gt;, affiliation_id &lt;chr&gt;,
 ## #   affiliation_ror &lt;chr&gt;, affiliation_country_code &lt;chr&gt;, affiliation_type &lt;chr&gt;,
@@ -2181,7 +2180,7 @@ Jochem Tolsma
 J. Tolsma , Jochem Tolsma, J L Tolsma
 </td>
 <td style="text-align:right;">
-8926.1
+8924.74
 </td>
 <td style="text-align:left;">
 <a href="https://openalex.org/A5087380803"
@@ -2201,7 +2200,7 @@ class="uri">https://orcid.org/0000-0002-4411-6932</a>
 </td>
 <td style="text-align:left;">
 2024, 2023, 2022, 2021, 2020, 2019, 2018, 2017, 2016, 2015, 2014, 2013,
-2012, 7, 5, 4, 4, 0, 4, 3, 3, 13, 4, 8, 6, 2, 225, 269, 199, 253, 233,
+2012, 7, 5, 4, 4, 0, 4, 3, 3, 13, 4, 8, 6, 2, 225, 269, 199, 253, 234,
 190, 200, 126, 186, 156, 128, 99, 68
 </td>
 <td style="text-align:left;">
@@ -2587,7 +2586,7 @@ Maurice Johannes Wilhelmus Gesthuizen, M. Gesthuizen , Maurice
 Gesthuizen , M.J.W. Gesthuizen , Maurice J.W. Gesthuizen
 </td>
 <td style="text-align:right;">
-8367.26
+8377.74
 </td>
 <td style="text-align:left;">
 <a href="https://openalex.org/A5007673492"
@@ -2995,7 +2994,7 @@ Michael Savelkoul
 M.J. Savelkoul , M. Savelkoul , Michael Savelkoul
 </td>
 <td style="text-align:right;">
-4053.26
+4063.26
 </td>
 <td style="text-align:left;">
 <a href="https://openalex.org/A5048988743"
@@ -3400,7 +3399,7 @@ T.W.G. Tom van der Meer, Tom W. G. van der Meer , Tom Van Der Meer , T.
 Van Der Meer , TOM W.G. VAN DER MEER
 </td>
 <td style="text-align:right;">
-17136.99
+17187.41
 </td>
 <td style="text-align:left;">
 <a href="https://openalex.org/A5010780363"
@@ -3416,12 +3415,12 @@ class="uri">https://orcid.org/0000-0002-6164-2926</a>
 142
 </td>
 <td style="text-align:right;">
-4562
+4585
 </td>
 <td style="text-align:left;">
 2024, 2023, 2022, 2021, 2020, 2019, 2018, 2017, 2016, 2015, 2014, 2013,
-2012, 4, 3, 4, 5, 6, 3, 9, 21, 13, 8, 5, 6, 9, 488, 740, 561, 570, 443,
-438, 373, 225, 254, 263, 191, 232, 103
+2012, 4, 3, 4, 5, 6, 3, 9, 21, 13, 8, 5, 6, 9, 510, 740, 561, 570, 443,
+438, 374, 225, 254, 263, 191, 232, 103
 </td>
 <td style="text-align:left;">
 University of Amsterdam

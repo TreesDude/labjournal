@@ -47,15 +47,20 @@ rm(list = ls())
 require(tidyverse)
 
 # install an old version of RSiena including sienaRI
-# remove.packages("RSiena") #use this to remove the current version of RSiena
-#devtools::install_version("RSiena", version = "1.3.14", repos = "http://cran.us.r-project.org") # This installs an older version
+#remove.packages("RSiena") #use this to remove the current version of RSiena
+#devtools::install_version("RSiena", version = "1.3.14", repos = "C:/Users/Vero/OneDrive - Radboud Universiteit/Documents/GitHub/labjournal") # This installs an older version
 
 # Run R as administrator when you install the older version!!
-  
+
 # You should end up with version 1.3.14 loaded in instead of 1.4.7, 
 # but then make sure there isn't a install.packages("RSiena") function running somewhere, because then it will reinstall the newest version
 
+# require(RSiena)
+# require(RsienaTwoStep)
+
 ```
+
+I do not seem to be able to call on the package RSiena, nor can I reinstall it.... I know programming never works on the first try but... goddamnit, why not even after 15?
 
 ## Functions
 
@@ -70,7 +75,6 @@ require(tidyverse)
 I tried removing the discipline = "sociology" part in the f_pubnets, fcolnet and all following functions that select data BUT SINCE 'discipline' is also relevant in the rest of the functions' code, it does not end up doing what I hoped (having a dataset with scholars of no specific discipline because then I could hopefully check how the department is named in the data and then find out how to add that to the data set initially).
 
 ```{r}
-
 fpackage.check <- function(packages) {
     lapply(packages, FUN = function(x) {
         if (!require(x, character.only = TRUE)) {
@@ -102,13 +106,10 @@ fshowdf <- function(x, ...) {
 }
 
 
-# before my edits:
-# f_pubnets <- function(df_scholars = df, list_publications = publications, discip = "sociology", affiliation = "RU",
-#     wave = list(wave1 = c(2018, 2019, 2020), wave2 = c(2021, 2022, 2023)))
+# this is the most important one. We created it in the previous script
 
-#after taking out discip = "sociology" in this first part    
-f_pubnets <- function(df_scholars = df, list_publications = publications, affiliation = "RU",
-    wave = list(wave1 = c(2018, 2019, 2020), wave2 = c(2021, 2022, 2023))) {
+f_pubnets <- function(df_scholars = df, list_publications = publications, discip = "sociology"+"political science", affiliation = "RU",
+    waves = list(wave1 = c(2018, 2019, 2020), wave2 = c(2021, 2022, 2023))) {
 
     publications <- list_publications %>%
         bind_rows() %>%
@@ -119,21 +120,21 @@ f_pubnets <- function(df_scholars = df, list_publications = publications, affili
         filter(discipline == discip) -> df_sel
 
     networklist <- list()
-    for (wave in 1:length(wave)) {
+    for (wave in 1:length(waves)) {
         networklist[[wave]] <- matrix(0, nrow = nrow(df_sel), ncol = nrow(df_sel))
     }
 
     publicationlist <- list()
-    for (wave in 1:length(wave)) {
+    for (wave in 1:length(waves)) {
         publicationlist[[wave]] <- publications %>%
             filter(gs_id %in% df_sel$gs_id) %>%
-            filter(year %in% wave[[wave]]) %>%
+            filter(year %in% waves[[wave]]) %>%
             select(author) %>%
             lapply(str_split, pattern = ",")
     }
 
     publicationlist2 <- list()
-    for (wave in 1:length(wave)) {
+    for (wave in 1:length(waves)) {
         publicationlist2[[wave]] <- publicationlist[[wave]]$author %>%
             # lowercase
         lapply(tolower) %>%
@@ -145,13 +146,13 @@ f_pubnets <- function(df_scholars = df, list_publications = publications, affili
         lapply(word, start = -1, sep = "-")
     }
 
-    for (wave in 1:length(wave)) {
+    for (wave in 1:length(waves)) {
         # let us remove all publications with only one author
         remove <- which(sapply(publicationlist2[[wave]], FUN = function(x) length(x) == 1) == TRUE)
         publicationlist2[[wave]] <- publicationlist2[[wave]][-remove]
     }
 
-    for (wave in 1:length(wave)) {
+    for (wave in 1:length(waves)) {
         pubs <- publicationlist2[[wave]]
         for (ego in 1:nrow(df_sel)) {
             # which ego?
@@ -178,21 +179,14 @@ f_pubnets <- function(df_scholars = df, list_publications = publications, affili
     }
     return(list(df = df_sel, network = networklist))
 }
-```
 
-```{r}
-view(f_pubnets)
 ```
 
 ## more functions
 
 ```{r}
-
-#prior to my edits:
-# fcolnet <- function(data = scholars, university = "RU", discipline = "sociology", wave = list(c(2019, 2023)), type = c("first")) 
-
-#after taking out discipline= "sociology" in the first part 
-fcolnet <- function(data = scholars, university = "RU", wave = list(c(2019, 2023)), type = c("first")) {
+fcolnet <- function(data = scholars, university = "RU", discipline = "sociology"+"political science", waves = list(c(2015,
+    2018), c(2019, 2023)), type = c("first")) {
 
     # step 1
     demographics <- do.call(rbind.data.frame, data$demographics)
@@ -211,8 +205,8 @@ fcolnet <- function(data = scholars, university = "RU", wave = list(c(2019, 2023
 
     # step 2
     ids <- demographics_soc$au_id
-    nwave <- length(wave)
-    nets <- array(0, dim = c(nwave, length(ids), length(ids)), dimnames = list(wave = 1:nwave, ids,
+    nwaves <- length(waves)
+    nets <- array(0, dim = c(nwaves, length(ids), length(ids)), dimnames = list(wave = 1:nwaves, ids,
         ids))
     dimnames(nets)
 
@@ -225,8 +219,8 @@ fcolnet <- function(data = scholars, university = "RU", wave = list(c(2019, 2023
 
     # step 4
     if (type == "first") {
-        for (j in 1:nwave) {
-            df_works_w <- df_works[df_works$works_year >= wave[[j]][1] & df_works$works_year <= wave[[j]][2],
+        for (j in 1:nwaves) {
+            df_works_w <- df_works[df_works$works_year >= waves[[j]][1] & df_works$works_year <= waves[[j]][2],
                 ]
             for (i in 1:nrow(df_works_w)) {
                 ego <- df_works_w$works_author[i][[1]]$au_id[1]
@@ -239,8 +233,8 @@ fcolnet <- function(data = scholars, university = "RU", wave = list(c(2019, 2023
     }
 
     if (type == "last") {
-        for (j in 1:nwave) {
-            df_works_w <- df_works[df_works$works_year >= wave[[j]][1] & df_works$works_year <= wave[[j]][2],
+        for (j in 1:nwaves) {
+            df_works_w <- df_works[df_works$works_year >= waves[[j]][1] & df_works$works_year <= waves[[j]][2],
                 ]
             for (i in 1:nrow(df_works_w)) {
                 ego <- rev(df_works_w$works_author[i][[1]]$au_id)[1]
@@ -253,8 +247,8 @@ fcolnet <- function(data = scholars, university = "RU", wave = list(c(2019, 2023
     }
 
     if (type == "all") {
-        for (j in 1:nwave) {
-            df_works_w <- df_works[df_works$works_year >= wave[[j]][1] & df_works$works_year <= wave[[j]][2],
+        for (j in 1:nwaves) {
+            df_works_w <- df_works[df_works$works_year >= waves[[j]][1] & df_works$works_year <= waves[[j]][2],
                 ]
             for (i in 1:nrow(df_works_w)) {
                 egos <- df_works_w$works_author[i][[1]]$au_id
@@ -268,61 +262,111 @@ fcolnet <- function(data = scholars, university = "RU", wave = list(c(2019, 2023
     output$data <- scholars_sel
     output$nets <- nets
     return(output)
-    
 }
+
 
 ```
 
-## load data
+## load and inspect data
 
 ```{r}
-scholars <- fload("./data/processed/scholars_20240924.rda")
+scholars <- fload("./data/processed/scholars_20240924.rda") #make sure to lead fload first ofcourse
+
+#inspecting scholars_20240924.rda object
+#df_ego <- do.call(rbind.data.frame, scholars$demographics)
+#unique(df_ego$discipline.22)
 
 # save the output of your function
+testsoc  <- fcolnet(data = scholars, 
+                university = "RU", 
+                discipline = "sociology", 
+                waves = list(c(2015, 2018), c(2019, 2023)), 
+    
+                            type = c("first"))
 
-# before my edits:
-# test <- fcolnet(data = scholars, university = "RU", discipline = "sociology", wave = list(c(2019, 2023)), type = c("first"))
+# I DONT KNOW HOW TO MAKE ALL SCHOLARS BE PART OF SAME FUNCTION ("sociology"+ "political science" does not work...)
 
-# after taking discipline= "sociology" out
-# test <- fcolnet(data = scholars, university = "RU", wave = list(c(2019, 2023)), type = c("first"))
-
-# here is where the error occurs due to taking out the discipline = "sociology" in multiple prior parts of the code 
+testpolsci <- fcolnet(data = scholars, 
+                university = "RU", 
+                discipline = "political science", 
+                waves = list(c(2015, 2018), c(2019, 2023)), 
+                type = c("first"))
 ```
 
 ------------------------------------------------------------------------
 
 # Define Data
 
+## waves - sociology department
+
 ```{r}
-wave <- test$nets[1, , ]
 
+# Jochem messed up and did: waves, rows, columns [1, , ]
+socwave1 <- testsoc$nets[ , ,1]  #rows, columns, waves
+socwave2 <- testsoc$nets[ , ,2]  #rows, columns, waves
 # let us put the diagonal to zero
-diag(wave) <- 0
+diag(socwave1) <- 0
+diag(socwave2) <- 0
 # we want a binary tie (not a weighted tie)
-wave[wave > 1] <- 1
-
+socwave1[socwave1 > 1] <- 1
+socwave2[socwave2 > 1] <- 1
 # put the nets in an array
-net_soc_array <- array(data = c(wave), dim = c(dim(wave), 2)) 
+net_soc_array <- array(data = c(socwave1, socwave2), dim = c(dim(socwave1), 2))
+
 str(net_soc_array)  #now we basically restructured this 
 # output: num [1:50, 1:50, 1:2] 0 0 0 0 0 0 0 0 0 0
+```
 
-# since I only take one wave should I replace the 2 with a 1 here? 
-net_soc_array1 <- array(data = c(wave), dim = c(dim(wave), 1)) 
-str(net_soc_array1)  #now we basically restructured this 
-# output: num [1:50, 1:50, 1] 0 0 0 0 0 0 0 0 0 0
+## waves - polsci department
+
+```{r}
+# Jochem messed up and did: waves, rows, columns [1, , ]
+polwave1 <- testpolsci$nets[ , ,1]  #rows, columns, waves
+polwave2 <- testpolsci$nets[ , ,2]  #rows, columns, waves
+# let us put the diagonal to zero
+diag(polwave1) <- 0
+diag(polwave2) <- 0
+# we want a binary tie (not a weighted tie)
+polwave1[polwave1 > 1] <- 1
+polwave2[polwave2 > 1] <- 1
+# put the nets in an array
+net_pol_array <- array(data = c(polwave1, polwave2), dim = c(dim(polwave1), 2))
+
+str(net_pol_array)  #now we basically restructured this 
+
 ```
 
 ### **QUESTION:**
 
 **What's the difference between putting the 2 and the 1 at the dimensions. I feel like one is appropriate since I am only looking at one wave, not two, but since the output is among the 'values' not 'data', I cannot view the variable net_soc_array(1) nor "visualize" what that means in terms of its structure. I don't really know what the difference would be between the 1:2 and the 1 in the outputs, structurally.**
 
+### ANSWER: 
+
+RSiena needs at least two waves, because it models the evolution of the networks. We have to store the networks in an array before we can convert it to an dependent variable objects. Moreover, for RSiena the dimensions should be in the following order: rows, columns, waves.
+
+I 'messed up' my function (for didactic reasons ;-) )and stored the nets in the following order: waves, rows, columns. Thus, either correct my function or retrieve the separate waves and store them in the order RSiena requires.
+
+### QUESTION TO THE ANSWER:
+
+We had agreed on me only investigating one time point for the sake of simplicity. It seems I basically have no choice but to investigate two waves, revisit my RQs and make an additional RQ about tie changes over time, right?
+
+Then I would end up with 4 RQs and that seems like more than it needs to be for this project (great for a research incentive, but for this class I need to keep it simple, as I am currently very overworked).
+
+Any advice on how I can keep it simple, nonetheless?
+
 ## Examine structure
 
 ```{r}
-dim(test$nets)
+dim(testsoc$nets)
 ```
 
-## My data 
+```{r}
+dim(testpolsci$nets)
+```
+
+## My data
+
+### sociology dep. 
 
 not using net_soc_array for now since I am unsure about its use due to question above
 
@@ -332,12 +376,12 @@ not using net_soc_array for now since I am unsure about its use due to question 
 
 
 # dependent 
- nets <- test$nets
+nets <- testsoc$nets
 
  
-df_ego_demo <- test$data$demographics
-df_ego_oa <- test$data$scholars_oa
-df_ego_works <- test$data$works
+df_ego_demo <- testsoc$data$demographics
+df_ego_oa <- testsoc$data$scholars_oa
+df_ego_works <- testsoc$data$works
 
 
 # DEMO
@@ -352,46 +396,153 @@ df_ego_works <- test$data$works
   df_ego_oa <- do.call(rbind.data.frame, df_ego_oa)
 
 
-# --> EGO DATAFRAME with demo and oa 
+  # --> EGO DATAFRAME with demo and oa (sociology)
   ?join.data.frame
-  df_ego <- left_join(df_ego_demo, df_ego_oa, by = join_by(au_id == id))
+  df_soc_ego <- left_join(df_ego_demo, df_ego_oa, by = join_by(au_id == id))
   
-  rownames(nets[1,,]) == df_ego$au_id # checking if the author id's are the same as in df_ego in nets dataframe 
+  rownames(nets[1,,]) == df_soc_ego$au_id # checking if the author id's are the same as in df_ego in nets dataframe 
   # --> yes, the correct ones!!!
-
-
-df_ego_works[[1]]$author 
+  
+  
+  df_ego_works[[1]]$author 
 #authors of all the works that first scholar (here: Ana Macanovic) is part of 
 
 
 ```
 
-## Gender
+### polsci department 
 
 ```{r}
-df_ego$Naam # list of all names 
+# dependent
+# pol_net <- sienaDependent(net_pol_array)
 
-df_ego$gender <- c(0,1,0,1,0,0,1,1,0,0,
-                   0,1,1,0,1,0,1,1,1,1,
-                   0,1,1,0,1,1,0,1,0,1,
-                   0,1,0,0,0,0,0,0,1,0,
-                   0,1,1,1,0,1,0,1,0,0) 
+
+# dependent 
+pol_nets <- testpolsci$nets
+
+ 
+df_pol_ego_demo <- testpolsci$data$demographics
+df_pol_ego_oa <- testpolsci$data$scholars_oa
+df_pol_ego_works <- testpolsci$data$works
+
+
+# DEMO
+  str(df_pol_ego_demo, 1) 
+  
+  df_pol_ego_demo <- do.call(rbind.data.frame, df_pol_ego_demo)
+  df_pol_ego_demo[[1]]
+
+# OA
+  #str(df_pol_ego_oa, 1)
+  df_pol_ego_oa[[1]]
+  df_pol_ego_oa <- do.call(rbind.data.frame, df_pol_ego_oa)
+  
+  
+# --> EGO DATAFRAME with demo and oa (political science)
+  df_pol_ego <- left_join(df_pol_ego_demo, df_pol_ego_oa, by = join_by(au_id == id))
+
+  rownames(pol_nets[1,,]) == df_pol_ego$au_id # checking if the author id's are the same as in df_ego in nets dataframe 
+  # --> yes, the correct ones!!!
+```
+
+## Gender
+
+### gender-soc
+
+```{r}
+df_soc_ego$Naam # list of all names in sociology department 
+
+df_soc_ego$gender <- c(0,1,0,1,0,0,1,1,0,0,
+                       0,1,1,0,1,0,1,1,1,1,
+                       0,1,1,0,1,1,0,1,0,1,
+                       0,1,0,0,0,0,0,0,1,0,
+                       0,1,1,1,0,1,0,1,0,0) 
 # manually filled in gender 0 = woman, 1 = man, based on majority given in NL voornamen bank 
 
 # check if it went smoothly 
-view(df_ego[c('Naam', 'gender', 'au_id')])
+view(df_soc_ego[c('Naam', 'gender', 'au_id')])
+
+
+```
+
+### gender - polsci
+
+```{r}
+df_pol_ego$Naam # list of all names 
+
+df_pol_ego$gender <- c(1,0,1,0,0,0,1,0,1,0,
+                       1,1,0,0,1,1,1,0,0,1,
+                       0,1,1,0,0,1,1,1,0,0,
+                       0,0,0,1,1,0,0,1,1,0,
+                       0,0,0,1,0,1,1,1,0,0,0) 
+    # manually filled in gender 0 = woman, 1 = man, based on majority given in NL voornamen bank, Guangyu was not in name bank but based on the employee-picture of RU, this person presents feminine, thus I assumed 0. 
+
+# check if it went smoothly 
+view(df_pol_ego[c('Naam', 'gender', 'au_id')])
 
 #covariate 
 # gender <- coCovar(df_ego$gender)
 ```
 
-## H-index
+### joining polsci and soc data 
 
-Inspired by Lucan's code:
+```{r}
+df_both_ego <- full_join(df_soc_ego, df_pol_ego, by = join_by
+                    (au_id == au_id, 
+                     Naam==Naam, 
+                     gender == gender, 
+                     discipline.22 == discipline.22,
+                     discipline.24 == discipline.24,
+                     counts_by_year== counts_by_year, 
+                     works_count == works_count, 
+                     cited_by_count == cited_by_count, 
+                     Universiteit1.22 == Universiteit1.22,
+                     Universiteit2.22 == Universiteit2.22,
+                     Universiteit1.24 == Universiteit1.24,
+                     Universiteit2.24 == Universiteit2.24,
+                     Universiteit.22 == Universiteit.22, 
+                     Universiteit.24 == Universiteit.24,
+                     no_oa_id == no_oa_id,
+                     display_name == display_name,
+                     display_name_alternatives == display_name_alternatives,
+                     ids== ids,
+                     orcid == orcid,
+                     year.22 == year.22,
+                     year.24 == year.24,
+                     Functie.24== Functie.24,
+                     relevance_score == relevance_score,
+                     affiliation_display_name == affiliation_display_name,
+                     affiliation_ror == affiliation_ror,
+                     affiliation_id == affiliation_id,
+                     affiliation_country_code == affiliation_country_code,
+                     affiliation_type == affiliation_type,
+                     affiliations_other == affiliations_other,
+                     affiliation_lineage == affiliation_lineage,
+                     Specialisatie.22 == Specialisatie.22,
+                     Specialisatie.24 == Specialisatie.24,
+                     x_concepts == x_concepts,
+                     works_api_url == works_api_url))
+# 101 scholars (50 sociology + 51 polsci) and 43 variables (as opposed to 21 bc i could not join them all.)
+
+
+
+# GODDAMMIT WHY DO I ONLY FIND THIS NOW?!?!?!?!
+# mydata <- sienaDataCreate(net, gender)
+```
+
+## QUESTION:
+
+With 101 scholars, instead of the nr. of scholars of looking at just one department, I wonder if this is where we could simplify. Looking at a change over time, but not looking through a lens that wants to compare the two departments. Instead, I could just look at one department.
+
+What do you think?
+
+## H-index webscraping
+
+Credits to Lucan for the code.
 
 ```{r}
 # Add h-index and i10-index columns to df_ego
-df_ego <- df_ego %>%
+df_ego <- df_both_ego %>%
   mutate(h_index = NA_real_, i10_index = NA_real_)
 
 # Get H-index and i10-index 
@@ -431,4 +582,26 @@ view(df_ego[c('au_id','Naam','gender','h_index','i10_index')])
 
 #covariate 
 # h_index <- coCovar(df_ego$h_index)
+```
+
+## Actually define data:
+
+```{r}
+# dependent:
+# net <- sienaDependent(net_soc_array)
+
+#covariate 1
+# gender <- coCovar(df_ego$gender)
+# covariate 2
+# h_index <- coCovar(df_ego$h_index)
+
+
+#combining data: wish I knew of this shit earlier...
+# mydata <- sienaDataCreate(net, gender)
+```
+
+# Create effects structure
+
+```{r}
+#myeff <- getEffects(mydata)
 ```

@@ -60,10 +60,8 @@ navbar:
         
     - text: "Step-by-step analysis"
       menu:
-      - text: "Step 1: Define data"
+      - text: "Step 1&2: Define data&effects structure"
         href: 1definedata.html
-      - text: "Step 2: Create effects structure"
-        href:  
       - text: "Step 3: Get initial description"
         href: 
       - text: "Step 4: Specify model"
