@@ -55,8 +55,8 @@ require(tidyverse)
 # You should end up with version 1.3.14 loaded in instead of 1.4.7, 
 # but then make sure there isn't a install.packages("RSiena") function running somewhere, because then it will reinstall the newest version
 
-# require(RSiena)
-# require(RsienaTwoStep)
+require(RSiena)
+require(RsienaTwoStep)
 
 ```
 
@@ -301,9 +301,10 @@ testpolsci <- fcolnet(data = scholars,
 
 ```{r}
 
+
 # Jochem messed up and did: waves, rows, columns [1, , ]
-socwave1 <- testsoc$nets[ , ,1]  #rows, columns, waves
-socwave2 <- testsoc$nets[ , ,2]  #rows, columns, waves
+socwave1 <- testsoc$nets[1, , ]  #rows, columns, waves
+socwave2 <- testsoc$nets[2, , ]  #rows, columns, waves
 # let us put the diagonal to zero
 diag(socwave1) <- 0
 diag(socwave2) <- 0
@@ -315,14 +316,22 @@ net_soc_array <- array(data = c(socwave1, socwave2), dim = c(dim(socwave1), 2))
 
 str(net_soc_array)  #now we basically restructured this 
 # output: num [1:50, 1:50, 1:2] 0 0 0 0 0 0 0 0 0 0
+
+
+# dependent
+net <- sienaDependent(net_soc_array)
 ```
+
+## QUESTION: 
+
+HOW COME: when I "correct" Jochem and put [rows,columns,waves] instead of [waves, rows, columns], the sienaDependent function does not work, but it DOES work if I leave the "incorrect" version unchanged?!
 
 ## waves - polsci department
 
 ```{r}
 # Jochem messed up and did: waves, rows, columns [1, , ]
-polwave1 <- testpolsci$nets[ , ,1]  #rows, columns, waves
-polwave2 <- testpolsci$nets[ , ,2]  #rows, columns, waves
+polwave1 <- testpolsci$nets[1, , ]  #rows, columns, waves
+polwave2 <- testpolsci$nets[2, , ]  #rows, columns, waves
 # let us put the diagonal to zero
 diag(polwave1) <- 0
 diag(polwave2) <- 0
@@ -334,19 +343,21 @@ net_pol_array <- array(data = c(polwave1, polwave2), dim = c(dim(polwave1), 2))
 
 str(net_pol_array)  #now we basically restructured this 
 
+
+
 ```
 
-### **QUESTION:**
+### **(old) QUESTION:**
 
 **What's the difference between putting the 2 and the 1 at the dimensions. I feel like one is appropriate since I am only looking at one wave, not two, but since the output is among the 'values' not 'data', I cannot view the variable net_soc_array(1) nor "visualize" what that means in terms of its structure. I don't really know what the difference would be between the 1:2 and the 1 in the outputs, structurally.**
 
-### ANSWER: 
+### ANSWER:
 
 RSiena needs at least two waves, because it models the evolution of the networks. We have to store the networks in an array before we can convert it to an dependent variable objects. Moreover, for RSiena the dimensions should be in the following order: rows, columns, waves.
 
 I 'messed up' my function (for didactic reasons ;-) )and stored the nets in the following order: waves, rows, columns. Thus, either correct my function or retrieve the separate waves and store them in the order RSiena requires.
 
-### QUESTION TO THE ANSWER:
+## (new) QUESTION:
 
 We had agreed on me only investigating one time point for the sake of simplicity. It seems I basically have no choice but to investigate two waves, revisit my RQs and make an additional RQ about tie changes over time, right?
 
@@ -366,17 +377,16 @@ dim(testpolsci$nets)
 
 ## My data
 
-### sociology dep. 
+### sociology dep.
 
 not using net_soc_array for now since I am unsure about its use due to question above
 
 ```{r}
-# dependent
+# # dependent
 # net <- sienaDependent(net_soc_array)
 
-
-# dependent 
-nets <- testsoc$nets
+# dependent ?
+# nets <- testsoc$nets
 
  
 df_ego_demo <- testsoc$data$demographics
@@ -410,7 +420,7 @@ df_ego_works <- testsoc$data$works
 
 ```
 
-### polsci department 
+### polsci department
 
 ```{r}
 # dependent
@@ -484,7 +494,7 @@ view(df_pol_ego[c('Naam', 'gender', 'au_id')])
 # gender <- coCovar(df_ego$gender)
 ```
 
-### joining polsci and soc data 
+### joining polsci and soc data
 
 ```{r}
 df_both_ego <- full_join(df_soc_ego, df_pol_ego, by = join_by
@@ -524,7 +534,7 @@ df_both_ego <- full_join(df_soc_ego, df_pol_ego, by = join_by
                      works_api_url == works_api_url))
 # 101 scholars (50 sociology + 51 polsci) and 43 variables (as opposed to 21 bc i could not join them all.)
 
-
+?full_join
 
 # GODDAMMIT WHY DO I ONLY FIND THIS NOW?!?!?!?!
 # mydata <- sienaDataCreate(net, gender)
@@ -586,9 +596,30 @@ view(df_ego[c('au_id','Naam','gender','h_index','i10_index')])
 
 ## Actually define data:
 
+### RSiena troubleshooting
+
+(Cannot install RSiena for some reason.)
+
+```{r}
+#require(RSiena)
+#require(RsienaTwoStep)
+```
+
+Changed administration rights in properties to get around the "file not found"-error.
+
 ```{r}
 # dependent:
-# net <- sienaDependent(net_soc_array)
+# net <- sienaDependent(net_soc_array) # Does not work "need 2 node sets for a bipartite network"
+
+#also this is only the array for sociology, I need to have a combined DV for both departments for RQ1 ... 
+
+# str(net_soc_array)
+# my output here: 1:2, 1:50, 1:2
+# but in week 5-2: 1:50, 1:50, 1:2
+
+# net <- sienaDependent(net_soc_array) # Which array to take 
+
+
 
 #covariate 1
 # gender <- coCovar(df_ego$gender)
