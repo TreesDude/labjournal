@@ -558,6 +558,7 @@ plot(testsoc_w1,
      edge.arrow.size =0.2)
 
 ```
+
 ## wave 2 - soc
 ```{r}
 testsoc_w2 <- igraph::graph_from_adjacency_matrix(
