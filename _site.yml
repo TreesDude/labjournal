@@ -51,9 +51,9 @@ navbar:
       menu:
       - text: "Clarify RQs"
         href: clarifyRQsandDesign.html   
+      - text: "Plotting"
+        href: plotting1.html
       - text: "Clarify design & hypotheses"
-        href: 
-      - text: "page"
         href:  
       - text: "page"
         href: 
