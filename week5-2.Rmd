@@ -302,9 +302,9 @@ myeff <- getEffects(mydata)
 THIS IS ALL THE EFFECTS YOU COULD LOOK AT IN YOUR NETWORK 
 e.g. outdegree (density), called density, three things: evaluation, endowment, and creation
   you can only include two of the three (tie creation, breaking and maintaining)
-  Assumption meachnisms to make and breka a tie are the same so we only use the EVALUATION part 
+  Assumption mechanisms to make and breaka a tie are the same so we only use the EVALUATION part 
   
-  All these effects are describedin the manual of RSiena Chapter 12 (9?) 
+  All these effects are described in the manual of RSiena Chapter 12 (9?) 
   
 
 
@@ -378,9 +378,7 @@ convergence ratio should be <.25
 Hirsch-Index is NOT scraped in open-alex already but you have the nr. of citations and you can google how someone else did it 
 
 # STUDY CHAPTER 12 of RSiena Manual! 
-# COLLECTIVELY SEND PAPER TO JOCHEM BEFORE WEEKEND!
 # PrACTICE WITH RSIENA 
-# LOOK AT MANUAL 
 
 # DONT GO OVERBOARD!!! 
 # REMAIN FOCUSED!!!

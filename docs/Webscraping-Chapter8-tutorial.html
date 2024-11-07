@@ -411,8 +411,10 @@ div.tocify {
     <li>
       <a href="plotting1.html">Plotting</a>
     </li>
+    <li>
+      <a href="revisitwithJochem.html">Check-in with Jochem</a>
+    </li>
     <li class="dropdown-header">Clarify design &amp; hypotheses</li>
-    <li class="dropdown-header">page</li>
   </ul>
 </li>
 <li class="dropdown">
@@ -513,13 +515,13 @@ rm(list = ls())
 # install.packages(&#39;data.table&#39;)
 library(data.table)  # mainly for faster data handling
 library(tidyverse)  # I assume you already installed this one!</code></pre>
-<pre><code>## ── Attaching core tidyverse packages ────── tidyverse 2.0.0 ──
+<pre><code>## ── Attaching core tidyverse packages ───
 ## ✔ dplyr     1.1.4     ✔ readr     2.1.5
 ## ✔ forcats   1.0.0     ✔ stringr   1.5.1
 ## ✔ ggplot2   3.5.1     ✔ tibble    3.2.1
 ## ✔ lubridate 1.9.3     ✔ tidyr     1.3.1
 ## ✔ purrr     1.0.2     
-## ── Conflicts ──────────────────────── tidyverse_conflicts() ──
+## ── Conflicts ── tidyverse_conflicts() ──
 ## ✖ dplyr::between()     masks data.table::between()
 ## ✖ dplyr::filter()      masks stats::filter()
 ## ✖ dplyr::first()       masks data.table::first()
@@ -583,10 +585,10 @@ sociology</h1>
 
 head(soc_staff)</code></pre>
 <pre><code>## $node
-## &lt;pointer: 0x00000243aa1fefd0&gt;
+## &lt;pointer: 0x0000025f68afe750&gt;
 ## 
 ## $doc
-## &lt;pointer: 0x00000243aa0ff180&gt;</code></pre>
+## &lt;pointer: 0x0000025f653ff7d0&gt;</code></pre>
 <pre class="r"><code>#which object? 
 class(soc_staff)</code></pre>
 <pre><code>## [1] &quot;xml_document&quot; &quot;xml_node&quot;</code></pre>
@@ -854,7 +856,7 @@ get_scholar_id_fix(last_name = &quot;tolsma&quot;, first_name = &quot;jochem&quo
 ## [1] &quot;Professor, Radboud University Nijmegen / University of Groningen&quot;
 ## 
 ## $total_cites
-## [1] 3452
+## [1] 3456
 ## 
 ## $h_index
 ## [1] 27
@@ -1239,7 +1241,7 @@ publications, citations</h3>
 ## 5                                                           35 (1), 51-61   154 2013
 ## 6                                                         24 (2), 215-230   136 2008
 ## 7                                                         38 (5), 793-813   107 2012
-## 8                                                              8, 117-134   104 2012
+## 8                                                              8, 117-134   105 2012
 ## 9                                                         23 (3), 325-339    87 2007
 ## 10                                                        60 (2), 257-277    86 2009
 ## 11                                                        26 (2), 235-252    82 2010
@@ -1248,7 +1250,7 @@ publications, citations</h3>
 ## 14                                                             98, 104185    58 2019
 ## 15                                                                           53 2016
 ## 16                                                      34 (5-6), 888-906    52 2013
-## 17                                                        14 (6), 697-719    44 2017
+## 17                                                        14 (6), 697-719    45 2017
 ## 18                                                          42 (1), 59-83    44 2013
 ## 19                                                              54, 80-95    40 2015
 ## 20                                                        31 (3), 239-259    39 2010
@@ -1271,10 +1273,10 @@ publications, citations</h3>
 ## 37                                                              63, 80-94    17 2018
 ## 38                                                            82 (2), 133    15 2007
 ## 39                                                       16 (2), e0245644    14 2021
-## 40                                                        13 (2), 231-256    13 2016
+## 40                                                        13 (2), 231-256    14 2016
 ## 41                                                                           13 2014
 ## 42                                                                     11    12 2011
-## 43                                                              4, 643150    10 2022
+## 43                                                              4, 643150    11 2022
 ## 44                                                            46, 581-618     9 2022
 ## 45                                                                            9 2016
 ## 46                                                                            9 2010
@@ -1474,12 +1476,12 @@ publications, citations</h3>
 ## 9  2016   227
 ## 10 2017   228
 ## 11 2018   289
-## 12 2019   312
+## 12 2019   311
 ## 13 2020   300
-## 14 2021   330
+## 14 2021   331
 ## 15 2022   338
-## 16 2023   334
-## 17 2024   310</code></pre>
+## 16 2023   335
+## 17 2024   312</code></pre>
 </div>
 <div id="get-collaborators" class="section level3" number="6.2.2">
 <h3><span class="header-section-number">6.2.2</span> get
@@ -1493,8 +1495,9 @@ number="6.3">
 <h2><span class="header-section-number">6.3</span> plot network of
 single staff member</h2>
 <pre class="r"><code>plot_coauthors(get_coauthors(&quot;Iu23-90AAAAJ&quot;, n_coauthors = 20, n_deep = 1), size_labels = 2)  </code></pre>
-<pre><code>## Warning: Removed 148 rows containing missing values or values outside
-## the scale range (`geom_point()`).</code></pre>
+<pre><code>## Warning: Removed 148 rows containing missing
+## values or values outside the scale
+## range (`geom_point()`).</code></pre>
 <pre><code>## Warning: ggrepel: 2 unlabeled data points (too many overlaps). Consider increasing max.overlaps</code></pre>
 <p><img src="Webscraping-Chapter8-tutorial_files/figure-html/plot-1.png" width="672" /></p>
 <pre class="r"><code># Doesn&#39;t look like much yet, but we&#39;ll make it prettier later.</code></pre>
@@ -1677,7 +1680,7 @@ Jochem Tolsma
 J. Tolsma , Jochem Tolsma, J L Tolsma
 </td>
 <td style="text-align:right;">
-8912.4
+8938.33
 </td>
 <td style="text-align:left;">
 <a href="https://openalex.org/A5087380803"
@@ -2049,7 +2052,7 @@ oa_fetch(entity= &quot;author&quot;, search = &quot;Jochem Tolsma&quot;, affilia
 <pre><code>## # A tibble: 1 × 18
 ##   id      display_name display_name_alterna…¹ relevance_score ids   orcid works_count cited_by_count
 ##   &lt;chr&gt;   &lt;chr&gt;        &lt;list&gt;                           &lt;dbl&gt; &lt;lis&gt; &lt;chr&gt;       &lt;int&gt;          &lt;int&gt;
-## 1 https:… Jochem Tols… &lt;chr [3]&gt;                        8912. &lt;chr&gt; http…          85           2049
+## 1 https:… Jochem Tols… &lt;chr [3]&gt;                        8938. &lt;chr&gt; http…          85           2049
 ## # ℹ abbreviated name: ¹​display_name_alternatives
 ## # ℹ 10 more variables: counts_by_year &lt;list&gt;, affiliation_display_name &lt;chr&gt;, affiliation_id &lt;chr&gt;,
 ## #   affiliation_ror &lt;chr&gt;, affiliation_country_code &lt;chr&gt;, affiliation_type &lt;chr&gt;,
@@ -2197,7 +2200,7 @@ Jochem Tolsma
 J. Tolsma , Jochem Tolsma, J L Tolsma
 </td>
 <td style="text-align:right;">
-8912.4
+8938.33
 </td>
 <td style="text-align:left;">
 <a href="https://openalex.org/A5087380803"
@@ -2603,7 +2606,7 @@ Maurice Johannes Wilhelmus Gesthuizen, M. Gesthuizen , Maurice
 Gesthuizen , M.J.W. Gesthuizen , Maurice J.W. Gesthuizen
 </td>
 <td style="text-align:right;">
-8385.25
+8408.65
 </td>
 <td style="text-align:left;">
 <a href="https://openalex.org/A5007673492"
@@ -3011,7 +3014,7 @@ Michael Savelkoul
 M.J. Savelkoul , M. Savelkoul , Michael Savelkoul
 </td>
 <td style="text-align:right;">
-4068.66
+4063.61
 </td>
 <td style="text-align:left;">
 <a href="https://openalex.org/A5048988743"
@@ -3027,11 +3030,11 @@ class="uri">https://orcid.org/0000-0002-2078-9462</a>
 29
 </td>
 <td style="text-align:right;">
-612
+615
 </td>
 <td style="text-align:left;">
 2024, 2023, 2022, 2021, 2020, 2019, 2018, 2017, 2016, 2015, 2014, 2013,
-2012, 0, 2, 1, 3, 1, 2, 3, 3, 3, 2, 2, 2, 1, 68, 50, 55, 65, 83, 41, 60,
+2012, 0, 2, 1, 3, 1, 2, 3, 3, 3, 2, 2, 2, 1, 69, 50, 55, 65, 84, 41, 60,
 41, 43, 46, 28, 39, 13
 </td>
 <td style="text-align:left;">
@@ -3416,7 +3419,7 @@ T.W.G. Tom van der Meer, Tom W. G. van der Meer , Tom Van Der Meer , T.
 Van Der Meer , TOM W.G. VAN DER MEER
 </td>
 <td style="text-align:right;">
-17204.22
+17223.25
 </td>
 <td style="text-align:left;">
 <a href="https://openalex.org/A5010780363"

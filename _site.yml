@@ -53,10 +53,11 @@ navbar:
         href: clarifyRQsandDesign.html   
       - text: "Plotting"
         href: plotting1.html
+      - text: "Check-in with Jochem"
+        href: revisitwithJochem.html
       - text: "Clarify design & hypotheses"
         href:  
-      - text: "page"
-        href: 
+
         
     - text: "Step-by-step analysis"
       menu:

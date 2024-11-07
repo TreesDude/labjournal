@@ -5,7 +5,6 @@ date: "2024-11-01"
 output: html_document
 ---
 
-
 ```{r, globalsettings, echo=FALSE, warning=FALSE, results='hide'}
 library(knitr)
 
@@ -29,6 +28,31 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```
 
-# Data Draft 
+# Data Draft
 
+Information about data set:
 
+-   Data set provided by Jochem
+
+-   collaborations of scholars in NL
+
+-   time frame: ?
+
+Gender:
+
+-   assumed binary for simplicity and ethical considerations of assuming gender based on other characterstics
+
+-   Names of scholars manually checked in Dutch Voornamenbank website (NAME WEBSITE)
+
+-   with 0 = female and 1 = male.
+
+-   
+
+Prestige
+
+-   indicated by H-Index:
+
+```{=html}
+<!-- -->
+```
+-   
