@@ -38,19 +38,31 @@ Information about data set:
 
 -   time frame: ?
 
-Gender:
+    -   timeframe of focus
+
+## DV: Collaboration between scholars 
+
+## Covariate 1: Gender
 
 -   assumed binary for simplicity and ethical considerations of assuming gender based on other characterstics
 
--   Names of scholars manually checked in Dutch Voornamenbank website (NAME WEBSITE)
+-   Names of scholars manually checked in Dutch Voornamenbank website **(NAME WEBSITE)**
 
 -   with 0 = female and 1 = male.
 
 -   
 
-Prestige
+## Covariate 2: Prestige
 
--   indicated by H-Index:
+-   indicated by H-Index: and i10 index
+
+-   definitions indeces:
+
+-   
+
+-   number of citations and publications webscraped through OpenAlex **[source]**
+
+-   h index and i10 index calculated based on these counts
 
 ```{=html}
 <!-- -->

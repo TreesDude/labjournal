@@ -302,9 +302,10 @@ myeff <- getEffects(mydata)
 THIS IS ALL THE EFFECTS YOU COULD LOOK AT IN YOUR NETWORK 
 e.g. outdegree (density), called density, three things: evaluation, endowment, and creation
   you can only include two of the three (tie creation, breaking and maintaining)
-  Assumption mechanisms to make and breaka a tie are the same so we only use the EVALUATION part 
+ 
+The assumption is: mechanisms to make and break a a tie are the same so WE ONLY USE THE EVALUATION part 
   
-  All these effects are described in the manual of RSiena Chapter 12 (9?) 
+  All these effects are described in the manual of RSiena Chapter 12! 
   
 
 
@@ -333,10 +334,11 @@ Sometimes similartostep 2 (but here you include specifically the effects you wan
 myeff <- includeEffects(myeff, isolateNet, inPop, outAct)  #we know that quite a lot of staff has not published with someone else
 
 ```
-inpope ppl with lots of indegrees will havelotof indegrees later (in population)
+over time:
+inpope ppl with lots of indegrees will havelot of indegrees later (in population)
  outAct ppl with lots of outdegrees will have lot of indegrees later 
 
- hint for my own project: interaction effect of these statistics and the effect of gender 
+ hint FOR MY OWN PROJECT: interaction effect of these statistics and the effect of gender 
 
 ```{r}
 
@@ -352,8 +354,6 @@ egoX
 
  "interaction1" HAS NOTHING TO DO WITH AN INTERACTION EFFECT 
 
-
- 
  
 # 7.14 STEP 5: Estimate model 
 ```{r}

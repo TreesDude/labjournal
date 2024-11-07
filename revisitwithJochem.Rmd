@@ -430,17 +430,17 @@ pol_gender <- fload("./data/processed/df_pol_ego_20241105.rda")
 ### Combine data (gender)
 
 ```{r combine gender set}
-df <- test$data
-df_ego <- do.call(rbind.data.frame, df$demographics)
+df <- test$data # make dataset with all data 
+df_ego <- do.call(rbind.data.frame, df$demographics) # dataset with demographic information
 
 
-soc_gender <- soc_gender[,c("Naam", "gender")]
-pol_gender <- pol_gender[,c("Naam", "gender")]
+soc_gender <- soc_gender[,c("Naam", "gender")] # selecting only the content we need
+pol_gender <- pol_gender[,c("Naam", "gender")] # selecting only the content we need
 
-gender <- rbind(soc_gender, pol_gender) # combining data sets 
+gender <- rbind(soc_gender, pol_gender) # combining the gender data sets 
 
 df_ego <- df_ego %>% 
-            left_join(gender) #dataset 
+            left_join(gender) #dcombininf dataset of gender with the one with demographic information 
 ```
 
 
@@ -574,6 +574,7 @@ names(df_ego) #see labels of variables
 
 plot(test_w1,
 vertex.color = ifelse(df_ego$gender == 1, "red", "blue"), #now, I can use actor attributes for plotting.
+# here: if gender = 1 (aka man) then red dot, if not then blue 
 vertex.label = NA,
 edge.width = 0.2,
 edge.arrow.size =0.2)

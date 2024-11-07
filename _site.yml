@@ -28,7 +28,7 @@ navbar:
         href: networkvis.html
       - text: "Week 5/Chapter 7 - Analysis pt.1"
         href: week5.html
-      - text: "Week 5/Chapter 7 - Analysis pt.2"
+      - text: "!Week 5/Chapter 7 - Analysis pt.2"
         href: week5-2.html
       - text: "Week 5 - Practice data 1"
         href: datapractice1.html

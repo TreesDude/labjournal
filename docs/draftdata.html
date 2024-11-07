@@ -369,7 +369,7 @@ div.tocify {
       <a href="week5.html">Week 5/Chapter 7 - Analysis pt.1</a>
     </li>
     <li>
-      <a href="week5-2.html">Week 5/Chapter 7 - Analysis pt.2</a>
+      <a href="week5-2.html">!Week 5/Chapter 7 - Analysis pt.2</a>
     </li>
     <li>
       <a href="datapractice1.html">Week 5 - Practice data 1</a>
@@ -513,28 +513,47 @@ div.tocify {
 <ul>
 <li><p>Data set provided by Jochem</p></li>
 <li><p>collaborations of scholars in NL</p></li>
-<li><p>time frame: ?</p></li>
+<li><p>time frame: ?</p>
+<ul>
+<li>timeframe of focus</li>
+</ul></li>
 </ul>
-<p>Gender:</p>
+<div id="dv-collaboration-between-scholars" class="section level2"
+number="1.1">
+<h2><span class="header-section-number">1.1</span> DV: Collaboration
+between scholars</h2>
+</div>
+<div id="covariate-1-gender" class="section level2" number="1.2">
+<h2><span class="header-section-number">1.2</span> Covariate 1:
+Gender</h2>
 <ul>
 <li><p>assumed binary for simplicity and ethical considerations of
 assuming gender based on other characterstics</p></li>
 <li><p>Names of scholars manually checked in Dutch Voornamenbank website
-(NAME WEBSITE)</p></li>
+<strong>(NAME WEBSITE)</strong></p></li>
 <li><p>with 0 = female and 1 = male.</p></li>
 <li></li>
 </ul>
-<p>Prestige</p>
+</div>
+<div id="covariate-2-prestige" class="section level2" number="1.3">
+<h2><span class="header-section-number">1.3</span> Covariate 2:
+Prestige</h2>
 <ul>
-<li>indicated by H-Index:</li>
+<li><p>indicated by H-Index: and i10 index</p></li>
+<li><p>definitions indeces:</p></li>
+<li></li>
+<li><p>number of citations and publications webscraped through OpenAlex
+<strong>[source]</strong></p></li>
+<li><p>h index and i10 index calculated based on these counts</p></li>
 </ul>
 <!-- -->
 <ul>
 <li></li>
 </ul>
 </div>
+</div>
 
-<div id="rmd-source-code">LS0tDQp0aXRsZTogImRyYWZ0LWRhdGEiDQphdXRob3I6ICJWZXJvb28iDQpkYXRlOiAiMjAyNC0xMS0wMSINCm91dHB1dDogaHRtbF9kb2N1bWVudA0KLS0tDQoNCmBgYHtyLCBnbG9iYWxzZXR0aW5ncywgZWNobz1GQUxTRSwgd2FybmluZz1GQUxTRSwgcmVzdWx0cz0naGlkZSd9DQpsaWJyYXJ5KGtuaXRyKQ0KDQprbml0cjo6b3B0c19jaHVuayRzZXQoZWNobyA9IFRSVUUpDQpvcHRzX2NodW5rJHNldCh0aWR5Lm9wdHM9bGlzdCh3aWR0aC5jdXRvZmY9MTAwKSx0aWR5PVRSVUUsIHdhcm5pbmcgPSBGQUxTRSwgbWVzc2FnZSA9IEZBTFNFLGNvbW1lbnQgPSAiIz4iLCBjYWNoZT1UUlVFLCBjbGFzcy5zb3VyY2U9YygidGVzdCIpLCBjbGFzcy5vdXRwdXQ9YygidGVzdDIiKSkNCm9wdGlvbnMod2lkdGggPSAxMDApDQpyZ2w6OnNldHVwS25pdHIoKQ0KDQpjb2xvcml6ZSA8LSBmdW5jdGlvbih4LCBjb2xvcikge3NwcmludGYoIjxzcGFuIHN0eWxlPSdjb2xvcjogJXM7Jz4lczwvc3Bhbj4iLCBjb2xvciwgeCkgfQ0KDQpgYGANCg0KYGBge3Iga2xpcHB5LCBlY2hvPUZBTFNFLCBpbmNsdWRlPUZBTFNFfQ0Ka2xpcHB5OjprbGlwcHkocG9zaXRpb24gPSBjKCd0b3AnLCAncmlnaHQnKSkNCiNrbGlwcHk6OmtsaXBweShjb2xvciA9ICdkYXJrcmVkJykNCiNrbGlwcHk6OmtsaXBweSh0b29sdGlwX21lc3NhZ2UgPSAnQ2xpY2sgdG8gY29weScsIHRvb2x0aXBfc3VjY2VzcyA9ICdEb25lJykNCmBgYA0KDQpgYGB7ciBzZXR1cCwgaW5jbHVkZT1GQUxTRX0NCmtuaXRyOjpvcHRzX2NodW5rJHNldChlY2hvID0gVFJVRSkNCg0KYGBgDQoNCiMgRGF0YSBEcmFmdA0KDQpJbmZvcm1hdGlvbiBhYm91dCBkYXRhIHNldDoNCg0KLSAgIERhdGEgc2V0IHByb3ZpZGVkIGJ5IEpvY2hlbQ0KDQotICAgY29sbGFib3JhdGlvbnMgb2Ygc2Nob2xhcnMgaW4gTkwNCg0KLSAgIHRpbWUgZnJhbWU6ID8NCg0KR2VuZGVyOg0KDQotICAgYXNzdW1lZCBiaW5hcnkgZm9yIHNpbXBsaWNpdHkgYW5kIGV0aGljYWwgY29uc2lkZXJhdGlvbnMgb2YgYXNzdW1pbmcgZ2VuZGVyIGJhc2VkIG9uIG90aGVyIGNoYXJhY3RlcnN0aWNzDQoNCi0gICBOYW1lcyBvZiBzY2hvbGFycyBtYW51YWxseSBjaGVja2VkIGluIER1dGNoIFZvb3JuYW1lbmJhbmsgd2Vic2l0ZSAoTkFNRSBXRUJTSVRFKQ0KDQotICAgd2l0aCAwID0gZmVtYWxlIGFuZCAxID0gbWFsZS4NCg0KLSAgIA0KDQpQcmVzdGlnZQ0KDQotICAgaW5kaWNhdGVkIGJ5IEgtSW5kZXg6DQoNCmBgYHs9aHRtbH0NCjwhLS0gLS0+DQpgYGANCi0gICANCg==</div>
+<div id="rmd-source-code">LS0tDQp0aXRsZTogImRyYWZ0LWRhdGEiDQphdXRob3I6ICJWZXJvb28iDQpkYXRlOiAiMjAyNC0xMS0wMSINCm91dHB1dDogaHRtbF9kb2N1bWVudA0KLS0tDQoNCmBgYHtyLCBnbG9iYWxzZXR0aW5ncywgZWNobz1GQUxTRSwgd2FybmluZz1GQUxTRSwgcmVzdWx0cz0naGlkZSd9DQpsaWJyYXJ5KGtuaXRyKQ0KDQprbml0cjo6b3B0c19jaHVuayRzZXQoZWNobyA9IFRSVUUpDQpvcHRzX2NodW5rJHNldCh0aWR5Lm9wdHM9bGlzdCh3aWR0aC5jdXRvZmY9MTAwKSx0aWR5PVRSVUUsIHdhcm5pbmcgPSBGQUxTRSwgbWVzc2FnZSA9IEZBTFNFLGNvbW1lbnQgPSAiIz4iLCBjYWNoZT1UUlVFLCBjbGFzcy5zb3VyY2U9YygidGVzdCIpLCBjbGFzcy5vdXRwdXQ9YygidGVzdDIiKSkNCm9wdGlvbnMod2lkdGggPSAxMDApDQpyZ2w6OnNldHVwS25pdHIoKQ0KDQpjb2xvcml6ZSA8LSBmdW5jdGlvbih4LCBjb2xvcikge3NwcmludGYoIjxzcGFuIHN0eWxlPSdjb2xvcjogJXM7Jz4lczwvc3Bhbj4iLCBjb2xvciwgeCkgfQ0KDQpgYGANCg0KYGBge3Iga2xpcHB5LCBlY2hvPUZBTFNFLCBpbmNsdWRlPUZBTFNFfQ0Ka2xpcHB5OjprbGlwcHkocG9zaXRpb24gPSBjKCd0b3AnLCAncmlnaHQnKSkNCiNrbGlwcHk6OmtsaXBweShjb2xvciA9ICdkYXJrcmVkJykNCiNrbGlwcHk6OmtsaXBweSh0b29sdGlwX21lc3NhZ2UgPSAnQ2xpY2sgdG8gY29weScsIHRvb2x0aXBfc3VjY2VzcyA9ICdEb25lJykNCmBgYA0KDQpgYGB7ciBzZXR1cCwgaW5jbHVkZT1GQUxTRX0NCmtuaXRyOjpvcHRzX2NodW5rJHNldChlY2hvID0gVFJVRSkNCg0KYGBgDQoNCiMgRGF0YSBEcmFmdA0KDQpJbmZvcm1hdGlvbiBhYm91dCBkYXRhIHNldDoNCg0KLSAgIERhdGEgc2V0IHByb3ZpZGVkIGJ5IEpvY2hlbQ0KDQotICAgY29sbGFib3JhdGlvbnMgb2Ygc2Nob2xhcnMgaW4gTkwNCg0KLSAgIHRpbWUgZnJhbWU6ID8NCg0KICAgIC0gICB0aW1lZnJhbWUgb2YgZm9jdXMNCg0KIyMgRFY6IENvbGxhYm9yYXRpb24gYmV0d2VlbiBzY2hvbGFycyANCg0KIyMgQ292YXJpYXRlIDE6IEdlbmRlcg0KDQotICAgYXNzdW1lZCBiaW5hcnkgZm9yIHNpbXBsaWNpdHkgYW5kIGV0aGljYWwgY29uc2lkZXJhdGlvbnMgb2YgYXNzdW1pbmcgZ2VuZGVyIGJhc2VkIG9uIG90aGVyIGNoYXJhY3RlcnN0aWNzDQoNCi0gICBOYW1lcyBvZiBzY2hvbGFycyBtYW51YWxseSBjaGVja2VkIGluIER1dGNoIFZvb3JuYW1lbmJhbmsgd2Vic2l0ZSAqKihOQU1FIFdFQlNJVEUpKioNCg0KLSAgIHdpdGggMCA9IGZlbWFsZSBhbmQgMSA9IG1hbGUuDQoNCi0gICANCg0KIyMgQ292YXJpYXRlIDI6IFByZXN0aWdlDQoNCi0gICBpbmRpY2F0ZWQgYnkgSC1JbmRleDogYW5kIGkxMCBpbmRleA0KDQotICAgZGVmaW5pdGlvbnMgaW5kZWNlczoNCg0KLSAgIA0KDQotICAgbnVtYmVyIG9mIGNpdGF0aW9ucyBhbmQgcHVibGljYXRpb25zIHdlYnNjcmFwZWQgdGhyb3VnaCBPcGVuQWxleCAqKltzb3VyY2VdKioNCg0KLSAgIGggaW5kZXggYW5kIGkxMCBpbmRleCBjYWxjdWxhdGVkIGJhc2VkIG9uIHRoZXNlIGNvdW50cw0KDQpgYGB7PWh0bWx9DQo8IS0tIC0tPg0KYGBgDQotICAgDQo=</div>
 
 
 </div>
