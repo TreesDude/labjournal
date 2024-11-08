@@ -64,7 +64,10 @@ navbar:
       - text: "Step 1&2: Define data&effects structure"
         href: 1definedata.html
       - text: "Step 3: initial description"
-        href: 
+        href: draftdata.html #bs html, change later
+        menu:
+        - text: "test second layer"
+          href: networkvis.html #bs html, change later # yay it works 
       - text: "Step 4&5: Specify & Estimate model"
         href: 
       - text: "Step 6: Goodness of Fit"
@@ -105,8 +108,7 @@ navbar:
         href: 
       - text: "Appendices"
         href:         
-        - text: "test second layer"
-          href:         
+       
 
   right:
   - icon: fab fa-github

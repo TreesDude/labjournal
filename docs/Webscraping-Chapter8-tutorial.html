@@ -427,7 +427,14 @@ div.tocify {
     <li>
       <a href="1definedata.html">Step 1&amp;2: Define data&amp;effects structure</a>
     </li>
-    <li class="dropdown-header">Step 3: initial description</li>
+    <li class="dropdown-submenu">
+      <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Step 3: initial description</a>
+      <ul class="dropdown-menu" role="menu">
+        <li>
+          <a href="networkvis.html">test second layer</a>
+        </li>
+      </ul>
+    </li>
     <li class="dropdown-header">Step 4&amp;5: Specify &amp; Estimate model</li>
     <li class="dropdown-header">Step 6: Goodness of Fit</li>
   </ul>
@@ -467,9 +474,7 @@ div.tocify {
     <li class="dropdown-header">Methods</li>
     <li class="dropdown-header">Results</li>
     <li class="dropdown-header">Discussion &amp; Conclusion</li>
-    <li>
-      <a href="list(text = &quot;test second layer&quot;, href = NULL)">Appendices</a>
-    </li>
+    <li class="dropdown-header">Appendices</li>
   </ul>
 </li>
       </ul>
@@ -586,10 +591,10 @@ sociology</h1>
 
 head(soc_staff)</code></pre>
 <pre><code>## $node
-## &lt;pointer: 0x000001e787afe850&gt;
+## &lt;pointer: 0x000001ab00cfe950&gt;
 ## 
 ## $doc
-## &lt;pointer: 0x000001e7863fe050&gt;</code></pre>
+## &lt;pointer: 0x000001aaffbfef70&gt;</code></pre>
 <pre class="r"><code>#which object? 
 class(soc_staff)</code></pre>
 <pre><code>## [1] &quot;xml_document&quot; &quot;xml_node&quot;</code></pre>
