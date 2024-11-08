@@ -63,12 +63,10 @@ navbar:
       menu:
       - text: "Step 1&2: Define data&effects structure"
         href: 1definedata.html
-      - text: "Step 3: Get initial description"
+      - text: "Step 3: initial description"
         href: 
-      - text: "Step 4: Specify model"
+      - text: "Step 4&5: Specify & Estimate model"
         href: 
-      - text: "Step 5: Estimate model"
-        href:  
       - text: "Step 6: Goodness of Fit"
         href: 
 
@@ -107,7 +105,8 @@ navbar:
         href: 
       - text: "Appendices"
         href:         
-
+        - text: "test second layer"
+          href:         
 
   right:
   - icon: fab fa-github

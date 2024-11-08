@@ -304,14 +304,10 @@ testpolsci <- fcolnet(data = scholars,
                 type = c("first"))
 ```
 
-#### soc department
+#### soc department save
 
 ```{r}
-# # dependent
-# net <- sienaDependent(net_soc_array)
-
-# dependent ?
-# nets <- testsoc$nets
+soc_nets <- testsoc$nets
 
  
 df_ego_demo <- testsoc$data$demographics
@@ -335,7 +331,7 @@ df_ego_works <- testsoc$data$works
   ?join.data.frame
   df_soc_ego <- left_join(df_ego_demo, df_ego_oa, by = join_by(au_id == id))
   
-  rownames(nets[1,,]) == df_soc_ego$au_id # checking if the author id's are the same as in df_ego in nets dataframe 
+  rownames(soc_nets[1,,]) == df_soc_ego$au_id # checking if the author id's are the same as in df_ego in nets dataframe 
   # --> yes, the correct ones!!!
   
   
@@ -345,7 +341,7 @@ df_ego_works <- testsoc$data$works
 
 ```
 
-#### polsci department
+#### polsci department save
 
 ```{r}
 # dependent
@@ -362,7 +358,7 @@ df_pol_ego_works <- testpolsci$data$works
 
 
 # DEMO
-  str(df_pol_ego_demo, 1) 
+  #str(df_pol_ego_demo, 1) 
   
   df_pol_ego_demo <- do.call(rbind.data.frame, df_pol_ego_demo)
   df_pol_ego_demo[[1]]
@@ -380,7 +376,7 @@ df_pol_ego_works <- testpolsci$data$works
   # --> yes, the correct ones!!!
 ```
 
-### gender-soc
+### gender - sociology department 
 
 ```{r gender s}
 df_soc_ego$Naam # list of all names in sociology department 
@@ -393,7 +389,7 @@ df_soc_ego$gender <- c(0,1,0,1,0,0,1,1,0,0,
 # manually filled in gender 0 = woman, 1 = man, based on majority given in NL voornamen bank 
 
 # check if it went smoothly 
-view(df_soc_ego[c('Naam', 'gender', 'au_id')])
+# view(df_soc_ego[c('Naam', 'gender', 'au_id')])
 
 # fsave(df_soc_ego)
 
@@ -412,7 +408,7 @@ df_pol_ego$gender <- c(1,0,1,0,0,0,1,0,1,0,
     # manually filled in gender 0 = woman, 1 = man, based on majority given in NL voornamen bank, Guangyu was not in name bank but based on the employee-picture of RU, this person presents feminine, thus I assumed 0. 
 
 # check if it went smoothly 
-view(df_pol_ego[c('Naam', 'gender', 'au_id')])
+# view(df_pol_ego[c('Naam', 'gender', 'au_id')])
 
 #covariate 
 # gender <- coCovar(df_ego$gender)
@@ -431,7 +427,7 @@ pol_gender <- fload("./data/processed/df_pol_ego_20241105.rda")
 
 ```{r combine gender set}
 df <- test$data # make dataset with all data 
-df_ego <- do.call(rbind.data.frame, df$demographics) # dataset with demographic information
+df_ego <- do.call(rbind.data.frame, df$demographics) # data set with demographic information
 
 
 soc_gender <- soc_gender[,c("Naam", "gender")] # selecting only the content we need
@@ -440,76 +436,15 @@ pol_gender <- pol_gender[,c("Naam", "gender")] # selecting only the content we n
 gender <- rbind(soc_gender, pol_gender) # combining the gender data sets 
 
 df_ego <- df_ego %>% 
-            left_join(gender) #dcombininf dataset of gender with the one with demographic information 
+            left_join(gender) #dcombining data set of gender with the one with demographic information 
 ```
 
+# H-index 
+Credits to Lucan Bovens for the code.
 
-# Quick RSiena
-
-```{r RSiena}
-#step1 data
-wave1 <- test$nets[1,,]
-wave2 <- test$nets[2,,]
-
-#put diagonals to zero 
-diag(wave1) <- 0
-diag(wave2) <- 0
-# we want a binary tie (not a weighted tie)
-wave1[wave1 > 1] <- 1
-wave2[wave2 > 1] <- 1
-# put the nets in an array
-net_array <- array(data = c(wave1, wave2), dim = c(dim(wave1), 2))
-
-gender <- df_ego$gender
-
-#dependent
-nets <- sienaDependent(net_array)
-#covariate
-genderrs <- coCovar(gender)
-#define data 
-mydata <- sienaDataCreate(nets, genderrs)
-
-#define effects structure 
-myeff <- getEffects(mydata)
-
-
-#skipped description
-
-myeff <- includeEffects(myeff, isolateNet, inPop, outAct)
-
-myeff <- includeEffects(myeff, egoX, altX, sameX, interaction1 = "genderrs")
-
-#look up which effects to iclude 
-
-
-myAlgorithm <- sienaAlgorithmCreate(modelType = c(nets=6), projname = "proProject")
-# undirected: model 6 "additive model", #check manual for this 
-
-
-# estimate
-model1 <- siena07(myAlgorithm, data = mydata, effects = myeff, returnDeps = TRUE)
-#latter needed for GOF 
-
-model1
-
-# output:  convergence ration NA probably bc we chose all ties to be included (type = "all") earlier
-# we can go back and change that or change it here in the myAlgorithm function
-
-
-# Make it a directed network 
-# focus: writing, h index, 
-# model interpretation
-
-
-```
-
-# H-index webscraping
-
-Credits to Lucan for the code.
-
-```{r h-index, include=FALSE, eval= FALSE}
+```{r h-index}
 # Add h-index and i10-index columns to df_ego
-df_ego <- df_both_ego %>%
+df_ego <- df_ego %>%
   mutate(h_index = NA_real_, i10_index = NA_real_)
 
 # Get H-index and i10-index 
@@ -547,12 +482,90 @@ for (i in 1:nrow(df_ego)) {
 view(df_ego[c('au_id','Naam','gender','h_index','i10_index')])
 
 
-#covariate 
-# h_index <- coCovar(df_ego$h_index)
+
 ```
 
-# Plotting
 
+# Quick RSiena
+
+```{r RSiena}
+#step1 data
+wave1 <- test$nets[1,,]
+wave2 <- test$nets[2,,]
+
+#put diagonals to zero 
+diag(wave1) <- 0
+diag(wave2) <- 0
+# we want a binary tie (not a weighted tie)
+wave1[wave1 > 1] <- 1
+wave2[wave2 > 1] <- 1
+```
+
+
+```{r RSiena2}
+# put the nets in an array
+net_array <- array(data = c(wave1, wave2), dim = c(dim(wave1), 2))
+#dependent
+nets <- sienaDependent(net_array)
+
+
+#put gender in object 
+gender <- df_ego$gender
+#covariate
+gender_RS <- coCovar(gender) # gender as covariate in Rsiena
+
+
+#put h-index in object 
+h_index <- df_ego$h_index
+df_ego$h_index
+#covarite 2
+h_index_RS <- coCovar(h_index) # h_index as covariate in RSiena
+
+
+
+#define data 
+mydata <- sienaDataCreate(nets, gender_RS, h_index_RS)
+
+#define effects structure 
+myeff <- getEffects(mydata)
+
+
+# skipped initial description part 
+
+myeff <- includeEffects(myeff, isolateNet, inPop, outAct)
+
+myeff <- includeEffects(myeff, egoX, altX, sameX, interaction1 = "gender_RS")
+#include effect of h index later too etc
+#look up which effects to iclude 
+
+
+myAlgorithm <- sienaAlgorithmCreate(modelType = c(nets=6), projname = "proProject")
+# undirected: model 6 "additive model", #check manual for this
+```
+
+
+```{r RSiena-model estimate}
+# estimate the model 
+model1 <- siena07(myAlgorithm, data = mydata, effects = myeff, returnDeps = TRUE)
+#latter needed for GOF 
+
+model1
+
+# output:  convergence ration NA probably bc we chose all ties to be included (type = "all") earlier
+# we can go back and change that or change it here in the myAlgorithm function
+
+
+# Make it a directed network 
+# focus: writing, h index, 
+# model interpretation
+
+
+```
+
+
+
+
+# Plotting
 ```{r}
 test_w1 <- igraph::graph_from_adjacency_matrix(
   test$nets[1,,], # first wave of data. 
@@ -573,7 +586,7 @@ plot(test_w1,
 names(df_ego) #see labels of variables 
 
 plot(test_w1,
-vertex.color = ifelse(df_ego$gender == 1, "red", "blue"), #now, I can use actor attributes for plotting.
+vertex.color = ifelse(df_ego$gender == 1, "red", "blue"), # now, I can use actor attributes for plotting.
 # here: if gender = 1 (aka man) then red dot, if not then blue 
 vertex.label = NA,
 edge.width = 0.2,

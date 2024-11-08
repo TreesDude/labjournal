@@ -427,9 +427,8 @@ div.tocify {
     <li>
       <a href="1definedata.html">Step 1&amp;2: Define data&amp;effects structure</a>
     </li>
-    <li class="dropdown-header">Step 3: Get initial description</li>
-    <li class="dropdown-header">Step 4: Specify model</li>
-    <li class="dropdown-header">Step 5: Estimate model</li>
+    <li class="dropdown-header">Step 3: initial description</li>
+    <li class="dropdown-header">Step 4&amp;5: Specify &amp; Estimate model</li>
     <li class="dropdown-header">Step 6: Goodness of Fit</li>
   </ul>
 </li>
@@ -468,7 +467,9 @@ div.tocify {
     <li class="dropdown-header">Methods</li>
     <li class="dropdown-header">Results</li>
     <li class="dropdown-header">Discussion &amp; Conclusion</li>
-    <li class="dropdown-header">Appendices</li>
+    <li>
+      <a href="list(text = &quot;test second layer&quot;, href = NULL)">Appendices</a>
+    </li>
   </ul>
 </li>
       </ul>
@@ -514,27 +515,59 @@ rm(list = ls())
 
 # install.packages(&#39;data.table&#39;)
 library(data.table)  # mainly for faster data handling
-library(tidyverse)  # I assume you already installed this one!
-#install.packages(&#39;httr&#39;) # we don&#39;t need this for now require(httr)
+library(tidyverse)  # I assume you already installed this one!</code></pre>
+<pre><code>## ── Attaching core tidyverse packages ───────────
+## ✔ dplyr     1.1.4     ✔ readr     2.1.5
+## ✔ forcats   1.0.0     ✔ stringr   1.5.1
+## ✔ ggplot2   3.5.1     ✔ tibble    3.2.1
+## ✔ lubridate 1.9.3     ✔ tidyr     1.3.1
+## ✔ purrr     1.0.2     
+## ── Conflicts ────────── tidyverse_conflicts() ──
+## ✖ dplyr::between()     masks data.table::between()
+## ✖ dplyr::filter()      masks stats::filter()
+## ✖ dplyr::first()       masks data.table::first()
+## ✖ lubridate::hour()    masks data.table::hour()
+## ✖ lubridate::isoweek() masks data.table::isoweek()
+## ✖ dplyr::lag()         masks stats::lag()
+## ✖ dplyr::last()        masks data.table::last()
+## ✖ lubridate::mday()    masks data.table::mday()
+## ✖ lubridate::minute()  masks data.table::minute()
+## ✖ lubridate::month()   masks data.table::month()
+## ✖ lubridate::quarter() masks data.table::quarter()
+## ✖ lubridate::second()  masks data.table::second()
+## ✖ purrr::transpose()   masks data.table::transpose()
+## ✖ lubridate::wday()    masks data.table::wday()
+## ✖ lubridate::week()    masks data.table::week()
+## ✖ lubridate::yday()    masks data.table::yday()
+## ✖ lubridate::year()    masks data.table::year()
+## ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+<pre class="r"><code>#install.packages(&#39;httr&#39;) # we don&#39;t need this for now require(httr)
 #install.packages(&quot;devtools&quot;)
 require(devtools)</code></pre>
-<pre><code>## Loading required package: devtools</code></pre>
-<pre><code>## Loading required package: usethis</code></pre>
+<pre><code>## Loading required package: devtools
+## Loading required package: usethis</code></pre>
 <pre class="r"><code>#install.packages(&quot;rvest&quot;)
-require(rvest)
-# rvest:This is the explanation the writers of the package give: “rvest is new package that makes it easy to scrape (or harvest) data from html web pages.” Seems like something we need, a package that stores information from webpages into relatively structured data that we can then query/manipulate.
+require(rvest)</code></pre>
+<pre><code>## Loading required package: rvest
+## 
+## Attaching package: &#39;rvest&#39;
+## 
+## The following object is masked from &#39;package:readr&#39;:
+## 
+##     guess_encoding</code></pre>
+<pre class="r"><code># rvest:This is the explanation the writers of the package give: “rvest is new package that makes it easy to scrape (or harvest) data from html web pages.” Seems like something we need, a package that stores information from webpages into relatively structured data that we can then query/manipulate.
 
 #install.packages(&quot;xml2&quot;)
 
-require(xml2)
-
-#xml2:This is what the writers of the package say about it: “Work with XML files using a simple, consistent interface.” So we can manipulate the data scraped with rvest, using the xml2 package functions
+require(xml2)</code></pre>
+<pre><code>## Loading required package: xml2</code></pre>
+<pre class="r"><code>#xml2:This is what the writers of the package say about it: “Work with XML files using a simple, consistent interface.” So we can manipulate the data scraped with rvest, using the xml2 package functions
 
 #Note we&#39;re doing something different here. We&#39;re installing a *latest* version directly from
 #GitHub This is because the released version of this packages contains some errors!
 devtools::install_github(&quot;jkeirstead/scholar&quot;)</code></pre>
-<pre><code>## Using GitHub PAT from the git credential store.</code></pre>
-<pre><code>## Skipping install of &#39;scholar&#39; from a github remote, the SHA1 (2d38dcc3) has not changed since last install.
+<pre><code>## Using GitHub PAT from the git credential store.
+## Skipping install of &#39;scholar&#39; from a github remote, the SHA1 (2d38dcc3) has not changed since last install.
 ##   Use `force = TRUE` to force installation</code></pre>
 <pre class="r"><code>require(scholar)</code></pre>
 <pre><code>## Loading required package: scholar</code></pre>
@@ -553,10 +586,10 @@ sociology</h1>
 
 head(soc_staff)</code></pre>
 <pre><code>## $node
-## &lt;pointer: 0x000001cd0fdfebd0&gt;
+## &lt;pointer: 0x000001e787afe850&gt;
 ## 
 ## $doc
-## &lt;pointer: 0x000001cd0eefee10&gt;</code></pre>
+## &lt;pointer: 0x000001e7863fe050&gt;</code></pre>
 <pre class="r"><code>#which object? 
 class(soc_staff)</code></pre>
 <pre><code>## [1] &quot;xml_document&quot; &quot;xml_node&quot;</code></pre>
@@ -824,7 +857,7 @@ get_scholar_id_fix(last_name = &quot;tolsma&quot;, first_name = &quot;jochem&quo
 ## [1] &quot;Professor, Radboud University Nijmegen / University of Groningen&quot;
 ## 
 ## $total_cites
-## [1] 3456
+## [1] 3460
 ## 
 ## $h_index
 ## [1] 27
@@ -922,55 +955,57 @@ publications, citations</h3>
 ## 63                                              Size and ethnic homogeneity of extended social networks in the Netherlands: Differences between migrant groups and migrant generations
 ## 64                                                                                                             Trends in de opleidingskloof op verschillende maatschappelijke domeinen
 ## 65                                                                       Choosing Your Sports Partners: Assessing Selection Preferences Through Observational and Experimental Studies
-## 66                                                                                    The social outcomes of community-based sociotherapy for refugees in nakivale settlements, Uganda
-## 67                                                                   Ethnic segregation and spatial patterns of attitudes: studying the link using register data and social simulation
-## 68                                                                                                 SCP, onderzoek liever hoe we kansenongelijkheid in het onderwijs kunnen verminderen
-## 69                                                                                                                     Sociale scheidslijnen tussen groepen: Wat valt er te verklaren?
-## 70                                                                                            NEtherlands Longitudinal Lifecourse Study 2022-Versie 1.0 [dataverzameling and codebook]
-## 71                                                                                                                     VIA pilot participatietraject gemeente Nijmegen: Eindrapportage
-## 72                                                          Fairly Paid but Dissatisfied? Determinants of Pay Fairness and Pay Satisfaction: Evidence from Germany and the Netherlands
-## 73                                                                                       In hoeverre verklaart de etnische samenstelling van de buurt de kans om te stemmen op de PVV?
-## 74                                                                        In de etalage: In hoeverre verklaart de etnische samenstelling van de buurt de kans om te stemmen op de PVV?
-## 75                                                                                                                                            Family Survey Dutch Population 2017/2018
-## 76                                                                                   Soort zoekt soort: vriendschapselectieprocessen met betrekking tot slachtofferschap en daderschap
-## 77                                     Modeling opinion dynamics in a real city: How realistic spatial patterns of demographic attributes affect the emergence of opinion polarization
-## 78                       Summary of “How, When and Where Can Spatial Segregation Induce Opinion Polarization? Two Competing Models”: Paper Under Review as JASSS Fast Track Submission
-## 79                                                                                                                                     ICS Alumni revisited [Brochure tbv Lustrum ICS]
-## 80                                                                                                                                                ICS Alumni Survey 2016 [Databestand]
-## 81                                       Modeling opinion dynamics in a simulated city. Realistic spatial patterns of demographic attributes and the emergence of opinion polarization
-## 82                                                                                                                           Opleiding als nieuwe sociale scheidslijn: een tegengeluid
-## 83                                                                                                                                  Opleiding als sociale scheidslijn: Een tegengeluid
-## 84                                                                                   Opleiding als sociale scheidslijn: aanleiding, probleemstelling, bestaande inzichten en werkwijze
-## 85                                                                                                                    De samenhang in het opleidingsniveau tussen (huwelijks) partners
-## 86                                                                                                 Sociale herkomst en ongelijkheid in de opbrengsten van diploma&#39;s op de arbeidsmarkt
-## 87                                                                                                       De rol van opleidingsniveau voor het starten en stoppen met vrijwilligerswerk
-## 88                                                                                  Was, is of wordt opleiding de sociale scheidslijn? Een terugblik, stand van zaken en toekomstvisie
-## 89                                                                                                Klein en vrijwillig of groot en ervaren? Een analyse van de voorkeuren van donateurs
-## 90                                                 Integratie en depressie: De relatie tussen sociaal-culturele integratie en depressieklachten bij Turkse en Marokkaanse Nederlanders
-## 91                                                                     De burger als rechter, onderzoek naar geprefereerde sancties voor misdrijven in Nederland (projectnummer 1933B)
-## 92                                                                                                                                   Onderwijsexpansie veroorzaakt nieuwe ongelijkheid
-## 93                                                                                                                  Sociale daling schaadt vertrouwen: Effecten van sociale mobiliteit
-## 94                                                                                                                                        Toenemende gelijkheid is nog geen verheffing
-## 95                    Over ouders, televisiekijken en (over) gewicht: Een studie naar de langetermijneffecten van ouderlijke televisiesocialisatie op het lichaamsgewicht van kinderen
-## 96                                                                       Onderwijsexpansie en opleidingsrichting: Trends in de intergenerationele overdracht van onderwijsongelijkheid
-## 97                                                                                                                                         Nijmegen School Study 2010-TNSS 2010-wave 1
-## 98                                                             On trouvera sous cette rubrique les sommaires les plus récents des grandes revues internationales de science politique.
-## 99                                                                                      Does Intergenerational Social Mobility affect Antagonistic Attitudes towards Ethnic Minorities
-## 100                                                            De invloed van lands-, gemeente-en buurtkenmerken op sociaal kapitaal: Putnam&#39;s hypothese getest in Europa en Nederland
-## 101      Vrijheid versus veiligheid: Wie steunt vrijheidsbeperking omwille van veiligheid in Nederland?[Liberty versus security: Who supports the restriction of personal freedom by …
-## 102    De onderwijskansen van allochtone en autochtone Nederlanders vergeleken: Een cohort-design [Ethnic inequality of educational opportunities in the Netherlands: A cohort design]
-## 103                                                                                      Lokale en regionale instituties in verandering: een onderzoek naar de ervaringen in Duitsland
-## 104                                                                                                                        Mentoring for Gender Equality in Early-Career Grant Receipt
-## 105                                                                                                                   Educational consequences of parental divorce and death in Europe
-## 106                        Volume 46-Article 20| Pages 581–618 Variation in the educational consequences of parental death and divorce: The role of family and country characteristics
-## 107                                      An Investigation into the Impact of Social Mobility Experiences, the Local Living Environment and Educational Attainment on Ethnic Hostility.
-## 108                                                                                                                                                    Parental Discouragement Measure
-## 109                                                                                                                                                     Complete Networks Small worlds
-## 110                                                                                                                                                           Causes of dyads (theory)
-## 111                                                                                                                                                                Egocentric Networks
-## 112                                                                                            The Role of Recent Migrants’ Country of Origin Engagement in Dutch Language Proficiency
-## 113                                                                                                                                                M1-102: Social capital and networks
-## 114                                                                                                   Social origin and occupational success at labour market entry in the Netherlands
+## 66                                                                                                                         The Bridging Power of Civic Organizations and Neighborhoods
+## 67                                                                                                                                                  The Bridging Power of Sports Clubs
+## 68                                                                                    The social outcomes of community-based sociotherapy for refugees in nakivale settlements, Uganda
+## 69                                                                   Ethnic segregation and spatial patterns of attitudes: studying the link using register data and social simulation
+## 70                                                                                                 SCP, onderzoek liever hoe we kansenongelijkheid in het onderwijs kunnen verminderen
+## 71                                                                                                                     Sociale scheidslijnen tussen groepen: Wat valt er te verklaren?
+## 72                                                                                            NEtherlands Longitudinal Lifecourse Study 2022-Versie 1.0 [dataverzameling and codebook]
+## 73                                                                                                                     VIA pilot participatietraject gemeente Nijmegen: Eindrapportage
+## 74                                                          Fairly Paid but Dissatisfied? Determinants of Pay Fairness and Pay Satisfaction: Evidence from Germany and the Netherlands
+## 75                                                                                       In hoeverre verklaart de etnische samenstelling van de buurt de kans om te stemmen op de PVV?
+## 76                                                                        In de etalage: In hoeverre verklaart de etnische samenstelling van de buurt de kans om te stemmen op de PVV?
+## 77                                                                                                                                            Family Survey Dutch Population 2017/2018
+## 78                                                                                   Soort zoekt soort: vriendschapselectieprocessen met betrekking tot slachtofferschap en daderschap
+## 79                                     Modeling opinion dynamics in a real city: How realistic spatial patterns of demographic attributes affect the emergence of opinion polarization
+## 80                       Summary of “How, When and Where Can Spatial Segregation Induce Opinion Polarization? Two Competing Models”: Paper Under Review as JASSS Fast Track Submission
+## 81                                                                                                                                     ICS Alumni revisited [Brochure tbv Lustrum ICS]
+## 82                                                                                                                                                ICS Alumni Survey 2016 [Databestand]
+## 83                                       Modeling opinion dynamics in a simulated city. Realistic spatial patterns of demographic attributes and the emergence of opinion polarization
+## 84                                                                                                                           Opleiding als nieuwe sociale scheidslijn: een tegengeluid
+## 85                                                                                                                                  Opleiding als sociale scheidslijn: Een tegengeluid
+## 86                                                                                   Opleiding als sociale scheidslijn: aanleiding, probleemstelling, bestaande inzichten en werkwijze
+## 87                                                                                                                    De samenhang in het opleidingsniveau tussen (huwelijks) partners
+## 88                                                                                                 Sociale herkomst en ongelijkheid in de opbrengsten van diploma&#39;s op de arbeidsmarkt
+## 89                                                                                                       De rol van opleidingsniveau voor het starten en stoppen met vrijwilligerswerk
+## 90                                                                                  Was, is of wordt opleiding de sociale scheidslijn? Een terugblik, stand van zaken en toekomstvisie
+## 91                                                                                                Klein en vrijwillig of groot en ervaren? Een analyse van de voorkeuren van donateurs
+## 92                                                 Integratie en depressie: De relatie tussen sociaal-culturele integratie en depressieklachten bij Turkse en Marokkaanse Nederlanders
+## 93                                                                     De burger als rechter, onderzoek naar geprefereerde sancties voor misdrijven in Nederland (projectnummer 1933B)
+## 94                                                                                                                                   Onderwijsexpansie veroorzaakt nieuwe ongelijkheid
+## 95                                                                                                                  Sociale daling schaadt vertrouwen: Effecten van sociale mobiliteit
+## 96                                                                                                                                        Toenemende gelijkheid is nog geen verheffing
+## 97                    Over ouders, televisiekijken en (over) gewicht: Een studie naar de langetermijneffecten van ouderlijke televisiesocialisatie op het lichaamsgewicht van kinderen
+## 98                                                                       Onderwijsexpansie en opleidingsrichting: Trends in de intergenerationele overdracht van onderwijsongelijkheid
+## 99                                                                                                                                         Nijmegen School Study 2010-TNSS 2010-wave 1
+## 100                                                            On trouvera sous cette rubrique les sommaires les plus récents des grandes revues internationales de science politique.
+## 101                                                                                     Does Intergenerational Social Mobility affect Antagonistic Attitudes towards Ethnic Minorities
+## 102                                                            De invloed van lands-, gemeente-en buurtkenmerken op sociaal kapitaal: Putnam&#39;s hypothese getest in Europa en Nederland
+## 103      Vrijheid versus veiligheid: Wie steunt vrijheidsbeperking omwille van veiligheid in Nederland?[Liberty versus security: Who supports the restriction of personal freedom by …
+## 104    De onderwijskansen van allochtone en autochtone Nederlanders vergeleken: Een cohort-design [Ethnic inequality of educational opportunities in the Netherlands: A cohort design]
+## 105                                                                                      Lokale en regionale instituties in verandering: een onderzoek naar de ervaringen in Duitsland
+## 106                                                                                                                        Mentoring for Gender Equality in Early-Career Grant Receipt
+## 107                                                                                                                   Educational consequences of parental divorce and death in Europe
+## 108                        Volume 46-Article 20| Pages 581–618 Variation in the educational consequences of parental death and divorce: The role of family and country characteristics
+## 109                                      An Investigation into the Impact of Social Mobility Experiences, the Local Living Environment and Educational Attainment on Ethnic Hostility.
+## 110                                                                                                                                                    Parental Discouragement Measure
+## 111                                                                                                                                                     Complete Networks Small worlds
+## 112                                                                                                                                                           Causes of dyads (theory)
+## 113                                                                                                                                                                Egocentric Networks
+## 114                                                                                            The Role of Recent Migrants’ Country of Origin Engagement in Dutch Language Proficiency
+## 115                                                                                                                                                M1-102: Social capital and networks
+## 116                                                                                                   Social origin and occupational success at labour market entry in the Netherlands
 ##                                                          author
 ## 1                                    TWG van der Meer, J Tolsma
 ## 2              M Savelkoul, P Scheepers, J Tolsma, L Hagendoorn
@@ -1037,55 +1072,57 @@ publications, citations</h3>
 ## 63                 T Jeroense, B Hofstra, N Spierings, J Tolsma
 ## 64                                            M Lange, J Tolsma
 ## 65                               R Franken, H Bekhuis, J Tolsma
-## 66                     T Ubels, S Kinsbergen, J Tolsma, DJ Koch
-## 67                              T Feliciani, J Tolsma, A Flache
-## 68                                                     J Tolsma
-## 69                                                     J Tolsma
-## 70             TMG Jeroense, J Tolsma, M Kalmijn, GLM Kraaykamp
-## 71                   N Spierings, L Werner, P Beckers, J Tolsma
-## 72                                J Adriaans, C Sauer, J Tolsma
-## 73                             M Savelkoul, J Laméris, J Tolsma
-## 74                           MJ Savelkoul, JG Laméris, J Tolsma
-## 75                          R Meuleman, J Tolsma, GLM Kraaykamp
-## 76                    J Rokven, J Tolsma, S Ruiter, G Kraaykamp
-## 77                              T Feliciani, A Flache, J Tolsma
-## 78                              T Feliciani, A Flache, J Tolsma
-## 79                 PE Thijs, GLM Kraaykamp, M Scholte, J Tolsma
-## 80                 GLM Kraaykamp, M Scholte, PE Thijs, J Tolsma
-## 81                      T Feliciani, A Flache, J Tolsma, M Maes
-## 82                                                     J Tolsma
-## 83                                                     J Tolsma
-## 84                            M de Lange, J Tolsma, MHJ Wolbers
-## 85                                        J Tolsma, ND de Graaf
-## 86                                        J Tolsma, MHJ Wolbers
-## 87                              D Wiertz, J Tolsma, ND De Graaf
+## 66                   K Dederichs, R Franken, D Wiertz, J Tolsma
+## 67                   K Dederichs, R Franken, D Wiertz, J Tolsma
+## 68                     T Ubels, S Kinsbergen, J Tolsma, DJ Koch
+## 69                              T Feliciani, J Tolsma, A Flache
+## 70                                                     J Tolsma
+## 71                                                     J Tolsma
+## 72             TMG Jeroense, J Tolsma, M Kalmijn, GLM Kraaykamp
+## 73                   N Spierings, L Werner, P Beckers, J Tolsma
+## 74                                J Adriaans, C Sauer, J Tolsma
+## 75                             M Savelkoul, J Laméris, J Tolsma
+## 76                           MJ Savelkoul, JG Laméris, J Tolsma
+## 77                          R Meuleman, J Tolsma, GLM Kraaykamp
+## 78                    J Rokven, J Tolsma, S Ruiter, G Kraaykamp
+## 79                              T Feliciani, A Flache, J Tolsma
+## 80                              T Feliciani, A Flache, J Tolsma
+## 81                 PE Thijs, GLM Kraaykamp, M Scholte, J Tolsma
+## 82                 GLM Kraaykamp, M Scholte, PE Thijs, J Tolsma
+## 83                      T Feliciani, A Flache, J Tolsma, M Maes
+## 84                                                     J Tolsma
+## 85                                                     J Tolsma
+## 86                            M de Lange, J Tolsma, MHJ Wolbers
+## 87                                        J Tolsma, ND de Graaf
 ## 88                                        J Tolsma, MHJ Wolbers
-## 89                                       S Kinsbergen, J Tolsma
-## 90                                             R Zwan, J Tolsma
-## 91                S Ruiter, J Tolsma, M Hoon, H Elffers, D Laan
-## 92                         GLM Kraaykamp, MHJ Wolbers, J Tolsma
-## 93                                        J Tolsma, MHJ Wolbers
-## 94                                        MHJ Wolbers, J Tolsma
-## 95                            N Notten, GLM Kraaykamp, J Tolsma
-## 96                         GLM Kraaykamp, J Tolsma, MHJ Wolbers
-## 97                                              J Tolsma, I Pop
-## 98            NA Allern, J Tolsma, T van der Meer, M Gesthuizen
-## 99                             N de Graaf, J Tolsma, L Quillian
-## 100   MJW Gesthuizen, PLH Scheepers, J Tolsma, TWG van der Meer
-## 101                             G Jansen, J Tolsma, ND de Graaf
-## 102                           J Tolsma, MTA Coenders, M Lubbers
-## 103        GH Hagelstein, G Morssinkhof, JML Tolsma, JBJM Berge
-## 104                             AM Mulders, B Hofstra, J Tolsma
-## 105                        C Bussemakers, G Kraaykamp, J Tolsma
-## 106                        C Bussemakers, G Kraaykamp, J Tolsma
-## 107                                                    J TOLSMA
-## 108                  JJ Rokven, J Tolsma, S Ruiter, G Kraaykamp
-## 109                                                    J Tolsma
-## 110                                                    J Tolsma
+## 89                              D Wiertz, J Tolsma, ND De Graaf
+## 90                                        J Tolsma, MHJ Wolbers
+## 91                                       S Kinsbergen, J Tolsma
+## 92                                             R Zwan, J Tolsma
+## 93                S Ruiter, J Tolsma, M Hoon, H Elffers, D Laan
+## 94                         GLM Kraaykamp, MHJ Wolbers, J Tolsma
+## 95                                        J Tolsma, MHJ Wolbers
+## 96                                        MHJ Wolbers, J Tolsma
+## 97                            N Notten, GLM Kraaykamp, J Tolsma
+## 98                         GLM Kraaykamp, J Tolsma, MHJ Wolbers
+## 99                                              J Tolsma, I Pop
+## 100           NA Allern, J Tolsma, T van der Meer, M Gesthuizen
+## 101                            N de Graaf, J Tolsma, L Quillian
+## 102   MJW Gesthuizen, PLH Scheepers, J Tolsma, TWG van der Meer
+## 103                             G Jansen, J Tolsma, ND de Graaf
+## 104                           J Tolsma, MTA Coenders, M Lubbers
+## 105        GH Hagelstein, G Morssinkhof, JML Tolsma, JBJM Berge
+## 106                             AM Mulders, B Hofstra, J Tolsma
+## 107                        C Bussemakers, G Kraaykamp, J Tolsma
+## 108                        C Bussemakers, G Kraaykamp, J Tolsma
+## 109                                                    J TOLSMA
+## 110                  JJ Rokven, J Tolsma, S Ruiter, G Kraaykamp
 ## 111                                                    J Tolsma
-## 112                                          N Geurts, J Tolsma
-## 113                                 J Laméris, J Tolsma, J Hipp
-## 114                                       J Tolsma, MHJ Wolbers
+## 112                                                    J Tolsma
+## 113                                                    J Tolsma
+## 114                                          N Geurts, J Tolsma
+## 115                                 J Laméris, J Tolsma, J Hipp
+## 116                                       J Tolsma, MHJ Wolbers
 ##                                                                              journal
 ## 1                                                                                   
 ## 2                                                       European sociological review
@@ -1152,59 +1189,61 @@ publications, citations</h3>
 ## 63                                                           International Migration
 ## 64                                                       Antwerpen/Apeldoorn: Garant
 ## 65                                         Research Quarterly for Exercise and Sport
-## 66                                          TROPICAL MEDICINE &amp; INTERNATIONAL HEALTH
-## 67                                           Journal of Computational Social Science
-## 68                                                                                  
-## 69                                                     University of Groningen Press
-## 70                                      Nijmegen; Den Haag: Radboud University; NIDI
-## 71                                                            Nijmegen: RUNOMI; RSCR
-## 72                                                                                  
-## 73                                                              Mens en Maatschappij
+## 66                                                                               OSF
+## 67                                                                               OSF
+## 68                                          TROPICAL MEDICINE &amp; INTERNATIONAL HEALTH
+## 69                                           Journal of Computational Social Science
+## 70                                                                                  
+## 71                                                     University of Groningen Press
+## 72                                      Nijmegen; Den Haag: Radboud University; NIDI
+## 73                                                            Nijmegen: RUNOMI; RSCR
 ## 74                                                                                  
-## 75                                                                         DANS EASY
-## 76                                                              Mens en maatschappij
-## 77                                                                                  
-## 78      International Conference on Principles and Practice of Multi-Agent Systems …
-## 79  Nijmegen: Interuniversity Center for Social Science Theory and Methodology (ICS)
-## 80  Nijmegen: Interuniversity Center for Social Science Theory and Methodology (ICS)
-## 81                                                      Social Simulation Conference
-## 82                                                                        Sociologos
-## 83                                                                                  
-## 84        Opleiding als sociale scheidslijn. Een nieuw perspectief op een oude kloof
-## 85                                                       Antwerpen/Apeldoorn: Garant
-## 86                                                       Antwerpen/Apeldoorn: Garant
-## 87                                                                  Garant Uitgevers
+## 75                                                              Mens en Maatschappij
+## 76                                                                                  
+## 77                                                                         DANS EASY
+## 78                                                              Mens en maatschappij
+## 79                                                                                  
+## 80      International Conference on Principles and Practice of Multi-Agent Systems …
+## 81  Nijmegen: Interuniversity Center for Social Science Theory and Methodology (ICS)
+## 82  Nijmegen: Interuniversity Center for Social Science Theory and Methodology (ICS)
+## 83                                                      Social Simulation Conference
+## 84                                                                        Sociologos
+## 85                                                                                  
+## 86        Opleiding als sociale scheidslijn. Een nieuw perspectief op een oude kloof
+## 87                                                       Antwerpen/Apeldoorn: Garant
 ## 88                                                       Antwerpen/Apeldoorn: Garant
-## 89                                                                   Amsterdam: NCDO
-## 90                                                                                  
-## 91                                                                         DANS EASY
-## 92                                                        [Sl]: Sociale Vraagstukken
-## 93                                                                                  
+## 89                                                                  Garant Uitgevers
+## 90                                                       Antwerpen/Apeldoorn: Garant
+## 91                                                                   Amsterdam: NCDO
+## 92                                                                                  
+## 93                                                                         DANS EASY
 ## 94                                                        [Sl]: Sociale Vraagstukken
-## 95                                                                 Assen: Van Gorcum
-## 96                                                                    Amsterdam: AUP
-## 97                                                                         DANS EASY
-## 98                                                                     Acta politica
-## 99                                                                   Wiley Blackwell
-## 100                                                       Den Haag/Nijmegen: SCP-NSV
-## 101                                                                                 
-## 102                                                                                 
-## 103                    Nederlands Instituut voor Sociaal en Economisch Recht (NISER)
-## 104                                                                Available at SSRN
-## 105                                                                                 
-## 106                                                                                 
+## 95                                                                                  
+## 96                                                        [Sl]: Sociale Vraagstukken
+## 97                                                                 Assen: Van Gorcum
+## 98                                                                    Amsterdam: AUP
+## 99                                                                         DANS EASY
+## 100                                                                    Acta politica
+## 101                                                                  Wiley Blackwell
+## 102                                                       Den Haag/Nijmegen: SCP-NSV
+## 103                                                                                 
+## 104                                                                                 
+## 105                    Nederlands Instituut voor Sociaal en Economisch Recht (NISER)
+## 106                                                                Available at SSRN
 ## 107                                                                                 
-## 108                                                  European Journal of Criminology
+## 108                                                                                 
 ## 109                                                                                 
-## 110                                                                                 
+## 110                                                  European Journal of Criminology
 ## 111                                                                                 
 ## 112                                                                                 
-## 113                                                                Book of Abstracts
+## 113                                                                                 
 ## 114                                                                                 
+## 115                                                                Book of Abstracts
+## 116                                                                                 
 ##                                                                    number cites year
-## 1                                                                           723 2014
-## 2                                                         27 (6), 741-758   378 2011
-## 3                                                                  44 (3)   336 2009
+## 1                                                                           724 2014
+## 2                                                         27 (6), 741-758   379 2011
+## 3                                                                  44 (3)   337 2009
 ## 4                                                         27 (3), 291-306   159 2011
 ## 5                                                           35 (1), 51-61   154 2013
 ## 6                                                         24 (2), 215-230   136 2008
@@ -1221,7 +1260,7 @@ publications, citations</h3>
 ## 17                                                        14 (6), 697-719    45 2017
 ## 18                                                          42 (1), 59-83    44 2013
 ## 19                                                              54, 80-95    40 2015
-## 20                                                        31 (3), 239-259    39 2010
+## 20                                                        31 (3), 239-259    40 2010
 ## 21                                                                           38 2014
 ## 22                                                      42 (6), 1571-1586    37 2013
 ## 23                                                                           34 2010
@@ -1267,55 +1306,57 @@ publications, citations</h3>
 ## 63                                                                            1 2024
 ## 64                                                                            1 2015
 ## 65                                                                   1-15     0 2024
-## 66                                                            28, 266-266     0 2023
-## 67                                                         6 (2), 877-921     0 2023
-## 68                                                                            0 2023
-## 69                                                                            0 2023
+## 66                                                                            0 2024
+## 67                                                                            0 2023
+## 68                                                            28, 266-266     0 2023
+## 69                                                         6 (2), 877-921     0 2023
 ## 70                                                                            0 2023
-## 71                                                                            0 2021
-## 72                                                    31st Annual Meeting     0 2019
-## 73                                                          93 (1), 82-85     0 2018
-## 74                                                                            0 2018
-## 75                                                                            0 2018
-## 76                                                        92 (3), 327-329     0 2017
-## 77  9th Conference of the International Network of Analytical Sociology …     0 2016
-## 78                                                                            0 2016
-## 79                                                                            0 2016
+## 71                                                                            0 2023
+## 72                                                                            0 2023
+## 73                                                                            0 2021
+## 74                                                    31st Annual Meeting     0 2019
+## 75                                                          93 (1), 82-85     0 2018
+## 76                                                                            0 2018
+## 77                                                                            0 2018
+## 78                                                        92 (3), 327-329     0 2017
+## 79  9th Conference of the International Network of Analytical Sociology …     0 2016
 ## 80                                                                            0 2016
-## 81                                                                   2016     0 2016
-## 82                                                                 36 (3)     0 2015
-## 83                                                                            0 2015
-## 84                                                                   9-32     0 2015
+## 81                                                                            0 2016
+## 82                                                                            0 2016
+## 83                                                                   2016     0 2016
+## 84                                                                 36 (3)     0 2015
 ## 85                                                                            0 2015
-## 86                                                                            0 2015
+## 86                                                                   9-32     0 2015
 ## 87                                                                            0 2015
 ## 88                                                                            0 2015
-## 89                                                                            0 2014
-## 90                                                                            0 2013
-## 91                                                                            0 2013
-## 92                                                                            0 2011
-## 93                                                                            0 2011
+## 89                                                                            0 2015
+## 90                                                                            0 2015
+## 91                                                                            0 2014
+## 92                                                                            0 2013
+## 93                                                                            0 2013
 ## 94                                                                            0 2011
 ## 95                                                                            0 2011
 ## 96                                                                            0 2011
-## 97                                                                            0 2010
-## 98                                                                 44 (3)     0 2009
-## 99                                                                            0 2009
-## 100                                                                           0 2009
-## 101                                                                           0 2008
-## 102                                                                           0 2007
-## 103                                                                           0 1991
-## 104                                                                486625     0   NA
-## 105                                                                           0   NA
-## 106                                                                           0   NA
+## 97                                                                            0 2011
+## 98                                                                            0 2011
+## 99                                                                            0 2010
+## 100                                                                44 (3)     0 2009
+## 101                                                                           0 2009
+## 102                                                                           0 2009
+## 103                                                                           0 2008
+## 104                                                                           0 2007
+## 105                                                                           0 1991
+## 106                                                                486625     0   NA
 ## 107                                                                           0   NA
 ## 108                                                                           0   NA
 ## 109                                                                           0   NA
 ## 110                                                                           0   NA
 ## 111                                                                           0   NA
 ## 112                                                                           0   NA
-## 113                                                                     1     0   NA
+## 113                                                                           0   NA
 ## 114                                                                           0   NA
+## 115                                                                     1     0   NA
+## 116                                                                           0   NA
 ##                                                                cid        pubid
 ## 1      17240473400423700490,461159763596233481,1315542974843119305 UxriW0iASnsC
 ## 2                                              9140218593636983243 9yKSN-GCB0IC
@@ -1382,55 +1423,57 @@ publications, citations</h3>
 ## 63                                            17141958553841870840 KUbvn5osdkgC
 ## 64                                            12139749723307797145 j3f4tGmQtD8C
 ## 65                                                            &lt;NA&gt; b1wdh0AR-JQC
-## 66                                                            &lt;NA&gt; tYavs44e6CUC
-## 67                                                            &lt;NA&gt; vDijr-p_gm4C
-## 68                                                            &lt;NA&gt; g3aElNc5_aQC
-## 69                                                            &lt;NA&gt; ML0RJ9NH7IQC
-## 70                                                            &lt;NA&gt; Z5m8FVwuT1cC
-## 71                                                            &lt;NA&gt; yB1At4FlUx8C
-## 72                                                            &lt;NA&gt; OU6Ihb5iCvQC
-## 73                                                            &lt;NA&gt; b0M2c_1WBrUC
-## 74                                                            &lt;NA&gt; ipzZ9siozwsC
-## 75                                                            &lt;NA&gt; j8SEvjWlNXcC
-## 76                                                            &lt;NA&gt; dfsIfKJdRG4C
-## 77                                                            &lt;NA&gt; 7T2F9Uy0os0C
-## 78                                                            &lt;NA&gt; NJ774b8OgUMC
-## 79                                                            &lt;NA&gt; lSLTfruPkqcC
-## 80                                                            &lt;NA&gt; RYcK_YlVTxYC
-## 81                                                            &lt;NA&gt; NaGl4SEjCO4C
-## 82                                                            &lt;NA&gt; NMxIlDl6LWMC
-## 83                                                            &lt;NA&gt; EYYDruWGBe4C
-## 84                                                            &lt;NA&gt; TFP_iSt0sucC
-## 85                                                            &lt;NA&gt; bEWYMUwI8FkC
-## 86                                                            &lt;NA&gt; iH-uZ7U-co4C
-## 87                                                            &lt;NA&gt; r0BpntZqJG4C
-## 88                                                            &lt;NA&gt; 4JMBOYKVnBMC
-## 89                                                            &lt;NA&gt; yD5IFk8b50cC
-## 90                                                            &lt;NA&gt; L7CI7m0gUJcC
-## 91                                                            &lt;NA&gt; 738O_yMBCRsC
-## 92                                                            &lt;NA&gt; _kc_bZDykSQC
-## 93                                                            &lt;NA&gt; ULOm3_A8WrAC
-## 94                                                            &lt;NA&gt; Zph67rFs4hoC
-## 95                                                            &lt;NA&gt; 3fE2CSJIrl8C
-## 96                                                            &lt;NA&gt; 5nxA0vEk-isC
-## 97                                                            &lt;NA&gt; uc_IGeMz5qoC
-## 98                                                            &lt;NA&gt; tuHXwOkdijsC
-## 99                                                            &lt;NA&gt; dshw04ExmUIC
-## 100                                                           &lt;NA&gt; YOwf2qJgpHMC
-## 101                                                           &lt;NA&gt; hMsQuOkrut0C
-## 102                                                           &lt;NA&gt; zYLM7Y9cAGgC
-## 103                                                           &lt;NA&gt; zLWjf1WUPmwC
-## 104                                                           &lt;NA&gt; gsN89kCJA0AC
-## 105                                                           &lt;NA&gt; BUYA1_V_uYcC
-## 106                                                           &lt;NA&gt; URolC5Kub84C
-## 107                                                           &lt;NA&gt; epqYDVWIO7EC
-## 108                                                           &lt;NA&gt; tzM49s52ZIMC
-## 109                                                           &lt;NA&gt; _Re3VWB3Y0AC
-## 110                                                           &lt;NA&gt; WbkHhVStYXYC
-## 111                                                           &lt;NA&gt; Tiz5es2fbqcC
-## 112                                                           &lt;NA&gt; 4OULZ7Gr8RgC
-## 113                                                           &lt;NA&gt; M05iB0D1s5AC
-## 114                                                           &lt;NA&gt; 70eg2SAEIzsC</code></pre>
+## 66                                                            &lt;NA&gt; lmc2jWPfTJgC
+## 67                                                            &lt;NA&gt; MLfJN-KU85MC
+## 68                                                            &lt;NA&gt; tYavs44e6CUC
+## 69                                                            &lt;NA&gt; vDijr-p_gm4C
+## 70                                                            &lt;NA&gt; g3aElNc5_aQC
+## 71                                                            &lt;NA&gt; ML0RJ9NH7IQC
+## 72                                                            &lt;NA&gt; Z5m8FVwuT1cC
+## 73                                                            &lt;NA&gt; yB1At4FlUx8C
+## 74                                                            &lt;NA&gt; OU6Ihb5iCvQC
+## 75                                                            &lt;NA&gt; b0M2c_1WBrUC
+## 76                                                            &lt;NA&gt; ipzZ9siozwsC
+## 77                                                            &lt;NA&gt; j8SEvjWlNXcC
+## 78                                                            &lt;NA&gt; dfsIfKJdRG4C
+## 79                                                            &lt;NA&gt; 7T2F9Uy0os0C
+## 80                                                            &lt;NA&gt; NJ774b8OgUMC
+## 81                                                            &lt;NA&gt; lSLTfruPkqcC
+## 82                                                            &lt;NA&gt; RYcK_YlVTxYC
+## 83                                                            &lt;NA&gt; NaGl4SEjCO4C
+## 84                                                            &lt;NA&gt; NMxIlDl6LWMC
+## 85                                                            &lt;NA&gt; EYYDruWGBe4C
+## 86                                                            &lt;NA&gt; TFP_iSt0sucC
+## 87                                                            &lt;NA&gt; bEWYMUwI8FkC
+## 88                                                            &lt;NA&gt; iH-uZ7U-co4C
+## 89                                                            &lt;NA&gt; r0BpntZqJG4C
+## 90                                                            &lt;NA&gt; 4JMBOYKVnBMC
+## 91                                                            &lt;NA&gt; yD5IFk8b50cC
+## 92                                                            &lt;NA&gt; L7CI7m0gUJcC
+## 93                                                            &lt;NA&gt; 738O_yMBCRsC
+## 94                                                            &lt;NA&gt; _kc_bZDykSQC
+## 95                                                            &lt;NA&gt; ULOm3_A8WrAC
+## 96                                                            &lt;NA&gt; Zph67rFs4hoC
+## 97                                                            &lt;NA&gt; 3fE2CSJIrl8C
+## 98                                                            &lt;NA&gt; 5nxA0vEk-isC
+## 99                                                            &lt;NA&gt; uc_IGeMz5qoC
+## 100                                                           &lt;NA&gt; tuHXwOkdijsC
+## 101                                                           &lt;NA&gt; dshw04ExmUIC
+## 102                                                           &lt;NA&gt; YOwf2qJgpHMC
+## 103                                                           &lt;NA&gt; hMsQuOkrut0C
+## 104                                                           &lt;NA&gt; zYLM7Y9cAGgC
+## 105                                                           &lt;NA&gt; zLWjf1WUPmwC
+## 106                                                           &lt;NA&gt; gsN89kCJA0AC
+## 107                                                           &lt;NA&gt; BUYA1_V_uYcC
+## 108                                                           &lt;NA&gt; URolC5Kub84C
+## 109                                                           &lt;NA&gt; epqYDVWIO7EC
+## 110                                                           &lt;NA&gt; tzM49s52ZIMC
+## 111                                                           &lt;NA&gt; _Re3VWB3Y0AC
+## 112                                                           &lt;NA&gt; WbkHhVStYXYC
+## 113                                                           &lt;NA&gt; Tiz5es2fbqcC
+## 114                                                           &lt;NA&gt; 4OULZ7Gr8RgC
+## 115                                                           &lt;NA&gt; M05iB0D1s5AC
+## 116                                                           &lt;NA&gt; 70eg2SAEIzsC</code></pre>
 <pre class="r"><code>get_citation_history(&quot;Iu23-90AAAAJ&quot;)  # Jochem&#39;s citation history</code></pre>
 <pre><code>##    year cites
 ## 1  2008    12
@@ -1441,15 +1484,15 @@ publications, citations</h3>
 ## 6  2013   124
 ## 7  2014   167
 ## 8  2015   218
-## 9  2016   227
+## 9  2016   228
 ## 10 2017   228
 ## 11 2018   289
-## 12 2019   311
+## 12 2019   312
 ## 13 2020   300
-## 14 2021   331
+## 14 2021   330
 ## 15 2022   338
-## 16 2023   335
-## 17 2024   312</code></pre>
+## 16 2023   334
+## 17 2024   316</code></pre>
 </div>
 <div id="get-collaborators" class="section level3" number="6.2.2">
 <h3><span class="header-section-number">6.2.2</span> get
@@ -1463,9 +1506,9 @@ number="6.3">
 <h2><span class="header-section-number">6.3</span> plot network of
 single staff member</h2>
 <pre class="r"><code>plot_coauthors(get_coauthors(&quot;Iu23-90AAAAJ&quot;, n_coauthors = 20, n_deep = 1), size_labels = 2)  </code></pre>
-<pre><code>## Warning: Removed 148 rows containing missing
-## values or values outside the scale
-## range (`geom_point()`).</code></pre>
+<pre><code>## Warning: Removed 148 rows containing missing values or
+## values outside the scale range
+## (`geom_point()`).</code></pre>
 <pre><code>## Warning: ggrepel: 2 unlabeled data points (too many overlaps). Consider increasing max.overlaps</code></pre>
 <p><img src="Webscraping-Chapter8-tutorial_files/figure-html/plot-1.png" width="672" /></p>
 <pre class="r"><code># Doesn&#39;t look like much yet, but we&#39;ll make it prettier later.</code></pre>
@@ -1648,7 +1691,7 @@ Jochem Tolsma
 J. Tolsma , Jochem Tolsma, J L Tolsma
 </td>
 <td style="text-align:right;">
-8938.33
+8949.66
 </td>
 <td style="text-align:left;">
 <a href="https://openalex.org/A5087380803"
@@ -2020,7 +2063,7 @@ oa_fetch(entity= &quot;author&quot;, search = &quot;Jochem Tolsma&quot;, affilia
 <pre><code>## # A tibble: 1 × 18
 ##   id      display_name display_name_alterna…¹ relevance_score ids   orcid works_count cited_by_count
 ##   &lt;chr&gt;   &lt;chr&gt;        &lt;list&gt;                           &lt;dbl&gt; &lt;lis&gt; &lt;chr&gt;       &lt;int&gt;          &lt;int&gt;
-## 1 https:… Jochem Tols… &lt;chr [3]&gt;                        8938. &lt;chr&gt; http…          85           2049
+## 1 https:… Jochem Tols… &lt;chr [3]&gt;                        8950. &lt;chr&gt; http…          85           2049
 ## # ℹ abbreviated name: ¹​display_name_alternatives
 ## # ℹ 10 more variables: counts_by_year &lt;list&gt;, affiliation_display_name &lt;chr&gt;, affiliation_id &lt;chr&gt;,
 ## #   affiliation_ror &lt;chr&gt;, affiliation_country_code &lt;chr&gt;, affiliation_type &lt;chr&gt;,
@@ -2168,7 +2211,7 @@ Jochem Tolsma
 J. Tolsma , Jochem Tolsma, J L Tolsma
 </td>
 <td style="text-align:right;">
-8938.33
+8949.66
 </td>
 <td style="text-align:left;">
 <a href="https://openalex.org/A5087380803"
@@ -2574,7 +2617,7 @@ Maurice Johannes Wilhelmus Gesthuizen, M. Gesthuizen , Maurice
 Gesthuizen , M.J.W. Gesthuizen , Maurice J.W. Gesthuizen
 </td>
 <td style="text-align:right;">
-8408.65
+8417.31
 </td>
 <td style="text-align:left;">
 <a href="https://openalex.org/A5007673492"
@@ -2982,7 +3025,7 @@ Michael Savelkoul
 M.J. Savelkoul , M. Savelkoul , Michael Savelkoul
 </td>
 <td style="text-align:right;">
-4063.61
+4067.08
 </td>
 <td style="text-align:left;">
 <a href="https://openalex.org/A5048988743"
@@ -3387,7 +3430,7 @@ T.W.G. Tom van der Meer, Tom W. G. van der Meer , Tom Van Der Meer , T.
 Van Der Meer , TOM W.G. VAN DER MEER
 </td>
 <td style="text-align:right;">
-17223.25
+17226.26
 </td>
 <td style="text-align:left;">
 <a href="https://openalex.org/A5010780363"
