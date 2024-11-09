@@ -1,7 +1,7 @@
 ---
-title: "Plotting plots and Hotzenplotz"
+title: "Descriptive adventures"
 author: "Verooo"
-date: "2024-11-05"
+date: "2024-11-08"
 output: html_document
 ---
 
@@ -27,10 +27,6 @@ klippy::klippy(position = c('top', 'right'))
 knitr::opts_chunk$set(echo = TRUE)
 
 ```
-
-Meeting with Jochem
-
-look at publications website (sunbelt workshop)
 
 # Getting started
 
@@ -259,11 +255,14 @@ fcolnet <- function(data = scholars, university = "RU", discipline = "sociology"
 
 ## Load data
 
-```{r data}
-scholars <- fload("./data/processed/scholars_20240924.rda") #make sure to lead fload first ofcourse
+Scholar
+
+```{r scholar data}
+scholars <- fload("./data/processed/scholars_20240924.rda") 
+#make sure to lead fload first of course
 ```
 
-```{r saving output}
+```{r saving schoalr output}
 # save the output of your function
 
 test  <- fcolnet(data = scholars, 
@@ -273,323 +272,16 @@ test  <- fcolnet(data = scholars,
                 type = c("all")) # all, first, last # which ties in there
 
 # USE not all but first or last so the ties are directed from "perspective" of first author of the publications 
-# usually first most prestige
-
-
+# usually first author has most prestige
 ```
 
-# Gender
+Ego
 
-## saving data for each department 
-This part, despite being lengthy and principally unnecessary, needed to stay in my code for the sake of transparency. AFterall, this code is what accumulated in the gender-data of each department in my data set. 
-
-```{r}
-#inspecting scholars_20240924.rda object
-#df_ego <- do.call(rbind.data.frame, scholars$demographics)
-#unique(df_ego$discipline.22)
-
-# save the output of your function
-testsoc  <- fcolnet(data = scholars, 
-                university = "RU", 
-                discipline = "sociology", 
-                waves = list(c(2015, 2018), c(2019, 2023)), 
-    
-                            type = c("first"))
-
-testpolsci <- fcolnet(data = scholars, 
-                university = "RU", 
-                discipline = "political science", 
-                waves = list(c(2015, 2018), c(2019, 2023)), 
-                type = c("first"))
+```{r df_ego data}
+df_ego <- fload("./data/processed/df_ego_20241108.rda")
 ```
 
-#### soc department save
-
-```{r}
-soc_nets <- testsoc$nets
-
- 
-df_ego_demo <- testsoc$data$demographics
-df_ego_oa <- testsoc$data$scholars_oa
-df_ego_works <- testsoc$data$works
-
-
-# DEMO
-  str(df_ego_demo, 1) 
-  
-  df_ego_demo <- do.call(rbind.data.frame, df_ego_demo)
-  df_ego_demo[[1]]
-
-# OA
-  #str(df_ego_oa, 1)
-  df_ego_oa[[1]]
-  df_ego_oa <- do.call(rbind.data.frame, df_ego_oa)
-
-
-  # --> EGO DATAFRAME with demo and oa (sociology)
-  ?join.data.frame
-  df_soc_ego <- left_join(df_ego_demo, df_ego_oa, by = join_by(au_id == id))
-  
-  rownames(soc_nets[1,,]) == df_soc_ego$au_id # checking if the author id's are the same as in df_ego in nets dataframe 
-  # --> yes, the correct ones!!!
-  
-  
-  df_ego_works[[1]]$author 
-#authors of all the works that first scholar (here: Ana Macanovic) is part of 
-
-
-```
-
-#### polsci department save
-
-```{r}
-# dependent
-# pol_net <- sienaDependent(net_pol_array)
-
-
-# dependent 
-pol_nets <- testpolsci$nets
-
- 
-df_pol_ego_demo <- testpolsci$data$demographics
-df_pol_ego_oa <- testpolsci$data$scholars_oa
-df_pol_ego_works <- testpolsci$data$works
-
-
-# DEMO
-  #str(df_pol_ego_demo, 1) 
-  
-  df_pol_ego_demo <- do.call(rbind.data.frame, df_pol_ego_demo)
-  df_pol_ego_demo[[1]]
-
-# OA
-  #str(df_pol_ego_oa, 1)
-  df_pol_ego_oa[[1]]
-  df_pol_ego_oa <- do.call(rbind.data.frame, df_pol_ego_oa)
-  
-  
-# --> EGO DATAFRAME with demo and oa (political science)
-  df_pol_ego <- left_join(df_pol_ego_demo, df_pol_ego_oa, by = join_by(au_id == id))
-
-  rownames(pol_nets[1,,]) == df_pol_ego$au_id # checking if the author id's are the same as in df_ego in nets dataframe 
-  # --> yes, the correct ones!!!
-```
-
-### gender - sociology department
-
-```{r gender s}
-df_soc_ego$Naam # list of all names in sociology department 
-
-df_soc_ego$gender <- c(0,1,0,1,0,0,1,1,0,0,
-                       0,1,1,0,1,0,1,1,1,1,
-                       0,1,1,0,1,1,0,1,0,1,
-                       0,1,0,0,0,0,0,0,1,0,
-                       0,1,1,1,0,1,0,1,0,0) 
-# manually filled in gender 0 = woman, 1 = man, based on majority given in NL voornamen bank 
-
-# check if it went smoothly 
-# view(df_soc_ego[c('Naam', 'gender', 'au_id')])
-
-# fsave(df_soc_ego)
-
-```
-
-### gender - polsci
-
-```{r gender p}
-df_pol_ego$Naam # list of all names 
-
-df_pol_ego$gender <- c(1,0,1,0,0,0,1,0,1,0,
-                       1,1,0,0,1,1,1,0,0,1,
-                       0,1,1,0,0,1,1,1,0,0,
-                       0,0,0,1,1,0,0,1,1,0,
-                       0,0,0,1,0,1,1,1,0,0,0) 
-    # manually filled in gender 0 = woman, 1 = man, based on majority given in NL voornamen bank, Guangyu was not in name bank but based on the employee-picture of RU, this person presents feminine, thus I assumed 0. 
-
-# check if it went smoothly 
-# view(df_pol_ego[c('Naam', 'gender', 'au_id')])
-
-#covariate 
-# gender <- coCovar(df_ego$gender)
-
-# fsave(df_pol_ego)
-```
-
-### save gender data sets
-
-```{r gender data}
-soc_gender <- fload("./data/processed/df_soc_ego_20241105.rda")
-pol_gender <- fload("./data/processed/df_pol_ego_20241105.rda")
-```
-
-### Combine data (gender)
-
-```{r combine gender set}
-df <- test$data # make dataset with all data 
-df_ego <- do.call(rbind.data.frame, df$demographics) # data set with demographic information
-
-
-soc_gender <- soc_gender[,c("Naam", "gender")] # selecting only the content we need
-pol_gender <- pol_gender[,c("Naam", "gender")] # selecting only the content we need
-
-gender <- rbind(soc_gender, pol_gender) # combining the gender data sets 
-
-df_ego <- df_ego %>% 
-            left_join(gender) #dcombining data set of gender with the one with demographic information 
-```
-
-
-# H-index
-
-Credits to Lucan Bovens for the code.
-
-```{r h-index}
-# Add h-index and i10-index columns to df_ego
-df_ego <- df_ego %>%
-  mutate(h_index = NA_real_, i10_index = NA_real_)
-
-# Get H-index and i10-index 
-get_openalex_metrics <- function(openalex_id) {
-  url <- paste0("https://api.openalex.org/authors/", openalex_id)
-  author_data <- tryCatch({
-    jsonlite::fromJSON(url)
-  }, error = function(e) {
-    message(paste("Error fetching data for OpenAlex ID:", openalex_id))
-    return(NULL)
-  })
-  
-  if (!is.null(author_data)) {
-    h_index <- author_data$summary_stats$h_index
-    i10_index <- author_data$summary_stats$i10_index
-    works_count <- author_data$works_count
-    cited_by_count <- author_data$cited_by_count
-    return(list(h_index = h_index, i10_index = i10_index, works_count = works_count, cited_by_count = cited_by_count))
-  } else {
-    return(list(h_index = NA, i10_index = NA, works_count = NA, cited_by_count = NA))
-  }
-}
-
-# Loop for each scholar 
-for (i in 1:nrow(df_ego)) {
-  openalex_id <- df_ego$au_id[i]  # assuming au_id is the OpenAlex ID in df_ego
-  metrics <- get_openalex_metrics(openalex_id)
-  df_ego$h_index[i] <- metrics$h_index
-  df_ego$i10_index[i] <- metrics$i10_index
-  df_ego$works_count[i] <- metrics$works_count
-  df_ego$cited_by_count[i] <- metrics$cited_by_count
-}
-
-# View updated df_ego with h-index and i10-index
-view(df_ego[c('au_id','Naam','gender','h_index','i10_index')])
-
-
-# fsave(df_ego)
-
-```
-
-# Quick RSiena
-
-## Step 1: Define data
-```{r RSiena}
-#step1 data
-wave1 <- test$nets[1,,]
-wave2 <- test$nets[2,,]
-
-#put diagonals to zero 
-diag(wave1) <- 0
-diag(wave2) <- 0
-# we want a binary tie (not a weighted tie)
-wave1[wave1 > 1] <- 1
-wave2[wave2 > 1] <- 1
-```
-
-```{r RSiena define}
-# put the nets in an array
-net_array <- array(data = c(wave1, wave2), dim = c(dim(wave1), 2))
-#dependent
-nets <- sienaDependent(net_array)
-
-
-#put gender in object 
-gender <- df_ego$gender
-#covariate
-gender_RS <- coCovar(gender) # gender as covariate in Rsiena
-
-
-#put h-index in object 
-h_index <- df_ego$h_index
-df_ego$h_index
-#covarite 2
-h_index_RS <- coCovar(h_index) # h_index as covariate in RSiena
-
-
-
-#define data 
-mydata <- sienaDataCreate(nets, gender_RS, h_index_RS)
-
-
-```
-
-## Step 2: Make effects structure 
-```{r RSiena myeff}
-#define effects structure 
-myeff <- getEffects(mydata)
-
-```
-
-## Step 3: initial description (skipped)
-Nothing for now. :)
-
-## Step 4: Specify model 
-```{r RSiena spec mod}
-
-myeff <- includeEffects(myeff, isolateNet, inPop, outAct)
-
-myeff <- includeEffects(myeff, egoX, altX, sameX, interaction1 = "gender_RS")
-#include effect of h index later too etc
-#look up which effects to iclude
-
-
-myAlgorithm <- sienaAlgorithmCreate(modelType = c(nets=6), projname = "proProject")
-# undirected: model 6 "additive model", #check manual for this
-```
-
-
-## Step 5: Estimate model 
-```{r RSiena-model estimate}
-# estimate the model 
-model1 <- siena07(myAlgorithm, data = mydata, effects = myeff, returnDeps = TRUE)
-#latter needed for GOF 
-
-# model1   #remove the comment to run model!!!!!
-
-
-
-# output:  convergence ration NA probably bc we chose all ties to be included (type = "all") earlier
-# we can go back and change that or change it here in the myAlgorithm function
-
-
-# Make it a directed network 
-# focus: writing, 
-# model interpretation
-
-
-```
-
-# Descriptives
-
-## Preparation
-
-packages descr and plot
-
-```{r peckegde}
-library(ggplot2) 
-library(igraph)
-```
-
-assign data
-
-```{r assign data}
+```{r matrix data ego}
 
 test_w1 <- igraph::graph_from_adjacency_matrix(
   test$nets[1,,], # first wave of data. 
@@ -602,6 +294,8 @@ test_w1 <- igraph::graph_from_adjacency_matrix(
 
 ```
 
+# Descriptives
+
 ## Ego level
 
 ### Gender
@@ -610,11 +304,10 @@ test_w1 <- igraph::graph_from_adjacency_matrix(
 
     -   descriptives (mean etc.)
 
-    ```{r sum gender}
+```{r sum gender}
 summary(df_ego$gender)
-summary(gender_RS) # no difference between the two so we are gucci using either one    
 
-    ```
+```
 
     -   overall
 
@@ -639,7 +332,6 @@ hist(df_ego$gender, breaks = , main = "Distribution of gender",     xlab = "Gend
 
 ```{r sum h index}
 summary(df_ego$h_index) 
-summary(h_index_RS) # no difference
 ```
 
 ```         
@@ -764,18 +456,19 @@ edge.arrow.size =0.2)
 
 ```
 
-
 # Detour: Colors
 
-```{r color overview, include = FALSE, eval = FALSE}
-
+```{r mypalette, include = FALSE, eval = FALSE}
+# palette i like:
 palette("Set 3");  sinplot("Set 3")
 palette.swatch("Set 3")
 palette.colors(palette = "Set 3")
  "#8DD3C7" "#FFFFB3" "#BEBADA" "#FB8072" "#80B1D3" "#FDB462"
  "#B3DE69" "#FCCDE5" "#D9D9D9" "#BC80BD" "#CCEBC5" "#FFED6F"
+```
 
 
+```{r colors in R, include = FALSE, eval = FALSE}
 colors (distinct = TRUE) # prints all colors R knows
 palette.pals()
 #  [1] "R3"              "R4"              "ggplot2"        
@@ -785,11 +478,13 @@ palette.pals()
 # [13] "Tableau 10"      "Classic Tableau" "Polychrome 36"  
 # [16] "Alphabet"       
 
-palette.colors()
+palette.colors(palette = "-palette name here-")
 # [1] "#000000" "#E69F00" "#56B4E9" "#009E73" "#F0E442" "#0072B2"
 # [7] "#D55E00" "#CC79A7" "#999999"
+```
 
 
+```{r look at colors PLOT, include = FALSE, eval = FALSE}
 ## Demonstrate the colors 1:8 in different palettes using a custom matplot()
 sinplot <- function(main=NULL, n = 8) {
     x <- outer(
@@ -807,9 +502,10 @@ palette("Tableau")  ; sinplot("Tableau", n = 10) # i like
 palROB <- colorRampPalette(c("red", "darkorange2", "blue"), space = "Lab")
 palette(palROB(16)); sinplot("palROB(16)", n = 16) # the orange purple blue rainbow retro vibe yay 
 palette("default") # reset
+```
 
 
-
+```{r look at colors SWATCH, include = FALSE, eval = FALSE}
 palette.swatch <- function(palette = palette.pals(), n = 8, nrow = 8,
                            border = "black", cex = 1, ...)
 {

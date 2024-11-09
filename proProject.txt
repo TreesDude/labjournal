@@ -701,3 +701,475 @@ There is a linear dependency between the parameter estimates
  therefore the covariance matrix should not be used.
 
 Total computation time 70.13 seconds.
+
+
+-----------------------------------
+New Analysis started.
+Date and time: 08/11/2024 16:58:33
+New results follow.
+-----------------------------------
+
+RSiena version 1.3.14 (07 Oct 22)
+
+
+@1
+Estimation by stochastic approximation algorithm.
+=================================================
+
+Random initialization of random number stream.
+Current random number seed is 965395.
+Effects object used: myeff 
+Model Type:
+ Pairwise joint model
+Estimation method: conditional moment estimation
+.
+Conditioning variable is the total number of observed changes ("distance") 
+in the network variable.
+Distance for simulations is  208 .
+Standard errors are estimated with the likelihood ratio method.
+Dolby method (regression on scores) is used.
+Initial value of gain parameter is  0.2000000.
+Reduction factor for gain parameter is  0.5000000.
+Number of subphases in Phase 2 is 4.
+
+Initial parameter values are 
+  0. Rate parameter                           4.1632
+  1. eval:  degree (density)                               -1.4815
+  2. eval:  degree of alter                                 0.0000
+  3. eval:  degree of ego                                   0.0000
+  4. eval:  network-isolate                                 0.0000
+  5. eval:  gender_RS alter                                 0.0000
+  6. eval:  gender_RS ego                                   0.0000
+  7. eval:  same gender_RS                                  0.0000
+
+
+Observed values of target statistics are
+  1. Number of edges                                                    118.0000
+  2. Sum of squared degrees                                            1636.0000
+  3. Sum of squared degrees                                            1636.0000
+  4. Number of isolates                                                  36.0000
+  5. Sum of degrees x gender_RS                                          38.1782
+  6. Sum of degrees x gender_RS                                          38.1782
+  7. same gender_RS                                                     140.0000
+
+ 7 parameters, 7 statistics
+
+Estimation of derivatives by the LR method (type 1).
+
+
+@2
+End of stochastic approximation algorithm, phase 3.
+---------------------------------------------------
+
+Total of 2726 iterations.
+Parameter estimates based on 1726 iterations,
+basic rate parameter as well as 
+convergence diagnostics, covariance and derivative matrices based on 1000 iterations.
+
+Information for convergence diagnosis.
+Averages, standard deviations, and t-ratios for deviations from targets:
+Overall maximum t-ratio for convergence not computable.
+  1.   0.2940  10.1096   0.0291 
+  2.  21.2320 371.0089   0.0572 
+  3.  21.2320 371.0089   0.0572 
+  4.  -0.0400   3.8768  -0.0103 
+  5.   0.1444  10.4640   0.0138 
+  6.   0.1444  10.4640   0.0138 
+  7.  -0.9840  15.3741  -0.0640 
+
+Good convergence is indicated by the t-ratios being close to zero.
+
+Overall maximum convergence ratio =  NA .
+*** Warning: Covariance matrix not positive definite *** 
+***            Standard errors not reliable           *** 
+The approximate linear combination that has variance 0 is
+1 * beta[2] + -1 * beta[3]
+Do not use any reported standard errors.
+
+
+
+@2
+Estimation Results.
+-------------------
+
+Regular end of estimation algorithm.
+Total of 2726 iteration steps.
+
+
+@3
+Estimates and standard errors
+                             
+Rate parameters:
+ 0. Rate parameter                            0.3292  (   0.0474)
+
+Other parameters:
+ 1. eval:  degree (density)                                     NANA
+ 2. eval:  degree of alter                                      NANA
+ 3. eval:  degree of ego                                        NANA
+ 4. eval:  network-isolate                                      NANA
+ 5. eval:  gender_RS alter                                      NANA
+ 6. eval:  gender_RS ego                                        NANA
+ 7. eval:  same gender_RS                                       NANA
+
+
+@3
+Covariance matrices
+                   
+There is a linear dependency between the parameter estimates
+ therefore the covariance matrix should not be used.
+
+Total computation time 55.25 seconds.
+
+
+-----------------------------------
+New Analysis started.
+Date and time: 08/11/2024 16:59:28
+New results follow.
+-----------------------------------
+
+RSiena version 1.3.14 (07 Oct 22)
+
+
+@1
+Estimation by stochastic approximation algorithm.
+=================================================
+
+Random initialization of random number stream.
+Current random number seed is 109686.
+Effects object used: myeff 
+Model Type:
+ Pairwise joint model
+Estimation method: conditional moment estimation
+.
+Conditioning variable is the total number of observed changes ("distance") 
+in the network variable.
+Distance for simulations is  208 .
+Standard errors are estimated with the likelihood ratio method.
+Dolby method (regression on scores) is used.
+Initial value of gain parameter is  0.2000000.
+Reduction factor for gain parameter is  0.5000000.
+Number of subphases in Phase 2 is 4.
+
+Initial parameter values are 
+  0. Rate parameter                           4.1632
+  1. eval:  degree (density)                               -1.4815
+  2. eval:  degree of alter                                 0.0000
+  3. eval:  degree of ego                                   0.0000
+  4. eval:  network-isolate                                 0.0000
+  5. eval:  gender_RS alter                                 0.0000
+  6. eval:  gender_RS ego                                   0.0000
+  7. eval:  same gender_RS                                  0.0000
+
+
+Observed values of target statistics are
+  1. Number of edges                                                    118.0000
+  2. Sum of squared degrees                                            1636.0000
+  3. Sum of squared degrees                                            1636.0000
+  4. Number of isolates                                                  36.0000
+  5. Sum of degrees x gender_RS                                          38.1782
+  6. Sum of degrees x gender_RS                                          38.1782
+  7. same gender_RS                                                     140.0000
+
+ 7 parameters, 7 statistics
+
+Estimation of derivatives by the LR method (type 1).
+
+
+@2
+End of stochastic approximation algorithm, phase 3.
+---------------------------------------------------
+
+Total of 2576 iterations.
+Parameter estimates based on 1576 iterations,
+basic rate parameter as well as 
+convergence diagnostics, covariance and derivative matrices based on 1000 iterations.
+
+Information for convergence diagnosis.
+Averages, standard deviations, and t-ratios for deviations from targets:
+Overall maximum t-ratio for convergence not computable.
+  1.   0.8300  10.6073   0.0782 
+  2.  36.5040 409.2111   0.0892 
+  3.  36.5040 409.2111   0.0892 
+  4.  -0.5930   3.8707  -0.1532 
+  5.   0.2835  11.3462   0.0250 
+  6.   0.2835  11.3462   0.0250 
+  7.   1.7160  15.6150   0.1099 
+
+Good convergence is indicated by the t-ratios being close to zero.
+
+Overall maximum convergence ratio =  NA .
+*** Warning: Covariance matrix not positive definite *** 
+***            Standard errors not reliable           *** 
+The approximate linear combination that has variance 0 is
+1 * beta[5] + -1 * beta[6]
+Do not use any reported standard errors.
+
+
+
+@2
+Estimation Results.
+-------------------
+
+Regular end of estimation algorithm.
+Total of 2576 iteration steps.
+
+
+@3
+Estimates and standard errors
+                             
+Rate parameters:
+ 0. Rate parameter                            0.3274  (   0.0489)
+
+Other parameters:
+ 1. eval:  degree (density)                                     NANA
+ 2. eval:  degree of alter                                      NANA
+ 3. eval:  degree of ego                                        NANA
+ 4. eval:  network-isolate                                      NANA
+ 5. eval:  gender_RS alter                                      NANA
+ 6. eval:  gender_RS ego                                        NANA
+ 7. eval:  same gender_RS                                       NANA
+
+
+@3
+Covariance matrices
+                   
+There is a linear dependency between the parameter estimates
+ therefore the covariance matrix should not be used.
+
+Total computation time 49.55 seconds.
+
+
+-----------------------------------
+New Analysis started.
+Date and time: 08/11/2024 17:31:59
+New results follow.
+-----------------------------------
+
+RSiena version 1.3.14 (07 Oct 22)
+
+
+@1
+Estimation by stochastic approximation algorithm.
+=================================================
+
+Random initialization of random number stream.
+Current random number seed is 476396.
+Effects object used: myeff 
+Model Type:
+ Pairwise joint model
+Estimation method: conditional moment estimation
+.
+Conditioning variable is the total number of observed changes ("distance") 
+in the network variable.
+Distance for simulations is  208 .
+Standard errors are estimated with the likelihood ratio method.
+Dolby method (regression on scores) is used.
+Initial value of gain parameter is  0.2000000.
+Reduction factor for gain parameter is  0.5000000.
+Number of subphases in Phase 2 is 4.
+
+Initial parameter values are 
+  0. Rate parameter                           4.1632
+  1. eval:  degree (density)                               -1.4815
+  2. eval:  degree of alter                                 0.0000
+  3. eval:  degree of ego                                   0.0000
+  4. eval:  network-isolate                                 0.0000
+  5. eval:  gender_RS alter                                 0.0000
+  6. eval:  gender_RS ego                                   0.0000
+  7. eval:  same gender_RS                                  0.0000
+
+
+Observed values of target statistics are
+  1. Number of edges                                                    118.0000
+  2. Sum of squared degrees                                            1636.0000
+  3. Sum of squared degrees                                            1636.0000
+  4. Number of isolates                                                  36.0000
+  5. Sum of degrees x gender_RS                                          38.1782
+  6. Sum of degrees x gender_RS                                          38.1782
+  7. same gender_RS                                                     140.0000
+
+ 7 parameters, 7 statistics
+
+Estimation of derivatives by the LR method (type 1).
+
+
+@2
+End of stochastic approximation algorithm, phase 3.
+---------------------------------------------------
+
+Total of 2550 iterations.
+Parameter estimates based on 1550 iterations,
+basic rate parameter as well as 
+convergence diagnostics, covariance and derivative matrices based on 1000 iterations.
+
+Information for convergence diagnosis.
+Averages, standard deviations, and t-ratios for deviations from targets:
+Overall maximum t-ratio for convergence not computable.
+  1.   1.1180   9.9155   0.1128 
+  2.  35.4240 377.8840   0.0937 
+  3.  35.4240 377.8840   0.0937 
+  4.  -0.4260   3.6764  -0.1159 
+  5.   0.1725  10.9269   0.0158 
+  6.   0.1725  10.9269   0.0158 
+  7.   0.5620  15.4994   0.0363 
+
+Good convergence is indicated by the t-ratios being close to zero.
+
+Overall maximum convergence ratio =  NA .
+*** Warning: Covariance matrix not positive definite *** 
+***            Standard errors not reliable           *** 
+The approximate linear combination that has variance 0 is
+1 * beta[2] + -1 * beta[3]
+Do not use any reported standard errors.
+
+
+
+@2
+Estimation Results.
+-------------------
+
+Regular end of estimation algorithm.
+Total of 2550 iteration steps.
+
+
+@3
+Estimates and standard errors
+                             
+Rate parameters:
+ 0. Rate parameter                            0.3211  (   0.0479)
+
+Other parameters:
+ 1. eval:  degree (density)                                     NANA
+ 2. eval:  degree of alter                                      NANA
+ 3. eval:  degree of ego                                        NANA
+ 4. eval:  network-isolate                                      NANA
+ 5. eval:  gender_RS alter                                      NANA
+ 6. eval:  gender_RS ego                                        NANA
+ 7. eval:  same gender_RS                                       NANA
+
+
+@3
+Covariance matrices
+                   
+There is a linear dependency between the parameter estimates
+ therefore the covariance matrix should not be used.
+
+Total computation time 63.75 seconds.
+
+
+-----------------------------------
+New Analysis started.
+Date and time: 08/11/2024 17:34:57
+New results follow.
+-----------------------------------
+
+RSiena version 1.3.14 (07 Oct 22)
+
+
+@1
+Estimation by stochastic approximation algorithm.
+=================================================
+
+Random initialization of random number stream.
+Current random number seed is 177630.
+Effects object used: myeff 
+Model Type:
+ Pairwise joint model
+Estimation method: conditional moment estimation
+.
+Conditioning variable is the total number of observed changes ("distance") 
+in the network variable.
+Distance for simulations is  208 .
+Standard errors are estimated with the likelihood ratio method.
+Dolby method (regression on scores) is used.
+Initial value of gain parameter is  0.2000000.
+Reduction factor for gain parameter is  0.5000000.
+Number of subphases in Phase 2 is 4.
+
+Initial parameter values are 
+  0. Rate parameter                           4.1632
+  1. eval:  degree (density)                               -1.4815
+  2. eval:  degree of alter                                 0.0000
+  3. eval:  degree of ego                                   0.0000
+  4. eval:  network-isolate                                 0.0000
+  5. eval:  gender_RS alter                                 0.0000
+  6. eval:  gender_RS ego                                   0.0000
+  7. eval:  same gender_RS                                  0.0000
+
+
+Observed values of target statistics are
+  1. Number of edges                                                    118.0000
+  2. Sum of squared degrees                                            1636.0000
+  3. Sum of squared degrees                                            1636.0000
+  4. Number of isolates                                                  36.0000
+  5. Sum of degrees x gender_RS                                          38.1782
+  6. Sum of degrees x gender_RS                                          38.1782
+  7. same gender_RS                                                     140.0000
+
+ 7 parameters, 7 statistics
+
+Estimation of derivatives by the LR method (type 1).
+
+
+@2
+End of stochastic approximation algorithm, phase 3.
+---------------------------------------------------
+
+Total of 2750 iterations.
+Parameter estimates based on 1750 iterations,
+basic rate parameter as well as 
+convergence diagnostics, covariance and derivative matrices based on 1000 iterations.
+
+Information for convergence diagnosis.
+Averages, standard deviations, and t-ratios for deviations from targets:
+Overall maximum t-ratio for convergence not computable.
+  1.   1.4580  10.3038   0.1415 
+  2.  80.0280 410.6362   0.1949 
+  3.  80.0280 410.6362   0.1949 
+  4.  -0.4660   3.8969  -0.1196 
+  5.   1.7810  10.6188   0.1677 
+  6.   1.7810  10.6188   0.1677 
+  7.   0.2240  15.0785   0.0149 
+
+Good convergence is indicated by the t-ratios being close to zero.
+
+Overall maximum convergence ratio =  NA .
+*** Warning: Covariance matrix not positive definite *** 
+***            Standard errors not reliable           *** 
+The approximate linear combination that has variance 0 is
+1 * beta[2] + -1 * beta[3]
+Do not use any reported standard errors.
+
+
+
+@2
+Estimation Results.
+-------------------
+
+Regular end of estimation algorithm.
+Total of 2750 iteration steps.
+
+
+@3
+Estimates and standard errors
+                             
+Rate parameters:
+ 0. Rate parameter                            0.3241  (   0.0482)
+
+Other parameters:
+ 1. eval:  degree (density)                                     NANA
+ 2. eval:  degree of alter                                      NANA
+ 3. eval:  degree of ego                                        NANA
+ 4. eval:  network-isolate                                      NANA
+ 5. eval:  gender_RS alter                                      NANA
+ 6. eval:  gender_RS ego                                        NANA
+ 7. eval:  same gender_RS                                       NANA
+
+
+@3
+Covariance matrices
+                   
+There is a linear dependency between the parameter estimates
+ therefore the covariance matrix should not be used.
+
+Total computation time 54.74 seconds.

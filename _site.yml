@@ -61,15 +61,12 @@ navbar:
         
     - text: "Step-by-step analysis"
       menu:
-      - text: "Step 1&2: Define data&effects structure"
-        href: 1definedata.html
+      - text: "Data prep"
+        href: datapreptrynew.html
       - text: "Step 3: initial description"
-        href: draftdata.html #bs html, change later
-        menu:
-        - text: "test second layer"
-          href: networkvis.html #bs html, change later # yay it works 
+        href: descriptivestry.html 
       - text: "Step 4&5: Specify & Estimate model"
-        href: 
+        href: RSienatry.html
       - text: "Step 6: Goodness of Fit"
         href: 
 
@@ -82,6 +79,9 @@ navbar:
         href: drafttheory.html
       - text: "Data"
         href: draftdata.html 
+        menu:
+        - text: "descriptives"
+          href: descriptivestry.html #bs html, change later # yay it works 
       - text: "Methods"
         href:  
       - text: "Results"

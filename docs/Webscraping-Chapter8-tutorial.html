@@ -425,17 +425,14 @@ div.tocify {
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="1definedata.html">Step 1&amp;2: Define data&amp;effects structure</a>
+      <a href="datapreptrynew.html">Data prep</a>
     </li>
-    <li class="dropdown-submenu">
-      <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Step 3: initial description</a>
-      <ul class="dropdown-menu" role="menu">
-        <li>
-          <a href="networkvis.html">test second layer</a>
-        </li>
-      </ul>
+    <li>
+      <a href="descriptivestry.html">Step 3: initial description</a>
     </li>
-    <li class="dropdown-header">Step 4&amp;5: Specify &amp; Estimate model</li>
+    <li>
+      <a href="RSienatry.html">Step 4&amp;5: Specify &amp; Estimate model</a>
+    </li>
     <li class="dropdown-header">Step 6: Goodness of Fit</li>
   </ul>
 </li>
@@ -452,8 +449,13 @@ div.tocify {
     <li>
       <a href="drafttheory.html">Theory</a>
     </li>
-    <li>
-      <a href="draftdata.html">Data</a>
+    <li class="dropdown-submenu">
+      <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Data</a>
+      <ul class="dropdown-menu" role="menu">
+        <li>
+          <a href="descriptivestry.html">descriptives</a>
+        </li>
+      </ul>
     </li>
     <li class="dropdown-header">Methods</li>
     <li class="dropdown-header">Results</li>
@@ -520,59 +522,27 @@ rm(list = ls())
 
 # install.packages(&#39;data.table&#39;)
 library(data.table)  # mainly for faster data handling
-library(tidyverse)  # I assume you already installed this one!</code></pre>
-<pre><code>## ── Attaching core tidyverse packages ───────────
-## ✔ dplyr     1.1.4     ✔ readr     2.1.5
-## ✔ forcats   1.0.0     ✔ stringr   1.5.1
-## ✔ ggplot2   3.5.1     ✔ tibble    3.2.1
-## ✔ lubridate 1.9.3     ✔ tidyr     1.3.1
-## ✔ purrr     1.0.2     
-## ── Conflicts ────────── tidyverse_conflicts() ──
-## ✖ dplyr::between()     masks data.table::between()
-## ✖ dplyr::filter()      masks stats::filter()
-## ✖ dplyr::first()       masks data.table::first()
-## ✖ lubridate::hour()    masks data.table::hour()
-## ✖ lubridate::isoweek() masks data.table::isoweek()
-## ✖ dplyr::lag()         masks stats::lag()
-## ✖ dplyr::last()        masks data.table::last()
-## ✖ lubridate::mday()    masks data.table::mday()
-## ✖ lubridate::minute()  masks data.table::minute()
-## ✖ lubridate::month()   masks data.table::month()
-## ✖ lubridate::quarter() masks data.table::quarter()
-## ✖ lubridate::second()  masks data.table::second()
-## ✖ purrr::transpose()   masks data.table::transpose()
-## ✖ lubridate::wday()    masks data.table::wday()
-## ✖ lubridate::week()    masks data.table::week()
-## ✖ lubridate::yday()    masks data.table::yday()
-## ✖ lubridate::year()    masks data.table::year()
-## ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
-<pre class="r"><code>#install.packages(&#39;httr&#39;) # we don&#39;t need this for now require(httr)
+library(tidyverse)  # I assume you already installed this one!
+#install.packages(&#39;httr&#39;) # we don&#39;t need this for now require(httr)
 #install.packages(&quot;devtools&quot;)
 require(devtools)</code></pre>
-<pre><code>## Loading required package: devtools
-## Loading required package: usethis</code></pre>
+<pre><code>## Loading required package: devtools</code></pre>
+<pre><code>## Loading required package: usethis</code></pre>
 <pre class="r"><code>#install.packages(&quot;rvest&quot;)
-require(rvest)</code></pre>
-<pre><code>## Loading required package: rvest
-## 
-## Attaching package: &#39;rvest&#39;
-## 
-## The following object is masked from &#39;package:readr&#39;:
-## 
-##     guess_encoding</code></pre>
-<pre class="r"><code># rvest:This is the explanation the writers of the package give: “rvest is new package that makes it easy to scrape (or harvest) data from html web pages.” Seems like something we need, a package that stores information from webpages into relatively structured data that we can then query/manipulate.
+require(rvest)
+# rvest:This is the explanation the writers of the package give: “rvest is new package that makes it easy to scrape (or harvest) data from html web pages.” Seems like something we need, a package that stores information from webpages into relatively structured data that we can then query/manipulate.
 
 #install.packages(&quot;xml2&quot;)
 
-require(xml2)</code></pre>
-<pre><code>## Loading required package: xml2</code></pre>
-<pre class="r"><code>#xml2:This is what the writers of the package say about it: “Work with XML files using a simple, consistent interface.” So we can manipulate the data scraped with rvest, using the xml2 package functions
+require(xml2)
+
+#xml2:This is what the writers of the package say about it: “Work with XML files using a simple, consistent interface.” So we can manipulate the data scraped with rvest, using the xml2 package functions
 
 #Note we&#39;re doing something different here. We&#39;re installing a *latest* version directly from
 #GitHub This is because the released version of this packages contains some errors!
 devtools::install_github(&quot;jkeirstead/scholar&quot;)</code></pre>
-<pre><code>## Using GitHub PAT from the git credential store.
-## Skipping install of &#39;scholar&#39; from a github remote, the SHA1 (2d38dcc3) has not changed since last install.
+<pre><code>## Using GitHub PAT from the git credential store.</code></pre>
+<pre><code>## Skipping install of &#39;scholar&#39; from a github remote, the SHA1 (2d38dcc3) has not changed since last install.
 ##   Use `force = TRUE` to force installation</code></pre>
 <pre class="r"><code>require(scholar)</code></pre>
 <pre><code>## Loading required package: scholar</code></pre>
@@ -591,10 +561,10 @@ sociology</h1>
 
 head(soc_staff)</code></pre>
 <pre><code>## $node
-## &lt;pointer: 0x000001ab00cfe950&gt;
+## &lt;pointer: 0x00000246752fe850&gt;
 ## 
 ## $doc
-## &lt;pointer: 0x000001aaffbfef70&gt;</code></pre>
+## &lt;pointer: 0x00000246742fe260&gt;</code></pre>
 <pre class="r"><code>#which object? 
 class(soc_staff)</code></pre>
 <pre><code>## [1] &quot;xml_document&quot; &quot;xml_node&quot;</code></pre>
@@ -1511,9 +1481,9 @@ number="6.3">
 <h2><span class="header-section-number">6.3</span> plot network of
 single staff member</h2>
 <pre class="r"><code>plot_coauthors(get_coauthors(&quot;Iu23-90AAAAJ&quot;, n_coauthors = 20, n_deep = 1), size_labels = 2)  </code></pre>
-<pre><code>## Warning: Removed 148 rows containing missing values or
-## values outside the scale range
-## (`geom_point()`).</code></pre>
+<pre><code>## Warning: Removed 148 rows containing missing
+## values or values outside the scale
+## range (`geom_point()`).</code></pre>
 <pre><code>## Warning: ggrepel: 2 unlabeled data points (too many overlaps). Consider increasing max.overlaps</code></pre>
 <p><img src="Webscraping-Chapter8-tutorial_files/figure-html/plot-1.png" width="672" /></p>
 <pre class="r"><code># Doesn&#39;t look like much yet, but we&#39;ll make it prettier later.</code></pre>
@@ -1696,7 +1666,7 @@ Jochem Tolsma
 J. Tolsma , Jochem Tolsma, J L Tolsma
 </td>
 <td style="text-align:right;">
-8949.66
+8965.17
 </td>
 <td style="text-align:left;">
 <a href="https://openalex.org/A5087380803"
@@ -2068,7 +2038,7 @@ oa_fetch(entity= &quot;author&quot;, search = &quot;Jochem Tolsma&quot;, affilia
 <pre><code>## # A tibble: 1 × 18
 ##   id      display_name display_name_alterna…¹ relevance_score ids   orcid works_count cited_by_count
 ##   &lt;chr&gt;   &lt;chr&gt;        &lt;list&gt;                           &lt;dbl&gt; &lt;lis&gt; &lt;chr&gt;       &lt;int&gt;          &lt;int&gt;
-## 1 https:… Jochem Tols… &lt;chr [3]&gt;                        8950. &lt;chr&gt; http…          85           2049
+## 1 https:… Jochem Tols… &lt;chr [3]&gt;                        8965. &lt;chr&gt; http…          85           2049
 ## # ℹ abbreviated name: ¹​display_name_alternatives
 ## # ℹ 10 more variables: counts_by_year &lt;list&gt;, affiliation_display_name &lt;chr&gt;, affiliation_id &lt;chr&gt;,
 ## #   affiliation_ror &lt;chr&gt;, affiliation_country_code &lt;chr&gt;, affiliation_type &lt;chr&gt;,
@@ -2216,7 +2186,7 @@ Jochem Tolsma
 J. Tolsma , Jochem Tolsma, J L Tolsma
 </td>
 <td style="text-align:right;">
-8949.66
+8965.17
 </td>
 <td style="text-align:left;">
 <a href="https://openalex.org/A5087380803"
@@ -2622,7 +2592,7 @@ Maurice Johannes Wilhelmus Gesthuizen, M. Gesthuizen , Maurice
 Gesthuizen , M.J.W. Gesthuizen , Maurice J.W. Gesthuizen
 </td>
 <td style="text-align:right;">
-8417.31
+8371.2
 </td>
 <td style="text-align:left;">
 <a href="https://openalex.org/A5007673492"
@@ -2638,11 +2608,11 @@ class="uri">https://orcid.org/0000-0002-5286-3989</a>
 112
 </td>
 <td style="text-align:right;">
-1867
+1871
 </td>
 <td style="text-align:left;">
 2024, 2023, 2022, 2021, 2020, 2019, 2018, 2017, 2016, 2015, 2014, 2013,
-2012, 0, 3, 1, 3, 3, 10, 2, 6, 5, 6, 5, 10, 4, 85, 160, 134, 176, 151,
+2012, 0, 3, 1, 3, 3, 10, 2, 6, 5, 6, 5, 10, 4, 88, 160, 134, 176, 153,
 126, 125, 119, 125, 141, 117, 137, 84
 </td>
 <td style="text-align:left;">
@@ -3030,7 +3000,7 @@ Michael Savelkoul
 M.J. Savelkoul , M. Savelkoul , Michael Savelkoul
 </td>
 <td style="text-align:right;">
-4067.08
+4071.82
 </td>
 <td style="text-align:left;">
 <a href="https://openalex.org/A5048988743"
@@ -3435,7 +3405,7 @@ T.W.G. Tom van der Meer, Tom W. G. van der Meer , Tom Van Der Meer , T.
 Van Der Meer , TOM W.G. VAN DER MEER
 </td>
 <td style="text-align:right;">
-17226.26
+17225
 </td>
 <td style="text-align:left;">
 <a href="https://openalex.org/A5010780363"
