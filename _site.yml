@@ -81,9 +81,9 @@ navbar:
         href: draftdata.html 
         menu:
         - text: "Data & Methods"
-          href: draftdata.html #bs html, change later # yay it works 
+          href: draftdata.html 
         - text: "descriptives"
-          href: descriptivestry.html #bs html, change later # yay it works 
+          href: descriptivestry.html 
       - text: "Results"
         href: 
       - text: "Discussion & Conclusion"
