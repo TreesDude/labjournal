@@ -29,7 +29,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```
 
-# Data 
+# Data
 
 Information about data set:
 
@@ -41,7 +41,7 @@ Information about data set:
 
     -   timeframe of focus
 
-## DV: formation of ties between scholars 
+## DV: formation of ties between scholars
 
 -   formation of ties between scholars
 
@@ -67,9 +67,11 @@ Information about data set:
 
     -   definitions indeces:
 
-        -    H-index: Hirsch-Index
+        -   H-index: Hirsch-Index
 
-            -   From Lucan: "The h-index namely measures an author’s prestige by calculating the number of publications that have been cited at least as many times as the total number of their publications. As explained by the creator of the h-index, ” A scientist has index h if h of his or her Np papers have at least h citations each and the other (Np - h) papers have ≤h citations each” (@Hirsch2005) "
+        ```         
+        -   From Lucan: "The h-index namely measures an author’s prestige by calculating the number of publications that have been cited at least as many times as the total number of their publications. As explained by the creator of the h-index, ” A scientist has index h if h of his or her Np papers have at least h citations each and the other (Np - h) papers have ≤h citations each” (@Hirsch2005) "
+        ```
 
         -   i10-index:
 
@@ -77,20 +79,17 @@ Information about data set:
 
     -   h index and i10 index calculated based on these counts
 
-```{=html}
 <!-- -->
-```
+
 -   Code for this was provided by a fellow course mate, namely Lucan Bovens
 
-# Data preparation /Methods 
+# Data preparation /Methods
 
-### RSiena 
+### RSiena
 
 -   definition
 
-    -   "SIENA, shorthand for **Simulation Investigation for Empirical Network Analysis**, is a computer program that carries out the statistical estimation of models for repeated measures of social networks according to the dynamic actor-oriented model of Snijders and van Duijn (1997), Snijders (2001), and Snijders, Steglich, and Schweinberger (2007); also see Steglich, Snijders, and Pearson (2009). A tutorial for these models is in Snijders, van de Bunt, and Steglich (2009). Some examples are presented, e.g., in van de Bunt (1999); van de Bunt, van Duijn, and Snijders (1999); and van Duijn, Zeggelink, Stokman, and Wasseur (2003); and Steglich, Snijders, and West (2006). A website for SIENA is maintained at http://www.stats.ox.ac.uk/\~snijders/siena/ . At this website (‘publications’ tab) you shall also find references to introductions in various other languages.
-        This is a provisional manual for SIENA version 4.0, which is also called RSiena. This is a contributed package for the R statistical system which can be downloaded from http://cran.r-project.org. For the operation of R, the reader is referred to the corresponding manual. If desired, SIENA can be operated apparently independently of R, as is explained in Section 2.1.
-        RSiena was programmed by Ruth Ripley and Krists Boitmanis, in collaboration with Tom Snijders."
+    -   "SIENA, shorthand for **Simulation Investigation for Empirical Network Analysis**, is a computer program that carries out the statistical estimation of models for repeated measures of social networks according to the dynamic actor-oriented model of Snijders and van Duijn (1997), Snijders (2001), and Snijders, Steglich, and Schweinberger (2007); also see Steglich, Snijders, and Pearson (2009). A tutorial for these models is in Snijders, van de Bunt, and Steglich (2009). Some examples are presented, e.g., in van de Bunt (1999); van de Bunt, van Duijn, and Snijders (1999); and van Duijn, Zeggelink, Stokman, and Wasseur (2003); and Steglich, Snijders, and West (2006). A website for SIENA is maintained at [http://www.stats.ox.ac.uk/\\\~snijders/siena/](http://www.stats.ox.ac.uk/\~snijders/siena/){.uri} . At this website (‘publications’ tab) you shall also find references to introductions in various other languages. This is a provisional manual for SIENA version 4.0, which is also called RSiena. This is a contributed package for the R statistical system which can be downloaded from <http://cran.r-project.org>. For the operation of R, the reader is referred to the corresponding manual. If desired, SIENA can be operated apparently independently of R, as is explained in Section 2.1. RSiena was programmed by Ruth Ripley and Krists Boitmanis, in collaboration with Tom Snijders."
 
 Ripley, Ruth, and Snijders, Tom A.B. 2009. Manual for SIENA version 4.0 (provisional version, July 6, 2009). Oxford: University of Oxford, Department of Statistics; Nuffield College. <http://www.stats.ox.ac.uk/siena/>
 
@@ -104,4 +103,4 @@ Methods, aka use of RSiena for SNA
 
     -   reference: \@SNASS
 
-# Data description 
+# Data description

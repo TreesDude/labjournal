@@ -80,10 +80,10 @@ navbar:
       - text: "Data"
         href: draftdata.html 
         menu:
+        - text: "Data & Methods"
+          href: descriptivestry.html #bs html, change later # yay it works 
         - text: "descriptives"
           href: descriptivestry.html #bs html, change later # yay it works 
-      - text: "Methods"
-        href:  
       - text: "Results"
         href: 
       - text: "Discussion & Conclusion"
