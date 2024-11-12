@@ -484,3 +484,9 @@ view(df_ego[c('au_id','Naam','gender','h_index','i10_index')])
 # fsave(df_ego)
 
 ```
+
+Dichotomize h_index ?
+```{r dicho hindex}
+# idk if I should yet
+```
+

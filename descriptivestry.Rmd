@@ -279,6 +279,7 @@ Ego
 
 ```{r df_ego data}
 df_ego <- fload("./data/processed/df_ego_20241108.rda")
+
 ```
 
 ```{r matrix data ego}
@@ -302,55 +303,70 @@ test_w1 <- igraph::graph_from_adjacency_matrix(
 
 -   Gender
 
-    -   descriptives (mean etc.)
+    -   descriptives (mean etc.) in whole sample
 
 ```{r sum gender}
 summary(df_ego$gender)
-
 ```
 
-    -   overall
+    - gender counts across whole sample (0 = female, 1 = male)
+
+```{r counts gender-all}
+table(df_ego$gender)
+```
+
+
+
+    -   overall gender distribution in sample
 
 ```{r hist gender}
 # Histogram of prestige scores for Wave 1  
-hist(df_ego$gender, breaks = , main = "Distribution of gender",     xlab = "Gender", ylab = "Frequency", col = "#B3DE69") # INSERT YEARS OF WAVE/TIME FRAME STILL
+hist(df_ego$gender, breaks = 2, main = "Distribution of gender",     xlab = "Gender", ylab = "Frequency", col = "#B3DE69") # INSERT YEARS OF WAVE/TIME FRAME STILL
 ```
 
-```         
--   Gender per department
-```
+       
+    -   Genders per department (0 = female, 1 = male)
 
 ```{r gender per dep.}
-# STILL DO 
+   
+# Wave 1: Gender count per department 
+table(df_ego$discipline.24, df_ego$gender)
 ```
+
 
 ### h index
 
-```         
--   descriptives (mean etc.)
+        
+    -   descriptives (mean etc.)
+```{r summary h index}
+summary(df_ego$h_index)
 ```
-
-```{r sum h index}
-summary(df_ego$h_index) 
-```
-
-```         
-- Overall  (INSERT YEARS STILL)
-```
+    - Overall  (INSERT YEARS STILL)
 
 ```{r hist h index}
-
 # Histogram of prestige scores for Wave 1 
 hist(df_ego$h_index, breaks = 30, main = "Distribution of H-Index from yearX to yearX",     xlab = "H Index", ylab = "Frequency", col = "#B3DE69") # INSERT YEARS OF WAVE/TIME FRAME STILL
 ```
 
-```         
--   H index per department
+    -   H index per department
+
+```{r table per dep h index}
+# Wave 1: Prestige distribution by dep. and total
+df_ego %>%
+    group_by(discipline.24) %>%
+    summarise(mean_h_index = mean(h_index, na.rm = TRUE), min_h_index = min(h_index,
+        na.rm = TRUE), max_h_index = max(h_index, na.rm = TRUE), sd_h_index = sd(h_index,
+        na.rm = TRUE)) %>%
+    bind_rows(df_ego %>%
+        summarise(discipline.24 = "total", mean_h_index = mean(h_index, na.rm = TRUE), min_h_index = min(h_index,
+            na.rm = TRUE), max_h_index = max(h_index, na.rm = TRUE), sd_h_index = sd(h_index,
+            na.rm = TRUE)))
 ```
 
-```{r h index per dep.}
-# STILL DO 
-```
+         
+
+
+
 
 ## Ego network
 
@@ -371,19 +387,21 @@ ecount(test_w1)
 -   Dyad census
 
     ```{r dyad cen}
-    # still do 
+
+igraph::dyad_census(test_w1)
     ```
 
 -   Triad-census
 
     ```{r triad cen}
-    # still do 
+igraph::triad_census(test_w1)
     ```
 
 -   edge-density
 
     ```{r edge dens}
-    #still do 
+# edge density
+igraph::edge_density(test_w1)
     ```
 
 ### more indepth:
@@ -391,25 +409,54 @@ ecount(test_w1)
 -   reciprocity
 
     ```{r recip}
-    #still do 
+reciprocity(test_w1, ignore.loops = TRUE, mode = c("default", "ratio"))
     ```
+reciprocity = 1 makes sense since the ties are undirected rn 
+
+
 
 -   degree centrality / degreee?
 
     ```{r degree}
-    # still do 
+
+degree_testw1 <- degree(test_w1)
+degree_testw1 <- as.data.frame(degree_testw1)
+ggplot(degree_testw1, aes(as.numeric(degree_testw1), colour = as.numeric(degree_testw1) )) +
+  geom_histogram(binwidth = .9) +
+  labs(
+    title = "Distribution Degrees Wave 1",
+    x = "Distribution of Degrees",
+    y = "Count"  ) +
+  ylim(0, 65)
+  
     ```
 
 -   Betweenness centrality /betweenness?
 
     ```{r betweenness}
-    #still do 
+betweenness_w1 <- igraph::betweenness(test_w1, directed = T)
+betweenness_w1 <- as.data.frame(betweenness_w1)
+ggplot(betweenness_w1, aes(as.numeric(betweenness_w1), colour = as.numeric(betweenness_w1))) +
+  geom_histogram(binwidth = 1.2) +
+  labs(
+    title = "Distribution Betweenness Wave 1",
+    x = "Distribution of Betweenness",
+    y = "Count")
+
     ```
 
 -   Clustering
 
     ```{r clustering}
-    #still do 
+#clustering w1
+clustering_w1 <- igraph::transitivity(test_w1, type = "local")
+clustering_w1 <- as.data.frame(clustering_w1)
+ggplot(clustering_w1, aes(as.numeric(clustering_w1), colour = as.numeric(clustering_w1) )) +
+  geom_histogram(binwidth = .05) +
+  labs(
+    title = "Distribution Clustering Wave 1",
+    x = "Distribution of Clustering",
+    y = "Count" )
     ```
 
 ## Network-level descriptives
@@ -417,13 +464,14 @@ ecount(test_w1)
 -   Density
 
     ```{r density}
-    #still do 
+density_w1 <- igraph::edge_density(test_w1)
+density_w1
     ```
 
 -   Average path length
 
     ```{r path length}
-    # still do 
+mean((ego_size(test_w1, order = 2, mode = "out") - 1)/vcount(test_w1))
     ```
 
 -   Segregation
@@ -440,19 +488,255 @@ plot(test_w1,
      edge.arrow.size =0.2)
 ```
 
+
+### Plotting: Gender 
+#### with isolates
 ```{r plot gender}
-names(df_ego) #see labels of variables 
+# names(df_ego) #see labels of variables 
 
 
 plot(test_w1,
-vertex.color = ifelse(df_ego$gender == 1, "#FB8072", "#80B1D3"), # now, I can use actor attributes for plotting.
+     vertex.color = ifelse(df_ego$gender == 1, "#FFED6F", "#80B1D3"), # now, I can use actor attributes for plotting.
 # here: if gender = 1 (aka man) then red dot, if not then blue 
-vertex.label = NA,
-edge.width = 0.2,
-edge.arrow.size =0.2)
+  vertex.label = NA,
+  vertex.size = 7.5,
+  edge.width = 0.5,
+  edge.arrow.size = 0.1,
+  main = "Network with isolates [yellow = female, blue = male]")
 
 # if you dont want plot to turn, save the layout (look at SNASS)
+```
 
+#### without isolates
+```{r removing isolates}
+indegr_w1 <- igraph::degree(test_w1, mode = "in")
+
+isolates_w1 <- V(test_w1)[degree(test_w1, mode = "all") == 0]
+
+noisolates_w1 <- delete_vertices(test_w1, isolates_w1)
+
+gsize(noisolates_w1) # edges
+
+gorder(noisolates_w1) # vertices
+```
+
+```{r plot wo isolates}
+plot(noisolates_w1,
+  vertex.color = ifelse(df_ego$gender == 1, "#80B1D3", "#FFED6F"), # now, I can use actor attributes for plotting.
+  # here: if gender = 1 (aka man) then red dot, if not then blue 
+  vertex.label = NA,
+  vertex.size = 9,
+  vertex.frame.color = "black",
+  edge.curved = 0.2,
+  edge.arrow.size = 0.3,
+  edge.color = "gray",
+  edge.width = 0.2,
+  main = "Network without isolates [yellow = female, blue = male]")
+```
+
+
+
+### Plotting: h-index -ggraph
+Credits to Hannah Groennou for the basis of the code of these graphs. 
+#### with isolates ?
+```{r}
+
+indegr_w1 <- degree(test_w1, mode = "in")
+
+# assign h-index to scholar
+V(test_w1)$h_index <- df_ego$h_index
+V(test_w1)$indegree <- indegr_w1
+
+#set size of plot
+options(repr.plot.width = 15, repr.plot.height = 18)
+
+#plot wave 1 with isolates
+p_iso <- ggraph(test_w1,
+       layout = "fr") +
+  geom_edge_link(color = "#BEBADA", width = 0.5) +
+  geom_node_point(aes(size = indegree, color = h_index)) + 
+  scale_size(range = c(3, 10)) + 
+  scale_color_gradient(low = "red", high = "blue") + 
+  theme_void() 
+       
+p_iso + labs(title = "Network with isolates",
+        subtitle = "Plot of indegree and H-index",
+        caption = "Data refer to: Scholars RU sociology and political science departments") + theme(plot.title = element_text(hjust = 0.5, face = "bold"), plot.subtitle = element_text(hjust=0.5), plot.caption = element_text(hjust = 1))
+```
+
+#### without isolates
+```{r}
+
+indegr_w1 <- degree(test_w1, mode = "in")
+
+# assign h-index to scholar
+V(test_w1)$h_index <- df_ego$h_index
+V(test_w1)$indegree <- indegr_w1
+
+#remove isolates
+noisolates_w1 <- delete_vertices(test_w1, V(test_w1)[degree(test_w1) == 0])
+
+#set size of plot
+options(repr.plot.width = 15, repr.plot.height = 15)
+
+#plot wave 1 without isolates 
+p_noiso <- ggraph(noisolates_w1,
+       layout = "fr") +
+  geom_edge_link(color = "#BEBADA", width = 0.7) +
+  geom_node_point(aes(size = indegree, color = h_index)) + 
+  scale_size(range = c(3, 10)) + 
+  scale_color_gradient(low = "red", high = "blue") + 
+  theme_void() 
+  
+
+p_noiso + labs(title = "Network without isolates",
+        subtitle = "Plot of indegree and H-index",
+        caption = "Data refer to: Scholars RU sociology and political science departments") + theme(plot.title = element_text(hjust = 0.5, face = "bold"), plot.subtitle = element_text(hjust=0.5))
+
+# allowed values for the font face include: “plain”, “italic”, “bold” and “bold.italic”.
+
+```
+
+##### H-index per department
+```{r}
+indegr_w1 <- degree(test_w1, mode = "in")
+
+# assign h-index to scholar
+V(test_w1)$h_index <- df_ego$h_index
+# assign discipline to scholar
+V(test_w1)$discipline <- df_ego$discipline.24
+
+V(test_w1)$indegree <- indegr_w1
+
+#remove isolates
+noisolates_w1 <- delete_vertices(test_w1, V(test_w1)[degree(test_w1) == 0])
+
+#set size of plot
+options(repr.plot.width = 15, repr.plot.height = 15)
+
+#plot wave 1 without isolates 
+p_noiso <- ggraph(noisolates_w1,
+       layout = "fr") +
+  geom_edge_link(color = "#BEBADA", width = 0.7) +
+  geom_node_point(aes(size = indegree, color = h_index, shape = as.factor(discipline))) + 
+  scale_size(range = c(3, 10)) + 
+  scale_color_gradient(low = "red", high = "blue") + 
+  theme_void() 
+  
+
+p_noiso + labs(title = "Departments without isolates",
+        subtitle = "Plot of indegree and H-index",
+        caption = "Data refer to scholars from Radboud University.") + theme(plot.title = element_text(hjust = 0.5, face = "bold"), plot.subtitle = element_text(hjust=0.5))
+
+# allowed values for the font face include: “plain”, “italic”, “bold” and “bold.italic”.
+
+```
+
+
+### Plotting gender - ggraph 
+#### with isolates per department 
+```{r}
+#assign gender to scholar 
+V(test_w1)$gender <- df_ego$gender
+
+# assign discipline to scholar
+V(test_w1)$discipline <- df_ego$discipline.24
+
+
+V(test_w1)$indegree <- indegr_w1
+
+
+p_gender <- ggraph(test_w1,
+  layout = "fr") +
+  geom_edge_link(color = "#BEBADA", width = 0.5) +
+  geom_node_point(aes(size = indegree, color = as.factor(discipline), shape = as.factor(gender))) +   
+  scale_size(range = c(3, 10)) + 
+  theme_void()
+
+p_gender + labs(title = "Departments with isolates",
+        subtitle = "Plot of indegree and gender",
+        caption = "Gender: 0 = female, 1 = male.\n Data refer to scholars from Radboud University.") + theme(plot.title = element_text(hjust = 0.5, face = "bold"), plot.subtitle = element_text(hjust=0.5), plot.caption = element_text(hjust = 1))
+
+```
+
+#### without isolates per department 
+```{r}
+#assign gender to scholar 
+V(test_w1)$gender <- df_ego$gender
+
+# assign disciplines to scholars
+V(test_w1)$discipline <- df_ego$discipline.24
+V(test_w1)$indegree <- indegr_w1
+
+
+#remove isolates
+noisolates_w1 <- delete_vertices(test_w1, V(test_w1)[degree(test_w1) == 0])
+
+p_noisgender <- ggraph(noisolates_w1,
+  layout = "fr") +
+  geom_edge_link(color = "#BEBADA", width = 0.5) +
+  geom_node_point(aes(size = indegree, color = as.factor(discipline), shape = as.factor(gender))) +   
+  scale_size(range = c(3, 10)) + 
+  theme_void()
+
+p_noisgender + labs(title = "Departments with isolates",
+        subtitle = "Plot of indegree and gender",
+        caption = "Gender: 0 = female, 1 = male.\n Data refer to scholars from Radboud University.") + theme(plot.title = element_text(hjust = 0.5, face = "bold"), plot.subtitle = element_text(hjust=0.5), plot.caption = element_text(hjust = 1))
+
+
+```
+
+
+
+### Plotting h index and gender -ggraph
+#### with isolates 
+```{r}
+#assign gender to scholar 
+V(test_w1)$gender <- df_ego$gender
+# V(test_w1)$gender <- ifelse(df_ego$gender >= 0.5,1,0)
+
+# assign h-index to scholar
+V(test_w1)$h_index <- df_ego$h_index
+V(test_w1)$indegree <- indegr_w1
+
+p_gender <- ggraph(test_w1,
+  layout = "fr") +
+  geom_edge_link(color = "#BEBADA", width = 0.5) +
+  geom_node_point(aes(size = indegree, color = h_index, shape = as.factor(gender))) +   
+  scale_size(range = c(3, 10)) + 
+  scale_color_gradient(low = "red", high = "blue") + 
+  theme_void()
+
+p_gender + labs(title = "Network with isolates",
+        subtitle = "Plot of indegree, H-index and gender",
+        caption = "Gender: 0 = female, 1 = male.\n Data refer to: Scholars RU sociology and political science departments.") + theme(plot.title = element_text(hjust = 0.5, face = "bold"), plot.subtitle = element_text(hjust=0.5), plot.caption = element_text(hjust = 1))
+
+ 
+```
+#### without isolates 
+```{r gen without iso}
+#assign gender to scholar 
+V(test_w1)$gender <- df_ego$gender
+
+# assign h-index to scholar
+V(test_w1)$h_index <- df_ego$h_index
+V(test_w1)$indegree <- indegr_w1
+
+
+#remove isolates
+noisolates_w1 <- delete_vertices(test_w1, V(test_w1)[degree(test_w1) == 0])
+
+p_noisogender <- ggraph(noisolates_w1,
+  layout = "fr") +
+  geom_edge_link(color = "#BEBADA", width = 0.5) +
+  geom_node_point(aes(size = indegree, color = h_index, shape = as.factor(gender))) +   
+  scale_size(range = c(3, 10)) + 
+  scale_color_gradient(low = "red", high = "blue") + 
+  theme_void()
+
+p_noisogender + labs(title = "Network without isolates",
+        subtitle = "Plot of indegree, H-index and gender",
+        caption = "Gender: 0 = female, 1 = male.\n Data refer to: Scholars RU sociology and political science departments.") + theme(plot.title = element_text(hjust = 0.5, face = "bold"), plot.subtitle = element_text(hjust=0.5))
 
 ```
 
