@@ -319,9 +319,12 @@ table(df_ego$gender)
 
     -   overall gender distribution in sample
 
-```{r hist gender}
-# Histogram of prestige scores for Wave 1  
-hist(df_ego$gender, breaks = 2, main = "Distribution of gender",     xlab = "Gender", ylab = "Frequency", col = "#B3DE69") # INSERT YEARS OF WAVE/TIME FRAME STILL
+```{r}
+# Create the histogram
+ggplot(df_ego, aes(x = gender))+
+  geom_bar(color = "darkgrey", fill ="#B3DE69", width = 0.75)+
+  labs(title = "Histogram of Gender", x = "Gender\n (0 = female, 1 = male)", y = "Count") + theme(plot.title = element_text(hjust = 0.5, face = "bold"))
+
 ```
 
        
@@ -489,7 +492,7 @@ plot(test_w1,
 ```
 
 
-### Plotting: Gender 
+### Plotting: Gender - igraph
 #### with isolates
 ```{r plot gender}
 # names(df_ego) #see labels of variables 
@@ -679,7 +682,7 @@ p_noisgender <- ggraph(noisolates_w1,
   scale_size(range = c(3, 10)) + 
   theme_void()
 
-p_noisgender + labs(title = "Departments with isolates",
+p_noisgender + labs(title = "Departments without isolates",
         subtitle = "Plot of indegree and gender",
         caption = "Gender: 0 = female, 1 = male.\n Data refer to scholars from Radboud University.") + theme(plot.title = element_text(hjust = 0.5, face = "bold"), plot.subtitle = element_text(hjust=0.5), plot.caption = element_text(hjust = 1))
 
@@ -713,7 +716,9 @@ p_gender + labs(title = "Network with isolates",
 
  
 ```
+
 #### without isolates 
+
 ```{r gen without iso}
 #assign gender to scholar 
 V(test_w1)$gender <- df_ego$gender
@@ -742,7 +747,7 @@ p_noisogender + labs(title = "Network without isolates",
 
 # Detour: Colors
 
-```{r mypalette, include = FALSE, eval = FALSE}
+```{r mypalette, include = FALSE, eval = FALSE, hide = TRUE}
 # palette i like:
 palette("Set 3");  sinplot("Set 3")
 palette.swatch("Set 3")
@@ -752,7 +757,7 @@ palette.colors(palette = "Set 3")
 ```
 
 
-```{r colors in R, include = FALSE, eval = FALSE}
+```{r colors in R, include = TRUE, eval = FALSE, hide = TRUE}
 colors (distinct = TRUE) # prints all colors R knows
 palette.pals()
 #  [1] "R3"              "R4"              "ggplot2"        
@@ -768,7 +773,7 @@ palette.colors(palette = "-palette name here-")
 ```
 
 
-```{r look at colors PLOT, include = FALSE, eval = FALSE}
+```{r look at colors PLOT, include = TRUE, eval = FALSE, hide = TURE}
 ## Demonstrate the colors 1:8 in different palettes using a custom matplot()
 sinplot <- function(main=NULL, n = 8) {
     x <- outer(
@@ -789,7 +794,7 @@ palette("default") # reset
 ```
 
 
-```{r look at colors SWATCH, include = FALSE, eval = FALSE}
+```{r look at colors SWATCH, include = TRUE, eval = FALSE, hide = TRUE}
 palette.swatch <- function(palette = palette.pals(), n = 8, nrow = 8,
                            border = "black", cex = 1, ...)
 {
