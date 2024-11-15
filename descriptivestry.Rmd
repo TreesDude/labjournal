@@ -743,6 +743,7 @@ p_noisogender + labs(title = "Network without isolates",
         subtitle = "Plot of indegree, H-index and gender",
         caption = "Gender: 0 = female, 1 = male.\n Data refer to: Scholars RU sociology and political science departments.") + theme(plot.title = element_text(hjust = 0.5, face = "bold"), plot.subtitle = element_text(hjust=0.5))
 
+
 ```
 
 # Detour: Colors
@@ -773,7 +774,7 @@ palette.colors(palette = "-palette name here-")
 ```
 
 
-```{r look at colors PLOT, include = TRUE, eval = FALSE, hide = TURE}
+```{r look at colors PLOT, include = TRUE, eval = FALSE, hide = TRUE}
 ## Demonstrate the colors 1:8 in different palettes using a custom matplot()
 sinplot <- function(main=NULL, n = 8) {
     x <- outer(
