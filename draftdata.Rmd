@@ -31,34 +31,25 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Data
 
-## Sample data 
+## Sample data
 
--   The data for this study was obtained by collecting information from all Sociology and Political Science scholars at all Dutch institutions. During the initial phase of data collection, all important information regarding the author's position, university affiliation, names, IDs, departments, and more was gathered. The coordinator of this course, Jochem Tolsma, has provided a dataset with said information to be used in this project (**source sunbelt?** ). OpenAlex was used to scrape all published works, including important work-related information such as work id, concepts, citations, abstracts, and subjects, up until 2024 (@Priem2022). From this data, I created a final dataset (n=101) that included all authors from the Sociology and Political Science departments at Radboud University.
-
--   source open alex: Priem et al. (2022)
-
-    -   Priem, J., Piwowar, H., & Orr, R. (2022). *OpenAlex: A fully-open index of scholarly works, authors, venues, institutions, and concepts*. ArXiv. https://arxiv.org/abs/2205.01833
+The data for this study was obtained by collecting information from all Sociology and Political Science scholars at all Dutch institutions. During the initial phase of data collection, all important information regarding the author's position, university affiliation, names, IDs, departments, and more was gathered. The coordinator of this course, Jochem Tolsma, has provided a dataset with said information to be used in this project (**source sunbelt?** ). OpenAlex was used to scrape all published works, including important work-related information such as work id, concepts, citations, abstracts, and subjects, up until 2024 (@Priem2022). From this data, I created a final dataset (n=101) that included all authors from the Sociology and Political Science departments at Radboud University within the time frame of **[INSERT TIME FRAME]**.
 
 -   timeframe of focus
 
-## Dependent variable: Ties between scholars
+## Dependent variable
 
--   The dependent variable in this dataset, indicated by the ties between scholars, refers to academic collaborations between them, often also known as co-authorships. The data was scraped from OpenAlex API using the rvest and XML packages in R ( @Priem2022, @xml2**, @rvest**). The dependent variable, represented by an *adjacency matrix*, shows whether two actors or writers collaborated on one of their publications in the specified wave. \
-    Each dyad (author combination) is assessed based on whether they collaborated (1) or not (0) throughout the data period, which in this case is the first or second wave.
+The dependent variable in this dataset, indicated by the ties between scholars, refers to academic collaborations between them, often also known as co-authorships. The data was scraped from OpenAlex API using the rvest and XML packages in R ( @Priem2022, @xml2**, @rvest**). The dependent variable, represented by an *adjacency matrix*, shows whether two actors or writers collaborated on one of their publications in the specified wave.\
+Each dyad (author combination) is assessed based on whether they collaborated (1) or not (0) throughout the data period.
 
--   ***In this study, ties are described as directional***, which implies that they are delivered by one actor and received by another. This means each actor has both outdegrees and indegrees. Outdegrees refer to 'sent' connections that refer to being the first author of a manuscript. Indegrees, or 'received' connections, imply collaboration on an article without being the 'initial' author. The generated adjacency matrix can take the form of a network, indicating the collaboration patterns of the academics who worked at the aforementioned university between **YEAR AND YEAR**.
+-   ***In this study, ties are described as directional***, which implies that they are delivered by one actor and received by another. This means each actor has both outdegrees and indegrees. Outdegrees refer to 'sent' connections that refer to being the first author of a manuscript. Indegrees, or 'received' connections, imply collaboration on an article without being the 'initial' author. The generated adjacency matrix can take the form of a network, indicating the collaboration patterns of the academics at Radboud University between **YEAR AND YEAR**.
 
+```{=html}
+<!-- -->
+```
 -   formation of ties between scholars
 
--   source rvest:
-
-    -   Wickham H (2024). rvest: Easily Harvest (Scrape) Web Pages. R package version 1.0.4, <https://github.com/tidyverse/rvest>, <https://rvest.tidyverse.org/>.
-
--   source xml2:
-
-    -   Wickham H, Hester J, Ooms J (2023). *xml2: Parse XML*. R package version 1.3.6, <https://github.com/r-lib/xml2,> <https://xml2.r-lib.org/>.
-
-## Independent variables 
+## Independent variables
 
 ### Gender
 
@@ -68,15 +59,27 @@ For simplicity's sake the concept of gender is not only inferred by the scholars
 
 ### Prestige
 
-The scholars' h-indices will serve as a control variable in this research design (**find source : Bornmann et al. 2020**). The h-index calculates the number of publications that have been cited at least as frequently as the author's total number of publications. This number can then be used as measure for the author's 'prestige' (@Hirsch2005). The number of citations and publications needed for this calculation were webscraped through OpenAlex API (@Priem2022**).** The code for this process was provided by a fellow course mate, namely Lucan Bovens.
+The scholars' h-indices will serve as a control variable in this research design (**find source : Bornmann et al. 2020**). The h-index calculates the number of publications that have been cited at least as frequently as the author's total number of publications. This number can then be used as measure for the author's 'prestige' (@Hirsch2005). The number of citations and publications needed for this calculation were webscraped through OpenAlex API (@Priem2022**).** The code for this process was provided by Lucan Bovens.
 
 # Data preparation /Methods
 
 ### RSiena
 
--   definition
+SIENA, which stands for *Simulation Investigation for Empirical Network Analysis*, is a software tool designed to perform statistical estimation of models for longitudinal social network data.
 
-    -   "SIENA, shorthand for **Simulation Investigation for Empirical Network Analysis**, is a computer program that carries out the statistical estimation of models for repeated measures of social networks according to the dynamic actor-oriented model of Snijders and van Duijn (1997), Snijders (2001), and Snijders, Steglich, and Schweinberger (2007); also see Steglich, Snijders, and Pearson (2009). A tutorial for these models is in Snijders, van de Bunt, and Steglich (2009). Some examples are presented, e.g., in van de Bunt (1999); van de Bunt, van Duijn, and Snijders (1999); and van Duijn, Zeggelink, Stokman, and Wasseur (2003); and Steglich, Snijders, and West (2006). A website for SIENA is maintained at [http://www.stats.ox.ac.uk/\\\~snijders/siena/](http://www.stats.ox.ac.uk/~snijders/siena/){.uri} . At this website (‘publications’ tab) you shall also find references to introductions in various other languages. This is a provisional manual for SIENA version 4.0, which is also called RSiena. This is a contributed package for the R statistical system which can be downloaded from <http://cran.r-project.org>. For the operation of R, the reader is referred to the corresponding manual. If desired, SIENA can be operated apparently independently of R, as is explained in Section 2.1. RSiena was programmed by Ruth Ripley and Krists Boitmanis, in collaboration with Tom Snijders."
+-   It operates based on the dynamic actor-oriented model, as developed in the works of
+
+    -   Snijders and van Duijn (1997),
+
+    -   Snijders (2001),
+
+    -   and Snijders, Steglich, and Schweinberger (2007).
+
+    -   Additional insights can be found in Steglich, Snijders, and Pearson (2009).
+
+SIENA version 4.0, also known as RSiena, is a package for the R statistical software and was developed by Ruth Ripley and Krists Boitmanis, in collaboration with Tom Snijders (@RSiena_package, @RSiena_manual). The use of RSiena for this project is highly based on the book "[**Social Network Analysis for Social Scientists**](https://jochemtolsma.github.io/SNA-4-Social-Scientists/)**"** by Jochem Tolsma and Bas Hofstra (@SNASS).
+
+# written references (remove in final paper) 
 
 R Siena manual reference: @RSiena_manual
 
@@ -89,3 +92,17 @@ Methods, aka use of RSiena for SNA
 -   Jochem Tolsma and Bas Hofstra: [**Methods**](https://jochemtolsma.github.io/SNA-4-Social-Scientists/socionetsm.html) (focusing on RSiena), Chapter 7 of [**Social Network Analysis for Social Scientists**](https://jochemtolsma.github.io/SNA-4-Social-Scientists/) ("SNASS").
 
     -   reference: @SNASS
+
+source open alex: Priem et al. (2022)
+
+-   Priem, J., Piwowar, H., & Orr, R. (2022). *OpenAlex: A fully-open index of scholarly works, authors, venues, institutions, and concepts*. ArXiv. <https://arxiv.org/abs/2205.01833>
+
+source rvest:
+
+-   Wickham H (2024). rvest: Easily Harvest (Scrape) Web Pages. R package version 1.0.4, <https://github.com/tidyverse/rvest>, <https://rvest.tidyverse.org/>.
+
+source xml2:
+
+-   Wickham H, Hester J, Ooms J (2023). *xml2: Parse XML*. R package version 1.3.6, <https://github.com/r-lib/xml2,> <https://xml2.r-lib.org/>.
+
+# References

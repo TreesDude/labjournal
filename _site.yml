@@ -82,6 +82,8 @@ navbar:
         menu:
         - text: "Data & Methods"
           href: draftdata.html 
+        - text: "Data preparation"
+          href: datapreptrynew.html
         - text: "descriptives"
           href: descriptivestry.html 
       - text: "Results"
