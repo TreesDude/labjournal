@@ -35,19 +35,14 @@ knitr::opts_chunk$set(echo = TRUE)
 
 The data for this study was obtained by collecting information from all Sociology and Political Science scholars at all Dutch institutions. During the initial phase of data collection, all important information regarding the author's position, university affiliation, names, IDs, departments, and more was gathered. The coordinator of this course, Jochem Tolsma, has provided a dataset with said information to be used in this project (**source sunbelt?** ). OpenAlex was used to scrape all published works, including important work-related information such as work id, concepts, citations, abstracts, and subjects, up until 2024 (@Priem2022). From this data, I created a final dataset (n=101) that included all authors from the Sociology and Political Science departments at Radboud University within the time frame of **[INSERT TIME FRAME]**.
 
--   timeframe of focus
+-   [**timeframe of focus**]{.underline}
 
 ## Dependent variable
 
-The dependent variable in this dataset, indicated by the ties between scholars, refers to academic collaborations between them, often also known as co-authorships. The data was scraped from OpenAlex API using the rvest and XML packages in R ( @Priem2022, @xml2**, @rvest**). The dependent variable, represented by an *adjacency matrix*, shows whether two actors or writers collaborated on one of their publications in the specified wave.\
+The dependent variable in this dataset, indicated by the ties between scholars, refers to academic collaborations between them and are often called co-authorships. The data was scraped from OpenAlex API using the rvest and xml2 packages in R ( @Priem2022, @xml2**,** @rvest). The dependent variable, represented by an *adjacency matrix*, shows whether two actors or writers collaborated on one of their publications in the specified wave.\
 Each dyad (author combination) is assessed based on whether they collaborated (1) or not (0) throughout the data period.
 
--   ***In this study, ties are described as directional***, which implies that they are delivered by one actor and received by another. This means each actor has both outdegrees and indegrees. Outdegrees refer to 'sent' connections that refer to being the first author of a manuscript. Indegrees, or 'received' connections, imply collaboration on an article without being the 'initial' author. The generated adjacency matrix can take the form of a network, indicating the collaboration patterns of the academics at Radboud University between **YEAR AND YEAR**.
-
-```{=html}
-<!-- -->
-```
--   formation of ties between scholars
+-   ***In this study, ties are described as directional*** **[ARE THEY??]** which implies that they are delivered by one actor and received by another. This means each actor has both outdegrees and indegrees. Outdegrees refer to 'sent' connections that refer to being the first author of a manuscript. Indegrees, or 'received' connections, imply collaboration on an article without being the 'initial' author. The generated adjacency matrix can take the form of a network, indicating the collaboration patterns of the academics at Radboud University between **YEAR AND YEAR**.
 
 ## Independent variables
 
@@ -59,33 +54,72 @@ For simplicity's sake the concept of gender is not only inferred by the scholars
 
 ### Prestige
 
-The scholars' h-indices will serve as a control variable in this research design (**find source : Bornmann et al. 2020**). The h-index calculates the number of publications that have been cited at least as frequently as the author's total number of publications. This number can then be used as measure for the author's 'prestige' (@Hirsch2005). The number of citations and publications needed for this calculation were webscraped through OpenAlex API (@Priem2022**).** The code for this process was provided by Lucan Bovens.
+The scholars' h-indices will serve as a control variable in this research design (@Bornmann2020, @Bornmann2021). The h-index calculates the number of publications that have been cited at least as frequently as the author's total number of publications. This number can then be used as measure for the author's 'prestige' (@Hirsch2005). The number of citations and publications needed for this calculation were webscraped through OpenAlex API (@Priem2022**).** The code for this process was provided by Lucan Bovens.
 
-# Data preparation /Methods
+# Methods
 
-### RSiena
+To evaluate the homophiliy in collaboration networks by gender and h-index, the analysis of the data will be as follows. The first step involves examining descriptives of the data to answer question of how homophily manifests in terms of degree and prestige within these networks. These descriptive findings will then serve as a foundation for the second phase of the analysis, which focuses on answering the explanatory research question of this study. This phase investigates the impact of homophily on collaboration and explores the interaction between gender and h-index. Descriptive analyses will utilize functions of the igraph and ggraph packages and t-tests, while the explanatory questions will be examined using Stochastic Actor-Based Models implemented via the RSiena package (@igraph, @ggraph, @RSiena_package, @RSiena_manual).
 
-SIENA, which stands for *Simulation Investigation for Empirical Network Analysis*, is a software tool designed to perform statistical estimation of models for longitudinal social network data.
+## Descriptives 
 
--   It operates based on the dynamic actor-oriented model, as developed in the works of
+**[Revisit and only talk about those that make sense to examine here]**
 
-    -   Snijders and van Duijn (1997),
+First, ego-level descriptives such as the counts and distributions of gender and h-indices in both departments were generated to establish a clearer picture of the data at hand.
 
-    -   Snijders (2001),
+I also examined descriptives of the ego network and of the whole network of scholars included in the data. Among others, these included the number of nodes, edges, reciprocity, degreee centrality, clustering, density, and path-length. With the help of these decriptives it was possible for me to...... **[INSERT INSIGHT FROM DESCRIPTIVES HERE]**
 
-    -   and Snijders, Steglich, and Schweinberger (2007).
+\
+**[UNSURE IF THIS IS NEEDED IF GENDER IS FIRST COVARIATE AND H INDEX ONLY CONTRL VARIABLE]**\
+Then, the networks were visualized using graphs to identify the presence of hubs and examine whether these hubs are concentrated among individuals with the highest h-index. Various centrality measures were also calculated and analyzed to determine their correlation with the scholars' h-index, providing further insight into whether network hubs tend to form around those with the highest h-index.
 
-    -   Additional insights can be found in Steglich, Snijders, and Pearson (2009).
+## RSiena
 
-SIENA version 4.0, also known as RSiena, is a package for the R statistical software and was developed by Ruth Ripley and Krists Boitmanis, in collaboration with Tom Snijders (@RSiena_package, @RSiena_manual). The use of RSiena for this project is highly based on the book "[**Social Network Analysis for Social Scientists**](https://jochemtolsma.github.io/SNA-4-Social-Scientists/)**"** by Jochem Tolsma and Bas Hofstra (@SNASS).
+SIENA, which stands for *Simulation Investigation for Empirical Network Analysis*, is a software tool designed to perform statistical estimation of models for longitudinal social network data. SIENA version 4.0, also known as RSiena, is a package for the R statistical software and was developed by Ruth Ripley and Krists Boitmanis, in collaboration with Tom Snijders (@RSiena_package, @RSiena_manual). The use of RSiena for this project is highly based on the book "[Social Network Analysis for Social Scientists](https://jochemtolsma.github.io/SNA-4-Social-Scientists/)**"** by Jochem Tolsma and Bas Hofstra (@SNASS).
 
-# written references (remove in final paper) 
+[**CHECK AGAIN BEFORE SUBMITTING**]:\
+A total of four models, including a null model, were estimated. The null model excludes structural effects, focusing solely on reciprocity and density. The first model incorporates all structural network effects. Model 2 builds on this by adding the ego-level effect of gender. In Model 3, the ego-level control variable for h-index is included. \
+**[NEEDED?]** Finally, Model 4 is similar to Model 3 but replaces the quadratic effect of indegree popularity with a simple structural effect of indegree popularity.
+
+# written references (remove in final paper)
+
+**Bornmann et al. 2020?**
+
+-   Bornmann, L., Ganser, C., Tekles, A., & Leydesdorff, L. (2020). Does the h α-index reinforce the Matthew effect in science? the introduction of agent-based simulations into scientometrics. *Quantitative science studies*, *1*(1), 331-346.
+
+-   We follow up on the point about the Matthew effect in the current study by using a recently developed **Stata command (h_index)** and **R package (hindex)**, which can be **used to simulate *h*-index and *h*~α~-index applications in research evaluation**.
+
+    -   The user can investigate under which conditions *h*~α~ reinforces the Matthew effect.
+
+    -   The results of our study confirm what Leydesdorff et al. (2019) expected:
+
+        -   The h~α~-index reinforces the Matthew effect.
+
+        -   This effect can be intensified if strategic behavior of the publishing scientists and cumulative advantage effects are additionally considered in the simulation.
+
+-   @Bornmann2020
+
+**Bornmann et al. 2021**
+
+-   Bornmann, L., Ganser, C., & Tekles, A. (2021). Simulation of the h index use at university departments within the bibliometrics-based heuristics framework: Can the indicator be used to compare individual researchers? *Journal of Informetrics*, *16*(1), 101237. <https://doi.org/10.1016/j.joi.2021.101237>
+
+```{=html}
+<!-- -->
+```
+-   We developed the Stata command h_index and R package hindex.
+
+    -   •The command and package can be used to decide whether the h index can be used to compare all researchers in a university department.
+
+    -   •If the visualizations show great differences in the citation cultures between sub-groups in the department, the h index should not be used.
+
+-   @Bornmann2021
 
 R Siena manual reference: @RSiena_manual
 
--   Ripley, Ruth, and Snijders, Tom A.B. 2009. Manual for SIENA version 4.0 (provisional version, July 6, 2009). Oxford: University of Oxford, Department of Statistics; Nuffield College. <http://www.stats.ox.ac.uk/siena/>
+-   Snijders TA, Ripley R, B'oda Z, V"or"os A, Preciado P (2024). Manual for RSiena. University of Groningen, Groningen, The Netherlands. R package version 1.4.7, <https://www.stats.ox.ac.uk/~snijders/siena/.>
 
-Siena package refrence: @RSiena_package
+Siena package reference: @RSiena_package
+
+-   Snijders TA, Ripley RM, Boitmanis K, Steglich C, Niezink NM, Amati V, Schoenenberger F (2024). “Siena - Simulation Investigation for Empirical Network Analysis.” R package version 1.4.7, <https://www.stats.ox.ac.uk/~snijders/siena/.>
 
 Methods, aka use of RSiena for SNA
 
@@ -104,5 +138,15 @@ source rvest:
 source xml2:
 
 -   Wickham H, Hester J, Ooms J (2023). *xml2: Parse XML*. R package version 1.3.6, <https://github.com/r-lib/xml2,> <https://xml2.r-lib.org/>.
+
+source igraph:
+
+-   Csardi G, Nepusz T (2006). “The igraph software package for complex network research.” *InterJournal*, **Complex Systems**, 1695. [https://igraph.org](https://igraph.org/).
+
+-   Csárdi G, Nepusz T, Traag V, Horvát Sz, Zanini F, Noom D, Müller K (2024). \_igraph: Network Analysis and Visualization in R\_. doi:10.5281/zenodo.7682609 \<https://doi.org/10.5281/zenodo.7682609\>, R package version 2.1.1.9005, \<https://CRAN.R-project.org/package=igraph\>.
+
+source ggraph:
+
+-   Pedersen T (2024). *ggraph: An Implementation of Grammar of Graphics for Graphs and Networks*. R package version 2.2.1.9000, https://github.com/thomasp85/ggraph, [https://ggraph.data-imaginist.com](https://ggraph.data-imaginist.com/).
 
 # References

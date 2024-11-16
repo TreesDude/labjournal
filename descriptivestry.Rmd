@@ -61,7 +61,7 @@ require(networkD3)
 ```
 
 ## Functions
-
+Functions chunk 
 ```{r functions 1}
 fpackage.check <- function(packages) {
     lapply(packages, FUN = function(x) {
@@ -170,8 +170,7 @@ f_pubnets <- function(df_scholars = df, list_publications = publications, discip
 
 ```
 
-## More functions
-
+More functions
 ```{r functions 2}
 fcolnet <- function(data = scholars, university = "RU", discipline = "sociology"+"political science", waves = list(c(2015,
     2018), c(2019, 2023)), type = c("first")) {
@@ -255,8 +254,7 @@ fcolnet <- function(data = scholars, university = "RU", discipline = "sociology"
 
 ## Load data
 
-Scholar
-
+Scholar data
 ```{r scholar data}
 scholars <- fload("./data/processed/scholars_20240924.rda") 
 #make sure to lead fload first of course
@@ -275,8 +273,7 @@ test  <- fcolnet(data = scholars,
 # usually first author has most prestige
 ```
 
-Ego
-
+Ego data
 ```{r df_ego data}
 df_ego <- fload("./data/processed/df_ego_20241108.rda")
 
@@ -301,8 +298,6 @@ test_w1 <- igraph::graph_from_adjacency_matrix(
 
 ### Gender
 
--   Gender
-
     -   descriptives (mean etc.) in whole sample
 
 ```{r sum gender}
@@ -315,8 +310,6 @@ summary(df_ego$gender)
 table(df_ego$gender)
 ```
 
-
-
     -   overall gender distribution in sample
 
 ```{r}
@@ -326,7 +319,6 @@ ggplot(df_ego, aes(x = gender))+
   labs(title = "Histogram of Gender", x = "Gender\n (0 = female, 1 = male)", y = "Count") + theme(plot.title = element_text(hjust = 0.5, face = "bold"))
 
 ```
-
        
     -   Genders per department (0 = female, 1 = male)
 
@@ -335,7 +327,6 @@ ggplot(df_ego, aes(x = gender))+
 # Wave 1: Gender count per department 
 table(df_ego$discipline.24, df_ego$gender)
 ```
-
 
 ### h index
 
@@ -365,10 +356,6 @@ df_ego %>%
             na.rm = TRUE), max_h_index = max(h_index, na.rm = TRUE), sd_h_index = sd(h_index,
             na.rm = TRUE)))
 ```
-
-         
-
-
 
 
 ## Ego network
@@ -407,8 +394,8 @@ igraph::triad_census(test_w1)
 igraph::edge_density(test_w1)
     ```
 
-### more indepth:
-
+### more in depth:
+ 
 -   reciprocity
 
     ```{r recip}
@@ -480,9 +467,7 @@ mean((ego_size(test_w1, order = 2, mode = "out") - 1)/vcount(test_w1))
 -   Segregation
 
     -   Mortons I
-    -   igraphs
-    -   ggraphs
-
+    - also graphs below
 ```{r plot}
 
 plot(test_w1,
