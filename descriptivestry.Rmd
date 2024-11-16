@@ -5,6 +5,40 @@ date: "2024-11-08"
 output: html_document
 ---
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Lab Journal</title>
+    <link rel="stylesheet" href="styles.css">  <!-- Link to the CSS file I created for dark mode code chunks -->
+
+</head>
+<body>
+    <header>
+        <h1>Welcome to My Lab Journal</h1>
+        <p>This is where I record my research and experiments.</p>
+    </header>
+
+    <main>
+        <section>
+            <h2>Experiment 1</h2>
+            <p>Details of the first experiment go here.</p>
+        </section>
+        <section>
+            <h2>Experiment 2</h2>
+            <p>Details of the second experiment go here.</p>
+        </section>
+    </main>
+
+    <footer>
+        <p>Created by Me, 2024</p>
+    </footer>
+</body>
+</html>
+
+
+
 ```{r, globalsettings, echo=FALSE, warning=FALSE, results='hide'}
 library(knitr)
 
@@ -19,8 +53,8 @@ colorize <- function(x, color) {sprintf("<span style='color: %s;'>%s</span>", co
 
 ```{r klippy, echo=FALSE, include=FALSE}
 klippy::klippy(position = c('top', 'right'))
-#klippy::klippy(color = 'darkred')
-#klippy::klippy(tooltip_message = 'Click to copy', tooltip_success = 'Done')
+klippy::klippy(color = 'darkred')
+klippy::klippy(tooltip_message = 'Click to copy', tooltip_success = 'Done')
 ```
 
 ```{r setup, include=FALSE}
@@ -48,8 +82,9 @@ require(xml2)
 # install.packages('rvest')
 require(rvest)
 require(igraph)
-
 require(ggraph)
+
+
 #install.packages('visNetwork')
 require(visNetwork)
 #install.packages('threejs')

@@ -18,7 +18,7 @@
 <script src="site_libs/header-attrs-2.28/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<link href="site_libs/bootstrap-3.3.5/css/darkly.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
@@ -74,7 +74,7 @@ if (window.hljs) {
 </style>
 
 
-<link rel="stylesheet" href="tweaks.css" type="text/css" />
+<link rel="stylesheet" href="styles.css" type="text/css" />
 
 
 
@@ -414,7 +414,6 @@ div.tocify {
     <li>
       <a href="revisitwithJochem.html">Check-in with Jochem</a>
     </li>
-    <li class="dropdown-header">Clarify design &amp; hypotheses</li>
   </ul>
 </li>
 <li class="dropdown">
@@ -527,27 +526,59 @@ rm(list = ls())
 
 # install.packages(&#39;data.table&#39;)
 library(data.table)  # mainly for faster data handling
-library(tidyverse)  # I assume you already installed this one!
-#install.packages(&#39;httr&#39;) # we don&#39;t need this for now require(httr)
+library(tidyverse)  # I assume you already installed this one!</code></pre>
+<pre><code>## ── Attaching core tidyverse packages ──────────────
+## ✔ dplyr     1.1.4     ✔ readr     2.1.5
+## ✔ forcats   1.0.0     ✔ stringr   1.5.1
+## ✔ ggplot2   3.5.1     ✔ tibble    3.2.1
+## ✔ lubridate 1.9.3     ✔ tidyr     1.3.1
+## ✔ purrr     1.0.2     
+## ── Conflicts ───────────── tidyverse_conflicts() ──
+## ✖ dplyr::between()     masks data.table::between()
+## ✖ dplyr::filter()      masks stats::filter()
+## ✖ dplyr::first()       masks data.table::first()
+## ✖ lubridate::hour()    masks data.table::hour()
+## ✖ lubridate::isoweek() masks data.table::isoweek()
+## ✖ dplyr::lag()         masks stats::lag()
+## ✖ dplyr::last()        masks data.table::last()
+## ✖ lubridate::mday()    masks data.table::mday()
+## ✖ lubridate::minute()  masks data.table::minute()
+## ✖ lubridate::month()   masks data.table::month()
+## ✖ lubridate::quarter() masks data.table::quarter()
+## ✖ lubridate::second()  masks data.table::second()
+## ✖ purrr::transpose()   masks data.table::transpose()
+## ✖ lubridate::wday()    masks data.table::wday()
+## ✖ lubridate::week()    masks data.table::week()
+## ✖ lubridate::yday()    masks data.table::yday()
+## ✖ lubridate::year()    masks data.table::year()
+## ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+<pre class="r"><code>#install.packages(&#39;httr&#39;) # we don&#39;t need this for now require(httr)
 #install.packages(&quot;devtools&quot;)
 require(devtools)</code></pre>
-<pre><code>## Loading required package: devtools</code></pre>
-<pre><code>## Loading required package: usethis</code></pre>
+<pre><code>## Loading required package: devtools
+## Loading required package: usethis</code></pre>
 <pre class="r"><code>#install.packages(&quot;rvest&quot;)
-require(rvest)
-# rvest:This is the explanation the writers of the package give: “rvest is new package that makes it easy to scrape (or harvest) data from html web pages.” Seems like something we need, a package that stores information from webpages into relatively structured data that we can then query/manipulate.
+require(rvest)</code></pre>
+<pre><code>## Loading required package: rvest
+## 
+## Attaching package: &#39;rvest&#39;
+## 
+## The following object is masked from &#39;package:readr&#39;:
+## 
+##     guess_encoding</code></pre>
+<pre class="r"><code># rvest:This is the explanation the writers of the package give: “rvest is new package that makes it easy to scrape (or harvest) data from html web pages.” Seems like something we need, a package that stores information from webpages into relatively structured data that we can then query/manipulate.
 
 #install.packages(&quot;xml2&quot;)
 
-require(xml2)
-
-#xml2:This is what the writers of the package say about it: “Work with XML files using a simple, consistent interface.” So we can manipulate the data scraped with rvest, using the xml2 package functions
+require(xml2)</code></pre>
+<pre><code>## Loading required package: xml2</code></pre>
+<pre class="r"><code>#xml2:This is what the writers of the package say about it: “Work with XML files using a simple, consistent interface.” So we can manipulate the data scraped with rvest, using the xml2 package functions
 
 #Note we&#39;re doing something different here. We&#39;re installing a *latest* version directly from
 #GitHub This is because the released version of this packages contains some errors!
 devtools::install_github(&quot;jkeirstead/scholar&quot;)</code></pre>
-<pre><code>## Using GitHub PAT from the git credential store.</code></pre>
-<pre><code>## Skipping install of &#39;scholar&#39; from a github remote, the SHA1 (2d38dcc3) has not changed since last install.
+<pre><code>## Using GitHub PAT from the git credential store.
+## Skipping install of &#39;scholar&#39; from a github remote, the SHA1 (2d38dcc3) has not changed since last install.
 ##   Use `force = TRUE` to force installation</code></pre>
 <pre class="r"><code>require(scholar)</code></pre>
 <pre><code>## Loading required package: scholar</code></pre>
@@ -566,10 +597,10 @@ sociology</h1>
 
 head(soc_staff)</code></pre>
 <pre><code>## $node
-## &lt;pointer: 0x000001148dffe5d0&gt;
+## &lt;pointer: 0x00000218e0efe650&gt;
 ## 
 ## $doc
-## &lt;pointer: 0x0000011488dffb40&gt;</code></pre>
+## &lt;pointer: 0x00000218df9ff5a0&gt;</code></pre>
 <pre class="r"><code>#which object? 
 class(soc_staff)</code></pre>
 <pre><code>## [1] &quot;xml_document&quot; &quot;xml_node&quot;</code></pre>
@@ -837,7 +868,7 @@ get_scholar_id_fix(last_name = &quot;tolsma&quot;, first_name = &quot;jochem&quo
 ## [1] &quot;Professor, Radboud University Nijmegen / University of Groningen&quot;
 ## 
 ## $total_cites
-## [1] 3466
+## [1] 3468
 ## 
 ## $h_index
 ## [1] 27
@@ -1227,14 +1258,14 @@ publications, citations</h3>
 ## 117                                                                Book of Abstracts
 ## 118                                                                                 
 ##                                                                    number cites year
-## 1                                                                           724 2014
+## 1                                                                           725 2014
 ## 2                                                         27 (6), 741-758   380 2011
 ## 3                                                                  44 (3)   337 2009
 ## 4                                                         27 (3), 291-306   159 2011
 ## 5                                                           35 (1), 51-61   154 2013
 ## 6                                                         24 (2), 215-230   136 2008
 ## 7                                                         38 (5), 793-813   107 2012
-## 8                                                              8, 117-134   105 2012
+## 8                                                              8, 117-134   106 2012
 ## 9                                                         23 (3), 325-339    87 2007
 ## 10                                                        60 (2), 257-277    86 2009
 ## 11                                                        26 (2), 235-252    82 2010
@@ -1471,7 +1502,7 @@ publications, citations</h3>
 ## 3  2010    32
 ## 4  2011    78
 ## 5  2012    80
-## 6  2013   124
+## 6  2013   123
 ## 7  2014   167
 ## 8  2015   218
 ## 9  2016   228
@@ -1479,10 +1510,10 @@ publications, citations</h3>
 ## 11 2018   289
 ## 12 2019   311
 ## 13 2020   300
-## 14 2021   331
+## 14 2021   332
 ## 15 2022   338
 ## 16 2023   334
-## 17 2024   322</code></pre>
+## 17 2024   324</code></pre>
 </div>
 <div id="get-collaborators" class="section level3" number="6.2.2">
 <h3><span class="header-section-number">6.2.2</span> get
@@ -1496,9 +1527,9 @@ number="6.3">
 <h2><span class="header-section-number">6.3</span> plot network of
 single staff member</h2>
 <pre class="r"><code>plot_coauthors(get_coauthors(&quot;Iu23-90AAAAJ&quot;, n_coauthors = 20, n_deep = 1), size_labels = 2)  </code></pre>
-<pre><code>## Warning: Removed 148 rows containing missing values or values
-## outside the scale range (`geom_point()`).</code></pre>
-<pre><code>## Warning: ggrepel: 1 unlabeled data points (too many overlaps). Consider increasing max.overlaps</code></pre>
+<pre><code>## Warning: Removed 148 rows containing missing values or
+## values outside the scale range (`geom_point()`).</code></pre>
+<pre><code>## Warning: ggrepel: 2 unlabeled data points (too many overlaps). Consider increasing max.overlaps</code></pre>
 <p><img src="Webscraping-Chapter8-tutorial_files/figure-html/plot-1.png" width="672" /></p>
 <pre class="r"><code># Doesn&#39;t look like much yet, but we&#39;ll make it prettier later.</code></pre>
 </div>

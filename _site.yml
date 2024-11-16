@@ -7,8 +7,7 @@ exclude:
   - "_test"
 bibliography: references.bib
 citation_package: natbib
-biblio-style: apalike
-natbiboptions: round
+
 
 navbar:
   left:
@@ -55,9 +54,6 @@ navbar:
         href: plotting1.html
       - text: "Check-in with Jochem"
         href: revisitwithJochem.html
-      - text: "Clarify design & hypotheses"
-        href:  
-
         
     - text: "Step-by-step analysis"
       menu:
@@ -115,13 +111,19 @@ navbar:
   right:
   - icon: fab fa-github
     href: https://github.com/JochemTolsma/labjournal
+
+
 output:
   html_document:
-    theme: flatly
+    theme: darkly 
+    #paper (e.g. like Hannah's), flatly (this was the default), darkly (dark mode but codechunks look weird then)
     highlight: default
     toc:  true
     toc_float: true
     number_sections: true
     code_folding: show
     code_download: yes
-    css: tweaks.css
+    css: styles.css 
+    # tweaks.css
+    
+

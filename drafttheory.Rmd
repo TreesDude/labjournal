@@ -4,6 +4,7 @@ author: "Verooo"
 date: "2024-10-31"
 output: html_document
 bibliography: references.bib
+csl: apa.csl
 ---
 
 ```{r, globalsettings, echo=FALSE, warning=FALSE, results='hide'}
@@ -29,9 +30,9 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```
 
-# Theory Draft 
+# Theory Draft
 
--   Explanation of gender homophily in scholarship
+## gender homophily in scholars' collaboration
 
 -   often: Males publishing with males, females publishing with females (@Horta2022)
 
@@ -59,8 +60,20 @@ knitr::opts_chunk$set(echo = TRUE)
 
 <!-- -->
 
+## h-index and collaboration 
+
 -   **Hypothesis 3:** On the ego level, the preference of *men to work with men and women with women, (controlled for structural network effects), is less influential in the choice to collaborate if the alter is someone who published in a high-prestige journal.*
 
     -   [RQ3: How does gender homophily in collaborations between staff differ depending on scholars having published in low vs. high prestige journals? ego-level] *idea: whether prestige (of ego/alter/dyad) impacts gender homophily in some way.*
+
+# Written references (remove in final paper)
+
+Bornmann, Lutz, Christian Ganser, and Alexander Tekles. 2021. “Simulation of the h Index Use at University Departments Within the Bibliometrics-Based Heuristics Framework: Can the Indicator Be Used to Compare Individual Researchers?” Journal of Informetrics 16 (1): 101237. <https://doi.org/10.1016/j.joi.2021.101237>.
+
+@Bornmann2021
+
+Bornmann, Lutz, Christian Ganser, Alexander Tekles, and Loet Leydesdorff. 2020. “Does the h αα-Index Reinforce the Matthew Effect in Science? The Introduction of Agent-Based Simulations into Scientometrics.” Quantitative Science Studies 1 (1): 331–46.
+
+@Bornmann2020
 
 # References
