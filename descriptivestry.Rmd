@@ -28,10 +28,10 @@ colorize <- function(x, color) {sprintf("<span style='color: %s;'>%s</span>", co
 
 ```
 
-```{r klippy, echo=FALSE, include=FALSE}
+```{r klippy, echo=FALSE, include=TRUE}
 klippy::klippy(position = c('top', 'right'))
-klippy::klippy(color = 'darkred')
-klippy::klippy(tooltip_message = 'Click to copy', tooltip_success = 'Done')
+#klippy::klippy(color = 'darkred')
+#klippy::klippy(tooltip_message = 'Click to copy', tooltip_success = 'Done')
 ```
 
 ```{r setup, include=FALSE}
