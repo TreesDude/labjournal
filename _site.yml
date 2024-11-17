@@ -64,7 +64,7 @@ navbar:
       - text: "Step 4&5: Specify & Estimate model"
         href: RSienatry.html
       - text: "Step 6: Goodness of Fit"
-        href: 
+        href: draftGOF.html
 
 
     - text: "Draft report"
@@ -80,32 +80,37 @@ navbar:
           href: draftdata.html 
         - text: "Data preparation"
           href: datapreptrynew.html
-        - text: "descriptives"
+        - text: "Descriptives"
           href: descriptivestry.html 
       - text: "Results"
-        href: 
+        href: draftresults.html #
       - text: "Discussion & Conclusion"
-        href: 
-      - text: "Appendices"
-        href:         
+        href: draftdiscussion.html
+      # - text: "Appendices"
+      #   href:         
 
 
     - text: "Final report"
       menu:
       - text: "Introduction"
-        href:    
+        href: finalintro.html   
       - text: "Theory"
-        href: 
+        href: finaltheory.html
       - text: "Data"
-        href:  
-      - text: "Methods"
-        href:  
+        href: finaldata.html
+        menu:
+        - text: "Data & Methods"
+          href: finaldata.html 
+        - text: "Data preparation"
+          href: finaldataprep.html
+        - text: "Descriptives"
+          href: finaldescriptives.html 
       - text: "Results"
-        href: 
+        href: finalresults.html
       - text: "Discussion & Conclusion"
-        href: 
-      - text: "Appendices"
-        href:         
+        href: finaldiscussion.html
+      # - text: "Appendices"
+      #   href:         
        
 
   right:
@@ -124,6 +129,6 @@ output:
     code_folding: show
     code_download: yes
     css: styles.css 
-    # tweaks.css
+    # tweaks.css (was default)
     
 

@@ -9,7 +9,7 @@ output: html_document
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Lab Journal</title>
+    <title>My Descriptives</title>
     <link rel="stylesheet" href="styles.css">  <!-- Link to the CSS file I created for dark mode code chunks -->
 
 </head>
@@ -40,13 +40,11 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 # Getting started
-
 ```{r clean}
 rm(list = ls())
 ```
 
 ## Packages
-
 ```{r package}
 require(tidyverse)
 require(RSiena)
@@ -72,7 +70,9 @@ require(networkD3)
 
 ```
 
+
 ## Functions
+
 Functions chunk 
 ```{r functions 1}
 fpackage.check <- function(packages) {
@@ -285,6 +285,7 @@ test  <- fcolnet(data = scholars,
 # usually first author has most prestige
 ```
 
+
 Ego data
 ```{r df_ego data}
 df_ego <- fload("./data/processed/df_ego_20241108.rda")
@@ -310,20 +311,17 @@ test_w1 <- igraph::graph_from_adjacency_matrix(
 
 ### Gender
 
-    -   descriptives (mean etc.) in whole sample
-
+descriptives (mean etc.) in whole sample
 ```{r sum gender}
 summary(df_ego$gender)
 ```
 
-    - gender counts across whole sample (0 = female, 1 = male)
-
+gender counts across whole sample (0 = female, 1 = male)
 ```{r counts gender-all}
 table(df_ego$gender)
 ```
 
-    -   overall gender distribution in sample
-
+overall gender distribution in sample
 ```{r}
 # Create the histogram
 ggplot(df_ego, aes(x = gender))+
@@ -332,8 +330,7 @@ ggplot(df_ego, aes(x = gender))+
 
 ```
        
-    -   Genders per department (0 = female, 1 = male)
-
+Genders per department (0 = female, 1 = male)
 ```{r gender per dep.}
    
 # Wave 1: Gender count per department 
@@ -342,20 +339,17 @@ table(df_ego$discipline.24, df_ego$gender)
 
 ### h index
 
-        
-    -   descriptives (mean etc.)
+descriptives (mean etc.)
 ```{r summary h index}
 summary(df_ego$h_index)
 ```
-    - Overall  (INSERT YEARS STILL)
-
+Overall  (INSERT YEARS STILL)
 ```{r hist h index}
 # Histogram of prestige scores for Wave 1 
 hist(df_ego$h_index, breaks = 30, main = "Distribution of H-Index from yearX to yearX",     xlab = "H Index", ylab = "Frequency", col = "#B3DE69") # INSERT YEARS OF WAVE/TIME FRAME STILL
 ```
 
-    -   H index per department
-
+H index per department
 ```{r table per dep h index}
 # Wave 1: Prestige distribution by dep. and total
 df_ego %>%
@@ -374,33 +368,28 @@ df_ego %>%
 
 ### basic descriptives
 
--   Nr. of nodes
-
+Nr. of nodes
 ```{r nodes}
 vcount(test_w1)
 ```
 
--   Nr. of edges
-
+Nr. of edges
 ```{r edges}
 ecount(test_w1)
 ```
 
--   Dyad census
-
+Dyad census
     ```{r dyad cen}
 
 igraph::dyad_census(test_w1)
     ```
 
--   Triad-census
-
+Triad-census
     ```{r triad cen}
 igraph::triad_census(test_w1)
     ```
 
--   edge-density
-
+Edge-density
     ```{r edge dens}
 # edge density
 igraph::edge_density(test_w1)
@@ -408,8 +397,7 @@ igraph::edge_density(test_w1)
 
 ### more in depth:
  
--   reciprocity
-
+reciprocity
     ```{r recip}
 reciprocity(test_w1, ignore.loops = TRUE, mode = c("default", "ratio"))
     ```
@@ -417,8 +405,7 @@ reciprocity = 1 makes sense since the ties are undirected rn
 
 
 
--   degree centrality / degreee?
-
+degree centrality / degreee?
     ```{r degree}
 
 degree_testw1 <- degree(test_w1)
@@ -433,8 +420,7 @@ ggplot(degree_testw1, aes(as.numeric(degree_testw1), colour = as.numeric(degree_
   
     ```
 
--   Betweenness centrality /betweenness?
-
+Betweenness centrality /betweenness?
     ```{r betweenness}
 betweenness_w1 <- igraph::betweenness(test_w1, directed = T)
 betweenness_w1 <- as.data.frame(betweenness_w1)
@@ -447,8 +433,7 @@ ggplot(betweenness_w1, aes(as.numeric(betweenness_w1), colour = as.numeric(betwe
 
     ```
 
--   Clustering
-
+Clustering
     ```{r clustering}
 #clustering w1
 clustering_w1 <- igraph::transitivity(test_w1, type = "local")
@@ -463,22 +448,19 @@ ggplot(clustering_w1, aes(as.numeric(clustering_w1), colour = as.numeric(cluster
 
 ## Network-level descriptives
 
--   Density
-
+Density
     ```{r density}
 density_w1 <- igraph::edge_density(test_w1)
 density_w1
     ```
 
--   Average path length
-
+Average path length
     ```{r path length}
 mean((ego_size(test_w1, order = 2, mode = "out") - 1)/vcount(test_w1))
     ```
 
--   Segregation
-
-    -   Mortons I
+Segregation
+    - Mortons I
     - also graphs below
 ```{r plot}
 
