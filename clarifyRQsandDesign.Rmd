@@ -92,3 +92,14 @@ But the idea is fine; whether prestige (of ego/alter/dyad) impacts gender homoph
 
 *try to **plot asap in the process**.\
 and update plots after descriptives and multivariate analyses along the way. it is an iterative process.*
+
+# 17.11.24:
+
+1.  **RQ1**: To what extent does gender homophily occur across all co-publications of the staff in the Sociology and Political Science Departments at Radboud University?\
+    *This question focuses on descriptive analysis at the network level, examining overall gender clustering patterns within and between departments.*
+
+2.  **RQ2**: To what extent do the two departments differ in their gender homophily?\
+    *This question compares the strength of gender homophily between the two departments, with a focus on dyadic-level interactions while controlling for structural network effects.*
+
+3.  **RQ3**: How does gender homophily in collaborations differ depending on scholars’ prestige (e.g., publication in high-impact journals)?\
+    *This question investigates the role of prestige in moderating gender homophily at the ego level.*

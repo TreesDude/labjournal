@@ -4,33 +4,51 @@
   max-height: 300px;
   overflow-y: auto;
   overflow-x: auto;
-  margin: 0;
+  margin: 40;
 }
 
 .test2 {
   max-height: 300px;
   overflow-y: auto;
   overflow-x: auto;
-  margin: 0;
+  margin: 40;
   background-color: #2d2d2d
 }
 
 
 h1, .h1, h2, .h2, h3, .h3 {
-  margin-top: 24px;
+  margin-top: 50px;  /* Increase space before headings */
+  color: #f0f0f0;  /* Ensure headings are visible in dark mode */
 }
+
 
 .title {
   display: none;
 }
 
+/*headings*/
+body {
+  background-color: #2d2d2d;  /* Dark background */
+  color: #f0f0f0;  /* Light text color  #f8f8f2*/
+  margin-top: 50px;  /* Increase space before headings */
+  line-height: 1.5;  /* Improves readability */
+}
+
+
+/* Paragraph text */
+p {
+  color:  #eaeaea;
+  line-height: 1.5/* Slightly dimmer text for paragraph content */
+                  /* #F2F2F2  #eaeaea #E2E2E2   #E4E1E3   #D9D9D9   #f8f8f2 */
+  margin-bottom: 20px; /* Add space after paragraphs */
+}
 
 
 /*CODE BLOCKS DARK MODE*/
 /* Styling for code blocks */
 pre {
     background-color: #2d2d2d;  /* Dark background */
-    color: #f8f8f2;             /* Light text color (off-white) */
+    color: #eaeaea;             /* Light text color (off-white) */
     padding: 15px;
     border-radius: 5px;
     overflow-x: auto;           /* Horizontal scroll if the code is long */
@@ -42,26 +60,42 @@ code {
     font-size: 1em;
 }
 
+
+
+
 /* Optional: Customize syntax highlighting for dark mode (if using a highlighter like highlight.js or Prism.js) */
 
 /* Example for highlight.js */
 .hljs {
     background-color: #2d2d2d;  /* Same dark background as the pre */
-    color: #f8f8f2;             /* Light text color */
+    color: #eaeaea;             /* Light text color */
 }
 
 /* Example for keywords, strings, and comments with custom colors */
 .hljs-keyword {
-    color: #c678dd;  /* Purple color for keywords */
+    color: #BC80BD;  /* Purple color for keywords */
 }
 
 .hljs-string {
-    color: #98c378;  /* Green color for strings */
+    color: #6a9954;  /* Green color for strings */
 }
 
 .hljs-comment {
-    color: #6a9954;  /* Greenish color for comments */
+    color: #FFED6F;  /* Yellow color for comments */
 }
+
+.hljs-literal {
+    color: #FDB462; /* Orange color for booleans*/
+}
+
+.hljs-class .hljs-title {
+    color: #8DD3C7;  /* turquoise for class names */
+}
+
+.hljs-number {
+    color: #80B1D3;  /* Blue for numbers */
+}
+
 
 
 
@@ -70,7 +104,7 @@ code {
 /* Style the output block background */
 div.output {
     background-color: #2d2d2d;  /* Dark background to match the rest of the site */
-    color: #f8f8f2;             /* Light text color (to match the dark mode theme) */
+    color: #eaeaea;             /* Light text color (to match the dark mode theme) */
     padding: 15px;
     border-radius: 5px;
     margin-top: 10px;           /* Add a little space between the code chunk and the output */
@@ -79,7 +113,7 @@ div.output {
 /* If the output is inside a <pre> tag (common for formatted output like code or long text) */
 pre.output {
     background-color: #2d2d2d;  /* Dark background */
-    color: #f8f8f2;             /* Light text */
+    color: #eaeaea;             /* Light text */
     padding: 15px;
     border-radius: 5px;
     overflow-x: auto;           /* Allow scrolling for long lines of output */
@@ -87,7 +121,7 @@ pre.output {
 
 /* Style specific elements within the output (if needed) */
 pre.output code {
-    color: #f8f8f2;  /* Light color for code in the output */
+    color: #eaeaea;  /* Light color for code in the output */
     background-color: transparent;  /* Make the code background transparent */
 }
 
@@ -99,7 +133,7 @@ pre.output code {
 
 .output table {
     background-color: #2d2d2d;  /* Dark background for tables */
-    color: #f8f8f2;             /* Light text for table content */
+    color: #eaeaea;             /* Light text for table content */
     border-collapse: collapse;  /* Remove borders between table cells */
 }
 
@@ -114,7 +148,7 @@ pre.output code {
 /* Apply dark background to output block with .r-output */
 .r-output {
     background-color: #2d2d2d;  /* Dark background */
-    color: #f8f8f2;             /* Light text color */
+    color: #eaeaea;             /* Light text color */
     padding: 15px;
     border-radius: 5px;
     margin-top: 10px;           /* Space between code chunk and output */
@@ -123,7 +157,7 @@ pre.output code {
 /* For preformatted text within the output block */
 .r-output pre {
     background-color: #2d2d2d;  /* Dark background */
-    color: #f8f8f2;             /* Light text */
+    color: #eaeaea;             /* Light text */
 }
 
 /* Style the output images */
@@ -135,7 +169,7 @@ pre.output code {
 /* Style output tables */
 .r-output table {
     background-color: #2d2d2d;
-    color: #f8f8f2;
+    color: #eaeaea;
     border-collapse: collapse;
 }
 
@@ -148,7 +182,7 @@ pre.output code {
 /* Apply to div elements with class 'output' */
 div.output {
     background-color: #2d2d2d;
-    color: #f8f8f2;
+    color: #eaeaea;
     padding: 15px;
     border-radius: 5px;
 }
@@ -156,7 +190,7 @@ div.output {
 /* Apply dark background to output area */
 .output_area {
     background-color: #2d2d2d;
-    color: #f8f8f2;
+    color: #eaeaea;
     padding: 15px;
     border-radius: 5px;
 }

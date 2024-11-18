@@ -12,12 +12,12 @@ csl: apa.csl
 <style>
 body {
 text-align: left;
-font-family: Times;
+line-height: 1.5;
 }
 
 h1, .h1, h2, .h2, h3, .h3 {
   margin-top: 24px;
-  font-family: Times;
+  line-height: 1;
 }
 
 </style>
@@ -78,13 +78,13 @@ In this context, it is crucial to explore whether the tendency for gender-based 
 
 This study aims to analyze gender homophily within the co-authorship networks of the Sociology and Political Science Departments at Radboud University, focusing on the role of prestige. The research is guided by the following questions:
 
--   **RQ1a:** To what extent does gender homophily occur across all co-publications of the staff in the Sociology and Political Science Departments at Radboud University?
+-   ***RQ1a:** To what extent does gender homophily occur across all co-publications of the staff in the Sociology and Political Science Departments at Radboud University?*
 
--   **RQ1b:** To what extent do the two departments differ in their levels of gender homophily?
+-   ***RQ1b:** To what extent do the two departments differ in their levels of gender homophily?*
 
 These questions focus on descriptive patterns, providing a macro-level view of gender clustering in academic networks.
 
--   **RQ2:** To what extent can gender homophily in collaboration networks be explained by preferences at the dyadic level, controlling for structural network and individual-level covariates?
+-   ***RQ2:** To what extent can gender homophily in collaboration networks be explained by preferences at the dyadic level, controlling for structural network and individual-level covariates?*
 
 This question shifts the focus to the micro-level, examining whether individual choices and structural factors drive homophily in co-authorship.
 

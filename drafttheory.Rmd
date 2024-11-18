@@ -7,6 +7,20 @@ bibliography: references.bib
 csl: apa.csl
 ---
 
+```{=html}
+<style>
+body {
+text-align: left;
+line-height: 1.5;
+}
+
+h1, .h1, h2, .h2, h3, .h3 {
+  margin-top: 24px;
+  line-height: 1;
+}
+
+</style>
+```
 ```{r, globalsettings, echo=FALSE, warning=FALSE, results='hide'}
 library(knitr)
 
@@ -31,6 +45,44 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 # Theory Draft
+
+### Theory
+
+Understanding collaboration patterns in academia is crucial for unpacking the mechanisms behind the formation of scholarly networks. One key principle that shapes these networks is **homophily**, the tendency of individuals to associate with others who are similar to them (@McPherson2001). In the context of academic collaborations, **gender homophily**—the preference for scholars to collaborate with others of the same gender—has been widely observed. Research consistently shows that men tend to collaborate more frequently with other men, and women with other women ( @Horta2022; @Kwiek2021). However, the degree and dynamics of this homophily can vary across disciplines and contexts, making it a fertile ground for investigation.
+
+#### Hypothesis 1: Gender Homophily in Collaboration Networks
+
+The first hypothesis centers on the presence of gender homophily across two academic departments: Political Science and Sociology at Radboud University. Based on the homophily principle, I expect scholars to prefer same-gender collaborators, leading to gendered clustering in co-authorship networks.
+
+-   ***H1**: Across the collaboration networks of both departments, scholars are more likely to collaborate with same-gender peers than with different-gender peers, indicating the presence of gender homophily.*
+
+This hypothesis aligns with prior studies that highlight gender homophily as a key feature of collaboration networks in academia (@Kwiek2021). However, the extent to which this tendency manifests may depend on the structural characteristics of each department, as well as broader societal norms and stereotypes.
+
+#### Hypothesis 2: Variation in Gender Homophily Between Departments
+
+While gender homophily is a general phenomenon, its intensity may vary across disciplines due to their differing gender dynamics and societal perceptions. Sociology, often perceived as a more gender-balanced or even female-leaning field, may exhibit weaker gender homophily compared to Political Science, which is often associated with traditionally masculine traits such as rationality and assertiveness. These stereotypes may influence collaboration patterns, with scholars in more male-dominated fields showing stronger gender homophily (@Kwiek2021).
+
+-   ***H2**: Scholars in the Sociology Department exhibit weaker gender homophily in their collaborations than those in the Political Science Department.*
+
+This hypothesis builds on the idea that the gender composition and cultural norms of academic disciplines shape collaboration preferences. In sociology, where gender parity is more pronounced, collaboration across genders may be more normalized, reducing homophilic tendencies.
+
+#### Hypothesis 3: The Influence of Prestige on Gender Homophily
+
+While homophily can drive collaboration patterns, prestige also plays a critical role. Scholars are often drawn to collaborate with those who have high academic prestige, typically measured through metrics such as publication in high-impact journals or h-index scores (@Bornmann2020). This "prestige effect" may weaken the influence of gender homophily, as the opportunity to collaborate with a prestigious scholar may outweigh same-gender preferences.
+
+-   ***H3**: Gender homophily is less influential in collaboration decisions when the potential collaborator has a high level of academic prestige (e.g., a strong publication record in high-prestige journals).*
+
+This hypothesis posits that prestige serves as a countervailing force to homophily. Collaboration with high-prestige individuals is a strategic choice, driven by the potential for increased visibility and career advancement, which may diminish the salience of gender in collaboration decisions.
+
+### Theoretical Framework
+
+The theoretical framework draws on both **homophily theory** and the concept of **preferential attachment** in academic networks. The homophily principle explains the tendency for scholars to form ties with others who share their gender, while preferential attachment highlights the allure of prestigious collaborators ( @Merton1968; @Broido2019). Together, these mechanisms shape the structure and evolution of collaboration networks.
+
+Prior research suggests that men, particularly in male-dominated fields, are more likely to form same-gender ties, reinforcing gender inequalities in academia (@Kwiek2021). However, as women gain visibility and prestige, their collaboration opportunities expand, potentially mitigating homophily effects (@Knobloch2013). Understanding these dynamics requires a nuanced approach that accounts for both individual preferences and structural network constraints.
+
+By addressing these hypotheses, this study contributes to the broader literature on academic collaboration and gender dynamics, offering insights into how societal norms and institutional contexts influence the formation of scholarly networks.
+
+# prior notes:
 
 ## gender homophily in scholars' collaboration
 
@@ -60,7 +112,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 <!-- -->
 
-## h-index and collaboration 
+## h-index and collaboration
 
 -   **Hypothesis 3:** On the ego level, the preference of *men to work with men and women with women, (controlled for structural network effects), is less influential in the choice to collaborate if the alter is someone who published in a high-prestige journal.*
 
@@ -75,5 +127,19 @@ Bornmann, Lutz, Christian Ganser, and Alexander Tekles. 2021. “Simulation of t
 Bornmann, Lutz, Christian Ganser, Alexander Tekles, and Loet Leydesdorff. 2020. “Does the h αα-Index Reinforce the Matthew Effect in Science? The Introduction of Agent-Based Simulations into Scientometrics.” Quantitative Science Studies 1 (1): 331–46.
 
 @Bornmann2020
+
+Broido, A. D., & Clauset, A. (2019). Scale-free networks are rare. *Nature communications*, *10*(1), 1017. <https://doi.org/10.1038/s41467-019-08746-5>
+
+@Broido2019
+
+Merton, Robert K. 1968. “The Matthew Effect in Science: The Reward and Communication Systems of Science Are Considered.” *Science* 159 (3810): 56–63.
+
+@Merton1968
+
+Knobloch-Westerwick, Silvia, Carroll J Glynn, and Michael Huge. 2013. “The Matilda Effect in Science Communication: An Experiment on Gender Bias in Publication Quality Perceptions and Collaboration Interest.” *Science Communication* 35 (5): 603–25.
+
+@Knobloch2013
+
+------------------------------------------------------------------------
 
 # References
