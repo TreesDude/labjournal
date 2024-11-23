@@ -801,6 +801,8 @@ refers to the preference of remaining an isolate. As this value is
 positive (\*IS IT??!\*\*), it means that people prefer to be an isolate
 in the network."
 
+---------------------------
+
 Estimates and standard errors
 
 Rate parameters:
@@ -847,7 +849,8 @@ convergence t ratio:
 ```
 
 ```         
- -0.0617
+6
+-0.0617
 ```
 
 ### ---Step 1: Define Siena Data & Variables
@@ -1305,6 +1308,31 @@ inPopX**.
 
 "The last model has a maximum convergence ratio of **0.23** and a a
 Goodness of Fit on the indegree distribution of **0.197**.
+
+```         
+Estimates, standard errors and convergence t-ratios
+                                               Estimate   Standard   Convergence
+                                                          Error      t-ratio
+Rate parameters:  
+  0      Rate parameter                       2.6891  ( 0.3675   )               
+
+Other parameters:     
+   1. eval outdegree (density)                 -2.7693  ( 1.9205   )    0.0698       
+   2. eval reciprocity                          2.1770  ( 0.5960   )    0.0919       
+   3. eval indegree - popularity               -0.0653  ( 0.1654   )   -0.0104       
+   4. eval outdegree - activity                -0.6851  ( 0.4029   )    0.0527       
+   5. eval network-isolate                      5.4634  ( 2.2770   )    0.0028       
+   6. eval gender_RS alter                     -0.0903  ( 0.3372   )    0.0129       
+   7. eval gender_RS ego                        0.2993  ( 0.4934   )   -0.0503       
+   8. eval same gender_RS                       0.6820  ( 0.2804   )    0.0201       
+   9. eval transitive triplets diff. gender_RS  2.4871  ( 0.6670   )    0.0505      
+  10. eval departm_RS alter                     0.3929  ( 0.6128   )   -0.0061      
+  11. eval departm_RS ego                      -1.4652  ( 0.6963   )   -0.0115      
+  12. eval same departm_RS                      2.6327  ( 0.6080   )    0.0173      
+  13. eval h_index_RS alter                     0.0829  ( 0.0364   )   -0.0031      
+  14. eval h_index_RS ego                      -0.1591  ( 0.0744   )    0.0161      
+  15. eval ind. pop.^(1/1) weighted h_index_RS -0.0287  ( 0.0570   )   -0.0129
+```
 
 **CHANGE!!!**
 
