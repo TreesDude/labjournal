@@ -1,0 +1,161 @@
+---
+title: "GOFdraft"
+author: "Verooo"
+date: "2024-11-23"
+output: html_document
+---
+
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Descriptives</title>
+    <link rel="stylesheet" href="styles.css">  <!-- Link to the CSS file I created for dark mode code chunks -->
+
+</head>
+</html>
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, globalsettings, echo=FALSE, warning=FALSE, results='hide'}
+library(knitr)
+
+knitr::opts_chunk$set(echo = TRUE)
+opts_chunk$set(tidy.opts=list(width.cutoff=100),tidy=TRUE, warning = FALSE, message = FALSE,comment = "#>", cache=TRUE, class.source=c("test"), class.output=c("test2"))
+options(width = 100)
+rgl::setupKnitr()
+
+colorize <- function(x, color) {sprintf("<span style='color: %s;'>%s</span>", color, x) }
+
+```
+
+```{r klippy, echo=FALSE, include=TRUE}
+klippy::klippy(position = c('top', 'right'))
+#klippy::klippy(color = 'darkred')
+#klippy::klippy(tooltip_message = 'Click to copy', tooltip_success = 'Done')
+```
+
+# Goodness of fit **CHANGE**
+Koen:
+
+The goodness of fit of a model indicates whether an estimated model represents the observed data. This is important as `RSiena` uses simulation to estimate the changes in the network. The goodness of fit checks whether the simulation matches the changes in the observed network. 
+Due to the nature of the research questions, which focus on the tie formation dependent on indegrees, I tested the goodness of fit for the indegree distribution for each model.  
+
+For model 1, 2, and 3, which all included a quadratic effect of indegree popularity, there is a good fit of the data with a p-value between **0,332 and 0,367**. This means that the fit only slightly increases when adding ego-level effects on top of the structural network effects. Additionally, this means that the estimates for these models can be interpreted. 
+For model 4, which replaces the squared estimate of indegree popularity for a non-quadratic effect, there is a significant difference in the observed and expected indegree distribution (**p = 0,03**), indicating the the squared estimate is a better fit for the data. This is also in line with the theoretical explanation that the more indegree someone has the the stronger this popularity effect will be. The estimates in Model 4 can thus **not be interpreted reliably**. 
+
+# Setup
+Clean workspace. 
+```{r clean}
+rm(list = ls())
+```
+
+## Packages
+
+```{r package}
+require(RSiena)
+
+```
+
+## Functions
+
+Functions chunk
+
+```{r functions 1, hide = TRUE}
+fpackage.check <- function(packages) {
+    lapply(packages, FUN = function(x) {
+        if (!require(x, character.only = TRUE)) {
+            install.packages(x, dependencies = TRUE)
+            library(x, character.only = TRUE)
+        }
+    })
+}
+
+fsave <- function(x, file = NULL, location = "./data/processed/") {
+    ifelse(!dir.exists("data"), dir.create("data"), FALSE)
+    ifelse(!dir.exists("data/processed"), dir.create("data/processed"), FALSE)
+    if (is.null(file))
+        file = deparse(substitute(x))
+    datename <- substr(gsub("[:-]", "", Sys.time()), 1, 8)
+    totalname <- paste(location, file, "_", datename, ".rda", sep = "")
+    save(x, file = totalname)  #need to fix if file is reloaded as input name, not as x. 
+}
+
+fload <- function(filename) {
+    load(filename)
+    get(ls()[ls() != "filename"])
+}
+
+fshowdf <- function(x, ...) {
+    knitr::kable(x, digits = 2, "html", ...) %>%
+        kableExtra::kable_styling(bootstrap_options = c("striped", "hover")) %>%
+        kableExtra::scroll_box(width = "100%", height = "300px")
+}
+
+```
+
+
+
+# Model 0
+```{r}
+Model0.1 <- fload("./data/processed/estimated_M0.1_20241123.rda")
+Model0.1
+```
+
+```{r GOF M0}
+GOF_M0.1 <- sienaGOF(Model0.1, IndegreeDistribution, verbose = FALSE, join = TRUE, varName = "nets")
+
+plot(GOF_M0.1, main = 'GOF - "Null" Model 0.1 \n Indegree Distribution')
+
+
+```
+
+
+# Model 1
+```{r}
+Model1.1 <- fload("./data/processed/estimated_M1.1_20241123.rda")
+```
+
+```{r GOF M1}
+GOF_M1.1 <- sienaGOF(Model1.1, IndegreeDistribution, verbose = FALSE, join = TRUE, varName = "nets")
+
+plot(GOF_M1.1, main = "GOF - Model 1 \n Indegree Distribution")
+```
+
+
+# Model 2
+```{r}
+Model2.1 <- fload ("./data/processed/estimated_M2.1_20241123.rda")
+Model2.1
+```
+
+```{r GOF M2}
+GOF_M2.1 <- sienaGOF(Model2.1, IndegreeDistribution, verbose = FALSE, join = TRUE, varName = "nets")
+
+plot(GOF_M2.1, main = "GOF - Model 2 \n Indegree Distribution")
+```
+
+
+# Model 3
+```{r, hide=TRUE}
+Model3 <- fload("./data/processed/estimated_M3_20241123.rda")
+```
+
+```{r GOF M3, hide=TRUE}
+GOF_M3 <- sienaGOF(Model3, IndegreeDistribution, verbose = FALSE, join = TRUE, varName = "nets")
+
+plot(GOF_M3, main = "GOF - Model 3 \n Indegree Distribution")
+```
+# Model 4
+```{r, hide=TRUE}
+Model4 <- fload("./data/processed/estimated_M4_20241123.rda")
+```
+
+```{r GOF M4, hide=TRUE}
+GOF_M4 <- sienaGOF(Model4, IndegreeDistribution, verbose = FALSE, join = TRUE, varName = "nets")
+
+plot(GOF_M4, main = "GOF - Model 4 \n Indegree Distribution")
+```

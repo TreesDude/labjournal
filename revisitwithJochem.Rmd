@@ -552,6 +552,7 @@ myeff <- includeEffects(myeff, egoX, altX, sameX, interaction1 = "gender_RS")
 
 myAlgorithm <- sienaAlgorithmCreate(modelType = c(nets=6), projname = "proProject")
 # undirected: model 6 "additive model", #check manual for this
+# NOW ITS DIRECTED SO USE DIFFERENT MODELTYPE FOR ALGORITHM 
 ```
 
 

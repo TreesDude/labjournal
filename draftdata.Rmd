@@ -165,7 +165,7 @@ source igraph:
 
 -   Csardi G, Nepusz T (2006). “The igraph software package for complex network research.” *InterJournal*, **Complex Systems**, 1695. [https://igraph.org](https://igraph.org/).
 
--   Csárdi G, Nepusz T, Traag V, Horvát Sz, Zanini F, Noom D, Müller K (2024). \_igraph: Network Analysis and Visualization in R\_. <doi:10.5281/zenodo.7682609> \<[[https://doi.org/10.5281/zenodo.7682609\\\\](https://doi.org/10.5281/zenodo.7682609\\){.uri}]([https://doi.org/10.5281/zenodo.7682609\\](https://doi.org/10.5281/zenodo.7682609\){.uri}){.uri}\>, R package version 2.1.1.9005, \<[[https://CRAN.R-project.org/package=igraph\\\\](https://CRAN.R-project.org/package=igraph\\){.uri}]([https://CRAN.R-project.org/package=igraph\\](https://CRAN.R-project.org/package=igraph\){.uri}){.uri}\>.
+-   Csárdi G, Nepusz T, Traag V, Horvát Sz, Zanini F, Noom D, Müller K (2024). \_igraph: Network Analysis and Visualization in R\_. <doi:10.5281/zenodo.7682609> \<[[https://doi.org/10.5281/zenodo.7682609\\\\](https://doi.org/10.5281/zenodo.7682609){.uri}](%5Bhttps://doi.org/10.5281/zenodo.7682609%5D(https://doi.org/10.5281/zenodo.7682609)%7B.uri%7D){.uri}\>, R package version 2.1.1.9005, \<[[https://CRAN.R-project.org/package=igraph\\\\](https://CRAN.R-project.org/package=igraph){.uri}](%5Bhttps://CRAN.R-project.org/package=igraph%5D(https://CRAN.R-project.org/package=igraph)%7B.uri%7D){.uri}\>.
 
 source ggraph:
 

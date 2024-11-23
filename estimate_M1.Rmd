@@ -1,0 +1,450 @@
+---
+title: "Estimate_M1"
+author: "Verooo"
+date: "2024-11-22"
+output: html_document
+---
+
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Descriptives</title>
+    <link rel="stylesheet" href="styles.css">  <!-- Link to the CSS file I created for dark mode code chunks -->
+
+</head>
+</html>
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, globalsettings, echo=FALSE, warning=FALSE, results='hide'}
+library(knitr)
+
+knitr::opts_chunk$set(echo = TRUE)
+opts_chunk$set(tidy.opts=list(width.cutoff=100),tidy=TRUE, warning = FALSE, message = FALSE,comment = "#>", cache=TRUE, class.source=c("test"), class.output=c("test2"))
+options(width = 100)
+rgl::setupKnitr()
+
+colorize <- function(x, color) {sprintf("<span style='color: %s;'>%s</span>", color, x) }
+
+```
+
+```{r klippy, echo=FALSE, include=TRUE}
+klippy::klippy(position = c('top', 'right'))
+#klippy::klippy(color = 'darkred')
+#klippy::klippy(tooltip_message = 'Click to copy', tooltip_success = 'Done')
+```
+
+# Setup
+Clean workspace. 
+```{r clean}
+rm(list = ls())
+```
+
+## Packages
+
+```{r package}
+require(tidyverse)
+require(RSiena)
+require(RsienaTwoStep)
+
+#install.packages("data.table")
+require(data.table)  # mainly for faster data handling
+# install.packages('xml2')
+require(xml2)
+# install.packages('rvest')
+require(rvest)
+require(igraph)
+require(ggraph)
+
+
+#install.packages('visNetwork')
+require(visNetwork)
+#install.packages('threejs')
+require(threejs)
+#install.packages('networkD3')
+require(networkD3)
+
+
+```
+
+## Functions
+
+Functions chunk
+
+```{r functions 1}
+fpackage.check <- function(packages) {
+    lapply(packages, FUN = function(x) {
+        if (!require(x, character.only = TRUE)) {
+            install.packages(x, dependencies = TRUE)
+            library(x, character.only = TRUE)
+        }
+    })
+}
+
+fsave <- function(x, file = NULL, location = "./data/processed/") {
+    ifelse(!dir.exists("data"), dir.create("data"), FALSE)
+    ifelse(!dir.exists("data/processed"), dir.create("data/processed"), FALSE)
+    if (is.null(file))
+        file = deparse(substitute(x))
+    datename <- substr(gsub("[:-]", "", Sys.time()), 1, 8)
+    totalname <- paste(location, file, "_", datename, ".rda", sep = "")
+    save(x, file = totalname)  #need to fix if file is reloaded as input name, not as x. 
+}
+
+fload <- function(filename) {
+    load(filename)
+    get(ls()[ls() != "filename"])
+}
+
+fshowdf <- function(x, ...) {
+    knitr::kable(x, digits = 2, "html", ...) %>%
+        kableExtra::kable_styling(bootstrap_options = c("striped", "hover")) %>%
+        kableExtra::scroll_box(width = "100%", height = "300px")
+}
+
+
+# this is the most important one. We created it in the previous script
+
+f_pubnets <- function(df_scholars = df, list_publications = publications, discip = "sociology"+"political science", affiliation = "RU",
+    waves = list(wave1 = c(2018, 2019, 2020), wave2 = c(2021, 2022, 2023))) {
+
+    publications <- list_publications %>%
+        bind_rows() %>%
+        distinct(title, .keep_all = TRUE)
+
+    df_scholars %>%
+        filter(affil1 == affiliation | affil2 == affiliation) %>%
+        filter(discipline == discip) -> df_sel
+
+    networklist <- list()
+    for (wave in 1:length(waves)) {
+        networklist[[wave]] <- matrix(0, nrow = nrow(df_sel), ncol = nrow(df_sel))
+    }
+
+    publicationlist <- list()
+    for (wave in 1:length(waves)) {
+        publicationlist[[wave]] <- publications %>%
+            filter(gs_id %in% df_sel$gs_id) %>%
+            filter(year %in% waves[[wave]]) %>%
+            select(author) %>%
+            lapply(str_split, pattern = ",")
+    }
+
+    publicationlist2 <- list()
+    for (wave in 1:length(waves)) {
+        publicationlist2[[wave]] <- publicationlist[[wave]]$author %>%
+            # lowercase
+        lapply(tolower) %>%
+            # Removing diacritics
+        lapply(stri_trans_general, id = "latin-ascii") %>%
+            # only last name
+        lapply(word, start = -1, sep = " ") %>%
+            # only last last name
+        lapply(word, start = -1, sep = "-")
+    }
+
+    for (wave in 1:length(waves)) {
+        # let us remove all publications with only one author
+        remove <- which(sapply(publicationlist2[[wave]], FUN = function(x) length(x) == 1) == TRUE)
+        publicationlist2[[wave]] <- publicationlist2[[wave]][-remove]
+    }
+
+    for (wave in 1:length(waves)) {
+        pubs <- publicationlist2[[wave]]
+        for (ego in 1:nrow(df_sel)) {
+            # which ego?
+            lastname_ego <- df_sel$lastname[ego]
+            # for all publications
+            for (pub in 1:length(pubs)) {
+                # only continue if ego is author of pub
+                if (lastname_ego %in% pubs[[pub]]) {
+                  aut_pot <- which.max(pubs[[pub]] %in% lastname_ego)
+                  # only continue if ego is first author of pub
+                  if (aut_pot == 1) {
+                    # check all alters/co-authors
+                    for (alter in 1:nrow(df_sel)) {
+                      # which alter
+                      lastname_alter <- df_sel$lastname[alter]
+                      if (lastname_alter %in% pubs[[pub]]) {
+                        networklist[[wave]][ego, alter] <- networklist[[wave]][ego, alter] + 1
+                      }
+                    }
+                  }
+                }
+            }
+        }
+    }
+    return(list(df = df_sel, network = networklist))
+}
+
+```
+
+More functions
+
+```{r functions 2}
+fcolnet <- function(data = scholars, university = "RU", discipline = "sociology"+"political science", waves = list(c(2015,
+    2018), c(2019, 2023)), type = c("first")) {
+
+    # step 1
+    demographics <- do.call(rbind.data.frame, data$demographics)
+    demographics <- demographics %>%
+        mutate(Universiteit1.22 = replace(Universiteit1.22, is.na(Universiteit1.22), ""), Universiteit2.22 = replace(Universiteit2.22,
+            is.na(Universiteit2.22), ""), Universiteit1.24 = replace(Universiteit1.24, is.na(Universiteit1.24),
+            ""), Universiteit2.24 = replace(Universiteit2.24, is.na(Universiteit2.24), ""), discipline.22 = replace(discipline.22,
+            is.na(discipline.22), ""), discipline.24 = replace(discipline.24, is.na(discipline.24), ""))
+
+    sample <- which((demographics$Universiteit1.22 %in% university | demographics$Universiteit2.22 %in%
+        university | demographics$Universiteit1.24 %in% university | demographics$Universiteit2.24 %in%
+        university) & (demographics$discipline.22 %in% discipline | demographics$discipline.24 %in% discipline))
+
+    demographics_soc <- demographics[sample, ]
+    scholars_sel <- lapply(scholars, "[", sample)
+
+    # step 2
+    ids <- demographics_soc$au_id
+    nwaves <- length(waves)
+    nets <- array(0, dim = c(nwaves, length(ids), length(ids)), dimnames = list(wave = 1:nwaves, ids,
+        ids))
+    dimnames(nets)
+
+    # step 3
+    df_works <- tibble(works_id = unlist(lapply(scholars_sel$work, function(l) l$id)), works_author = unlist(lapply(scholars_sel$work,
+        function(l) l$author), recursive = FALSE), works_year = unlist(lapply(scholars_sel$work, function(l) l$publication_year),
+        recursive = FALSE))
+
+    df_works <- df_works[!duplicated(df_works), ]
+
+    # step 4
+    if (type == "first") {
+        for (j in 1:nwaves) {
+            df_works_w <- df_works[df_works$works_year >= waves[[j]][1] & df_works$works_year <= waves[[j]][2],
+                ]
+            for (i in 1:nrow(df_works_w)) {
+                ego <- df_works_w$works_author[i][[1]]$au_id[1]
+                alters <- df_works_w$works_author[i][[1]]$au_id[-1]
+                if (sum(ids %in% ego) > 0 & sum(ids %in% alters) > 0) {
+                  nets[j, which(ids %in% ego), which(ids %in% alters)] <- 1
+                }
+            }
+        }
+    }
+
+    if (type == "last") {
+        for (j in 1:nwaves) {
+            df_works_w <- df_works[df_works$works_year >= waves[[j]][1] & df_works$works_year <= waves[[j]][2],
+                ]
+            for (i in 1:nrow(df_works_w)) {
+                ego <- rev(df_works_w$works_author[i][[1]]$au_id)[1]
+                alters <- rev(df_works_w$works_author[i][[1]]$au_id)[-1]
+                if (sum(ids %in% ego) > 0 & sum(ids %in% alters) > 0) {
+                  nets[j, which(ids %in% ego), which(ids %in% alters)] <- 1
+                }
+            }
+        }
+    }
+
+    if (type == "all") {
+        for (j in 1:nwaves) {
+            df_works_w <- df_works[df_works$works_year >= waves[[j]][1] & df_works$works_year <= waves[[j]][2],
+                ]
+            for (i in 1:nrow(df_works_w)) {
+                egos <- df_works_w$works_author[i][[1]]$au_id
+                if (sum(ids %in% egos) > 0) {
+                  nets[j, which(ids %in% egos), which(ids %in% egos)] <- 1
+                }
+            }
+        }
+    }
+    output <- list()
+    output$data <- scholars_sel
+    output$nets <- nets
+    return(output)
+}
+```
+
+GOF auxiliary Functions 
+<!--
+# see here: ?'sienaGOF-auxiliary'
+
+# The geodesic distribution is not available from within RSiena, and therefore is copied from the
+# help page of sienaGOF-auxiliary:
+
+# GeodesicDistribution calculates the distribution of non-directed geodesic distances; see
+# ?sna::geodist The default for \code{levls} reflects the usual phenomenon that geodesic distances
+# larger than 5 do not differ appreciably with respect to interpretation.  Note that the levels of
+# the result are named; these names are used in the \code{plot} method.
+
+-->
+[unsure if needed. put these here when trying to figure out why sienaGOF function does not work.]
+```{r}
+
+GeodesicDistribution <- function(i, data, sims, period, groupName, varName, levls = c(1:5, Inf), cumulative = TRUE,
+    ...) {
+    x <- networkExtraction(i, data, sims, period, groupName, varName)
+    require(sna)
+    a <- sna::geodist(symmetrize(x))$gdist
+    if (cumulative) {
+        gdi <- sapply(levls, function(i) {
+            sum(a <= i)
+        })
+    } else {
+        gdi <- sapply(levls, function(i) {
+            sum(a == i)
+        })
+    }
+    names(gdi) <- as.character(levls)
+    gdi
+}
+
+# The following function is taken from the help page for sienaTest
+
+testall <- function(ans) {
+    for (i in which(ans$test)) {
+        sct <- score.Test(ans, i)
+        cat(ans$requestedEffects$effectName[i], "\n")
+        print(sct)
+    }
+    invisible(score.Test(ans))
+}
+```
+
+
+# Get Data
+
+## Load Scholar Data
+
+```{r scholar data}
+scholars <- fload("./data/processed/scholars_20240924.rda") 
+#make sure to lead fload first of course
+```
+
+Save the output of the function.
+
+```{r saving output}
+# save the output of your function
+
+test  <- fcolnet(data = scholars, 
+                university = "RU", 
+                discipline = c("sociology", "political science"),
+                waves = list(c(2015, 2018), c(2019, 2023)), 
+                type = c("first"))
+
+```
+
+MODEL 1
+Testing if the models can be estimated in separate files without error. Easier for me than cleanign the workspace due to oversight of having separate tabs. Of course I still clean the workspace in between but yaknow. Visual distinction. 
+
+## Load Ego Data
+
+```{r df_ego data, include= FALSE}
+df_ego <- fload("./data/processed/df_ego_20241108.rda")
+
+```
+
+# Make Network Data
+
+```{r RSiena network data}
+#step1 data
+wave1 <- test$nets[1,,]
+wave2 <- test$nets[2,,]
+
+# put nets in an array
+net_array <- array(data = c(wave1, wave2), dim = c(dim(wave1), 2))
+
+```
+
+
+## Model 1 - Structural Effects
+
+**CHANGE** This model includes the relevant network statistics: InPop,
+outAct, isolateNet.
+
+It has a convergence of NUMBER and a Goodness of Fit on the indegree
+distribution of NUMBER.
+
+Indegree Popularity (inPop) is defined as the extent to which people who
+have a lot of indegrees are more popular to connect with. This parameter
+is NUMBER, meaning that actors have a preference to connect with actors
+who have a lot of indegrees. The parameter is significant for an alpha
+of NUMBER.
+
+Outdegree Activity (outAct) has a value of NUMBER, but is not
+significant. IsolateNet is significant andhas a value of NUMBER and
+refers to the preference of remaining an isolate. As this value is
+positive (IS IT??!), it means that people prefer to be an isolate in the
+network.
+
+### Step 1: Define Siena Data & Variables
+
+```{r RSiena define M1}
+# dependent variable 
+nets <- sienaDependent(net_array)
+
+# define data object 
+mydata_M1 <- sienaDataCreate(nets)
+
+```
+
+Print short descriptive report
+
+```{r}
+ifelse(!dir.exists("results"), dir.create("results"), FALSE)
+
+#if there is not a folder called "results" in your repository: make one
+
+```
+
+```{r}
+print01Report(mydata_M1, modelname = "./results/results_M1") # create file with report in results folder 
+```
+
+### Step 2: Make effects object/structure
+
+```{r RSiena myeff m1}
+# define effects structure 
+myeff_M1 <- getEffects(mydata_M1)
+
+```
+
+### Step 3: Add Effects
+
+```{r effects m1}
+myeff_M1 <- includeEffects(myeff_M1, isolateNet, inPop, outAct) 
+
+```
+
+### Step 4: Specify model/algorithm
+
+```{r algo m1}
+
+myAlgorithm_M1 <- sienaAlgorithmCreate (projname = "results_M1")
+
+```
+
+### Step 5: Estimate model
+
+```{r estimate m1}
+# estimate the model 
+Model1 <- siena07(myAlgorithm_M1, data = mydata_M1, effects = myeff_M1, returnDeps = TRUE)
+#latter needed for GOF 
+
+Model1
+
+
+Model1.1 <- siena07(myAlgorithm_M1, data = mydata_M1, effects = myeff_M1, prevAns =Model1, returnDeps = TRUE)
+#latter needed for GOF 
+Model1.1
+
+```
+
+### Step 6: GOF - Goodness of Fit
+
+```{r GOF M1}
+GOF_M1 <- sienaGOF(Model1.1, IndegreeDistribution, verbose = FALSE, join = TRUE, varName = "nets")
+
+plot(GOF_M1, main = "GOF - Model 1 \n Indegree Distribution")
+```

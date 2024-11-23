@@ -63,8 +63,8 @@ navbar:
         href: descriptivestry.html 
       - text: "Step 4&5: Specify & Estimate model"
         href: RSienatry.html
-      - text: "Step 6: Goodness of Fit"
-        href: draftGOF.html
+      - text: "Test estimate display"
+        href: estimate_M0.html
 
 
     - text: "Draft report"
@@ -83,7 +83,14 @@ navbar:
         - text: "Descriptives"
           href: descriptivestry.html 
       - text: "Results"
-        href: draftresults.html #
+        href: modelestimate.html #
+        menu:
+        - text: "Descriptive results"
+          href: draftdesresults.html 
+        - text: "Model Estimation"
+          href: modelestimate.html 
+        - text: "Goodness Of Fit"
+          href: draftGOF.html
       - text: "Discussion & Conclusion"
         href: draftdiscussion.html
       # - text: "Appendices"
@@ -106,7 +113,14 @@ navbar:
         - text: "Descriptives"
           href: finaldescriptives.html 
       - text: "Results"
-        href: finalresults.html
+        href: finalestimate.html
+        menu:
+        - text: "Descriptive results"
+          href: finaldesresults.html 
+        - text: "Model Estimation"
+          href: finalestimate.html 
+        - text: "Goodness Of Fit"
+          href: finalGOF.html      
       - text: "Discussion & Conclusion"
         href: finaldiscussion.html
       # - text: "Appendices"

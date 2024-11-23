@@ -70,9 +70,9 @@ This hypothesis builds on the idea that the gender composition and cultural norm
 
 While homophily can drive collaboration patterns, prestige also plays a critical role. Scholars are often drawn to collaborate with those who have high academic prestige, typically measured through metrics such as publication in high-impact journals or h-index scores (@Bornmann2020). This "prestige effect" may weaken the influence of gender homophily, as the opportunity to collaborate with a prestigious scholar may outweigh same-gender preferences.
 
--   ***H3**: Gender homophily is less influential in collaboration decisions when the potential collaborator has a high level of academic prestige (e.g., a strong publication record in high-prestige journals).*
+-   ***H3**: Gender homophily is less influential in collaboration decisions when the potential collaborator has a higher Hirsch-Index.*
 
-This hypothesis posits that prestige serves as a countervailing force to homophily. Collaboration with high-prestige individuals is a strategic choice, driven by the potential for increased visibility and career advancement, which may diminish the salience of gender in collaboration decisions.
+This hypothesis posits that prestige (higher h-index) serves as a countervailing force to homophily. Collaboration with high-prestige individuals is a strategic choice, driven by the potential for increased visibility and career advancement, which may diminish the salience of gender in collaboration decisions.
 
 ### Theoretical Framework
 

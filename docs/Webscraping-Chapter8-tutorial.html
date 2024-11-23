@@ -433,7 +433,7 @@ div.tocify {
       <a href="RSienatry.html">Step 4&amp;5: Specify &amp; Estimate model</a>
     </li>
     <li>
-      <a href="draftGOF.html">Step 6: Goodness of Fit</a>
+      <a href="estimate_M0.html">Test estimate display</a>
     </li>
   </ul>
 </li>
@@ -464,8 +464,19 @@ div.tocify {
         </li>
       </ul>
     </li>
-    <li>
-      <a href="draftresults.html">Results</a>
+    <li class="dropdown-submenu">
+      <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Results</a>
+      <ul class="dropdown-menu" role="menu">
+        <li>
+          <a href="draftdesresults.html">Descriptive results</a>
+        </li>
+        <li>
+          <a href="modelestimate.html">Model Estimation</a>
+        </li>
+        <li>
+          <a href="draftGOF.html">Goodness Of Fit</a>
+        </li>
+      </ul>
     </li>
     <li>
       <a href="draftdiscussion.html">Discussion &amp; Conclusion</a>
@@ -499,8 +510,19 @@ div.tocify {
         </li>
       </ul>
     </li>
-    <li>
-      <a href="finalresults.html">Results</a>
+    <li class="dropdown-submenu">
+      <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Results</a>
+      <ul class="dropdown-menu" role="menu">
+        <li>
+          <a href="finaldesresults.html">Descriptive results</a>
+        </li>
+        <li>
+          <a href="finalestimate.html">Model Estimation</a>
+        </li>
+        <li>
+          <a href="finalGOF.html">Goodness Of Fit</a>
+        </li>
+      </ul>
     </li>
     <li>
       <a href="finaldiscussion.html">Discussion &amp; Conclusion</a>
@@ -550,59 +572,27 @@ rm(list = ls())
 
 # install.packages(&#39;data.table&#39;)
 library(data.table)  # mainly for faster data handling
-library(tidyverse)  # I assume you already installed this one!</code></pre>
-<pre><code>## ── Attaching core tidyverse packages ─────────
-## ✔ dplyr     1.1.4     ✔ readr     2.1.5
-## ✔ forcats   1.0.0     ✔ stringr   1.5.1
-## ✔ ggplot2   3.5.1     ✔ tibble    3.2.1
-## ✔ lubridate 1.9.3     ✔ tidyr     1.3.1
-## ✔ purrr     1.0.2     
-## ── Conflicts ──────── tidyverse_conflicts() ──
-## ✖ dplyr::between()     masks data.table::between()
-## ✖ dplyr::filter()      masks stats::filter()
-## ✖ dplyr::first()       masks data.table::first()
-## ✖ lubridate::hour()    masks data.table::hour()
-## ✖ lubridate::isoweek() masks data.table::isoweek()
-## ✖ dplyr::lag()         masks stats::lag()
-## ✖ dplyr::last()        masks data.table::last()
-## ✖ lubridate::mday()    masks data.table::mday()
-## ✖ lubridate::minute()  masks data.table::minute()
-## ✖ lubridate::month()   masks data.table::month()
-## ✖ lubridate::quarter() masks data.table::quarter()
-## ✖ lubridate::second()  masks data.table::second()
-## ✖ purrr::transpose()   masks data.table::transpose()
-## ✖ lubridate::wday()    masks data.table::wday()
-## ✖ lubridate::week()    masks data.table::week()
-## ✖ lubridate::yday()    masks data.table::yday()
-## ✖ lubridate::year()    masks data.table::year()
-## ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
-<pre class="r"><code>#install.packages(&#39;httr&#39;) # we don&#39;t need this for now require(httr)
+library(tidyverse)  # I assume you already installed this one!
+#install.packages(&#39;httr&#39;) # we don&#39;t need this for now require(httr)
 #install.packages(&quot;devtools&quot;)
 require(devtools)</code></pre>
-<pre><code>## Loading required package: devtools
-## Loading required package: usethis</code></pre>
+<pre><code>## Loading required package: devtools</code></pre>
+<pre><code>## Loading required package: usethis</code></pre>
 <pre class="r"><code>#install.packages(&quot;rvest&quot;)
-require(rvest)</code></pre>
-<pre><code>## Loading required package: rvest
-## 
-## Attaching package: &#39;rvest&#39;
-## 
-## The following object is masked from &#39;package:readr&#39;:
-## 
-##     guess_encoding</code></pre>
-<pre class="r"><code># rvest:This is the explanation the writers of the package give: “rvest is new package that makes it easy to scrape (or harvest) data from html web pages.” Seems like something we need, a package that stores information from webpages into relatively structured data that we can then query/manipulate.
+require(rvest)
+# rvest:This is the explanation the writers of the package give: “rvest is new package that makes it easy to scrape (or harvest) data from html web pages.” Seems like something we need, a package that stores information from webpages into relatively structured data that we can then query/manipulate.
 
 #install.packages(&quot;xml2&quot;)
 
-require(xml2)</code></pre>
-<pre><code>## Loading required package: xml2</code></pre>
-<pre class="r"><code>#xml2:This is what the writers of the package say about it: “Work with XML files using a simple, consistent interface.” So we can manipulate the data scraped with rvest, using the xml2 package functions
+require(xml2)
+
+#xml2:This is what the writers of the package say about it: “Work with XML files using a simple, consistent interface.” So we can manipulate the data scraped with rvest, using the xml2 package functions
 
 #Note we&#39;re doing something different here. We&#39;re installing a *latest* version directly from
 #GitHub This is because the released version of this packages contains some errors!
 devtools::install_github(&quot;jkeirstead/scholar&quot;)</code></pre>
-<pre><code>## Using GitHub PAT from the git credential store.
-## Skipping install of &#39;scholar&#39; from a github remote, the SHA1 (2d38dcc3) has not changed since last install.
+<pre><code>## Using GitHub PAT from the git credential store.</code></pre>
+<pre><code>## Skipping install of &#39;scholar&#39; from a github remote, the SHA1 (2d38dcc3) has not changed since last install.
 ##   Use `force = TRUE` to force installation</code></pre>
 <pre class="r"><code>require(scholar)</code></pre>
 <pre><code>## Loading required package: scholar</code></pre>
@@ -621,10 +611,10 @@ sociology</h1>
 
 head(soc_staff)</code></pre>
 <pre><code>## $node
-## &lt;pointer: 0x000001c7359fed50&gt;
+## &lt;pointer: 0x000002a9f11fe0d0&gt;
 ## 
 ## $doc
-## &lt;pointer: 0x000001c7341fe890&gt;</code></pre>
+## &lt;pointer: 0x000002a9eddff250&gt;</code></pre>
 <pre class="r"><code>#which object? 
 class(soc_staff)</code></pre>
 <pre><code>## [1] &quot;xml_document&quot; &quot;xml_node&quot;</code></pre>
@@ -892,7 +882,7 @@ get_scholar_id_fix(last_name = &quot;tolsma&quot;, first_name = &quot;jochem&quo
 ## [1] &quot;Professor, Radboud University Nijmegen / University of Groningen&quot;
 ## 
 ## $total_cites
-## [1] 3467
+## [1] 3471
 ## 
 ## $h_index
 ## [1] 27
@@ -912,7 +902,7 @@ get_scholar_id_fix(last_name = &quot;tolsma&quot;, first_name = &quot;jochem&quo
 ##  [5] &quot;Stijn Ruiter&quot;        &quot;peer scheepers&quot;      &quot;Marcel Lubbers&quot;      &quot;Joran Lameris&quot;      
 ##  [9] &quot;Marcel Coenders&quot;     &quot;Nan Dirk de Graaf&quot;   &quot;Sara Kinsbergen&quot;     &quot;Carlijn Bussemakers&quot;
 ## [13] &quot;dr. Natascha Notten&quot; &quot;Tobias H. Stark&quot;     &quot;Thomas Feliciani&quot;    &quot;Andreas Flache&quot;     
-## [17] &quot;Matthijs Kalmijn&quot;    &quot;Lincoln Quillian&quot;    &quot;Ariana Need&quot;         &quot;René Veenstra&quot;      
+## [17] &quot;Matthijs Kalmijn&quot;    &quot;Lincoln Quillian&quot;    &quot;Ariana Need&quot;         &quot;Marloes de Lange&quot;   
 ## 
 ## $available
 ## [1] 14
@@ -954,8 +944,8 @@ publications, citations</h3>
 ## 27  Ethnic hostility among ethnic majority and minority groups in the Netherlands: an investigation into the impact of social mobility experiences, the local living environment and …
 ## 28                                                                                            Kudos make you run! How runners influence each other on the online social network Strava
 ## 29                      Perceptions as the crucial link? The mediating role of neighborhood perceptions in the relationship between the neighborhood context and neighborhood cohesion
-## 30      Under what conditions do ethnic minority candidates attract the ethnic minority vote? How neighbourhood and candidate characteristics affected ethnic affinity voting in the …
-## 31                                                                                                                     Preferences for work arrangements: A discrete choice experiment
+## 30                                                                                                                     Preferences for work arrangements: A discrete choice experiment
+## 31      Under what conditions do ethnic minority candidates attract the ethnic minority vote? How neighbourhood and candidate characteristics affected ethnic affinity voting in the …
 ## 32                                                                                                 Trust and contact in diverse neighbourhoods: An interplay of four ethnicity effects
 ## 33                                                                                          Explaining natives&#39; interethnic friendship and contact with colleagues in European regions
 ## 34                                                       Combating hooliganism in the Netherlands: An evaluation of measures to combat hooliganism with longitudinal registration data
@@ -990,9 +980,9 @@ publications, citations</h3>
 ## 63                                              Size and ethnic homogeneity of extended social networks in the Netherlands: Differences between migrant groups and migrant generations
 ## 64                                                                                                             Trends in de opleidingskloof op verschillende maatschappelijke domeinen
 ## 65                                                                                                            How the educational level of confidants impacts our political attitudes?
-## 66                                                                       Choosing Your Sports Partners: Assessing Selection Preferences Through Observational and Experimental Studies
-## 67                                                                                                                         The Bridging Power of Civic Organizations and Neighborhoods
-## 68                                                                                           The unstable social networks of students: Where does dissimilarity drive tie dissolution?
+## 66                                                                                           The unstable social networks of students: Where does dissimilarity drive tie dissolution?
+## 67                                                                       Choosing Your Sports Partners: Assessing Selection Preferences Through Observational and Experimental Studies
+## 68                                                                                                                         The Bridging Power of Civic Organizations and Neighborhoods
 ## 69                                                                                                                                                  The Bridging Power of Sports Clubs
 ## 70                                                                                    The social outcomes of community-based sociotherapy for refugees in nakivale settlements, Uganda
 ## 71                                                                   Ethnic segregation and spatial patterns of attitudes: studying the link using register data and social simulation
@@ -1073,8 +1063,8 @@ publications, citations</h3>
 ## 27                                                     J Tolsma
 ## 28                               R Franken, H Bekhuis, J Tolsma
 ## 29                                 J Laméris, JR Hipp, J Tolsma
-## 30                          R Van der Zwan, J Tolsma, M Lubbers
-## 31                                   P Valet, C Sauer, J Tolsma
+## 30                                   P Valet, C Sauer, J Tolsma
+## 31                          R Van der Zwan, J Tolsma, M Lubbers
 ## 32                                   J Tolsma, TWG Van der Meer
 ## 33                           M Savelkoul, J Tolsma, P Scheepers
 ## 34                       D Schaap, M Postma, L Jansen, J Tolsma
@@ -1110,8 +1100,8 @@ publications, citations</h3>
 ## 64                                            M Lange, J Tolsma
 ## 65                            T Jeroense, N Spierings, J Tolsma
 ## 66                               R Franken, H Bekhuis, J Tolsma
-## 67                   K Dederichs, R Franken, D Wiertz, J Tolsma
-## 68                               R Franken, H Bekhuis, J Tolsma
+## 67                               R Franken, H Bekhuis, J Tolsma
+## 68                   K Dederichs, R Franken, D Wiertz, J Tolsma
 ## 69                   K Dederichs, R Franken, D Wiertz, J Tolsma
 ## 70                     T Ubels, S Kinsbergen, J Tolsma, DJ Koch
 ## 71                              T Feliciani, J Tolsma, A Flache
@@ -1192,8 +1182,8 @@ publications, citations</h3>
 ## 27                                                                                  
 ## 28                                                                   Social Networks
 ## 29                                                           Social Science Research
-## 30                                                               Political Geography
-## 31                                                                          PloS one
+## 30                                                                          PloS one
+## 31                                                               Political Geography
 ## 32                                                           Social science research
 ## 33                                           Journal of Ethnic and Migration Studies
 ## 34                                  European Journal on Criminal Policy and Research
@@ -1228,9 +1218,9 @@ publications, citations</h3>
 ## 63                                                           International Migration
 ## 64                                                       Antwerpen/Apeldoorn: Garant
 ## 65                                                European Sociological Review, jcae
-## 66                                         Research Quarterly for Exercise and Sport
-## 67                                                                               OSF
-## 68                                                                Sociological Forum
+## 66                                                                Sociological Forum
+## 67                                         Research Quarterly for Exercise and Sport
+## 68                                                                               OSF
 ## 69                                                                               OSF
 ## 70                                          TROPICAL MEDICINE &amp; INTERNATIONAL HEALTH
 ## 71                                           Journal of Computational Social Science
@@ -1282,7 +1272,7 @@ publications, citations</h3>
 ## 117                                                                Book of Abstracts
 ## 118                                                                                 
 ##                                                                    number cites year
-## 1                                                                           724 2014
+## 1                                                                           725 2014
 ## 2                                                         27 (6), 741-758   380 2011
 ## 3                                                                  44 (3)   337 2009
 ## 4                                                         27 (3), 291-306   159 2011
@@ -1295,7 +1285,7 @@ publications, citations</h3>
 ## 11                                                        26 (2), 235-252    82 2010
 ## 12                                                          27 (1), 20-33    72 2017
 ## 13                                                        33 (2), 209-224    68 2017
-## 14                                                             98, 104185    58 2019
+## 14                                                             98, 104185    59 2019
 ## 15                                                                           53 2016
 ## 16                                                      34 (5-6), 888-906    52 2013
 ## 17                                                        14 (6), 697-719    45 2017
@@ -1311,12 +1301,12 @@ publications, citations</h3>
 ## 27                                                                           28 2009
 ## 28                                                            72, 151-164    26 2023
 ## 29                                                              72, 53-68    25 2018
-## 30                                                             77, 102098    24 2020
-## 31                                                       16 (7), e0254483    23 2021
+## 30                                                       16 (7), e0254483    24 2021
+## 31                                                             77, 102098    24 2020
 ## 32                                                             73, 92-106    23 2018
 ## 33                                                        41 (5), 683-709    23 2015
 ## 34                                                              21, 83-97    23 2015
-## 35                                                                           20 2015
+## 35                                                                           21 2015
 ## 36                                                                           20 2011
 ## 37                                                              63, 80-94    17 2018
 ## 38                                                            82 (2), 133    15 2007
@@ -1347,8 +1337,8 @@ publications, citations</h3>
 ## 63                                                                            1 2024
 ## 64                                                                            1 2015
 ## 65                                                                   e041     0 2024
-## 66                                                                   1-15     0 2024
-## 67                                                                            0 2024
+## 66                                                                            0 2024
+## 67                                                                   1-15     0 2024
 ## 68                                                                            0 2024
 ## 69                                                                            0 2023
 ## 70                                                            28, 266-266     0 2023
@@ -1430,8 +1420,8 @@ publications, citations</h3>
 ## 27                                            10378332126833599949 IjCSPb-OGe4C
 ## 28                                            12114155743971894213 9Nmd_mFXekcC
 ## 29                                            16357054384393453824 D03iK_w7-QYC
-## 30                                             7114430646392466648 uWQEDVKXjbEC
-## 31                                            14800116132549688497 tKAzc9rXhukC
+## 30                                            14800116132549688497 tKAzc9rXhukC
+## 31                                             7114430646392466648 uWQEDVKXjbEC
 ## 32                                             8349908030823257502 pyW8ca7W8N0C
 ## 33                                            18182577779862774305 -f6ydRqryjwC
 ## 34                                             9528443224826780083 ZeXyd9-uunAC
@@ -1466,9 +1456,9 @@ publications, citations</h3>
 ## 63                                            17141958553841870840 KUbvn5osdkgC
 ## 64                                            12139749723307797145 j3f4tGmQtD8C
 ## 65                                                            &lt;NA&gt; LI9QrySNdTsC
-## 66                                                            &lt;NA&gt; b1wdh0AR-JQC
-## 67                                                            &lt;NA&gt; lmc2jWPfTJgC
-## 68                                                            &lt;NA&gt; VaXvl8Fpj5cC
+## 66                                                            &lt;NA&gt; VaXvl8Fpj5cC
+## 67                                                            &lt;NA&gt; b1wdh0AR-JQC
+## 68                                                            &lt;NA&gt; lmc2jWPfTJgC
 ## 69                                                            &lt;NA&gt; MLfJN-KU85MC
 ## 70                                                            &lt;NA&gt; tYavs44e6CUC
 ## 71                                                            &lt;NA&gt; vDijr-p_gm4C
@@ -1532,12 +1522,12 @@ publications, citations</h3>
 ## 9  2016   228
 ## 10 2017   228
 ## 11 2018   289
-## 12 2019   311
+## 12 2019   310
 ## 13 2020   300
-## 14 2021   331
-## 15 2022   338
+## 14 2021   332
+## 15 2022   339
 ## 16 2023   334
-## 17 2024   323</code></pre>
+## 17 2024   326</code></pre>
 </div>
 <div id="get-collaborators" class="section level3" number="6.2.2">
 <h3><span class="header-section-number">6.2.2</span> get
@@ -1551,10 +1541,9 @@ number="6.3">
 <h2><span class="header-section-number">6.3</span> plot network of
 single staff member</h2>
 <pre class="r"><code>plot_coauthors(get_coauthors(&quot;Iu23-90AAAAJ&quot;, n_coauthors = 20, n_deep = 1), size_labels = 2)  </code></pre>
-<pre><code>## Warning: Removed 148 rows containing missing values or
-## values outside the scale range
-## (`geom_point()`).</code></pre>
-<pre><code>## Warning: ggrepel: 2 unlabeled data points (too many overlaps). Consider increasing max.overlaps</code></pre>
+<pre><code>## Warning: Removed 128 rows containing missing values or
+## values outside the scale range (`geom_point()`).</code></pre>
+<pre><code>## Warning: ggrepel: 1 unlabeled data points (too many overlaps). Consider increasing max.overlaps</code></pre>
 <p><img src="Webscraping-Chapter8-tutorial_files/figure-html/plot-1.png" width="672" /></p>
 <pre class="r"><code># Doesn&#39;t look like much yet, but we&#39;ll make it prettier later.</code></pre>
 </div>
@@ -1628,6 +1617,7 @@ fload &lt;- function(filename) {
 
 #install.packages(&quot;kableExtra&quot;)
 library(kableExtra)</code></pre>
+<pre><code>## Warning: package &#39;kableExtra&#39; was built under R version 4.4.2</code></pre>
 <pre><code>## 
 ## Attaching package: &#39;kableExtra&#39;</code></pre>
 <pre><code>## The following object is masked from &#39;package:dplyr&#39;:
@@ -1736,7 +1726,7 @@ Jochem Tolsma
 J. Tolsma , Jochem Tolsma, J L Tolsma
 </td>
 <td style="text-align:right;">
-9033.54
+8960.39
 </td>
 <td style="text-align:left;">
 <a href="https://openalex.org/A5087380803"
@@ -1749,15 +1739,15 @@ class="uri">https://orcid.org/0000-0002-4411-6932</a>
 class="uri">https://orcid.org/0000-0002-4411-6932</a>
 </td>
 <td style="text-align:right;">
-85
+87
 </td>
 <td style="text-align:right;">
-2057
+2064
 </td>
 <td style="text-align:left;">
 2024, 2023, 2022, 2021, 2020, 2019, 2018, 2017, 2016, 2015, 2014, 2013,
-2012, 7, 5, 4, 4, 0, 4, 3, 3, 13, 4, 8, 6, 2, 230, 269, 199, 253, 234,
-190, 200, 126, 186, 156, 128, 99, 68
+2012, 9, 5, 4, 4, 0, 4, 3, 3, 13, 4, 8, 6, 2, 239, 272, 200, 257, 234,
+193, 200, 127, 186, 156, 128, 99, 68
 </td>
 <td style="text-align:left;">
 Radboud University Nijmegen
@@ -1793,13 +1783,13 @@ class="uri">https://openalex.org/I4210087716</a>
 , 13 , 14 , 14 , 14 , 14 , 15 , 15 , 15 , 15 , 16 , 16 , 16 , 16 , 17 ,
 17 , 17 , 17 , 18 , 18 , 18 , 18 , 19 , 19 , 19 , 19 , 20 , 20 , 20 , 20
 , 21 , 21 , 21 , 21 , 22 , 22 , 22 , 22 , 23 , 23 , 23 , 23 , 24 , 24 ,
-24 , 24 , 25 , 25 , 25 , 25 , 15 , 15 , 15 , 15 , 12 , 12 , 12 , 12 , 9
-, 9 , 9 , 9 , 8 , 8 , 8 , 8 , 8 , 8 , 8 , 8 , 8 , 8 , 8 , 8 , 8 , 8 , 8
-, 8 , 7 , 7 , 7 , 7 , 6 , 6 , 6 , 6 , 5 , 5 , 5 , 5 , 5 , 5 , 5 , 5 , 5
-, 5 , 5 , 5 , 5 , 5 , 5 , 5 , 4 , 4 , 4 , 4 , 4 , 4 , 4 , 4 , 4 , 4 , 4
-, 4 , 4 , 4 , 4 , 4 , 4 , 4 , 4 , 4 , 4 , 4 , 4 , 4 , 3 , 3 , 3 , 3 , 3
-, 3 , 3 , 3 , 3 , 3 , 3 , 3 , 3 , 3 , 3 , 3 , 3 , 3 , 3 , 3 , 3 , 3 , 3
-, 3 , topic , subfield , field , domain , topic , subfield , field ,
+24 , 24 , 25 , 25 , 25 , 25 , 16 , 16 , 16 , 16 , 12 , 12 , 12 , 12 , 10
+, 10 , 10 , 10 , 9 , 9 , 9 , 9 , 8 , 8 , 8 , 8 , 8 , 8 , 8 , 8 , 8 , 8 ,
+8 , 8 , 7 , 7 , 7 , 7 , 7 , 7 , 7 , 7 , 6 , 6 , 6 , 6 , 5 , 5 , 5 , 5 ,
+5 , 5 , 5 , 5 , 5 , 5 , 5 , 5 , 4 , 4 , 4 , 4 , 4 , 4 , 4 , 4 , 4 , 4 ,
+4 , 4 , 4 , 4 , 4 , 4 , 4 , 4 , 4 , 4 , 4 , 4 , 4 , 4 , 3 , 3 , 3 , 3 ,
+3 , 3 , 3 , 3 , 3 , 3 , 3 , 3 , 3 , 3 , 3 , 3 , 3 , 3 , 3 , 3 , 3 , 3 ,
+3 , 3 , topic , subfield , field , domain , topic , subfield , field ,
 domain , topic , subfield , field , domain , topic , subfield , field ,
 domain , topic , subfield , field , domain , topic , subfield , field ,
 domain , topic , subfield , field , domain , topic , subfield , field ,
@@ -1836,18 +1826,18 @@ href="https://openalex.org/fields/33"
 class="uri">https://openalex.org/fields/33</a> , <a
 href="https://openalex.org/domains/2"
 class="uri">https://openalex.org/domains/2</a> , <a
-href="https://openalex.org/T10314"
-class="uri">https://openalex.org/T10314</a> , <a
-href="https://openalex.org/subfields/3312"
-class="uri">https://openalex.org/subfields/3312</a> , <a
-href="https://openalex.org/fields/33"
-class="uri">https://openalex.org/fields/33</a> , <a
-href="https://openalex.org/domains/2"
-class="uri">https://openalex.org/domains/2</a> , <a
 href="https://openalex.org/T10108"
 class="uri">https://openalex.org/T10108</a> , <a
 href="https://openalex.org/subfields/3320"
 class="uri">https://openalex.org/subfields/3320</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T10349"
+class="uri">https://openalex.org/T10349</a> , <a
+href="https://openalex.org/subfields/3312"
+class="uri">https://openalex.org/subfields/3312</a> , <a
 href="https://openalex.org/fields/33"
 class="uri">https://openalex.org/fields/33</a> , <a
 href="https://openalex.org/domains/2"
@@ -1860,10 +1850,18 @@ href="https://openalex.org/fields/33"
 class="uri">https://openalex.org/fields/33</a> , <a
 href="https://openalex.org/domains/2"
 class="uri">https://openalex.org/domains/2</a> , <a
-href="https://openalex.org/T10349"
-class="uri">https://openalex.org/T10349</a> , <a
+href="https://openalex.org/T10314"
+class="uri">https://openalex.org/T10314</a> , <a
 href="https://openalex.org/subfields/3312"
 class="uri">https://openalex.org/subfields/3312</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T10557"
+class="uri">https://openalex.org/T10557</a> , <a
+href="https://openalex.org/subfields/3315"
+class="uri">https://openalex.org/subfields/3315</a> , <a
 href="https://openalex.org/fields/33"
 class="uri">https://openalex.org/fields/33</a> , <a
 href="https://openalex.org/domains/2"
@@ -1884,18 +1882,10 @@ href="https://openalex.org/fields/33"
 class="uri">https://openalex.org/fields/33</a> , <a
 href="https://openalex.org/domains/2"
 class="uri">https://openalex.org/domains/2</a> , <a
-href="https://openalex.org/T10443"
-class="uri">https://openalex.org/T10443</a> , <a
-href="https://openalex.org/subfields/3320"
-class="uri">https://openalex.org/subfields/3320</a> , <a
-href="https://openalex.org/fields/33"
-class="uri">https://openalex.org/fields/33</a> , <a
-href="https://openalex.org/domains/2"
-class="uri">https://openalex.org/domains/2</a> , <a
-href="https://openalex.org/T10557"
-class="uri">https://openalex.org/T10557</a> , <a
-href="https://openalex.org/subfields/3315"
-class="uri">https://openalex.org/subfields/3315</a> , <a
+href="https://openalex.org/T10674"
+class="uri">https://openalex.org/T10674</a> , <a
+href="https://openalex.org/subfields/3304"
+class="uri">https://openalex.org/subfields/3304</a> , <a
 href="https://openalex.org/fields/33"
 class="uri">https://openalex.org/fields/33</a> , <a
 href="https://openalex.org/domains/2"
@@ -1916,18 +1906,26 @@ href="https://openalex.org/fields/33"
 class="uri">https://openalex.org/fields/33</a> , <a
 href="https://openalex.org/domains/2"
 class="uri">https://openalex.org/domains/2</a> , <a
-href="https://openalex.org/T11397"
-class="uri">https://openalex.org/T11397</a> , <a
-href="https://openalex.org/subfields/3320"
-class="uri">https://openalex.org/subfields/3320</a> , <a
+href="https://openalex.org/T10762"
+class="uri">https://openalex.org/T10762</a> , <a
+href="https://openalex.org/subfields/3203"
+class="uri">https://openalex.org/subfields/3203</a> , <a
+href="https://openalex.org/fields/32"
+class="uri">https://openalex.org/fields/32</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T13532"
+class="uri">https://openalex.org/T13532</a> , <a
+href="https://openalex.org/subfields/3304"
+class="uri">https://openalex.org/subfields/3304</a> , <a
 href="https://openalex.org/fields/33"
 class="uri">https://openalex.org/fields/33</a> , <a
 href="https://openalex.org/domains/2"
 class="uri">https://openalex.org/domains/2</a> , <a
-href="https://openalex.org/T10674"
-class="uri">https://openalex.org/T10674</a> , <a
-href="https://openalex.org/subfields/3304"
-class="uri">https://openalex.org/subfields/3304</a> , <a
+href="https://openalex.org/T11397"
+class="uri">https://openalex.org/T11397</a> , <a
+href="https://openalex.org/subfields/3320"
+class="uri">https://openalex.org/subfields/3320</a> , <a
 href="https://openalex.org/fields/33"
 class="uri">https://openalex.org/fields/33</a> , <a
 href="https://openalex.org/domains/2"
@@ -1940,12 +1938,12 @@ href="https://openalex.org/fields/31"
 class="uri">https://openalex.org/fields/31</a> , <a
 href="https://openalex.org/domains/3"
 class="uri">https://openalex.org/domains/3</a> , <a
-href="https://openalex.org/T10762"
-class="uri">https://openalex.org/T10762</a> , <a
-href="https://openalex.org/subfields/3203"
-class="uri">https://openalex.org/subfields/3203</a> , <a
-href="https://openalex.org/fields/32"
-class="uri">https://openalex.org/fields/32</a> , <a
+href="https://openalex.org/T10443"
+class="uri">https://openalex.org/T10443</a> , <a
+href="https://openalex.org/subfields/3320"
+class="uri">https://openalex.org/subfields/3320</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
 href="https://openalex.org/domains/2"
 class="uri">https://openalex.org/domains/2</a> , <a
 href="https://openalex.org/T10652"
@@ -1956,20 +1954,12 @@ href="https://openalex.org/fields/33"
 class="uri">https://openalex.org/fields/33</a> , <a
 href="https://openalex.org/domains/2"
 class="uri">https://openalex.org/domains/2</a> , <a
-href="https://openalex.org/T13532"
-class="uri">https://openalex.org/T13532</a> , <a
-href="https://openalex.org/subfields/3304"
-class="uri">https://openalex.org/subfields/3304</a> , <a
+href="https://openalex.org/T10843"
+class="uri">https://openalex.org/T10843</a> , <a
+href="https://openalex.org/subfields/3318"
+class="uri">https://openalex.org/subfields/3318</a> , <a
 href="https://openalex.org/fields/33"
 class="uri">https://openalex.org/fields/33</a> , <a
-href="https://openalex.org/domains/2"
-class="uri">https://openalex.org/domains/2</a> , <a
-href="https://openalex.org/T10182"
-class="uri">https://openalex.org/T10182</a> , <a
-href="https://openalex.org/subfields/3203"
-class="uri">https://openalex.org/subfields/3203</a> , <a
-href="https://openalex.org/fields/32"
-class="uri">https://openalex.org/fields/32</a> , <a
 href="https://openalex.org/domains/2"
 class="uri">https://openalex.org/domains/2</a> , <a
 href="https://openalex.org/T11076"
@@ -1980,22 +1970,6 @@ href="https://openalex.org/fields/33"
 class="uri">https://openalex.org/fields/33</a> , <a
 href="https://openalex.org/domains/2"
 class="uri">https://openalex.org/domains/2</a> , <a
-href="https://openalex.org/T10064"
-class="uri">https://openalex.org/T10064</a> , <a
-href="https://openalex.org/subfields/3109"
-class="uri">https://openalex.org/subfields/3109</a> , <a
-href="https://openalex.org/fields/31"
-class="uri">https://openalex.org/fields/31</a> , <a
-href="https://openalex.org/domains/3"
-class="uri">https://openalex.org/domains/3</a> , <a
-href="https://openalex.org/T10208"
-class="uri">https://openalex.org/T10208</a> , <a
-href="https://openalex.org/subfields/2002"
-class="uri">https://openalex.org/subfields/2002</a> , <a
-href="https://openalex.org/fields/20"
-class="uri">https://openalex.org/fields/20</a> , <a
-href="https://openalex.org/domains/2"
-class="uri">https://openalex.org/domains/2</a> , <a
 href="https://openalex.org/T10632"
 class="uri">https://openalex.org/T10632</a> , <a
 href="https://openalex.org/subfields/2002"
@@ -2004,56 +1978,72 @@ href="https://openalex.org/fields/20"
 class="uri">https://openalex.org/fields/20</a> , <a
 href="https://openalex.org/domains/2"
 class="uri">https://openalex.org/domains/2</a> , <a
-href="https://openalex.org/T11542"
-class="uri">https://openalex.org/T11542</a> , <a
-href="https://openalex.org/subfields/3202"
-class="uri">https://openalex.org/subfields/3202</a> , <a
+href="https://openalex.org/T10208"
+class="uri">https://openalex.org/T10208</a> , <a
+href="https://openalex.org/subfields/2002"
+class="uri">https://openalex.org/subfields/2002</a> , <a
+href="https://openalex.org/fields/20"
+class="uri">https://openalex.org/fields/20</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T10182"
+class="uri">https://openalex.org/T10182</a> , <a
+href="https://openalex.org/subfields/3203"
+class="uri">https://openalex.org/subfields/3203</a> , <a
 href="https://openalex.org/fields/32"
 class="uri">https://openalex.org/fields/32</a> , <a
 href="https://openalex.org/domains/2"
-class="uri">https://openalex.org/domains/2</a> , Social Capital and
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T10064"
+class="uri">https://openalex.org/T10064</a> , <a
+href="https://openalex.org/subfields/3109"
+class="uri">https://openalex.org/subfields/3109</a> , <a
+href="https://openalex.org/fields/31"
+class="uri">https://openalex.org/fields/31</a> , <a
+href="https://openalex.org/domains/3"
+class="uri">https://openalex.org/domains/3</a> , Social Capital and
 Trust in Communities , Sociology and Political Science , Social Sciences
 , Social Sciences , Effects of Residential Segregation on Communities
 and Individuals , Sociology and Political Science , Social Sciences ,
 Social Sciences , Intergenerational Mobility and Social Stratification ,
 Sociology and Political Science , Social Sciences , Social Sciences ,
-Intergroup Relations and Social Identity Theories , Sociology and
-Political Science , Social Sciences , Social Sciences , Empirical
-Analysis of Political Behavior and Institutions , Political Science and
-International Relations , Social Sciences , Social Sciences , Politics
-and Social Implications of Immigration , Sociology and Political Science
-, Social Sciences , Social Sciences , Migration Networks and Impacts on
-Labor Market , Sociology and Political Science , Social Sciences ,
-Social Sciences , Impact of Social Factors on Health Outcomes , Health ,
-Social Sciences , Social Sciences , Education and Research Methods in
-Social Sciences , Education , Social Sciences , Social Sciences ,
-Politics and Economics of Welfare State , Political Science and
-International Relations , Social Sciences , Social Sciences , The Impact
-of Digital Media on Public Discourse , Communication , Social Sciences ,
-Social Sciences , Education Policy and Social Development , Education ,
-Social Sciences , Social Sciences , Impact of Social Structure on Crime
-and Delinquency , Sociology and Political Science , Social Sciences ,
-Social Sciences , Populism in Contemporary Politics , Political Science
-and International Relations , Social Sciences , Social Sciences ,
-Inequality in Education: Impact of Socioeconomic Status , Education ,
+Empirical Analysis of Political Behavior and Institutions , Political
+Science and International Relations , Social Sciences , Social Sciences
+, Migration Networks and Impacts on Labor Market , Sociology and
+Political Science , Social Sciences , Social Sciences , Politics and
+Social Implications of Immigration , Sociology and Political Science ,
+Social Sciences , Social Sciences , Intergroup Relations and Social
+Identity Theories , Sociology and Political Science , Social Sciences ,
+Social Sciences , The Impact of Digital Media on Public Discourse ,
+Communication , Social Sciences , Social Sciences , Impact of Social
+Factors on Health Outcomes , Health , Social Sciences , Social Sciences
+, Education and Research Methods in Social Sciences , Education , Social
+Sciences , Social Sciences , Inequality in Education: Impact of
+Socioeconomic Status , Education , Social Sciences , Social Sciences ,
+Education Policy and Social Development , Education , Social Sciences ,
+Social Sciences , Impact of Social Structure on Crime and Delinquency ,
+Sociology and Political Science , Social Sciences , Social Sciences ,
+Mental Health of Refugees and Immigrants , Clinical Psychology ,
+Psychology , Social Sciences , Vocational Education and Training in
+Australia , Education , Social Sciences , Social Sciences , Populism in
+Contemporary Politics , Political Science and International Relations ,
 Social Sciences , Social Sciences , Statistical Physics of Opinion
 Dynamics , Statistical and Nonlinear Physics , Physics and Astronomy ,
-Physical Sciences , Mental Health of Refugees and Immigrants , Clinical
-Psychology , Psychology , Social Sciences , Racial Discrimination and
-Health Inequities , Sociology and Political Science , Social Sciences ,
-Social Sciences , Vocational Education and Training in Australia ,
-Education , Social Sciences , Social Sciences , Emotion Regulation and
-Psychopathology in Children and Adolescents , Clinical Psychology ,
-Psychology , Social Sciences , Impact of Procedural Justice on Police
-Legitimacy , Political Science and International Relations , Social
-Sciences , Social Sciences , Statistical Mechanics of Complex Networks ,
-Statistical and Nonlinear Physics , Physics and Astronomy , Physical
-Sciences , Labor Market Dynamics and Inequality , Economics and
-Econometrics , Economics, Econometrics and Finance , Social Sciences ,
-Consequences of Mortgage Credit Expansion and Housing Market Dynamics,
+Physical Sciences , Politics and Economics of Welfare State , Political
+Science and International Relations , Social Sciences , Social Sciences
+, Racial Discrimination and Health Inequities , Sociology and Political
+Science , Social Sciences , Social Sciences , Gender Bias in Academic
+Medicine and Science , Gender Studies , Social Sciences , Social
+Sciences , Impact of Procedural Justice on Police Legitimacy , Political
+Science and International Relations , Social Sciences , Social Sciences
+, Consequences of Mortgage Credit Expansion and Housing Market Dynamics,
 Economics and Econometrics , Economics, Econometrics and Finance ,
-Social Sciences , Theories of Behavior Change and Self-Regulation ,
-Applied Psychology , Psychology , Social Sciences
+Social Sciences , Labor Market Dynamics and Inequality , Economics and
+Econometrics , Economics, Econometrics and Finance , Social Sciences ,
+Emotion Regulation and Psychopathology in Children and Adolescents ,
+Clinical Psychology , Psychology , Social Sciences , Statistical
+Mechanics of Complex Networks , Statistical and Nonlinear Physics ,
+Physics and Astronomy , Physical Sciences
 </td>
 <td style="text-align:left;">
 <a href="https://api.openalex.org/works?filter=author.id:A5087380803"
@@ -2108,7 +2098,7 @@ oa_fetch(entity= &quot;author&quot;, search = &quot;Jochem Tolsma&quot;, affilia
 <pre><code>## # A tibble: 1 × 18
 ##   id      display_name display_name_alterna…¹ relevance_score ids   orcid works_count cited_by_count
 ##   &lt;chr&gt;   &lt;chr&gt;        &lt;list&gt;                           &lt;dbl&gt; &lt;lis&gt; &lt;chr&gt;       &lt;int&gt;          &lt;int&gt;
-## 1 https:… Jochem Tols… &lt;chr [3]&gt;                        9034. &lt;chr&gt; http…          85           2057
+## 1 https:… Jochem Tols… &lt;chr [3]&gt;                        8960. &lt;chr&gt; http…          87           2064
 ## # ℹ abbreviated name: ¹​display_name_alternatives
 ## # ℹ 10 more variables: counts_by_year &lt;list&gt;, affiliation_display_name &lt;chr&gt;, affiliation_id &lt;chr&gt;,
 ## #   affiliation_ror &lt;chr&gt;, affiliation_country_code &lt;chr&gt;, affiliation_type &lt;chr&gt;,
@@ -2256,7 +2246,7 @@ Jochem Tolsma
 J. Tolsma , Jochem Tolsma, J L Tolsma
 </td>
 <td style="text-align:right;">
-9033.54
+8960.39
 </td>
 <td style="text-align:left;">
 <a href="https://openalex.org/A5087380803"
@@ -2269,15 +2259,15 @@ class="uri">https://orcid.org/0000-0002-4411-6932</a>
 class="uri">https://orcid.org/0000-0002-4411-6932</a>
 </td>
 <td style="text-align:right;">
-85
+87
 </td>
 <td style="text-align:right;">
-2057
+2064
 </td>
 <td style="text-align:left;">
 2024, 2023, 2022, 2021, 2020, 2019, 2018, 2017, 2016, 2015, 2014, 2013,
-2012, 7, 5, 4, 4, 0, 4, 3, 3, 13, 4, 8, 6, 2, 230, 269, 199, 253, 234,
-190, 200, 126, 186, 156, 128, 99, 68
+2012, 9, 5, 4, 4, 0, 4, 3, 3, 13, 4, 8, 6, 2, 239, 272, 200, 257, 234,
+193, 200, 127, 186, 156, 128, 99, 68
 </td>
 <td style="text-align:left;">
 Radboud University Nijmegen
@@ -2313,13 +2303,13 @@ class="uri">https://openalex.org/I4210087716</a>
 , 13 , 14 , 14 , 14 , 14 , 15 , 15 , 15 , 15 , 16 , 16 , 16 , 16 , 17 ,
 17 , 17 , 17 , 18 , 18 , 18 , 18 , 19 , 19 , 19 , 19 , 20 , 20 , 20 , 20
 , 21 , 21 , 21 , 21 , 22 , 22 , 22 , 22 , 23 , 23 , 23 , 23 , 24 , 24 ,
-24 , 24 , 25 , 25 , 25 , 25 , 15 , 15 , 15 , 15 , 12 , 12 , 12 , 12 , 9
-, 9 , 9 , 9 , 8 , 8 , 8 , 8 , 8 , 8 , 8 , 8 , 8 , 8 , 8 , 8 , 8 , 8 , 8
-, 8 , 7 , 7 , 7 , 7 , 6 , 6 , 6 , 6 , 5 , 5 , 5 , 5 , 5 , 5 , 5 , 5 , 5
-, 5 , 5 , 5 , 5 , 5 , 5 , 5 , 4 , 4 , 4 , 4 , 4 , 4 , 4 , 4 , 4 , 4 , 4
-, 4 , 4 , 4 , 4 , 4 , 4 , 4 , 4 , 4 , 4 , 4 , 4 , 4 , 3 , 3 , 3 , 3 , 3
-, 3 , 3 , 3 , 3 , 3 , 3 , 3 , 3 , 3 , 3 , 3 , 3 , 3 , 3 , 3 , 3 , 3 , 3
-, 3 , topic , subfield , field , domain , topic , subfield , field ,
+24 , 24 , 25 , 25 , 25 , 25 , 16 , 16 , 16 , 16 , 12 , 12 , 12 , 12 , 10
+, 10 , 10 , 10 , 9 , 9 , 9 , 9 , 8 , 8 , 8 , 8 , 8 , 8 , 8 , 8 , 8 , 8 ,
+8 , 8 , 7 , 7 , 7 , 7 , 7 , 7 , 7 , 7 , 6 , 6 , 6 , 6 , 5 , 5 , 5 , 5 ,
+5 , 5 , 5 , 5 , 5 , 5 , 5 , 5 , 4 , 4 , 4 , 4 , 4 , 4 , 4 , 4 , 4 , 4 ,
+4 , 4 , 4 , 4 , 4 , 4 , 4 , 4 , 4 , 4 , 4 , 4 , 4 , 4 , 3 , 3 , 3 , 3 ,
+3 , 3 , 3 , 3 , 3 , 3 , 3 , 3 , 3 , 3 , 3 , 3 , 3 , 3 , 3 , 3 , 3 , 3 ,
+3 , 3 , topic , subfield , field , domain , topic , subfield , field ,
 domain , topic , subfield , field , domain , topic , subfield , field ,
 domain , topic , subfield , field , domain , topic , subfield , field ,
 domain , topic , subfield , field , domain , topic , subfield , field ,
@@ -2356,18 +2346,18 @@ href="https://openalex.org/fields/33"
 class="uri">https://openalex.org/fields/33</a> , <a
 href="https://openalex.org/domains/2"
 class="uri">https://openalex.org/domains/2</a> , <a
-href="https://openalex.org/T10314"
-class="uri">https://openalex.org/T10314</a> , <a
-href="https://openalex.org/subfields/3312"
-class="uri">https://openalex.org/subfields/3312</a> , <a
-href="https://openalex.org/fields/33"
-class="uri">https://openalex.org/fields/33</a> , <a
-href="https://openalex.org/domains/2"
-class="uri">https://openalex.org/domains/2</a> , <a
 href="https://openalex.org/T10108"
 class="uri">https://openalex.org/T10108</a> , <a
 href="https://openalex.org/subfields/3320"
 class="uri">https://openalex.org/subfields/3320</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T10349"
+class="uri">https://openalex.org/T10349</a> , <a
+href="https://openalex.org/subfields/3312"
+class="uri">https://openalex.org/subfields/3312</a> , <a
 href="https://openalex.org/fields/33"
 class="uri">https://openalex.org/fields/33</a> , <a
 href="https://openalex.org/domains/2"
@@ -2380,10 +2370,18 @@ href="https://openalex.org/fields/33"
 class="uri">https://openalex.org/fields/33</a> , <a
 href="https://openalex.org/domains/2"
 class="uri">https://openalex.org/domains/2</a> , <a
-href="https://openalex.org/T10349"
-class="uri">https://openalex.org/T10349</a> , <a
+href="https://openalex.org/T10314"
+class="uri">https://openalex.org/T10314</a> , <a
 href="https://openalex.org/subfields/3312"
 class="uri">https://openalex.org/subfields/3312</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T10557"
+class="uri">https://openalex.org/T10557</a> , <a
+href="https://openalex.org/subfields/3315"
+class="uri">https://openalex.org/subfields/3315</a> , <a
 href="https://openalex.org/fields/33"
 class="uri">https://openalex.org/fields/33</a> , <a
 href="https://openalex.org/domains/2"
@@ -2404,18 +2402,10 @@ href="https://openalex.org/fields/33"
 class="uri">https://openalex.org/fields/33</a> , <a
 href="https://openalex.org/domains/2"
 class="uri">https://openalex.org/domains/2</a> , <a
-href="https://openalex.org/T10443"
-class="uri">https://openalex.org/T10443</a> , <a
-href="https://openalex.org/subfields/3320"
-class="uri">https://openalex.org/subfields/3320</a> , <a
-href="https://openalex.org/fields/33"
-class="uri">https://openalex.org/fields/33</a> , <a
-href="https://openalex.org/domains/2"
-class="uri">https://openalex.org/domains/2</a> , <a
-href="https://openalex.org/T10557"
-class="uri">https://openalex.org/T10557</a> , <a
-href="https://openalex.org/subfields/3315"
-class="uri">https://openalex.org/subfields/3315</a> , <a
+href="https://openalex.org/T10674"
+class="uri">https://openalex.org/T10674</a> , <a
+href="https://openalex.org/subfields/3304"
+class="uri">https://openalex.org/subfields/3304</a> , <a
 href="https://openalex.org/fields/33"
 class="uri">https://openalex.org/fields/33</a> , <a
 href="https://openalex.org/domains/2"
@@ -2436,18 +2426,26 @@ href="https://openalex.org/fields/33"
 class="uri">https://openalex.org/fields/33</a> , <a
 href="https://openalex.org/domains/2"
 class="uri">https://openalex.org/domains/2</a> , <a
-href="https://openalex.org/T11397"
-class="uri">https://openalex.org/T11397</a> , <a
-href="https://openalex.org/subfields/3320"
-class="uri">https://openalex.org/subfields/3320</a> , <a
+href="https://openalex.org/T10762"
+class="uri">https://openalex.org/T10762</a> , <a
+href="https://openalex.org/subfields/3203"
+class="uri">https://openalex.org/subfields/3203</a> , <a
+href="https://openalex.org/fields/32"
+class="uri">https://openalex.org/fields/32</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T13532"
+class="uri">https://openalex.org/T13532</a> , <a
+href="https://openalex.org/subfields/3304"
+class="uri">https://openalex.org/subfields/3304</a> , <a
 href="https://openalex.org/fields/33"
 class="uri">https://openalex.org/fields/33</a> , <a
 href="https://openalex.org/domains/2"
 class="uri">https://openalex.org/domains/2</a> , <a
-href="https://openalex.org/T10674"
-class="uri">https://openalex.org/T10674</a> , <a
-href="https://openalex.org/subfields/3304"
-class="uri">https://openalex.org/subfields/3304</a> , <a
+href="https://openalex.org/T11397"
+class="uri">https://openalex.org/T11397</a> , <a
+href="https://openalex.org/subfields/3320"
+class="uri">https://openalex.org/subfields/3320</a> , <a
 href="https://openalex.org/fields/33"
 class="uri">https://openalex.org/fields/33</a> , <a
 href="https://openalex.org/domains/2"
@@ -2460,12 +2458,12 @@ href="https://openalex.org/fields/31"
 class="uri">https://openalex.org/fields/31</a> , <a
 href="https://openalex.org/domains/3"
 class="uri">https://openalex.org/domains/3</a> , <a
-href="https://openalex.org/T10762"
-class="uri">https://openalex.org/T10762</a> , <a
-href="https://openalex.org/subfields/3203"
-class="uri">https://openalex.org/subfields/3203</a> , <a
-href="https://openalex.org/fields/32"
-class="uri">https://openalex.org/fields/32</a> , <a
+href="https://openalex.org/T10443"
+class="uri">https://openalex.org/T10443</a> , <a
+href="https://openalex.org/subfields/3320"
+class="uri">https://openalex.org/subfields/3320</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
 href="https://openalex.org/domains/2"
 class="uri">https://openalex.org/domains/2</a> , <a
 href="https://openalex.org/T10652"
@@ -2476,20 +2474,12 @@ href="https://openalex.org/fields/33"
 class="uri">https://openalex.org/fields/33</a> , <a
 href="https://openalex.org/domains/2"
 class="uri">https://openalex.org/domains/2</a> , <a
-href="https://openalex.org/T13532"
-class="uri">https://openalex.org/T13532</a> , <a
-href="https://openalex.org/subfields/3304"
-class="uri">https://openalex.org/subfields/3304</a> , <a
+href="https://openalex.org/T10843"
+class="uri">https://openalex.org/T10843</a> , <a
+href="https://openalex.org/subfields/3318"
+class="uri">https://openalex.org/subfields/3318</a> , <a
 href="https://openalex.org/fields/33"
 class="uri">https://openalex.org/fields/33</a> , <a
-href="https://openalex.org/domains/2"
-class="uri">https://openalex.org/domains/2</a> , <a
-href="https://openalex.org/T10182"
-class="uri">https://openalex.org/T10182</a> , <a
-href="https://openalex.org/subfields/3203"
-class="uri">https://openalex.org/subfields/3203</a> , <a
-href="https://openalex.org/fields/32"
-class="uri">https://openalex.org/fields/32</a> , <a
 href="https://openalex.org/domains/2"
 class="uri">https://openalex.org/domains/2</a> , <a
 href="https://openalex.org/T11076"
@@ -2500,22 +2490,6 @@ href="https://openalex.org/fields/33"
 class="uri">https://openalex.org/fields/33</a> , <a
 href="https://openalex.org/domains/2"
 class="uri">https://openalex.org/domains/2</a> , <a
-href="https://openalex.org/T10064"
-class="uri">https://openalex.org/T10064</a> , <a
-href="https://openalex.org/subfields/3109"
-class="uri">https://openalex.org/subfields/3109</a> , <a
-href="https://openalex.org/fields/31"
-class="uri">https://openalex.org/fields/31</a> , <a
-href="https://openalex.org/domains/3"
-class="uri">https://openalex.org/domains/3</a> , <a
-href="https://openalex.org/T10208"
-class="uri">https://openalex.org/T10208</a> , <a
-href="https://openalex.org/subfields/2002"
-class="uri">https://openalex.org/subfields/2002</a> , <a
-href="https://openalex.org/fields/20"
-class="uri">https://openalex.org/fields/20</a> , <a
-href="https://openalex.org/domains/2"
-class="uri">https://openalex.org/domains/2</a> , <a
 href="https://openalex.org/T10632"
 class="uri">https://openalex.org/T10632</a> , <a
 href="https://openalex.org/subfields/2002"
@@ -2524,56 +2498,72 @@ href="https://openalex.org/fields/20"
 class="uri">https://openalex.org/fields/20</a> , <a
 href="https://openalex.org/domains/2"
 class="uri">https://openalex.org/domains/2</a> , <a
-href="https://openalex.org/T11542"
-class="uri">https://openalex.org/T11542</a> , <a
-href="https://openalex.org/subfields/3202"
-class="uri">https://openalex.org/subfields/3202</a> , <a
+href="https://openalex.org/T10208"
+class="uri">https://openalex.org/T10208</a> , <a
+href="https://openalex.org/subfields/2002"
+class="uri">https://openalex.org/subfields/2002</a> , <a
+href="https://openalex.org/fields/20"
+class="uri">https://openalex.org/fields/20</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T10182"
+class="uri">https://openalex.org/T10182</a> , <a
+href="https://openalex.org/subfields/3203"
+class="uri">https://openalex.org/subfields/3203</a> , <a
 href="https://openalex.org/fields/32"
 class="uri">https://openalex.org/fields/32</a> , <a
 href="https://openalex.org/domains/2"
-class="uri">https://openalex.org/domains/2</a> , Social Capital and
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T10064"
+class="uri">https://openalex.org/T10064</a> , <a
+href="https://openalex.org/subfields/3109"
+class="uri">https://openalex.org/subfields/3109</a> , <a
+href="https://openalex.org/fields/31"
+class="uri">https://openalex.org/fields/31</a> , <a
+href="https://openalex.org/domains/3"
+class="uri">https://openalex.org/domains/3</a> , Social Capital and
 Trust in Communities , Sociology and Political Science , Social Sciences
 , Social Sciences , Effects of Residential Segregation on Communities
 and Individuals , Sociology and Political Science , Social Sciences ,
 Social Sciences , Intergenerational Mobility and Social Stratification ,
 Sociology and Political Science , Social Sciences , Social Sciences ,
-Intergroup Relations and Social Identity Theories , Sociology and
-Political Science , Social Sciences , Social Sciences , Empirical
-Analysis of Political Behavior and Institutions , Political Science and
-International Relations , Social Sciences , Social Sciences , Politics
-and Social Implications of Immigration , Sociology and Political Science
-, Social Sciences , Social Sciences , Migration Networks and Impacts on
-Labor Market , Sociology and Political Science , Social Sciences ,
-Social Sciences , Impact of Social Factors on Health Outcomes , Health ,
-Social Sciences , Social Sciences , Education and Research Methods in
-Social Sciences , Education , Social Sciences , Social Sciences ,
-Politics and Economics of Welfare State , Political Science and
-International Relations , Social Sciences , Social Sciences , The Impact
-of Digital Media on Public Discourse , Communication , Social Sciences ,
-Social Sciences , Education Policy and Social Development , Education ,
-Social Sciences , Social Sciences , Impact of Social Structure on Crime
-and Delinquency , Sociology and Political Science , Social Sciences ,
-Social Sciences , Populism in Contemporary Politics , Political Science
-and International Relations , Social Sciences , Social Sciences ,
-Inequality in Education: Impact of Socioeconomic Status , Education ,
+Empirical Analysis of Political Behavior and Institutions , Political
+Science and International Relations , Social Sciences , Social Sciences
+, Migration Networks and Impacts on Labor Market , Sociology and
+Political Science , Social Sciences , Social Sciences , Politics and
+Social Implications of Immigration , Sociology and Political Science ,
+Social Sciences , Social Sciences , Intergroup Relations and Social
+Identity Theories , Sociology and Political Science , Social Sciences ,
+Social Sciences , The Impact of Digital Media on Public Discourse ,
+Communication , Social Sciences , Social Sciences , Impact of Social
+Factors on Health Outcomes , Health , Social Sciences , Social Sciences
+, Education and Research Methods in Social Sciences , Education , Social
+Sciences , Social Sciences , Inequality in Education: Impact of
+Socioeconomic Status , Education , Social Sciences , Social Sciences ,
+Education Policy and Social Development , Education , Social Sciences ,
+Social Sciences , Impact of Social Structure on Crime and Delinquency ,
+Sociology and Political Science , Social Sciences , Social Sciences ,
+Mental Health of Refugees and Immigrants , Clinical Psychology ,
+Psychology , Social Sciences , Vocational Education and Training in
+Australia , Education , Social Sciences , Social Sciences , Populism in
+Contemporary Politics , Political Science and International Relations ,
 Social Sciences , Social Sciences , Statistical Physics of Opinion
 Dynamics , Statistical and Nonlinear Physics , Physics and Astronomy ,
-Physical Sciences , Mental Health of Refugees and Immigrants , Clinical
-Psychology , Psychology , Social Sciences , Racial Discrimination and
-Health Inequities , Sociology and Political Science , Social Sciences ,
-Social Sciences , Vocational Education and Training in Australia ,
-Education , Social Sciences , Social Sciences , Emotion Regulation and
-Psychopathology in Children and Adolescents , Clinical Psychology ,
-Psychology , Social Sciences , Impact of Procedural Justice on Police
-Legitimacy , Political Science and International Relations , Social
-Sciences , Social Sciences , Statistical Mechanics of Complex Networks ,
-Statistical and Nonlinear Physics , Physics and Astronomy , Physical
-Sciences , Labor Market Dynamics and Inequality , Economics and
-Econometrics , Economics, Econometrics and Finance , Social Sciences ,
-Consequences of Mortgage Credit Expansion and Housing Market Dynamics,
+Physical Sciences , Politics and Economics of Welfare State , Political
+Science and International Relations , Social Sciences , Social Sciences
+, Racial Discrimination and Health Inequities , Sociology and Political
+Science , Social Sciences , Social Sciences , Gender Bias in Academic
+Medicine and Science , Gender Studies , Social Sciences , Social
+Sciences , Impact of Procedural Justice on Police Legitimacy , Political
+Science and International Relations , Social Sciences , Social Sciences
+, Consequences of Mortgage Credit Expansion and Housing Market Dynamics,
 Economics and Econometrics , Economics, Econometrics and Finance ,
-Social Sciences , Theories of Behavior Change and Self-Regulation ,
-Applied Psychology , Psychology , Social Sciences
+Social Sciences , Labor Market Dynamics and Inequality , Economics and
+Econometrics , Economics, Econometrics and Finance , Social Sciences ,
+Emotion Regulation and Psychopathology in Children and Adolescents ,
+Clinical Psychology , Psychology , Social Sciences , Statistical
+Mechanics of Complex Networks , Statistical and Nonlinear Physics ,
+Physics and Astronomy , Physical Sciences
 </td>
 <td style="text-align:left;">
 <a href="https://api.openalex.org/works?filter=author.id:A5087380803"
@@ -2662,7 +2652,7 @@ Maurice Johannes Wilhelmus Gesthuizen, M. Gesthuizen , Maurice
 Gesthuizen , M.J.W. Gesthuizen , Maurice J.W. Gesthuizen
 </td>
 <td style="text-align:right;">
-8437.27
+8419.23
 </td>
 <td style="text-align:left;">
 <a href="https://openalex.org/A5007673492"
@@ -2678,11 +2668,11 @@ class="uri">https://orcid.org/0000-0002-5286-3989</a>
 112
 </td>
 <td style="text-align:right;">
-1871
+1879
 </td>
 <td style="text-align:left;">
 2024, 2023, 2022, 2021, 2020, 2019, 2018, 2017, 2016, 2015, 2014, 2013,
-2012, 0, 3, 1, 3, 3, 10, 2, 6, 5, 6, 5, 10, 4, 88, 160, 134, 176, 153,
+2012, 0, 3, 1, 3, 3, 10, 2, 6, 5, 6, 5, 10, 4, 92, 160, 134, 178, 153,
 126, 125, 119, 125, 141, 117, 137, 84
 </td>
 <td style="text-align:left;">
@@ -2723,13 +2713,13 @@ class="uri">https://openalex.org/I75951250</a>
 , 13 , 14 , 14 , 14 , 14 , 15 , 15 , 15 , 15 , 16 , 16 , 16 , 16 , 17 ,
 17 , 17 , 17 , 18 , 18 , 18 , 18 , 19 , 19 , 19 , 19 , 20 , 20 , 20 , 20
 , 21 , 21 , 21 , 21 , 22 , 22 , 22 , 22 , 23 , 23 , 23 , 23 , 24 , 24 ,
-24 , 24 , 25 , 25 , 25 , 25 , 31 , 31 , 31 , 31 , 23 , 23 , 23 , 23 , 19
-, 19 , 19 , 19 , 18 , 18 , 18 , 18 , 17 , 17 , 17 , 17 , 14 , 14 , 14 ,
-14 , 14 , 14 , 14 , 14 , 13 , 13 , 13 , 13 , 13 , 13 , 13 , 13 , 10 , 10
+24 , 24 , 25 , 25 , 25 , 25 , 30 , 30 , 30 , 30 , 23 , 23 , 23 , 23 , 19
+, 19 , 19 , 19 , 18 , 18 , 18 , 18 , 17 , 17 , 17 , 17 , 15 , 15 , 15 ,
+15 , 14 , 14 , 14 , 14 , 14 , 14 , 14 , 14 , 13 , 13 , 13 , 13 , 10 , 10
 , 10 , 10 , 8 , 8 , 8 , 8 , 7 , 7 , 7 , 7 , 6 , 6 , 6 , 6 , 6 , 6 , 6 ,
 6 , 5 , 5 , 5 , 5 , 5 , 5 , 5 , 5 , 4 , 4 , 4 , 4 , 4 , 4 , 4 , 4 , 4 ,
 4 , 4 , 4 , 4 , 4 , 4 , 4 , 3 , 3 , 3 , 3 , 3 , 3 , 3 , 3 , 3 , 3 , 3 ,
-3 , 3 , 3 , 3 , 3 , 2 , 2 , 2 , 2 , topic , subfield , field , domain ,
+3 , 2 , 2 , 2 , 2 , 2 , 2 , 2 , 2 , topic , subfield , field , domain ,
 topic , subfield , field , domain , topic , subfield , field , domain ,
 topic , subfield , field , domain , topic , subfield , field , domain ,
 topic , subfield , field , domain , topic , subfield , field , domain ,
@@ -2782,24 +2772,8 @@ href="https://openalex.org/fields/33"
 class="uri">https://openalex.org/fields/33</a> , <a
 href="https://openalex.org/domains/2"
 class="uri">https://openalex.org/domains/2</a> , <a
-href="https://openalex.org/T10235"
-class="uri">https://openalex.org/T10235</a> , <a
-href="https://openalex.org/subfields/3306"
-class="uri">https://openalex.org/subfields/3306</a> , <a
-href="https://openalex.org/fields/33"
-class="uri">https://openalex.org/fields/33</a> , <a
-href="https://openalex.org/domains/2"
-class="uri">https://openalex.org/domains/2</a> , <a
 href="https://openalex.org/T12088"
 class="uri">https://openalex.org/T12088</a> , <a
-href="https://openalex.org/subfields/3312"
-class="uri">https://openalex.org/subfields/3312</a> , <a
-href="https://openalex.org/fields/33"
-class="uri">https://openalex.org/fields/33</a> , <a
-href="https://openalex.org/domains/2"
-class="uri">https://openalex.org/domains/2</a> , <a
-href="https://openalex.org/T12714"
-class="uri">https://openalex.org/T12714</a> , <a
 href="https://openalex.org/subfields/3312"
 class="uri">https://openalex.org/subfields/3312</a> , <a
 href="https://openalex.org/fields/33"
@@ -2810,6 +2784,22 @@ href="https://openalex.org/T13532"
 class="uri">https://openalex.org/T13532</a> , <a
 href="https://openalex.org/subfields/3304"
 class="uri">https://openalex.org/subfields/3304</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T10235"
+class="uri">https://openalex.org/T10235</a> , <a
+href="https://openalex.org/subfields/3306"
+class="uri">https://openalex.org/subfields/3306</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T12714"
+class="uri">https://openalex.org/T12714</a> , <a
+href="https://openalex.org/subfields/3312"
+class="uri">https://openalex.org/subfields/3312</a> , <a
 href="https://openalex.org/fields/33"
 class="uri">https://openalex.org/fields/33</a> , <a
 href="https://openalex.org/domains/2"
@@ -2838,18 +2828,18 @@ href="https://openalex.org/fields/20"
 class="uri">https://openalex.org/fields/20</a> , <a
 href="https://openalex.org/domains/2"
 class="uri">https://openalex.org/domains/2</a> , <a
-href="https://openalex.org/T13709"
-class="uri">https://openalex.org/T13709</a> , <a
-href="https://openalex.org/subfields/3304"
-class="uri">https://openalex.org/subfields/3304</a> , <a
-href="https://openalex.org/fields/33"
-class="uri">https://openalex.org/fields/33</a> , <a
-href="https://openalex.org/domains/2"
-class="uri">https://openalex.org/domains/2</a> , <a
 href="https://openalex.org/T11895"
 class="uri">https://openalex.org/T11895</a> , <a
 href="https://openalex.org/subfields/3312"
 class="uri">https://openalex.org/subfields/3312</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T13709"
+class="uri">https://openalex.org/T13709</a> , <a
+href="https://openalex.org/subfields/3304"
+class="uri">https://openalex.org/subfields/3304</a> , <a
 href="https://openalex.org/fields/33"
 class="uri">https://openalex.org/fields/33</a> , <a
 href="https://openalex.org/domains/2"
@@ -2870,10 +2860,10 @@ href="https://openalex.org/fields/33"
 class="uri">https://openalex.org/fields/33</a> , <a
 href="https://openalex.org/domains/2"
 class="uri">https://openalex.org/domains/2</a> , <a
-href="https://openalex.org/T10108"
-class="uri">https://openalex.org/T10108</a> , <a
-href="https://openalex.org/subfields/3320"
-class="uri">https://openalex.org/subfields/3320</a> , <a
+href="https://openalex.org/T10314"
+class="uri">https://openalex.org/T10314</a> , <a
+href="https://openalex.org/subfields/3312"
+class="uri">https://openalex.org/subfields/3312</a> , <a
 href="https://openalex.org/fields/33"
 class="uri">https://openalex.org/fields/33</a> , <a
 href="https://openalex.org/domains/2"
@@ -2886,28 +2876,20 @@ href="https://openalex.org/fields/32"
 class="uri">https://openalex.org/fields/32</a> , <a
 href="https://openalex.org/domains/2"
 class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T10108"
+class="uri">https://openalex.org/T10108</a> , <a
+href="https://openalex.org/subfields/3320"
+class="uri">https://openalex.org/subfields/3320</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
 href="https://openalex.org/T11120"
 class="uri">https://openalex.org/T11120</a> , <a
 href="https://openalex.org/subfields/3312"
 class="uri">https://openalex.org/subfields/3312</a> , <a
 href="https://openalex.org/fields/33"
 class="uri">https://openalex.org/fields/33</a> , <a
-href="https://openalex.org/domains/2"
-class="uri">https://openalex.org/domains/2</a> , <a
-href="https://openalex.org/T10314"
-class="uri">https://openalex.org/T10314</a> , <a
-href="https://openalex.org/subfields/3312"
-class="uri">https://openalex.org/subfields/3312</a> , <a
-href="https://openalex.org/fields/33"
-class="uri">https://openalex.org/fields/33</a> , <a
-href="https://openalex.org/domains/2"
-class="uri">https://openalex.org/domains/2</a> , <a
-href="https://openalex.org/T14509"
-class="uri">https://openalex.org/T14509</a> , <a
-href="https://openalex.org/subfields/1803"
-class="uri">https://openalex.org/subfields/1803</a> , <a
-href="https://openalex.org/fields/18"
-class="uri">https://openalex.org/fields/18</a> , <a
 href="https://openalex.org/domains/2"
 class="uri">https://openalex.org/domains/2</a> , <a
 href="https://openalex.org/T12781"
@@ -2926,12 +2908,12 @@ href="https://openalex.org/fields/32"
 class="uri">https://openalex.org/fields/32</a> , <a
 href="https://openalex.org/domains/2"
 class="uri">https://openalex.org/domains/2</a> , <a
-href="https://openalex.org/T10349"
-class="uri">https://openalex.org/T10349</a> , <a
-href="https://openalex.org/subfields/3312"
-class="uri">https://openalex.org/subfields/3312</a> , <a
-href="https://openalex.org/fields/33"
-class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/T14509"
+class="uri">https://openalex.org/T14509</a> , <a
+href="https://openalex.org/subfields/1803"
+class="uri">https://openalex.org/subfields/1803</a> , <a
+href="https://openalex.org/fields/18"
+class="uri">https://openalex.org/fields/18</a> , <a
 href="https://openalex.org/domains/2"
 class="uri">https://openalex.org/domains/2</a> , <a
 href="https://openalex.org/T12693"
@@ -2940,6 +2922,14 @@ href="https://openalex.org/subfields/3312"
 class="uri">https://openalex.org/subfields/3312</a> , <a
 href="https://openalex.org/fields/33"
 class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T11817"
+class="uri">https://openalex.org/T11817</a> , <a
+href="https://openalex.org/subfields/2003"
+class="uri">https://openalex.org/subfields/2003</a> , <a
+href="https://openalex.org/fields/20"
+class="uri">https://openalex.org/fields/20</a> , <a
 href="https://openalex.org/domains/2"
 class="uri">https://openalex.org/domains/2</a> , Health Effects of
 Precarious Employment and Unemployment , General Health Professions ,
@@ -2950,39 +2940,39 @@ Sociology and Political Science , Social Sciences , Social Sciences ,
 Politics and Economics of Welfare State , Political Science and
 International Relations , Social Sciences , Social Sciences , Impact of
 Retirement on Aging Workforce , Demography , Social Sciences , Social
-Sciences , Impact of Social Factors on Health Outcomes , Health , Social
-Sciences , Social Sciences , Intergenerational Mobility and Social
-Stratification , Sociology and Political Science , Social Sciences ,
-Social Sciences , Youth Transitions and Social Inequality , Sociology
-and Political Science , Social Sciences , Social Sciences , Vocational
-Education and Training in Australia , Education , Social Sciences ,
+Sciences , Intergenerational Mobility and Social Stratification ,
+Sociology and Political Science , Social Sciences , Social Sciences ,
+Vocational Education and Training in Australia , Education , Social
+Sciences , Social Sciences , Impact of Social Factors on Health Outcomes
+, Health , Social Sciences , Social Sciences , Youth Transitions and
+Social Inequality , Sociology and Political Science , Social Sciences ,
 Social Sciences , Education and Research Methods in Social Sciences ,
 Education , Social Sciences , Social Sciences , Labor Relations and
 Union Revitalization Studies , Public Administration , Social Sciences ,
 Social Sciences , Economic Policy and Development Analysis , Economics
 and Econometrics , Economics, Econometrics and Finance , Social Sciences
-, Education Policy and Social Development , Education , Social Sciences
-, Social Sciences , Cultural Capital and Social Class in Education ,
-Sociology and Political Science , Social Sciences , Social Sciences ,
+, Cultural Capital and Social Class in Education , Sociology and
+Political Science , Social Sciences , Social Sciences , Education Policy
+and Social Development , Education , Social Sciences , Social Sciences ,
 Effects of Residential Segregation on Communities and Individuals,
 Sociology and Political Science , Social Sciences , Social Sciences ,
 Gender Inequality and Labor Force Dynamics , Gender Studies , Social
-Sciences , Social Sciences , Empirical Analysis of Political Behavior
+Sciences , Social Sciences , Intergroup Relations and Social Identity
+Theories , Sociology and Political Science , Social Sciences , Social
+Sciences , Cultural Psychology and Values Research , Social Psychology ,
+Psychology , Social Sciences , Empirical Analysis of Political Behavior
 and Institutions , Political Science and International Relations ,
-Social Sciences , Social Sciences , Cultural Psychology and Values
-Research , Social Psychology , Psychology , Social Sciences , Multilevel
-Perspectives on Prosocial Behavior and Volunteering , Sociology and
-Political Science , Social Sciences , Social Sciences , Intergroup
-Relations and Social Identity Theories , Sociology and Political Science
-, Social Sciences , Social Sciences , Spatial Microsimulation Models for
-Policy Analysis , Management Science and Operations Research , Decision
+Social Sciences , Social Sciences , Multilevel Perspectives on Prosocial
+Behavior and Volunteering , Sociology and Political Science , Social
 Sciences , Social Sciences , Determinants of Health Care Expenditure and
 Longevity , General Health Professions , Health Professions , Health
 Sciences , Role of Positive Emotions in Well-Being , Social Psychology ,
-Psychology , Social Sciences , Migration Networks and Impacts on Labor
-Market , Sociology and Political Science , Social Sciences , Social
-Sciences , Immigrant Entrepreneurship in Advanced Economies , Sociology
-and Political Science , Social Sciences , Social Sciences
+Psychology , Social Sciences , Spatial Microsimulation Models for Policy
+Analysis , Management Science and Operations Research , Decision
+Sciences , Social Sciences , Immigrant Entrepreneurship in Advanced
+Economies , Sociology and Political Science , Social Sciences , Social
+Sciences , Financialization of the Economy , Finance , Economics,
+Econometrics and Finance , Social Sciences
 </td>
 <td style="text-align:left;">
 <a href="https://api.openalex.org/works?filter=author.id:A5007673492"
@@ -3070,7 +3060,7 @@ Michael Savelkoul
 M.J. Savelkoul , M. Savelkoul , Michael Savelkoul
 </td>
 <td style="text-align:right;">
-4062.84
+4091.68
 </td>
 <td style="text-align:left;">
 <a href="https://openalex.org/A5048988743"
@@ -3475,7 +3465,7 @@ T.W.G. Tom van der Meer, Tom W. G. van der Meer , Tom Van Der Meer , T.
 Van Der Meer , TOM W.G. VAN DER MEER
 </td>
 <td style="text-align:right;">
-17215.21
+17144.19
 </td>
 <td style="text-align:left;">
 <a href="https://openalex.org/A5010780363"
@@ -3491,12 +3481,12 @@ class="uri">https://orcid.org/0000-0002-6164-2926</a>
 142
 </td>
 <td style="text-align:right;">
-4597
+4609
 </td>
 <td style="text-align:left;">
 2024, 2023, 2022, 2021, 2020, 2019, 2018, 2017, 2016, 2015, 2014, 2013,
-2012, 4, 3, 4, 5, 6, 3, 9, 21, 13, 8, 5, 6, 9, 512, 739, 561, 570, 443,
-438, 374, 225, 254, 263, 191, 232, 103
+2012, 6, 3, 4, 5, 6, 3, 9, 21, 13, 8, 5, 6, 9, 532, 743, 560, 574, 443,
+439, 374, 226, 254, 263, 191, 232, 103
 </td>
 <td style="text-align:left;">
 University of Amsterdam
@@ -3546,7 +3536,7 @@ class="uri">https://openalex.org/I4210163498</a>
 , 19 , 19 , 19 , 17 , 17 , 17 , 17 , 16 , 16 , 16 , 16 , 12 , 12 , 12 ,
 12 , 10 , 10 , 10 , 10 , 9 , 9 , 9 , 9 , 7 , 7 , 7 , 7 , 6 , 6 , 6 , 6 ,
 6 , 6 , 6 , 6 , 5 , 5 , 5 , 5 , 5 , 5 , 5 , 5 , 5 , 5 , 5 , 5 , 5 , 5 ,
-5 , 5 , 5 , 5 , 5 , 5 , 4 , 4 , 4 , 4 , 4 , 4 , 4 , 4 , 4 , 4 , 4 , 4 ,
+5 , 5 , 4 , 4 , 4 , 4 , 4 , 4 , 4 , 4 , 4 , 4 , 4 , 4 , 4 , 4 , 4 , 4 ,
 4 , 4 , 4 , 4 , 4 , 4 , 4 , 4 , 4 , 4 , 4 , 4 , 3 , 3 , 3 , 3 , 3 , 3 ,
 3 , 3 , 3 , 3 , 3 , 3 , topic , subfield , field , domain , topic ,
 subfield , field , domain , topic , subfield , field , domain , topic ,
@@ -3633,18 +3623,18 @@ href="https://openalex.org/fields/33"
 class="uri">https://openalex.org/fields/33</a> , <a
 href="https://openalex.org/domains/2"
 class="uri">https://openalex.org/domains/2</a> , <a
-href="https://openalex.org/T11895"
-class="uri">https://openalex.org/T11895</a> , <a
-href="https://openalex.org/subfields/3312"
-class="uri">https://openalex.org/subfields/3312</a> , <a
-href="https://openalex.org/fields/33"
-class="uri">https://openalex.org/fields/33</a> , <a
-href="https://openalex.org/domains/2"
-class="uri">https://openalex.org/domains/2</a> , <a
 href="https://openalex.org/T10289"
 class="uri">https://openalex.org/T10289</a> , <a
 href="https://openalex.org/subfields/3320"
 class="uri">https://openalex.org/subfields/3320</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T11895"
+class="uri">https://openalex.org/T11895</a> , <a
+href="https://openalex.org/subfields/3312"
+class="uri">https://openalex.org/subfields/3312</a> , <a
 href="https://openalex.org/fields/33"
 class="uri">https://openalex.org/fields/33</a> , <a
 href="https://openalex.org/domains/2"
@@ -3657,18 +3647,18 @@ href="https://openalex.org/fields/33"
 class="uri">https://openalex.org/fields/33</a> , <a
 href="https://openalex.org/domains/2"
 class="uri">https://openalex.org/domains/2</a> , <a
-href="https://openalex.org/T14493"
-class="uri">https://openalex.org/T14493</a> , <a
-href="https://openalex.org/subfields/3308"
-class="uri">https://openalex.org/subfields/3308</a> , <a
-href="https://openalex.org/fields/33"
-class="uri">https://openalex.org/fields/33</a> , <a
-href="https://openalex.org/domains/2"
-class="uri">https://openalex.org/domains/2</a> , <a
 href="https://openalex.org/T10235"
 class="uri">https://openalex.org/T10235</a> , <a
 href="https://openalex.org/subfields/3306"
 class="uri">https://openalex.org/subfields/3306</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T14493"
+class="uri">https://openalex.org/T14493</a> , <a
+href="https://openalex.org/subfields/3308"
+class="uri">https://openalex.org/subfields/3308</a> , <a
 href="https://openalex.org/fields/33"
 class="uri">https://openalex.org/fields/33</a> , <a
 href="https://openalex.org/domains/2"
@@ -3685,6 +3675,22 @@ href="https://openalex.org/T10216"
 class="uri">https://openalex.org/T10216</a> , <a
 href="https://openalex.org/subfields/3312"
 class="uri">https://openalex.org/subfields/3312</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T13993"
+class="uri">https://openalex.org/T13993</a> , <a
+href="https://openalex.org/subfields/3320"
+class="uri">https://openalex.org/subfields/3320</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T13086"
+class="uri">https://openalex.org/T13086</a> , <a
+href="https://openalex.org/subfields/3320"
+class="uri">https://openalex.org/subfields/3320</a> , <a
 href="https://openalex.org/fields/33"
 class="uri">https://openalex.org/fields/33</a> , <a
 href="https://openalex.org/domains/2"
@@ -3713,34 +3719,10 @@ href="https://openalex.org/fields/33"
 class="uri">https://openalex.org/fields/33</a> , <a
 href="https://openalex.org/domains/2"
 class="uri">https://openalex.org/domains/2</a> , <a
-href="https://openalex.org/T13993"
-class="uri">https://openalex.org/T13993</a> , <a
-href="https://openalex.org/subfields/3320"
-class="uri">https://openalex.org/subfields/3320</a> , <a
-href="https://openalex.org/fields/33"
-class="uri">https://openalex.org/fields/33</a> , <a
-href="https://openalex.org/domains/2"
-class="uri">https://openalex.org/domains/2</a> , <a
 href="https://openalex.org/T10314"
 class="uri">https://openalex.org/T10314</a> , <a
 href="https://openalex.org/subfields/3312"
 class="uri">https://openalex.org/subfields/3312</a> , <a
-href="https://openalex.org/fields/33"
-class="uri">https://openalex.org/fields/33</a> , <a
-href="https://openalex.org/domains/2"
-class="uri">https://openalex.org/domains/2</a> , <a
-href="https://openalex.org/T13086"
-class="uri">https://openalex.org/T13086</a> , <a
-href="https://openalex.org/subfields/3320"
-class="uri">https://openalex.org/subfields/3320</a> , <a
-href="https://openalex.org/fields/33"
-class="uri">https://openalex.org/fields/33</a> , <a
-href="https://openalex.org/domains/2"
-class="uri">https://openalex.org/domains/2</a> , <a
-href="https://openalex.org/T11421"
-class="uri">https://openalex.org/T11421</a> , <a
-href="https://openalex.org/subfields/3321"
-class="uri">https://openalex.org/subfields/3321</a> , <a
 href="https://openalex.org/fields/33"
 class="uri">https://openalex.org/fields/33</a> , <a
 href="https://openalex.org/domains/2"
@@ -3753,12 +3735,20 @@ href="https://openalex.org/fields/33"
 class="uri">https://openalex.org/fields/33</a> , <a
 href="https://openalex.org/domains/2"
 class="uri">https://openalex.org/domains/2</a> , <a
-href="https://openalex.org/T13938"
-class="uri">https://openalex.org/T13938</a> , <a
-href="https://openalex.org/subfields/1202"
-class="uri">https://openalex.org/subfields/1202</a> , <a
-href="https://openalex.org/fields/12"
-class="uri">https://openalex.org/fields/12</a> , <a
+href="https://openalex.org/T11421"
+class="uri">https://openalex.org/T11421</a> , <a
+href="https://openalex.org/subfields/3321"
+class="uri">https://openalex.org/subfields/3321</a> , <a
+href="https://openalex.org/fields/33"
+class="uri">https://openalex.org/fields/33</a> , <a
+href="https://openalex.org/domains/2"
+class="uri">https://openalex.org/domains/2</a> , <a
+href="https://openalex.org/T11621"
+class="uri">https://openalex.org/T11621</a> , <a
+href="https://openalex.org/subfields/2002"
+class="uri">https://openalex.org/subfields/2002</a> , <a
+href="https://openalex.org/fields/20"
+class="uri">https://openalex.org/fields/20</a> , <a
 href="https://openalex.org/domains/2"
 class="uri">https://openalex.org/domains/2</a> , Empirical Analysis of
 Political Behavior and Institutions , Political Science and
@@ -3776,33 +3766,34 @@ Social Sciences , Effects of Residential Segregation on Communities and
 Individuals, Sociology and Political Science , Social Sciences , Social
 Sciences , Judicial Review in European Legal Systems , Political Science
 and International Relations , Social Sciences , Social Sciences ,
-Cultural Capital and Social Class in Education , Sociology and Political
-Science , Social Sciences , Social Sciences , European Integration and
-Governance Dynamics , Political Science and International Relations ,
-Social Sciences , Social Sciences , Multilevel Perspectives on Prosocial
-Behavior and Volunteering , Sociology and Political Science , Social
-Sciences , Social Sciences , Criminal Procedure and Human Rights , Law ,
+European Integration and Governance Dynamics , Political Science and
+International Relations , Social Sciences , Social Sciences , Cultural
+Capital and Social Class in Education , Sociology and Political Science
+, Social Sciences , Social Sciences , Multilevel Perspectives on
+Prosocial Behavior and Volunteering , Sociology and Political Science ,
 Social Sciences , Social Sciences , Impact of Social Factors on Health
-Outcomes , Health , Social Sciences , Social Sciences ,
+Outcomes , Health , Social Sciences , Social Sciences , Criminal
+Procedure and Human Rights , Law , Social Sciences , Social Sciences ,
 Intergovernmental Relations in Multinational Federations , Political
 Science and International Relations , Social Sciences , Social Sciences
 , Politics and Social Implications of Immigration , Sociology and
-Political Science , Social Sciences , Social Sciences , Migration,
-Education, and Policy Implications , Demography , Social Sciences ,
-Social Sciences , Religion and Secularism in Modern Society , Sociology
-and Political Science , Social Sciences , Social Sciences , Media Bias
-and Political Influence , Sociology and Political Science , Social
-Sciences , Social Sciences , European-Australian Political and Cultural
-Relations , Political Science and International Relations , Social
-Sciences , Social Sciences , Intergroup Relations and Social Identity
-Theories , Sociology and Political Science , Social Sciences , Social
-Sciences , The Sustainability and Future of Unrecognized Quasi-States ,
-Political Science and International Relations , Social Sciences , Social
-Sciences , Labor Relations and Union Revitalization Studies , Public
-Administration , Social Sciences , Social Sciences , Qualitative
-Research in Social Sciences and Education , Education , Social Sciences
-, Social Sciences , History of International Humanitarianism and Human
-Rights , History , Arts and Humanities , Social Sciences
+Political Science , Social Sciences , Social Sciences ,
+European-Australian Political and Cultural Relations , Political Science
+and International Relations , Social Sciences , Social Sciences , The
+Sustainability and Future of Unrecognized Quasi-States , Political
+Science and International Relations , Social Sciences , Social Sciences
+, Migration, Education, and Policy Implications , Demography , Social
+Sciences , Social Sciences , Religion and Secularism in Modern Society ,
+Sociology and Political Science , Social Sciences , Social Sciences ,
+Media Bias and Political Influence , Sociology and Political Science ,
+Social Sciences , Social Sciences , Intergroup Relations and Social
+Identity Theories , Sociology and Political Science , Social Sciences ,
+Social Sciences , Qualitative Research in Social Sciences and Education
+, Education , Social Sciences , Social Sciences , Labor Relations and
+Union Revitalization Studies , Public Administration , Social Sciences ,
+Social Sciences , Political and Economic Impacts of Fiscal Policy Cycles
+, Economics and Econometrics , Economics, Econometrics and Finance ,
+Social Sciences
 </td>
 <td style="text-align:left;">
 <a href="https://api.openalex.org/works?filter=author.id:A5010780363"

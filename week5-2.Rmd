@@ -327,7 +327,7 @@ print01Report(mydata, modelname = "./results/soc_init") # create file with repor
 
  
 # 7.13 STEP 4: Specify model 
-Sometimes similartostep 2 (but here you include specifically the effects you want to look at)
+Sometimes similartostep  (but here you include specifically the effects you want to look at)2
 ```{r}
 # if you want to select only specific effects in your model:
 
@@ -335,8 +335,8 @@ myeff <- includeEffects(myeff, isolateNet, inPop, outAct)  #we know that quite a
 
 ```
 over time:
-inpope ppl with lots of indegrees will havelot of indegrees later (in population)
- outAct ppl with lots of outdegrees will have lot of indegrees later 
+inpop: ppl with lots of indegrees will havelot of indegrees later (in population)
+ outAct: ppl with lots of outdegrees will have lot of indegrees later 
 
  hint FOR MY OWN PROJECT: interaction effect of these statistics and the effect of gender 
 
@@ -373,12 +373,10 @@ convergence ratio should be <.25
 
 ---
 
-# Sidenote: H- index via openAlex
+## Sidenote: H- index via openAlex
 
 Hirsch-Index is NOT scraped in open-alex already but you have the nr. of citations and you can google how someone else did it 
 
 # STUDY CHAPTER 12 of RSiena Manual! 
-# PrACTICE WITH RSIENA 
-
-# DONT GO OVERBOARD!!! 
-# REMAIN FOCUSED!!!
+## PrACTICE WITH RSIENA 
+# DONT GO OVERBOARD!!! & REMAIN FOCUSED!!!

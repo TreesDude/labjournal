@@ -1,0 +1,1112 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Verooo" />
+
+<meta name="date" content="2024-11-23" />
+
+<title>Descriptive Results</title>
+
+<script src="site_libs/header-attrs-2.28/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/darkly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<script src="site_libs/navigation-1.1/sourceembed.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<script src="site_libs/clipboard-1.7.1/clipboard.min.js"></script>
+<link href="site_libs/primer-tooltips-1.4.0/build.css" rel="stylesheet" />
+<link href="site_libs/klippy-0.0.0.9500/css/klippy.min.css" rel="stylesheet" />
+<script src="site_libs/klippy-0.0.0.9500/js/klippy.min.js"></script>
+<link href="site_libs/font-awesome-6.4.2/css/all.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+<style type="text/css">
+#rmd-source-code {
+  display: none;
+}
+</style>
+
+
+<link rel="stylesheet" href="styles.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html"></a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">
+    <span class="fa fa-home"></span>
+     
+  </a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    My journal
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="testjt.html">Week 1</a>
+    </li>
+    <li>
+      <a href="week2.html">Week 2</a>
+    </li>
+    <li>
+      <a href="Webscraping-Chapter8-tutorial.html">Chapter 8 - Webscraping tutorial</a>
+    </li>
+    <li>
+      <a href="week3RSelenium.html">Week 3 - RSelenium (see Ch.8 tab tho)</a>
+    </li>
+    <li>
+      <a href="networkvis.html">Chapter 9 - Netw. Visualisation tutorial</a>
+    </li>
+    <li>
+      <a href="week5.html">Week 5/Chapter 7 - Analysis pt.1</a>
+    </li>
+    <li>
+      <a href="week5-2.html">!Week 5/Chapter 7 - Analysis pt.2</a>
+    </li>
+    <li>
+      <a href="datapractice1.html">Week 5 - Practice data 1</a>
+    </li>
+    <li>
+      <a href="week6.html">Week 6</a>
+    </li>
+    <li>
+      <a href="weekbacktrack.html">Week Nr. getbackontrack</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    RQs
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="RQdraft1.html">1st draft</a>
+    </li>
+    <li>
+      <a href="RQdraft2.html">2nd draft - w Intro &amp; data types</a>
+    </li>
+    <li>
+      <a href="RQdraft3.html">3rd draft</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Project design
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="clarifyRQsandDesign.html">Clarify RQs</a>
+    </li>
+    <li>
+      <a href="plotting1.html">Plotting</a>
+    </li>
+    <li>
+      <a href="revisitwithJochem.html">Check-in with Jochem</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Step-by-step analysis
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="datapreptrynew.html">Data prep</a>
+    </li>
+    <li>
+      <a href="descriptivestry.html">Step 3: initial description</a>
+    </li>
+    <li>
+      <a href="RSienatry.html">Step 4&amp;5: Specify &amp; Estimate model</a>
+    </li>
+    <li>
+      <a href="estimate_M0.html">Test estimate display</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Draft report
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="draftintro.html">Introduction</a>
+    </li>
+    <li>
+      <a href="drafttheory.html">Theory</a>
+    </li>
+    <li class="dropdown-submenu">
+      <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Data</a>
+      <ul class="dropdown-menu" role="menu">
+        <li>
+          <a href="draftdata.html">Data &amp; Methods</a>
+        </li>
+        <li>
+          <a href="datapreptrynew.html">Data preparation</a>
+        </li>
+        <li>
+          <a href="descriptivestry.html">Descriptives</a>
+        </li>
+      </ul>
+    </li>
+    <li class="dropdown-submenu">
+      <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Results</a>
+      <ul class="dropdown-menu" role="menu">
+        <li>
+          <a href="draftdesresults.html">Descriptive results</a>
+        </li>
+        <li>
+          <a href="modelestimate.html">Model Estimation</a>
+        </li>
+        <li>
+          <a href="draftGOF.html">Goodness Of Fit</a>
+        </li>
+      </ul>
+    </li>
+    <li>
+      <a href="draftdiscussion.html">Discussion &amp; Conclusion</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Final report
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="finalintro.html">Introduction</a>
+    </li>
+    <li>
+      <a href="finaltheory.html">Theory</a>
+    </li>
+    <li class="dropdown-submenu">
+      <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Data</a>
+      <ul class="dropdown-menu" role="menu">
+        <li>
+          <a href="finaldata.html">Data &amp; Methods</a>
+        </li>
+        <li>
+          <a href="finaldataprep.html">Data preparation</a>
+        </li>
+        <li>
+          <a href="finaldescriptives.html">Descriptives</a>
+        </li>
+      </ul>
+    </li>
+    <li class="dropdown-submenu">
+      <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Results</a>
+      <ul class="dropdown-menu" role="menu">
+        <li>
+          <a href="finaldesresults.html">Descriptive results</a>
+        </li>
+        <li>
+          <a href="finalestimate.html">Model Estimation</a>
+        </li>
+        <li>
+          <a href="finalGOF.html">Goodness Of Fit</a>
+        </li>
+      </ul>
+    </li>
+    <li>
+      <a href="finaldiscussion.html">Discussion &amp; Conclusion</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/JochemTolsma/labjournal">
+    <span class="fab fa-github"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+<li role="separator" class="divider"></li>
+<li><a id="rmd-download-source" href="#">Download Rmd</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">Descriptive Results</h1>
+<h4 class="author">Verooo</h4>
+<h4 class="date">2024-11-23</h4>
+
+</div>
+
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+My Descriptives
+</title>
+<p><link rel="stylesheet" href="styles.css">
+<!-- Link to the CSS file I created for dark mode code chunks --></p>
+</head>
+</html>
+<script>
+  addClassKlippyTo("pre.r, pre.markdown");
+  addKlippy('right', 'top', 'auto', '1', 'Copy code', 'Copied!');
+</script>
+<div id="getting-started" class="section level1" number="1">
+<h1><span class="header-section-number">1</span> Getting started</h1>
+<pre class="r test"><code>rm(list = ls())</code></pre>
+<div id="packages" class="section level2" number="1.1">
+<h2><span class="header-section-number">1.1</span> Packages</h2>
+<pre class="r test"><code>require(tidyverse)
+require(RSiena)
+require(RsienaTwoStep)
+
+# install.packages(&#39;data.table&#39;)
+require(data.table)  # mainly for faster data handling
+# install.packages(&#39;xml2&#39;)
+require(xml2)
+# install.packages(&#39;rvest&#39;)
+require(rvest)
+require(igraph)
+require(ggraph)
+require(ggplot2)
+
+
+# install.packages(&#39;visNetwork&#39;)
+require(visNetwork)
+# install.packages(&#39;threejs&#39;)
+require(threejs)
+# install.packages(&#39;networkD3&#39;)
+require(networkD3)
+
+require(RColorBrewer)</code></pre>
+</div>
+<div id="functions" class="section level2" number="1.2">
+<h2><span class="header-section-number">1.2</span> Functions</h2>
+<p>Functions chunk</p>
+<pre class="r test"><code>fpackage.check &lt;- function(packages) {
+    lapply(packages, FUN = function(x) {
+        if (!require(x, character.only = TRUE)) {
+            install.packages(x, dependencies = TRUE)
+            library(x, character.only = TRUE)
+        }
+    })
+}
+
+fsave &lt;- function(x, file = NULL, location = &quot;./data/processed/&quot;) {
+    ifelse(!dir.exists(&quot;data&quot;), dir.create(&quot;data&quot;), FALSE)
+    ifelse(!dir.exists(&quot;data/processed&quot;), dir.create(&quot;data/processed&quot;), FALSE)
+    if (is.null(file))
+        file = deparse(substitute(x))
+    datename &lt;- substr(gsub(&quot;[:-]&quot;, &quot;&quot;, Sys.time()), 1, 8)
+    totalname &lt;- paste(location, file, &quot;_&quot;, datename, &quot;.rda&quot;, sep = &quot;&quot;)
+    save(x, file = totalname)  #need to fix if file is reloaded as input name, not as x. 
+}
+
+fload &lt;- function(filename) {
+    load(filename)
+    get(ls()[ls() != &quot;filename&quot;])
+}
+
+fshowdf &lt;- function(x, ...) {
+    knitr::kable(x, digits = 2, &quot;html&quot;, ...) %&gt;%
+        kableExtra::kable_styling(bootstrap_options = c(&quot;striped&quot;, &quot;hover&quot;)) %&gt;%
+        kableExtra::scroll_box(width = &quot;100%&quot;, height = &quot;300px&quot;)
+}
+
+
+# this is the most important one. We created it in the previous script
+
+f_pubnets &lt;- function(df_scholars = df, list_publications = publications, discip = &quot;sociology&quot; + &quot;political science&quot;,
+    affiliation = &quot;RU&quot;, waves = list(wave1 = c(2018, 2019, 2020), wave2 = c(2021, 2022, 2023))) {
+
+    publications &lt;- list_publications %&gt;%
+        bind_rows() %&gt;%
+        distinct(title, .keep_all = TRUE)
+
+    df_scholars %&gt;%
+        filter(affil1 == affiliation | affil2 == affiliation) %&gt;%
+        filter(discipline == discip) -&gt; df_sel
+
+    networklist &lt;- list()
+    for (wave in 1:length(waves)) {
+        networklist[[wave]] &lt;- matrix(0, nrow = nrow(df_sel), ncol = nrow(df_sel))
+    }
+
+    publicationlist &lt;- list()
+    for (wave in 1:length(waves)) {
+        publicationlist[[wave]] &lt;- publications %&gt;%
+            filter(gs_id %in% df_sel$gs_id) %&gt;%
+            filter(year %in% waves[[wave]]) %&gt;%
+            select(author) %&gt;%
+            lapply(str_split, pattern = &quot;,&quot;)
+    }
+
+    publicationlist2 &lt;- list()
+    for (wave in 1:length(waves)) {
+        publicationlist2[[wave]] &lt;- publicationlist[[wave]]$author %&gt;%
+            # lowercase
+        lapply(tolower) %&gt;%
+            # Removing diacritics
+        lapply(stri_trans_general, id = &quot;latin-ascii&quot;) %&gt;%
+            # only last name
+        lapply(word, start = -1, sep = &quot; &quot;) %&gt;%
+            # only last last name
+        lapply(word, start = -1, sep = &quot;-&quot;)
+    }
+
+    for (wave in 1:length(waves)) {
+        # let us remove all publications with only one author
+        remove &lt;- which(sapply(publicationlist2[[wave]], FUN = function(x) length(x) == 1) == TRUE)
+        publicationlist2[[wave]] &lt;- publicationlist2[[wave]][-remove]
+    }
+
+    for (wave in 1:length(waves)) {
+        pubs &lt;- publicationlist2[[wave]]
+        for (ego in 1:nrow(df_sel)) {
+            # which ego?
+            lastname_ego &lt;- df_sel$lastname[ego]
+            # for all publications
+            for (pub in 1:length(pubs)) {
+                # only continue if ego is author of pub
+                if (lastname_ego %in% pubs[[pub]]) {
+                  aut_pot &lt;- which.max(pubs[[pub]] %in% lastname_ego)
+                  # only continue if ego is first author of pub
+                  if (aut_pot == 1) {
+                    # check all alters/co-authors
+                    for (alter in 1:nrow(df_sel)) {
+                      # which alter
+                      lastname_alter &lt;- df_sel$lastname[alter]
+                      if (lastname_alter %in% pubs[[pub]]) {
+                        networklist[[wave]][ego, alter] &lt;- networklist[[wave]][ego, alter] + 1
+                      }
+                    }
+                  }
+                }
+            }
+        }
+    }
+    return(list(df = df_sel, network = networklist))
+}</code></pre>
+<p>More functions</p>
+<pre class="r test"><code>fcolnet &lt;- function(data = scholars, university = &quot;RU&quot;, discipline = &quot;sociology&quot; + &quot;political science&quot;,
+    waves = list(c(2015, 2018), c(2019, 2023)), type = c(&quot;first&quot;)) {
+
+    # step 1
+    demographics &lt;- do.call(rbind.data.frame, data$demographics)
+    demographics &lt;- demographics %&gt;%
+        mutate(Universiteit1.22 = replace(Universiteit1.22, is.na(Universiteit1.22), &quot;&quot;), Universiteit2.22 = replace(Universiteit2.22,
+            is.na(Universiteit2.22), &quot;&quot;), Universiteit1.24 = replace(Universiteit1.24, is.na(Universiteit1.24),
+            &quot;&quot;), Universiteit2.24 = replace(Universiteit2.24, is.na(Universiteit2.24), &quot;&quot;), discipline.22 = replace(discipline.22,
+            is.na(discipline.22), &quot;&quot;), discipline.24 = replace(discipline.24, is.na(discipline.24), &quot;&quot;))
+
+    sample &lt;- which((demographics$Universiteit1.22 %in% university | demographics$Universiteit2.22 %in%
+        university | demographics$Universiteit1.24 %in% university | demographics$Universiteit2.24 %in%
+        university) &amp; (demographics$discipline.22 %in% discipline | demographics$discipline.24 %in% discipline))
+
+    demographics_soc &lt;- demographics[sample, ]
+    scholars_sel &lt;- lapply(scholars, &quot;[&quot;, sample)
+
+    # step 2
+    ids &lt;- demographics_soc$au_id
+    nwaves &lt;- length(waves)
+    nets &lt;- array(0, dim = c(nwaves, length(ids), length(ids)), dimnames = list(wave = 1:nwaves, ids,
+        ids))
+    dimnames(nets)
+
+    # step 3
+    df_works &lt;- tibble(works_id = unlist(lapply(scholars_sel$work, function(l) l$id)), works_author = unlist(lapply(scholars_sel$work,
+        function(l) l$author), recursive = FALSE), works_year = unlist(lapply(scholars_sel$work, function(l) l$publication_year),
+        recursive = FALSE))
+
+    df_works &lt;- df_works[!duplicated(df_works), ]
+
+    # step 4
+    if (type == &quot;first&quot;) {
+        for (j in 1:nwaves) {
+            df_works_w &lt;- df_works[df_works$works_year &gt;= waves[[j]][1] &amp; df_works$works_year &lt;= waves[[j]][2],
+                ]
+            for (i in 1:nrow(df_works_w)) {
+                ego &lt;- df_works_w$works_author[i][[1]]$au_id[1]
+                alters &lt;- df_works_w$works_author[i][[1]]$au_id[-1]
+                if (sum(ids %in% ego) &gt; 0 &amp; sum(ids %in% alters) &gt; 0) {
+                  nets[j, which(ids %in% ego), which(ids %in% alters)] &lt;- 1
+                }
+            }
+        }
+    }
+
+    if (type == &quot;last&quot;) {
+        for (j in 1:nwaves) {
+            df_works_w &lt;- df_works[df_works$works_year &gt;= waves[[j]][1] &amp; df_works$works_year &lt;= waves[[j]][2],
+                ]
+            for (i in 1:nrow(df_works_w)) {
+                ego &lt;- rev(df_works_w$works_author[i][[1]]$au_id)[1]
+                alters &lt;- rev(df_works_w$works_author[i][[1]]$au_id)[-1]
+                if (sum(ids %in% ego) &gt; 0 &amp; sum(ids %in% alters) &gt; 0) {
+                  nets[j, which(ids %in% ego), which(ids %in% alters)] &lt;- 1
+                }
+            }
+        }
+    }
+
+    if (type == &quot;all&quot;) {
+        for (j in 1:nwaves) {
+            df_works_w &lt;- df_works[df_works$works_year &gt;= waves[[j]][1] &amp; df_works$works_year &lt;= waves[[j]][2],
+                ]
+            for (i in 1:nrow(df_works_w)) {
+                egos &lt;- df_works_w$works_author[i][[1]]$au_id
+                if (sum(ids %in% egos) &gt; 0) {
+                  nets[j, which(ids %in% egos), which(ids %in% egos)] &lt;- 1
+                }
+            }
+        }
+    }
+    output &lt;- list()
+    output$data &lt;- scholars_sel
+    output$nets &lt;- nets
+    return(output)
+}</code></pre>
+</div>
+<div id="load-data" class="section level2" number="1.3">
+<h2><span class="header-section-number">1.3</span> Load data</h2>
+<p>Scholar data</p>
+<pre class="r test"><code>scholars &lt;- fload(&quot;./data/processed/scholars_20240924.rda&quot;)
+# make sure to lead fload first of course</code></pre>
+<pre class="r test"><code># save the output of your function
+
+test &lt;- fcolnet(data = scholars, university = &quot;RU&quot;, discipline = c(&quot;sociology&quot;, &quot;political science&quot;),
+    waves = list(c(2015, 2018), c(2019, 2023)), type = c(&quot;first&quot;))</code></pre>
+<p>Ego data</p>
+<pre class="r test"><code>df_ego &lt;- fload(&quot;./data/processed/df_ego_20241108.rda&quot;)</code></pre>
+<pre class="r test"><code>test_w1 &lt;- igraph::graph_from_adjacency_matrix(
+  test$nets[1,,], # first wave of data. 
+  # (thus I select the array of networks and take the first matrix)
+  mode = c(&quot;directed&quot;),
+  weighted = NULL,
+  diag = FALSE,
+  add.colnames = NULL,
+  add.rownames = NULL)</code></pre>
+</div>
+</div>
+<div id="network-description" class="section level1" number="2">
+<h1><span class="header-section-number">2</span> Network
+Description</h1>
+<p>The network data we are looking at pertains to 101 scholars and their
+publications. In the time frame of the wave at hand, namely form 2015 to
+2018, we find 47 edges, with 6 reciprocated collaborations 36 ties that
+are asymmetric. Additionally, there were 5009 occasions in which a ties
+could have been made but was not. The edge density of 0.004 suggests
+that from all possible edges, this sample contains relatively few.</p>
+<p>In terms of triad-configurations, pertaining to the different
+possibilities three scholars could collaborate, we find that the most
+common one is no collaboration at all (configuration ‘003’). Beyond
+that, the configuration ‘012’ is also common, meaning that only one
+directed edge is present in the triad. In our sample it is also common
+for such edge to be reciprocated, as seen in the third-highes-t count of
+the triad-configuration ‘102’, a graph with a mutual connection between
+two vertices. Overall, the seems to be high number of isolates in the
+sample network.</p>
+<div id="nr.-of-nodesvertices" class="section level2" number="2.1">
+<h2><span class="header-section-number">2.1</span> Nr. of
+nodes/vertices</h2>
+<pre class="r test"><code>vcount(test_w1)</code></pre>
+<pre class="test2"><code>#&gt; [1] 101</code></pre>
+</div>
+<div id="nr.-of-edges" class="section level2" number="2.2">
+<h2><span class="header-section-number">2.2</span> Nr. of edges</h2>
+<pre class="r test"><code>ecount(test_w1)</code></pre>
+<pre class="test2"><code>#&gt; [1] 47</code></pre>
+</div>
+<div id="dyad-census" class="section level2" number="2.3">
+<h2><span class="header-section-number">2.3</span> Dyad census</h2>
+<pre class="r test"><code>igraph::dyad_census(test_w1)</code></pre>
+<pre class="test2"><code>#&gt; $mut
+#&gt; [1] 6
+#&gt; 
+#&gt; $asym
+#&gt; [1] 35
+#&gt; 
+#&gt; $null
+#&gt; [1] 5009</code></pre>
+</div>
+<div id="triad-census" class="section level2" number="2.4">
+<h2><span class="header-section-number">2.4</span> Triad-census</h2>
+<pre class="r test"><code>igraph::triad_census(test_w1)</code></pre>
+<pre class="test2"><code>#&gt;  [1] 162709   3266    561     19     38     25     17     10      1      0      1      0      1
+#&gt; [14]      1      1      0</code></pre>
+<!-- 
+TRIAD CONFIGURATIONS (16 possible)
+
+o Three digits [x, x, x]
+  First: nr. of reciprocal ties 
+  Middle counts: nr of directed ties
+  On right: if no ties
+o D, U, C 
+  Down 
+  Up 
+  Cyclical 
+
+
+1. # 003 A,B,C, the empty graph.
+
+2. # 012 A->B, C, the graph with a single directed edge.
+
+3. # 102 A<->B, C, the graph with a mutual connection between two vertices.
+
+4. # 021D A<-B->C, the out-star.
+
+5. # 021U A->B<-C, the in-star.
+
+6. # 021C A->B->C, directed line.
+
+7. # 111D A<->B<-C.
+
+8. # 111U A<->B->C.
+
+9. #- 030T A->B<-C, A->C.
+
+10.#X 030C A<-B<-C, A->C.
+
+11.#- 201 A<->B<->C.
+
+12.#X 120D A<-B->C, A<->C.
+
+13.#- 120U A->B<-C, A<->C.
+
+14.#- 120C A->B->C, A<->C.
+
+15.#- 210 A->B<->C, A<->C.
+
+16.#X 300 A<->B<->C, A<->C, the complete graph.
+
+-->
+</div>
+<div id="edge-density" class="section level2" number="2.5">
+<h2><span class="header-section-number">2.5</span> Edge-density</h2>
+<pre class="r test"><code># edge density
+igraph::edge_density(test_w1)</code></pre>
+<pre class="test2"><code>#&gt; [1] 0.004653465</code></pre>
+</div>
+<div id="degree-centrality" class="section level2" number="2.6">
+<h2><span class="header-section-number">2.6</span> Degree
+centrality</h2>
+<p>Degree centrality, often simply called ‘degree’, measures the number
+of connections a scholar, or ego, has with other scholars, known as
+alters. In the context of our dataset, we distinguish between two types
+of degrees: incoming connections (indegrees) and outgoing connections
+(outdegrees). Indegrees represent ties directed toward the ego, which in
+this case signify instances where the ego is <strong>not</strong> the
+primary author of a paper. Conversely, outdegrees represent ties
+originating from the ego, indicating collaborations where the ego
+assumes the role of the first author.</p>
+<pre class="r test"><code># Calculate degree centrality
+degree_testw1 &lt;- degree(test_w1)
+degree_testw1 &lt;- as.data.frame(degree_testw1)
+
+ggplot(degree_testw1, aes(x = as.numeric(degree_testw1))) +
+  geom_histogram(binwidth = 0.9, fill = &quot;#FFFFB3&quot;, color = &quot;black&quot;) +  
+  labs(
+    title = &quot;Distribution Degrees Wave 1&quot;,
+    x = &quot;Distribution of Degrees&quot;,
+    y = &quot;Count&quot;
+  ) +
+  ylim(0, 15) +  # Set y-axis limits 
+  theme_minimal(base_family = &quot;Arial&quot;) +  # Minimal, clean base theme
+  theme(
+    plot.background = element_rect(fill = &quot;#2d2d2d&quot;, color = NA),  # Dark background
+    panel.background = element_rect(fill = &quot;#2d2d2d&quot;, color = NA),  # Dark panel background
+    panel.grid.major = element_line(color = &quot;#444444&quot;),  # Subtle grid lines
+    panel.grid.minor = element_line(color = &quot;#444444&quot;),
+    axis.text = element_text(color = &quot;#f0f0f0&quot;),  # White axis text
+    axis.title = element_text(color = &quot;#f0f0f0&quot;, face = &quot;bold&quot;),  # Bold white axis titles
+    plot.title = element_text(color = &quot;#f0f0f0&quot;, face = &quot;bold&quot;, hjust = 0.5),  # White centered title
+    legend.background = element_rect(fill = &quot;#2d2d2d&quot;, color = NA),  # Dark legend background
+    legend.text = element_text(color = &quot;#f0f0f0&quot;)  # White legend text
+  ) +
+  guides(fill = &quot;none&quot;)  # Remove the legend</code></pre>
+<p><img src="draftdesresults_files/figure-html/degree-1.png" width="672" /></p>
+<!-- ylim was 65 at some point priot due to one higher bar, I wonder what changed since... -->
+<p>The indegree distribution is right-skewed. This suggests that only
+very few vertices have many infegrees, and that most vertices have a low
+number of indegrees.</p>
+</div>
+<div id="betweenness-centrality" class="section level2" number="2.7">
+<h2><span class="header-section-number">2.7</span> Betweenness
+Centrality</h2>
+<p>(with isolates)</p>
+<pre class="r test"><code># Calculate betweenness centrality
+betweenness_w1 &lt;- igraph::betweenness(test_w1, directed = TRUE)
+betweenness_w1 &lt;- as.data.frame(betweenness_w1)
+
+
+ggplot(betweenness_w1, aes(as.numeric(betweenness_w1), colour = as.numeric(betweenness_w1))) +
+  geom_histogram(binwidth = 1.2, fill = &quot;#FFFFB3&quot;) +
+  labs(
+    title = &quot;Distribution Betweenness Wave 1&quot;,
+    x = &quot;Distribution of Betweenness&quot;,
+    y = &quot;Count&quot;) +
+   theme_minimal(base_family = &quot;Arial&quot;) +  # Minimal, clean base theme
+  theme(
+    plot.background = element_rect(fill = &quot;#2d2d2d&quot;, color = NA),  # Dark background
+    panel.background = element_rect(fill = &quot;#2d2d2d&quot;, color = NA),  # Dark panel background
+    panel.grid.major = element_line(color = &quot;#444444&quot;),  # Subtle grid lines
+    panel.grid.minor = element_line(color = &quot;#444444&quot;),
+    axis.text = element_text(color = &quot;#f0f0f0&quot;),  # White axis text
+    axis.title = element_text(color = &quot;#f0f0f0&quot;, face = &quot;bold&quot;),  # Bold white axis titles
+    plot.title = element_text(color = &quot;#f0f0f0&quot;, face = &quot;bold&quot;, hjust = 0.5),  # White centered title
+    legend.background = element_rect(fill = &quot;#2d2d2d&quot;, color = NA),  # Dark legend background
+    legend.text = element_text(color = &quot;#f0f0f0&quot;)  # White legend text
+  ) +
+  guides(fill = guide_legend(title = &quot;Betweenness (rounded)&quot;))  # Customize legend</code></pre>
+<p><img src="draftdesresults_files/figure-html/betweenness-1.png" width="672" /></p>
+</div>
+<div id="clustering" class="section level2" number="2.8">
+<h2><span class="header-section-number">2.8</span> Clustering</h2>
+<pre class="r test"><code># Clustering the wave 
+clustering_w1 &lt;- igraph::transitivity(test_w1, type = &quot;local&quot;)
+clustering_w1 &lt;- as.data.frame(clustering_w1)
+
+# Generate the dark mode plot with a single color fill
+ggplot(clustering_w1, aes(x = as.numeric(clustering_w1))) +
+   geom_histogram(binwidth = 0.05, fill = &quot;#FFFFB3&quot;, color = &quot;black&quot;, position = &quot;dodge&quot;) +  
+  labs(
+    title = &quot;Distribution Clustering Wave 1&quot;,
+    x = &quot;Distribution of Clustering&quot;,
+    y = &quot;Count&quot;
+  ) +
+  theme_minimal(base_family = &quot;Arial&quot;) +  # Clean, minimal base theme
+  theme(
+    plot.background = element_rect(fill = &quot;#2d2d2d&quot;, color = NA),  # Dark background
+    panel.background = element_rect(fill = &quot;#2d2d2d&quot;, color = NA),  # Dark panel background
+    panel.grid.major = element_line(color = &quot;#444444&quot;),  # Subtle grid lines
+    panel.grid.minor = element_line(color = &quot;#444444&quot;),
+    axis.text = element_text(color = &quot;#f0f0f0&quot;),  # White axis text
+    axis.title = element_text(color = &quot;#f0f0f0&quot;, face = &quot;bold&quot;),  # Bold white axis titles
+    plot.title = element_text(color = &quot;#f0f0f0&quot;, face = &quot;bold&quot;, hjust = 0.5),  # White centered title
+    legend.background = element_rect(fill = &quot;#2d2d2d&quot;, color = NA),  # Dark legend background
+    legend.text = element_text(color = &quot;#f0f0f0&quot;)  # White legend text
+  ) + guides(fill = &quot;none&quot;)  # Remove the legend (since all bars are the same color)</code></pre>
+<p><img src="draftdesresults_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
+</div>
+<div id="segregation" class="section level2" number="2.9">
+<h2><span class="header-section-number">2.9</span> Segregation ?</h2>
+</div>
+</div>
+<div id="plots" class="section level1" number="3">
+<h1><span class="header-section-number">3</span> Plots</h1>
+</div>
+
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIkRlc2NyaXB0aXZlIFJlc3VsdHMiDQphdXRob3I6ICJWZXJvb28iDQpkYXRlOiAiMjAyNC0xMS0yMyINCm91dHB1dDogaHRtbF9kb2N1bWVudA0KLS0tDQoNCjxodG1sIGxhbmc9ImVuIj4NCg0KPGhlYWQ+DQoNCjxtZXRhIGNoYXJzZXQ9IlVURi04Ij4NCg0KPG1ldGEgbmFtZT0idmlld3BvcnQiIGNvbnRlbnQ9IndpZHRoPWRldmljZS13aWR0aCwgaW5pdGlhbC1zY2FsZT0xLjAiPg0KDQo8dGl0bGU+TXkgRGVzY3JpcHRpdmVzPC90aXRsZT4NCg0KPGxpbmsgcmVsPSJzdHlsZXNoZWV0IiBocmVmPSJzdHlsZXMuY3NzIj4gPCEtLSBMaW5rIHRvIHRoZSBDU1MgZmlsZSBJIGNyZWF0ZWQgZm9yIGRhcmsgbW9kZSBjb2RlIGNodW5rcyAtLT4NCg0KPC9oZWFkPg0KDQo8L2h0bWw+DQpgYGB7ciBzZXR1cCwgaW5jbHVkZT1GQUxTRX0NCmtuaXRyOjpvcHRzX2NodW5rJHNldChlY2hvID0gVFJVRSkNCmBgYA0KDQpgYGB7ciBnbG9iYWxzZXR0aW5ncywgZWNobz1GQUxTRSwgd2FybmluZz1GQUxTRSwgcmVzdWx0cz0naGlkZSd9DQpsaWJyYXJ5KGtuaXRyKQ0KDQprbml0cjo6b3B0c19jaHVuayRzZXQoZWNobyA9IFRSVUUpDQpvcHRzX2NodW5rJHNldCh0aWR5Lm9wdHM9bGlzdCh3aWR0aC5jdXRvZmY9MTAwKSx0aWR5PVRSVUUsIHdhcm5pbmcgPSBGQUxTRSwgbWVzc2FnZSA9IEZBTFNFLGNvbW1lbnQgPSAiIz4iLCBjYWNoZT1UUlVFLCBjbGFzcy5zb3VyY2U9YygidGVzdCIpLCBjbGFzcy5vdXRwdXQ9YygidGVzdDIiKSkNCm9wdGlvbnMod2lkdGggPSAxMDApDQpyZ2w6OnNldHVwS25pdHIoKQ0KDQpjb2xvcml6ZSA8LSBmdW5jdGlvbih4LCBjb2xvcikge3NwcmludGYoIjxzcGFuIHN0eWxlPSdjb2xvcjogJXM7Jz4lczwvc3Bhbj4iLCBjb2xvciwgeCkgfQ0KDQpgYGANCg0KYGBge3Iga2xpcHB5LCBlY2hvPUZBTFNFLCBpbmNsdWRlPVRSVUV9DQprbGlwcHk6OmtsaXBweShwb3NpdGlvbiA9IGMoJ3RvcCcsICdyaWdodCcpKQ0KI2tsaXBweTo6a2xpcHB5KGNvbG9yID0gJ2RhcmtyZWQnKQ0KI2tsaXBweTo6a2xpcHB5KHRvb2x0aXBfbWVzc2FnZSA9ICdDbGljayB0byBjb3B5JywgdG9vbHRpcF9zdWNjZXNzID0gJ0RvbmUnKQ0KYGBgDQoNCiMgR2V0dGluZyBzdGFydGVkDQoNCmBgYHtyIGNsZWFufQ0Kcm0obGlzdCA9IGxzKCkpDQpgYGANCg0KIyMgUGFja2FnZXMNCg0KYGBge3IgcGFja2FnZSwgaGlkZT1UUlVFfQ0KcmVxdWlyZSh0aWR5dmVyc2UpDQpyZXF1aXJlKFJTaWVuYSkNCnJlcXVpcmUoUnNpZW5hVHdvU3RlcCkNCg0KI2luc3RhbGwucGFja2FnZXMoImRhdGEudGFibGUiKQ0KcmVxdWlyZShkYXRhLnRhYmxlKSAgIyBtYWlubHkgZm9yIGZhc3RlciBkYXRhIGhhbmRsaW5nDQojIGluc3RhbGwucGFja2FnZXMoJ3htbDInKQ0KcmVxdWlyZSh4bWwyKQ0KIyBpbnN0YWxsLnBhY2thZ2VzKCdydmVzdCcpDQpyZXF1aXJlKHJ2ZXN0KQ0KcmVxdWlyZShpZ3JhcGgpDQpyZXF1aXJlKGdncmFwaCkNCnJlcXVpcmUoZ2dwbG90MikNCg0KDQojaW5zdGFsbC5wYWNrYWdlcygndmlzTmV0d29yaycpDQpyZXF1aXJlKHZpc05ldHdvcmspDQojaW5zdGFsbC5wYWNrYWdlcygndGhyZWVqcycpDQpyZXF1aXJlKHRocmVlanMpDQojaW5zdGFsbC5wYWNrYWdlcygnbmV0d29ya0QzJykNCnJlcXVpcmUobmV0d29ya0QzKQ0KDQpyZXF1aXJlKFJDb2xvckJyZXdlcikNCg0KDQpgYGANCg0KIyMgRnVuY3Rpb25zDQoNCkZ1bmN0aW9ucyBjaHVuaw0KDQpgYGB7ciBmdW5jdGlvbnMgMSwgaGlkZSA9VFJVRX0NCmZwYWNrYWdlLmNoZWNrIDwtIGZ1bmN0aW9uKHBhY2thZ2VzKSB7DQogICAgbGFwcGx5KHBhY2thZ2VzLCBGVU4gPSBmdW5jdGlvbih4KSB7DQogICAgICAgIGlmICghcmVxdWlyZSh4LCBjaGFyYWN0ZXIub25seSA9IFRSVUUpKSB7DQogICAgICAgICAgICBpbnN0YWxsLnBhY2thZ2VzKHgsIGRlcGVuZGVuY2llcyA9IFRSVUUpDQogICAgICAgICAgICBsaWJyYXJ5KHgsIGNoYXJhY3Rlci5vbmx5ID0gVFJVRSkNCiAgICAgICAgfQ0KICAgIH0pDQp9DQoNCmZzYXZlIDwtIGZ1bmN0aW9uKHgsIGZpbGUgPSBOVUxMLCBsb2NhdGlvbiA9ICIuL2RhdGEvcHJvY2Vzc2VkLyIpIHsNCiAgICBpZmVsc2UoIWRpci5leGlzdHMoImRhdGEiKSwgZGlyLmNyZWF0ZSgiZGF0YSIpLCBGQUxTRSkNCiAgICBpZmVsc2UoIWRpci5leGlzdHMoImRhdGEvcHJvY2Vzc2VkIiksIGRpci5jcmVhdGUoImRhdGEvcHJvY2Vzc2VkIiksIEZBTFNFKQ0KICAgIGlmIChpcy5udWxsKGZpbGUpKQ0KICAgICAgICBmaWxlID0gZGVwYXJzZShzdWJzdGl0dXRlKHgpKQ0KICAgIGRhdGVuYW1lIDwtIHN1YnN0cihnc3ViKCJbOi1dIiwgIiIsIFN5cy50aW1lKCkpLCAxLCA4KQ0KICAgIHRvdGFsbmFtZSA8LSBwYXN0ZShsb2NhdGlvbiwgZmlsZSwgIl8iLCBkYXRlbmFtZSwgIi5yZGEiLCBzZXAgPSAiIikNCiAgICBzYXZlKHgsIGZpbGUgPSB0b3RhbG5hbWUpICAjbmVlZCB0byBmaXggaWYgZmlsZSBpcyByZWxvYWRlZCBhcyBpbnB1dCBuYW1lLCBub3QgYXMgeC4gDQp9DQoNCmZsb2FkIDwtIGZ1bmN0aW9uKGZpbGVuYW1lKSB7DQogICAgbG9hZChmaWxlbmFtZSkNCiAgICBnZXQobHMoKVtscygpICE9ICJmaWxlbmFtZSJdKQ0KfQ0KDQpmc2hvd2RmIDwtIGZ1bmN0aW9uKHgsIC4uLikgew0KICAgIGtuaXRyOjprYWJsZSh4LCBkaWdpdHMgPSAyLCAiaHRtbCIsIC4uLikgJT4lDQogICAgICAgIGthYmxlRXh0cmE6OmthYmxlX3N0eWxpbmcoYm9vdHN0cmFwX29wdGlvbnMgPSBjKCJzdHJpcGVkIiwgImhvdmVyIikpICU+JQ0KICAgICAgICBrYWJsZUV4dHJhOjpzY3JvbGxfYm94KHdpZHRoID0gIjEwMCUiLCBoZWlnaHQgPSAiMzAwcHgiKQ0KfQ0KDQoNCiMgdGhpcyBpcyB0aGUgbW9zdCBpbXBvcnRhbnQgb25lLiBXZSBjcmVhdGVkIGl0IGluIHRoZSBwcmV2aW91cyBzY3JpcHQNCg0KZl9wdWJuZXRzIDwtIGZ1bmN0aW9uKGRmX3NjaG9sYXJzID0gZGYsIGxpc3RfcHVibGljYXRpb25zID0gcHVibGljYXRpb25zLCBkaXNjaXAgPSAic29jaW9sb2d5IisicG9saXRpY2FsIHNjaWVuY2UiLCBhZmZpbGlhdGlvbiA9ICJSVSIsDQogICAgd2F2ZXMgPSBsaXN0KHdhdmUxID0gYygyMDE4LCAyMDE5LCAyMDIwKSwgd2F2ZTIgPSBjKDIwMjEsIDIwMjIsIDIwMjMpKSkgew0KDQogICAgcHVibGljYXRpb25zIDwtIGxpc3RfcHVibGljYXRpb25zICU+JQ0KICAgICAgICBiaW5kX3Jvd3MoKSAlPiUNCiAgICAgICAgZGlzdGluY3QodGl0bGUsIC5rZWVwX2FsbCA9IFRSVUUpDQoNCiAgICBkZl9zY2hvbGFycyAlPiUNCiAgICAgICAgZmlsdGVyKGFmZmlsMSA9PSBhZmZpbGlhdGlvbiB8IGFmZmlsMiA9PSBhZmZpbGlhdGlvbikgJT4lDQogICAgICAgIGZpbHRlcihkaXNjaXBsaW5lID09IGRpc2NpcCkgLT4gZGZfc2VsDQoNCiAgICBuZXR3b3JrbGlzdCA8LSBsaXN0KCkNCiAgICBmb3IgKHdhdmUgaW4gMTpsZW5ndGgod2F2ZXMpKSB7DQogICAgICAgIG5ldHdvcmtsaXN0W1t3YXZlXV0gPC0gbWF0cml4KDAsIG5yb3cgPSBucm93KGRmX3NlbCksIG5jb2wgPSBucm93KGRmX3NlbCkpDQogICAgfQ0KDQogICAgcHVibGljYXRpb25saXN0IDwtIGxpc3QoKQ0KICAgIGZvciAod2F2ZSBpbiAxOmxlbmd0aCh3YXZlcykpIHsNCiAgICAgICAgcHVibGljYXRpb25saXN0W1t3YXZlXV0gPC0gcHVibGljYXRpb25zICU+JQ0KICAgICAgICAgICAgZmlsdGVyKGdzX2lkICVpbiUgZGZfc2VsJGdzX2lkKSAlPiUNCiAgICAgICAgICAgIGZpbHRlcih5ZWFyICVpbiUgd2F2ZXNbW3dhdmVdXSkgJT4lDQogICAgICAgICAgICBzZWxlY3QoYXV0aG9yKSAlPiUNCiAgICAgICAgICAgIGxhcHBseShzdHJfc3BsaXQsIHBhdHRlcm4gPSAiLCIpDQogICAgfQ0KDQogICAgcHVibGljYXRpb25saXN0MiA8LSBsaXN0KCkNCiAgICBmb3IgKHdhdmUgaW4gMTpsZW5ndGgod2F2ZXMpKSB7DQogICAgICAgIHB1YmxpY2F0aW9ubGlzdDJbW3dhdmVdXSA8LSBwdWJsaWNhdGlvbmxpc3RbW3dhdmVdXSRhdXRob3IgJT4lDQogICAgICAgICAgICAjIGxvd2VyY2FzZQ0KICAgICAgICBsYXBwbHkodG9sb3dlcikgJT4lDQogICAgICAgICAgICAjIFJlbW92aW5nIGRpYWNyaXRpY3MNCiAgICAgICAgbGFwcGx5KHN0cmlfdHJhbnNfZ2VuZXJhbCwgaWQgPSAibGF0aW4tYXNjaWkiKSAlPiUNCiAgICAgICAgICAgICMgb25seSBsYXN0IG5hbWUNCiAgICAgICAgbGFwcGx5KHdvcmQsIHN0YXJ0ID0gLTEsIHNlcCA9ICIgIikgJT4lDQogICAgICAgICAgICAjIG9ubHkgbGFzdCBsYXN0IG5hbWUNCiAgICAgICAgbGFwcGx5KHdvcmQsIHN0YXJ0ID0gLTEsIHNlcCA9ICItIikNCiAgICB9DQoNCiAgICBmb3IgKHdhdmUgaW4gMTpsZW5ndGgod2F2ZXMpKSB7DQogICAgICAgICMgbGV0IHVzIHJlbW92ZSBhbGwgcHVibGljYXRpb25zIHdpdGggb25seSBvbmUgYXV0aG9yDQogICAgICAgIHJlbW92ZSA8LSB3aGljaChzYXBwbHkocHVibGljYXRpb25saXN0Mltbd2F2ZV1dLCBGVU4gPSBmdW5jdGlvbih4KSBsZW5ndGgoeCkgPT0gMSkgPT0gVFJVRSkNCiAgICAgICAgcHVibGljYXRpb25saXN0Mltbd2F2ZV1dIDwtIHB1YmxpY2F0aW9ubGlzdDJbW3dhdmVdXVstcmVtb3ZlXQ0KICAgIH0NCg0KICAgIGZvciAod2F2ZSBpbiAxOmxlbmd0aCh3YXZlcykpIHsNCiAgICAgICAgcHVicyA8LSBwdWJsaWNhdGlvbmxpc3QyW1t3YXZlXV0NCiAgICAgICAgZm9yIChlZ28gaW4gMTpucm93KGRmX3NlbCkpIHsNCiAgICAgICAgICAgICMgd2hpY2ggZWdvPw0KICAgICAgICAgICAgbGFzdG5hbWVfZWdvIDwtIGRmX3NlbCRsYXN0bmFtZVtlZ29dDQogICAgICAgICAgICAjIGZvciBhbGwgcHVibGljYXRpb25zDQogICAgICAgICAgICBmb3IgKHB1YiBpbiAxOmxlbmd0aChwdWJzKSkgew0KICAgICAgICAgICAgICAgICMgb25seSBjb250aW51ZSBpZiBlZ28gaXMgYXV0aG9yIG9mIHB1Yg0KICAgICAgICAgICAgICAgIGlmIChsYXN0bmFtZV9lZ28gJWluJSBwdWJzW1twdWJdXSkgew0KICAgICAgICAgICAgICAgICAgYXV0X3BvdCA8LSB3aGljaC5tYXgocHVic1tbcHViXV0gJWluJSBsYXN0bmFtZV9lZ28pDQogICAgICAgICAgICAgICAgICAjIG9ubHkgY29udGludWUgaWYgZWdvIGlzIGZpcnN0IGF1dGhvciBvZiBwdWINCiAgICAgICAgICAgICAgICAgIGlmIChhdXRfcG90ID09IDEpIHsNCiAgICAgICAgICAgICAgICAgICAgIyBjaGVjayBhbGwgYWx0ZXJzL2NvLWF1dGhvcnMNCiAgICAgICAgICAgICAgICAgICAgZm9yIChhbHRlciBpbiAxOm5yb3coZGZfc2VsKSkgew0KICAgICAgICAgICAgICAgICAgICAgICMgd2hpY2ggYWx0ZXINCiAgICAgICAgICAgICAgICAgICAgICBsYXN0bmFtZV9hbHRlciA8LSBkZl9zZWwkbGFzdG5hbWVbYWx0ZXJdDQogICAgICAgICAgICAgICAgICAgICAgaWYgKGxhc3RuYW1lX2FsdGVyICVpbiUgcHVic1tbcHViXV0pIHsNCiAgICAgICAgICAgICAgICAgICAgICAgIG5ldHdvcmtsaXN0W1t3YXZlXV1bZWdvLCBhbHRlcl0gPC0gbmV0d29ya2xpc3RbW3dhdmVdXVtlZ28sIGFsdGVyXSArIDENCiAgICAgICAgICAgICAgICAgICAgICB9DQogICAgICAgICAgICAgICAgICAgIH0NCiAgICAgICAgICAgICAgICAgIH0NCiAgICAgICAgICAgICAgICB9DQogICAgICAgICAgICB9DQogICAgICAgIH0NCiAgICB9DQogICAgcmV0dXJuKGxpc3QoZGYgPSBkZl9zZWwsIG5ldHdvcmsgPSBuZXR3b3JrbGlzdCkpDQp9DQoNCmBgYA0KDQpNb3JlIGZ1bmN0aW9ucw0KDQpgYGB7ciBmdW5jdGlvbnMgMiwgaGlkZT1UUlVFfQ0KZmNvbG5ldCA8LSBmdW5jdGlvbihkYXRhID0gc2Nob2xhcnMsIHVuaXZlcnNpdHkgPSAiUlUiLCBkaXNjaXBsaW5lID0gInNvY2lvbG9neSIrInBvbGl0aWNhbCBzY2llbmNlIiwgd2F2ZXMgPSBsaXN0KGMoMjAxNSwNCiAgICAyMDE4KSwgYygyMDE5LCAyMDIzKSksIHR5cGUgPSBjKCJmaXJzdCIpKSB7DQoNCiAgICAjIHN0ZXAgMQ0KICAgIGRlbW9ncmFwaGljcyA8LSBkby5jYWxsKHJiaW5kLmRhdGEuZnJhbWUsIGRhdGEkZGVtb2dyYXBoaWNzKQ0KICAgIGRlbW9ncmFwaGljcyA8LSBkZW1vZ3JhcGhpY3MgJT4lDQogICAgICAgIG11dGF0ZShVbml2ZXJzaXRlaXQxLjIyID0gcmVwbGFjZShVbml2ZXJzaXRlaXQxLjIyLCBpcy5uYShVbml2ZXJzaXRlaXQxLjIyKSwgIiIpLCBVbml2ZXJzaXRlaXQyLjIyID0gcmVwbGFjZShVbml2ZXJzaXRlaXQyLjIyLA0KICAgICAgICAgICAgaXMubmEoVW5pdmVyc2l0ZWl0Mi4yMiksICIiKSwgVW5pdmVyc2l0ZWl0MS4yNCA9IHJlcGxhY2UoVW5pdmVyc2l0ZWl0MS4yNCwgaXMubmEoVW5pdmVyc2l0ZWl0MS4yNCksDQogICAgICAgICAgICAiIiksIFVuaXZlcnNpdGVpdDIuMjQgPSByZXBsYWNlKFVuaXZlcnNpdGVpdDIuMjQsIGlzLm5hKFVuaXZlcnNpdGVpdDIuMjQpLCAiIiksIGRpc2NpcGxpbmUuMjIgPSByZXBsYWNlKGRpc2NpcGxpbmUuMjIsDQogICAgICAgICAgICBpcy5uYShkaXNjaXBsaW5lLjIyKSwgIiIpLCBkaXNjaXBsaW5lLjI0ID0gcmVwbGFjZShkaXNjaXBsaW5lLjI0LCBpcy5uYShkaXNjaXBsaW5lLjI0KSwgIiIpKQ0KDQogICAgc2FtcGxlIDwtIHdoaWNoKChkZW1vZ3JhcGhpY3MkVW5pdmVyc2l0ZWl0MS4yMiAlaW4lIHVuaXZlcnNpdHkgfCBkZW1vZ3JhcGhpY3MkVW5pdmVyc2l0ZWl0Mi4yMiAlaW4lDQogICAgICAgIHVuaXZlcnNpdHkgfCBkZW1vZ3JhcGhpY3MkVW5pdmVyc2l0ZWl0MS4yNCAlaW4lIHVuaXZlcnNpdHkgfCBkZW1vZ3JhcGhpY3MkVW5pdmVyc2l0ZWl0Mi4yNCAlaW4lDQogICAgICAgIHVuaXZlcnNpdHkpICYgKGRlbW9ncmFwaGljcyRkaXNjaXBsaW5lLjIyICVpbiUgZGlzY2lwbGluZSB8IGRlbW9ncmFwaGljcyRkaXNjaXBsaW5lLjI0ICVpbiUgZGlzY2lwbGluZSkpDQoNCiAgICBkZW1vZ3JhcGhpY3Nfc29jIDwtIGRlbW9ncmFwaGljc1tzYW1wbGUsIF0NCiAgICBzY2hvbGFyc19zZWwgPC0gbGFwcGx5KHNjaG9sYXJzLCAiWyIsIHNhbXBsZSkNCg0KICAgICMgc3RlcCAyDQogICAgaWRzIDwtIGRlbW9ncmFwaGljc19zb2MkYXVfaWQNCiAgICBud2F2ZXMgPC0gbGVuZ3RoKHdhdmVzKQ0KICAgIG5ldHMgPC0gYXJyYXkoMCwgZGltID0gYyhud2F2ZXMsIGxlbmd0aChpZHMpLCBsZW5ndGgoaWRzKSksIGRpbW5hbWVzID0gbGlzdCh3YXZlID0gMTpud2F2ZXMsIGlkcywNCiAgICAgICAgaWRzKSkNCiAgICBkaW1uYW1lcyhuZXRzKQ0KDQogICAgIyBzdGVwIDMNCiAgICBkZl93b3JrcyA8LSB0aWJibGUod29ya3NfaWQgPSB1bmxpc3QobGFwcGx5KHNjaG9sYXJzX3NlbCR3b3JrLCBmdW5jdGlvbihsKSBsJGlkKSksIHdvcmtzX2F1dGhvciA9IHVubGlzdChsYXBwbHkoc2Nob2xhcnNfc2VsJHdvcmssDQogICAgICAgIGZ1bmN0aW9uKGwpIGwkYXV0aG9yKSwgcmVjdXJzaXZlID0gRkFMU0UpLCB3b3Jrc195ZWFyID0gdW5saXN0KGxhcHBseShzY2hvbGFyc19zZWwkd29yaywgZnVuY3Rpb24obCkgbCRwdWJsaWNhdGlvbl95ZWFyKSwNCiAgICAgICAgcmVjdXJzaXZlID0gRkFMU0UpKQ0KDQogICAgZGZfd29ya3MgPC0gZGZfd29ya3NbIWR1cGxpY2F0ZWQoZGZfd29ya3MpLCBdDQoNCiAgICAjIHN0ZXAgNA0KICAgIGlmICh0eXBlID09ICJmaXJzdCIpIHsNCiAgICAgICAgZm9yIChqIGluIDE6bndhdmVzKSB7DQogICAgICAgICAgICBkZl93b3Jrc193IDwtIGRmX3dvcmtzW2RmX3dvcmtzJHdvcmtzX3llYXIgPj0gd2F2ZXNbW2pdXVsxXSAmIGRmX3dvcmtzJHdvcmtzX3llYXIgPD0gd2F2ZXNbW2pdXVsyXSwNCiAgICAgICAgICAgICAgICBdDQogICAgICAgICAgICBmb3IgKGkgaW4gMTpucm93KGRmX3dvcmtzX3cpKSB7DQogICAgICAgICAgICAgICAgZWdvIDwtIGRmX3dvcmtzX3ckd29ya3NfYXV0aG9yW2ldW1sxXV0kYXVfaWRbMV0NCiAgICAgICAgICAgICAgICBhbHRlcnMgPC0gZGZfd29ya3NfdyR3b3Jrc19hdXRob3JbaV1bWzFdXSRhdV9pZFstMV0NCiAgICAgICAgICAgICAgICBpZiAoc3VtKGlkcyAlaW4lIGVnbykgPiAwICYgc3VtKGlkcyAlaW4lIGFsdGVycykgPiAwKSB7DQogICAgICAgICAgICAgICAgICBuZXRzW2osIHdoaWNoKGlkcyAlaW4lIGVnbyksIHdoaWNoKGlkcyAlaW4lIGFsdGVycyldIDwtIDENCiAgICAgICAgICAgICAgICB9DQogICAgICAgICAgICB9DQogICAgICAgIH0NCiAgICB9DQoNCiAgICBpZiAodHlwZSA9PSAibGFzdCIpIHsNCiAgICAgICAgZm9yIChqIGluIDE6bndhdmVzKSB7DQogICAgICAgICAgICBkZl93b3Jrc193IDwtIGRmX3dvcmtzW2RmX3dvcmtzJHdvcmtzX3llYXIgPj0gd2F2ZXNbW2pdXVsxXSAmIGRmX3dvcmtzJHdvcmtzX3llYXIgPD0gd2F2ZXNbW2pdXVsyXSwNCiAgICAgICAgICAgICAgICBdDQogICAgICAgICAgICBmb3IgKGkgaW4gMTpucm93KGRmX3dvcmtzX3cpKSB7DQogICAgICAgICAgICAgICAgZWdvIDwtIHJldihkZl93b3Jrc193JHdvcmtzX2F1dGhvcltpXVtbMV1dJGF1X2lkKVsxXQ0KICAgICAgICAgICAgICAgIGFsdGVycyA8LSByZXYoZGZfd29ya3NfdyR3b3Jrc19hdXRob3JbaV1bWzFdXSRhdV9pZClbLTFdDQogICAgICAgICAgICAgICAgaWYgKHN1bShpZHMgJWluJSBlZ28pID4gMCAmIHN1bShpZHMgJWluJSBhbHRlcnMpID4gMCkgew0KICAgICAgICAgICAgICAgICAgbmV0c1tqLCB3aGljaChpZHMgJWluJSBlZ28pLCB3aGljaChpZHMgJWluJSBhbHRlcnMpXSA8LSAxDQogICAgICAgICAgICAgICAgfQ0KICAgICAgICAgICAgfQ0KICAgICAgICB9DQogICAgfQ0KDQogICAgaWYgKHR5cGUgPT0gImFsbCIpIHsNCiAgICAgICAgZm9yIChqIGluIDE6bndhdmVzKSB7DQogICAgICAgICAgICBkZl93b3Jrc193IDwtIGRmX3dvcmtzW2RmX3dvcmtzJHdvcmtzX3llYXIgPj0gd2F2ZXNbW2pdXVsxXSAmIGRmX3dvcmtzJHdvcmtzX3llYXIgPD0gd2F2ZXNbW2pdXVsyXSwNCiAgICAgICAgICAgICAgICBdDQogICAgICAgICAgICBmb3IgKGkgaW4gMTpucm93KGRmX3dvcmtzX3cpKSB7DQogICAgICAgICAgICAgICAgZWdvcyA8LSBkZl93b3Jrc193JHdvcmtzX2F1dGhvcltpXVtbMV1dJGF1X2lkDQogICAgICAgICAgICAgICAgaWYgKHN1bShpZHMgJWluJSBlZ29zKSA+IDApIHsNCiAgICAgICAgICAgICAgICAgIG5ldHNbaiwgd2hpY2goaWRzICVpbiUgZWdvcyksIHdoaWNoKGlkcyAlaW4lIGVnb3MpXSA8LSAxDQogICAgICAgICAgICAgICAgfQ0KICAgICAgICAgICAgfQ0KICAgICAgICB9DQogICAgfQ0KICAgIG91dHB1dCA8LSBsaXN0KCkNCiAgICBvdXRwdXQkZGF0YSA8LSBzY2hvbGFyc19zZWwNCiAgICBvdXRwdXQkbmV0cyA8LSBuZXRzDQogICAgcmV0dXJuKG91dHB1dCkNCn0NCmBgYA0KDQojIyBMb2FkIGRhdGENCg0KU2Nob2xhciBkYXRhDQoNCmBgYHtyIHNjaG9sYXIgZGF0YX0NCnNjaG9sYXJzIDwtIGZsb2FkKCIuL2RhdGEvcHJvY2Vzc2VkL3NjaG9sYXJzXzIwMjQwOTI0LnJkYSIpIA0KI21ha2Ugc3VyZSB0byBsZWFkIGZsb2FkIGZpcnN0IG9mIGNvdXJzZQ0KYGBgDQoNCmBgYHtyIHNhdmluZyBzY2hvbGFyIG91dHB1dH0NCiMgc2F2ZSB0aGUgb3V0cHV0IG9mIHlvdXIgZnVuY3Rpb24NCg0KdGVzdCAgPC0gZmNvbG5ldChkYXRhID0gc2Nob2xhcnMsIA0KICAgICAgICAgICAgICAgIHVuaXZlcnNpdHkgPSAiUlUiLCANCiAgICAgICAgICAgICAgICBkaXNjaXBsaW5lID0gYygic29jaW9sb2d5IiwgInBvbGl0aWNhbCBzY2llbmNlIiksDQogICAgICAgICAgICAgICAgd2F2ZXMgPSBsaXN0KGMoMjAxNSwgMjAxOCksIGMoMjAxOSwgMjAyMykpLCANCiAgICAgICAgICAgICAgICB0eXBlID0gYygiZmlyc3QiKSkNCmBgYA0KDQpFZ28gZGF0YQ0KDQpgYGB7ciBkZl9lZ28gZGF0YX0NCmRmX2VnbyA8LSBmbG9hZCgiLi9kYXRhL3Byb2Nlc3NlZC9kZl9lZ29fMjAyNDExMDgucmRhIikNCg0KYGBgDQoNCmBgYHtyIG1hdHJpeCBkYXRhIGVnb30NCg0KdGVzdF93MSA8LSBpZ3JhcGg6OmdyYXBoX2Zyb21fYWRqYWNlbmN5X21hdHJpeCgNCiAgdGVzdCRuZXRzWzEsLF0sICMgZmlyc3Qgd2F2ZSBvZiBkYXRhLiANCiAgIyAodGh1cyBJIHNlbGVjdCB0aGUgYXJyYXkgb2YgbmV0d29ya3MgYW5kIHRha2UgdGhlIGZpcnN0IG1hdHJpeCkNCiAgbW9kZSA9IGMoImRpcmVjdGVkIiksDQogIHdlaWdodGVkID0gTlVMTCwNCiAgZGlhZyA9IEZBTFNFLA0KICBhZGQuY29sbmFtZXMgPSBOVUxMLA0KICBhZGQucm93bmFtZXMgPSBOVUxMKQ0KDQpgYGANCg0KIyBOZXR3b3JrIERlc2NyaXB0aW9uDQoNClRoZSBuZXR3b3JrIGRhdGEgd2UgYXJlIGxvb2tpbmcgYXQgcGVydGFpbnMgdG8gMTAxIHNjaG9sYXJzIGFuZCB0aGVpciBwdWJsaWNhdGlvbnMuIEluIHRoZSB0aW1lIGZyYW1lIG9mIHRoZSB3YXZlIGF0IGhhbmQsIG5hbWVseSBmb3JtIDIwMTUgdG8gMjAxOCwgd2UgZmluZCA0NyBlZGdlcywgd2l0aCA2IHJlY2lwcm9jYXRlZCBjb2xsYWJvcmF0aW9ucyAzNiB0aWVzIHRoYXQgYXJlIGFzeW1tZXRyaWMuIEFkZGl0aW9uYWxseSwgdGhlcmUgd2VyZSA1MDA5IG9jY2FzaW9ucyBpbiB3aGljaCBhIHRpZXMgY291bGQgaGF2ZSBiZWVuIG1hZGUgYnV0IHdhcyBub3QuIFRoZSBlZGdlIGRlbnNpdHkgb2YgMC4wMDQgc3VnZ2VzdHMgdGhhdCBmcm9tIGFsbCBwb3NzaWJsZSBlZGdlcywgdGhpcyBzYW1wbGUgY29udGFpbnMgcmVsYXRpdmVseSBmZXcuDQoNCkluIHRlcm1zIG9mIHRyaWFkLWNvbmZpZ3VyYXRpb25zLCBwZXJ0YWluaW5nIHRvIHRoZSBkaWZmZXJlbnQgcG9zc2liaWxpdGllcyB0aHJlZSBzY2hvbGFycyBjb3VsZCBjb2xsYWJvcmF0ZSwgd2UgZmluZCB0aGF0IHRoZSBtb3N0IGNvbW1vbiBvbmUgaXMgbm8gY29sbGFib3JhdGlvbiBhdCBhbGwgKGNvbmZpZ3VyYXRpb24gJzAwMycpLiBCZXlvbmQgdGhhdCwgdGhlIGNvbmZpZ3VyYXRpb24gJzAxMicgaXMgYWxzbyBjb21tb24sIG1lYW5pbmcgdGhhdCBvbmx5IG9uZSBkaXJlY3RlZCBlZGdlIGlzIHByZXNlbnQgaW4gdGhlIHRyaWFkLiBJbiBvdXIgc2FtcGxlIGl0IGlzIGFsc28gY29tbW9uIGZvciBzdWNoIGVkZ2UgdG8gYmUgcmVjaXByb2NhdGVkLCBhcyBzZWVuIGluIHRoZSB0aGlyZC1oaWdoZXMtdCBjb3VudCBvZiB0aGUgdHJpYWQtY29uZmlndXJhdGlvbiAnMTAyJywgYSBncmFwaCB3aXRoIGEgbXV0dWFsIGNvbm5lY3Rpb24gYmV0d2VlbiB0d28gdmVydGljZXMuIE92ZXJhbGwsIHRoZSBzZWVtcyB0byBiZSBoaWdoIG51bWJlciBvZiBpc29sYXRlcyBpbiB0aGUgc2FtcGxlIG5ldHdvcmsuDQoNCiMjIE5yLiBvZiBub2Rlcy92ZXJ0aWNlcw0KDQpgYGB7ciBub2Rlc30NCnZjb3VudCh0ZXN0X3cxKQ0KYGBgDQoNCiMjIE5yLiBvZiBlZGdlcw0KDQpgYGB7ciBlZGdlc30NCmVjb3VudCh0ZXN0X3cxKQ0KYGBgDQoNCiMjIER5YWQgY2Vuc3VzDQoNCmBgYHtyIGR5YWQgY2VufQ0KaWdyYXBoOjpkeWFkX2NlbnN1cyh0ZXN0X3cxKQ0KYGBgDQoNCiMjIFRyaWFkLWNlbnN1cw0KDQpgYGB7ciB0cmlhZCBjZW59DQppZ3JhcGg6OnRyaWFkX2NlbnN1cyh0ZXN0X3cxKQ0KYGBgDQoNCmBgYHs9aHRtbH0NCjwhLS0gDQpUUklBRCBDT05GSUdVUkFUSU9OUyAoMTYgcG9zc2libGUpDQoNCm8gVGhyZWUgZGlnaXRzIFt4LCB4LCB4XQ0KICBGaXJzdDogbnIuIG9mIHJlY2lwcm9jYWwgdGllcyANCiAgTWlkZGxlIGNvdW50czogbnIgb2YgZGlyZWN0ZWQgdGllcw0KICBPbiByaWdodDogaWYgbm8gdGllcw0KbyBELCBVLCBDIA0KICBEb3duIA0KICBVcCANCiAgQ3ljbGljYWwgDQoNCg0KMS4gIyAwMDMgQSxCLEMsIHRoZSBlbXB0eSBncmFwaC4NCg0KMi4gIyAwMTIgQS0+QiwgQywgdGhlIGdyYXBoIHdpdGggYSBzaW5nbGUgZGlyZWN0ZWQgZWRnZS4NCg0KMy4gIyAxMDIgQTwtPkIsIEMsIHRoZSBncmFwaCB3aXRoIGEgbXV0dWFsIGNvbm5lY3Rpb24gYmV0d2VlbiB0d28gdmVydGljZXMuDQoNCjQuICMgMDIxRCBBPC1CLT5DLCB0aGUgb3V0LXN0YXIuDQoNCjUuICMgMDIxVSBBLT5CPC1DLCB0aGUgaW4tc3Rhci4NCg0KNi4gIyAwMjFDIEEtPkItPkMsIGRpcmVjdGVkIGxpbmUuDQoNCjcuICMgMTExRCBBPC0+QjwtQy4NCg0KOC4gIyAxMTFVIEE8LT5CLT5DLg0KDQo5LiAjLSAwMzBUIEEtPkI8LUMsIEEtPkMuDQoNCjEwLiNYIDAzMEMgQTwtQjwtQywgQS0+Qy4NCg0KMTEuIy0gMjAxIEE8LT5CPC0+Qy4NCg0KMTIuI1ggMTIwRCBBPC1CLT5DLCBBPC0+Qy4NCg0KMTMuIy0gMTIwVSBBLT5CPC1DLCBBPC0+Qy4NCg0KMTQuIy0gMTIwQyBBLT5CLT5DLCBBPC0+Qy4NCg0KMTUuIy0gMjEwIEEtPkI8LT5DLCBBPC0+Qy4NCg0KMTYuI1ggMzAwIEE8LT5CPC0+QywgQTwtPkMsIHRoZSBjb21wbGV0ZSBncmFwaC4NCg0KLS0+DQpgYGANCiMjIEVkZ2UtZGVuc2l0eQ0KDQpgYGB7ciBlZGdlIGRlbnN9DQojIGVkZ2UgZGVuc2l0eQ0KaWdyYXBoOjplZGdlX2RlbnNpdHkodGVzdF93MSkNCmBgYA0KDQojIyBEZWdyZWUgY2VudHJhbGl0eQ0KDQpEZWdyZWUgY2VudHJhbGl0eSwgb2Z0ZW4gc2ltcGx5IGNhbGxlZCAnZGVncmVlJywgbWVhc3VyZXMgdGhlIG51bWJlciBvZiBjb25uZWN0aW9ucyBhIHNjaG9sYXIsIG9yIGVnbywgaGFzIHdpdGggb3RoZXIgc2Nob2xhcnMsIGtub3duIGFzIGFsdGVycy4gSW4gdGhlIGNvbnRleHQgb2Ygb3VyIGRhdGFzZXQsIHdlIGRpc3Rpbmd1aXNoIGJldHdlZW4gdHdvIHR5cGVzIG9mIGRlZ3JlZXM6IGluY29taW5nIGNvbm5lY3Rpb25zIChpbmRlZ3JlZXMpIGFuZCBvdXRnb2luZyBjb25uZWN0aW9ucyAob3V0ZGVncmVlcykuIEluZGVncmVlcyByZXByZXNlbnQgdGllcyBkaXJlY3RlZCB0b3dhcmQgdGhlIGVnbywgd2hpY2ggaW4gdGhpcyBjYXNlIHNpZ25pZnkgaW5zdGFuY2VzIHdoZXJlIHRoZSBlZ28gaXMgKipub3QqKiB0aGUgcHJpbWFyeSBhdXRob3Igb2YgYSBwYXBlci4gQ29udmVyc2VseSwgb3V0ZGVncmVlcyByZXByZXNlbnQgdGllcyBvcmlnaW5hdGluZyBmcm9tIHRoZSBlZ28sIGluZGljYXRpbmcgY29sbGFib3JhdGlvbnMgd2hlcmUgdGhlIGVnbyBhc3N1bWVzIHRoZSByb2xlIG9mIHRoZSBmaXJzdCBhdXRob3IuDQoNCmBgYHtyIGRlZ3JlZX0NCiMgQ2FsY3VsYXRlIGRlZ3JlZSBjZW50cmFsaXR5DQpkZWdyZWVfdGVzdHcxIDwtIGRlZ3JlZSh0ZXN0X3cxKQ0KZGVncmVlX3Rlc3R3MSA8LSBhcy5kYXRhLmZyYW1lKGRlZ3JlZV90ZXN0dzEpDQoNCmdncGxvdChkZWdyZWVfdGVzdHcxLCBhZXMoeCA9IGFzLm51bWVyaWMoZGVncmVlX3Rlc3R3MSkpKSArDQogIGdlb21faGlzdG9ncmFtKGJpbndpZHRoID0gMC45LCBmaWxsID0gIiNGRkZGQjMiLCBjb2xvciA9ICJibGFjayIpICsgIA0KICBsYWJzKA0KICAgIHRpdGxlID0gIkRpc3RyaWJ1dGlvbiBEZWdyZWVzIFdhdmUgMSIsDQogICAgeCA9ICJEaXN0cmlidXRpb24gb2YgRGVncmVlcyIsDQogICAgeSA9ICJDb3VudCINCiAgKSArDQogIHlsaW0oMCwgMTUpICsgICMgU2V0IHktYXhpcyBsaW1pdHMgDQogIHRoZW1lX21pbmltYWwoYmFzZV9mYW1pbHkgPSAiQXJpYWwiKSArICAjIE1pbmltYWwsIGNsZWFuIGJhc2UgdGhlbWUNCiAgdGhlbWUoDQogICAgcGxvdC5iYWNrZ3JvdW5kID0gZWxlbWVudF9yZWN0KGZpbGwgPSAiIzJkMmQyZCIsIGNvbG9yID0gTkEpLCAgIyBEYXJrIGJhY2tncm91bmQNCiAgICBwYW5lbC5iYWNrZ3JvdW5kID0gZWxlbWVudF9yZWN0KGZpbGwgPSAiIzJkMmQyZCIsIGNvbG9yID0gTkEpLCAgIyBEYXJrIHBhbmVsIGJhY2tncm91bmQNCiAgICBwYW5lbC5ncmlkLm1ham9yID0gZWxlbWVudF9saW5lKGNvbG9yID0gIiM0NDQ0NDQiKSwgICMgU3VidGxlIGdyaWQgbGluZXMNCiAgICBwYW5lbC5ncmlkLm1pbm9yID0gZWxlbWVudF9saW5lKGNvbG9yID0gIiM0NDQ0NDQiKSwNCiAgICBheGlzLnRleHQgPSBlbGVtZW50X3RleHQoY29sb3IgPSAiI2YwZjBmMCIpLCAgIyBXaGl0ZSBheGlzIHRleHQNCiAgICBheGlzLnRpdGxlID0gZWxlbWVudF90ZXh0KGNvbG9yID0gIiNmMGYwZjAiLCBmYWNlID0gImJvbGQiKSwgICMgQm9sZCB3aGl0ZSBheGlzIHRpdGxlcw0KICAgIHBsb3QudGl0bGUgPSBlbGVtZW50X3RleHQoY29sb3IgPSAiI2YwZjBmMCIsIGZhY2UgPSAiYm9sZCIsIGhqdXN0ID0gMC41KSwgICMgV2hpdGUgY2VudGVyZWQgdGl0bGUNCiAgICBsZWdlbmQuYmFja2dyb3VuZCA9IGVsZW1lbnRfcmVjdChmaWxsID0gIiMyZDJkMmQiLCBjb2xvciA9IE5BKSwgICMgRGFyayBsZWdlbmQgYmFja2dyb3VuZA0KICAgIGxlZ2VuZC50ZXh0ID0gZWxlbWVudF90ZXh0KGNvbG9yID0gIiNmMGYwZjAiKSAgIyBXaGl0ZSBsZWdlbmQgdGV4dA0KICApICsNCiAgZ3VpZGVzKGZpbGwgPSAibm9uZSIpICAjIFJlbW92ZSB0aGUgbGVnZW5kDQoNCmBgYA0KDQo8IS0tIHlsaW0gd2FzIDY1IGF0IHNvbWUgcG9pbnQgcHJpb3QgZHVlIHRvIG9uZSBoaWdoZXIgYmFyLCBJIHdvbmRlciB3aGF0IGNoYW5nZWQgc2luY2UuLi4gLS0+DQoNClRoZSBpbmRlZ3JlZSBkaXN0cmlidXRpb24gaXMgcmlnaHQtc2tld2VkLiBUaGlzIHN1Z2dlc3RzIHRoYXQgb25seSB2ZXJ5IGZldyB2ZXJ0aWNlcyBoYXZlIG1hbnkgaW5mZWdyZWVzLCBhbmQgdGhhdCBtb3N0IHZlcnRpY2VzIGhhdmUgYSBsb3cgbnVtYmVyIG9mIGluZGVncmVlcy4NCg0KIyMgQmV0d2Vlbm5lc3MgQ2VudHJhbGl0eQ0KDQood2l0aCBpc29sYXRlcykNCg0KYGBge3IgYmV0d2Vlbm5lc3N9DQojIENhbGN1bGF0ZSBiZXR3ZWVubmVzcyBjZW50cmFsaXR5DQpiZXR3ZWVubmVzc193MSA8LSBpZ3JhcGg6OmJldHdlZW5uZXNzKHRlc3RfdzEsIGRpcmVjdGVkID0gVFJVRSkNCmJldHdlZW5uZXNzX3cxIDwtIGFzLmRhdGEuZnJhbWUoYmV0d2Vlbm5lc3NfdzEpDQoNCg0KZ2dwbG90KGJldHdlZW5uZXNzX3cxLCBhZXMoYXMubnVtZXJpYyhiZXR3ZWVubmVzc193MSksIGNvbG91ciA9IGFzLm51bWVyaWMoYmV0d2Vlbm5lc3NfdzEpKSkgKw0KICBnZW9tX2hpc3RvZ3JhbShiaW53aWR0aCA9IDEuMiwgZmlsbCA9ICIjRkZGRkIzIikgKw0KICBsYWJzKA0KICAgIHRpdGxlID0gIkRpc3RyaWJ1dGlvbiBCZXR3ZWVubmVzcyBXYXZlIDEiLA0KICAgIHggPSAiRGlzdHJpYnV0aW9uIG9mIEJldHdlZW5uZXNzIiwNCiAgICB5ID0gIkNvdW50IikgKw0KICAgdGhlbWVfbWluaW1hbChiYXNlX2ZhbWlseSA9ICJBcmlhbCIpICsgICMgTWluaW1hbCwgY2xlYW4gYmFzZSB0aGVtZQ0KICB0aGVtZSgNCiAgICBwbG90LmJhY2tncm91bmQgPSBlbGVtZW50X3JlY3QoZmlsbCA9ICIjMmQyZDJkIiwgY29sb3IgPSBOQSksICAjIERhcmsgYmFja2dyb3VuZA0KICAgIHBhbmVsLmJhY2tncm91bmQgPSBlbGVtZW50X3JlY3QoZmlsbCA9ICIjMmQyZDJkIiwgY29sb3IgPSBOQSksICAjIERhcmsgcGFuZWwgYmFja2dyb3VuZA0KICAgIHBhbmVsLmdyaWQubWFqb3IgPSBlbGVtZW50X2xpbmUoY29sb3IgPSAiIzQ0NDQ0NCIpLCAgIyBTdWJ0bGUgZ3JpZCBsaW5lcw0KICAgIHBhbmVsLmdyaWQubWlub3IgPSBlbGVtZW50X2xpbmUoY29sb3IgPSAiIzQ0NDQ0NCIpLA0KICAgIGF4aXMudGV4dCA9IGVsZW1lbnRfdGV4dChjb2xvciA9ICIjZjBmMGYwIiksICAjIFdoaXRlIGF4aXMgdGV4dA0KICAgIGF4aXMudGl0bGUgPSBlbGVtZW50X3RleHQoY29sb3IgPSAiI2YwZjBmMCIsIGZhY2UgPSAiYm9sZCIpLCAgIyBCb2xkIHdoaXRlIGF4aXMgdGl0bGVzDQogICAgcGxvdC50aXRsZSA9IGVsZW1lbnRfdGV4dChjb2xvciA9ICIjZjBmMGYwIiwgZmFjZSA9ICJib2xkIiwgaGp1c3QgPSAwLjUpLCAgIyBXaGl0ZSBjZW50ZXJlZCB0aXRsZQ0KICAgIGxlZ2VuZC5iYWNrZ3JvdW5kID0gZWxlbWVudF9yZWN0KGZpbGwgPSAiIzJkMmQyZCIsIGNvbG9yID0gTkEpLCAgIyBEYXJrIGxlZ2VuZCBiYWNrZ3JvdW5kDQogICAgbGVnZW5kLnRleHQgPSBlbGVtZW50X3RleHQoY29sb3IgPSAiI2YwZjBmMCIpICAjIFdoaXRlIGxlZ2VuZCB0ZXh0DQogICkgKw0KICBndWlkZXMoZmlsbCA9IGd1aWRlX2xlZ2VuZCh0aXRsZSA9ICJCZXR3ZWVubmVzcyAocm91bmRlZCkiKSkgICMgQ3VzdG9taXplIGxlZ2VuZA0KDQoNCmBgYA0KDQojIyBDbHVzdGVyaW5nDQoNCmBgYHtyfQ0KIyBDbHVzdGVyaW5nIHRoZSB3YXZlIA0KY2x1c3RlcmluZ193MSA8LSBpZ3JhcGg6OnRyYW5zaXRpdml0eSh0ZXN0X3cxLCB0eXBlID0gImxvY2FsIikNCmNsdXN0ZXJpbmdfdzEgPC0gYXMuZGF0YS5mcmFtZShjbHVzdGVyaW5nX3cxKQ0KDQojIEdlbmVyYXRlIHRoZSBkYXJrIG1vZGUgcGxvdCB3aXRoIGEgc2luZ2xlIGNvbG9yIGZpbGwNCmdncGxvdChjbHVzdGVyaW5nX3cxLCBhZXMoeCA9IGFzLm51bWVyaWMoY2x1c3RlcmluZ193MSkpKSArDQogICBnZW9tX2hpc3RvZ3JhbShiaW53aWR0aCA9IDAuMDUsIGZpbGwgPSAiI0ZGRkZCMyIsIGNvbG9yID0gImJsYWNrIiwgcG9zaXRpb24gPSAiZG9kZ2UiKSArICANCiAgbGFicygNCiAgICB0aXRsZSA9ICJEaXN0cmlidXRpb24gQ2x1c3RlcmluZyBXYXZlIDEiLA0KICAgIHggPSAiRGlzdHJpYnV0aW9uIG9mIENsdXN0ZXJpbmciLA0KICAgIHkgPSAiQ291bnQiDQogICkgKw0KICB0aGVtZV9taW5pbWFsKGJhc2VfZmFtaWx5ID0gIkFyaWFsIikgKyAgIyBDbGVhbiwgbWluaW1hbCBiYXNlIHRoZW1lDQogIHRoZW1lKA0KICAgIHBsb3QuYmFja2dyb3VuZCA9IGVsZW1lbnRfcmVjdChmaWxsID0gIiMyZDJkMmQiLCBjb2xvciA9IE5BKSwgICMgRGFyayBiYWNrZ3JvdW5kDQogICAgcGFuZWwuYmFja2dyb3VuZCA9IGVsZW1lbnRfcmVjdChmaWxsID0gIiMyZDJkMmQiLCBjb2xvciA9IE5BKSwgICMgRGFyayBwYW5lbCBiYWNrZ3JvdW5kDQogICAgcGFuZWwuZ3JpZC5tYWpvciA9IGVsZW1lbnRfbGluZShjb2xvciA9ICIjNDQ0NDQ0IiksICAjIFN1YnRsZSBncmlkIGxpbmVzDQogICAgcGFuZWwuZ3JpZC5taW5vciA9IGVsZW1lbnRfbGluZShjb2xvciA9ICIjNDQ0NDQ0IiksDQogICAgYXhpcy50ZXh0ID0gZWxlbWVudF90ZXh0KGNvbG9yID0gIiNmMGYwZjAiKSwgICMgV2hpdGUgYXhpcyB0ZXh0DQogICAgYXhpcy50aXRsZSA9IGVsZW1lbnRfdGV4dChjb2xvciA9ICIjZjBmMGYwIiwgZmFjZSA9ICJib2xkIiksICAjIEJvbGQgd2hpdGUgYXhpcyB0aXRsZXMNCiAgICBwbG90LnRpdGxlID0gZWxlbWVudF90ZXh0KGNvbG9yID0gIiNmMGYwZjAiLCBmYWNlID0gImJvbGQiLCBoanVzdCA9IDAuNSksICAjIFdoaXRlIGNlbnRlcmVkIHRpdGxlDQogICAgbGVnZW5kLmJhY2tncm91bmQgPSBlbGVtZW50X3JlY3QoZmlsbCA9ICIjMmQyZDJkIiwgY29sb3IgPSBOQSksICAjIERhcmsgbGVnZW5kIGJhY2tncm91bmQNCiAgICBsZWdlbmQudGV4dCA9IGVsZW1lbnRfdGV4dChjb2xvciA9ICIjZjBmMGYwIikgICMgV2hpdGUgbGVnZW5kIHRleHQNCiAgKSArIGd1aWRlcyhmaWxsID0gIm5vbmUiKSAgIyBSZW1vdmUgdGhlIGxlZ2VuZCAoc2luY2UgYWxsIGJhcnMgYXJlIHRoZSBzYW1lIGNvbG9yKQ0KDQpgYGANCg0KIyMgU2VncmVnYXRpb24gPyANCg0KIyBQbG90cyANCg==</div>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeSourceEmbed("draftdesresults.Rmd");
+  window.initializeCodeFolding("show" === "show");
+});
+</script>
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

@@ -6,17 +6,22 @@ output: html_document
 ---
 
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Descriptives</title>
-    <link rel="stylesheet" href="styles.css">  <!-- Link to the CSS file I created for dark mode code chunks -->
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>My Descriptives</title>
+
+<link rel="stylesheet" href="styles.css"> <!-- Link to the CSS file I created for dark mode code chunks -->
 
 </head>
+
 </html>
 
-
-```{r, globalsettings, echo=FALSE, warning=FALSE, results='hide'}
+```{r globalsettings, echo=FALSE, warning=FALSE, results='hide'}
 library(knitr)
 
 knitr::opts_chunk$set(echo = TRUE)
@@ -40,12 +45,14 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 # Getting started
+
 ```{r clean}
 rm(list = ls())
 ```
 
 ## Packages
-```{r package}
+
+```{r package, hide=TRUE}
 require(tidyverse)
 require(RSiena)
 require(RsienaTwoStep)
@@ -58,6 +65,7 @@ require(xml2)
 require(rvest)
 require(igraph)
 require(ggraph)
+require(ggplot2)
 
 
 #install.packages('visNetwork')
@@ -67,14 +75,16 @@ require(threejs)
 #install.packages('networkD3')
 require(networkD3)
 
+require(RColorBrewer)
+
 
 ```
 
-
 ## Functions
 
-Functions chunk 
-```{r functions 1}
+Functions chunk
+
+```{r functions 1, hide =TRUE}
 fpackage.check <- function(packages) {
     lapply(packages, FUN = function(x) {
         if (!require(x, character.only = TRUE)) {
@@ -183,7 +193,8 @@ f_pubnets <- function(df_scholars = df, list_publications = publications, discip
 ```
 
 More functions
-```{r functions 2}
+
+```{r functions 2, hide=TRUE}
 fcolnet <- function(data = scholars, university = "RU", discipline = "sociology"+"political science", waves = list(c(2015,
     2018), c(2019, 2023)), type = c("first")) {
 
@@ -267,26 +278,24 @@ fcolnet <- function(data = scholars, university = "RU", discipline = "sociology"
 ## Load data
 
 Scholar data
+
 ```{r scholar data}
 scholars <- fload("./data/processed/scholars_20240924.rda") 
 #make sure to lead fload first of course
 ```
 
-```{r saving schoalr output}
+```{r saving scholar output}
 # save the output of your function
 
 test  <- fcolnet(data = scholars, 
                 university = "RU", 
                 discipline = c("sociology", "political science"),
                 waves = list(c(2015, 2018), c(2019, 2023)), 
-                type = c("all")) # all, first, last # which ties in there
-
-# USE not all but first or last so the ties are directed from "perspective" of first author of the publications 
-# usually first author has most prestige
+                type = c("first"))
 ```
 
-
 Ego data
+
 ```{r df_ego data}
 df_ego <- fload("./data/processed/df_ego_20241108.rda")
 
@@ -305,32 +314,63 @@ test_w1 <- igraph::graph_from_adjacency_matrix(
 
 ```
 
-# Descriptives
+# Descriptives - Demographics 
+The following graphs represent the segregation of the network based on gender and on H-index for the wave of interest (2015-2018). 
+
 
 ## Ego level
 
 ### Gender
 
 descriptives (mean etc.) in whole sample
+
 ```{r sum gender}
 summary(df_ego$gender)
 ```
 
 gender counts across whole sample (0 = female, 1 = male)
+
 ```{r counts gender-all}
 table(df_ego$gender)
 ```
 
-overall gender distribution in sample
-```{r}
-# Create the histogram
-ggplot(df_ego, aes(x = gender))+
-  geom_bar(color = "darkgrey", fill ="#B3DE69", width = 0.75)+
-  labs(title = "Histogram of Gender", x = "Gender\n (0 = female, 1 = male)", y = "Count") + theme(plot.title = element_text(hjust = 0.5, face = "bold"))
+Histogram: overall gender distribution in sample
+
+```{r histogram gender }
+# Convert gender to a factor to avoid errors
+df_ego$gender <- as.factor(df_ego$gender)
+# Create the histogram with a dark theme and two colors for bars
+ggplot(df_ego, aes(x = gender, fill = gender)) +
+  geom_bar(color = "darkgrey", width = 0.6) +  # Add borders for bars
+  scale_fill_manual(
+    values = c("0" = "#FFFFB3", "1" = "#80B1D3"),  # Custom colors: yellow for females, blue for males
+    labels = c("Female", "Male")  # Optional: customize legend labels
+  ) +
+  labs(
+    title = "Gender Distribution",
+    x = "Gender\n (0 = female, 1 = male)",
+    y = "Count",
+    fill = "Gender"  # Legend title
+  ) +
+  theme_minimal(base_family = "Arial") +  # Clean, minimal base theme
+  theme(
+    plot.background = element_rect(fill = "#2d2d2d", color = NA),  # Dark background
+    panel.background = element_rect(fill = "#2d2d2d", color = NA),  # Dark panel background
+    panel.grid.major = element_line(color = "#444444"),  # Subtle grid lines
+    panel.grid.minor = element_line(color = "#444444"),
+    axis.text = element_text(color = "#f0f0f0"),  # White axis text
+    axis.title = element_text(color = "#f0f0f0", face = "bold"),  # Bold white axis titles
+    plot.title = element_text(color = "#f0f0f0", face = "bold", hjust = 0.5),  # White centered title
+    legend.background = element_rect(fill = "#2d2d2d", color = NA),  # Dark legend background
+    legend.text = element_text(color = "#f0f0f0"),  # White legend text
+    legend.title = element_text(color = "#f0f0f0")  # White legend title
+    )
+
 
 ```
-       
+
 Genders per department (0 = female, 1 = male)
+
 ```{r gender per dep.}
    
 # Wave 1: Gender count per department 
@@ -340,16 +380,46 @@ table(df_ego$discipline.24, df_ego$gender)
 ### h index
 
 descriptives (mean etc.)
+
 ```{r summary h index}
 summary(df_ego$h_index)
 ```
-Overall  (INSERT YEARS STILL)
+
+Overall(2015-2018)
+
 ```{r hist h index}
 # Histogram of prestige scores for Wave 1 
-hist(df_ego$h_index, breaks = 30, main = "Distribution of H-Index from yearX to yearX",     xlab = "H Index", ylab = "Frequency", col = "#B3DE69") # INSERT YEARS OF WAVE/TIME FRAME STILL
+
+# Create a data frame for ggplot2 
+df_h_index <- data.frame(h_index = df_ego$h_index)
+
+# Generate the histogram with ggplot2
+ggplot(df_h_index, aes(x = h_index)) +
+  geom_histogram(
+    bins = 30,
+    fill = "#FFFFB3",  # Bar color
+    color = "black"    # Border color for bars
+  ) +
+  labs(
+    title = "Distribution of H-Index from 2015 to 2018",
+    x = "H Index",
+    y = "Frequency"
+  ) +
+  theme_minimal(base_family = "Arial") +  # Clean, minimal base theme
+  theme(
+    plot.background = element_rect(fill = "#2d2d2d", color = NA),  # Dark background
+    panel.background = element_rect(fill = "#2d2d2d", color = NA),  # Dark panel background
+    panel.grid.major = element_line(color = "#444444"),  # Subtle grid lines
+    panel.grid.minor = element_line(color = "#444444"),
+    axis.text = element_text(color = "#f0f0f0"),  # White axis text
+    axis.title = element_text(color = "#f0f0f0", face = "bold"),  # Bold white axis titles
+    plot.title = element_text(color = "#f0f0f0", face = "bold", hjust = 0.5)  # White centered title
+  )
+
 ```
 
 H index per department
+
 ```{r table per dep h index}
 # Wave 1: Prestige distribution by dep. and total
 df_ego %>%
@@ -364,504 +434,4 @@ df_ego %>%
 ```
 
 
-## Ego network
 
-### basic descriptives
-
-Nr. of nodes
-```{r nodes}
-vcount(test_w1)
-```
-
-Nr. of edges
-```{r edges}
-ecount(test_w1)
-```
-
-Dyad census
-    ```{r dyad cen}
-
-igraph::dyad_census(test_w1)
-    ```
-
-Triad-census
-    ```{r triad cen}
-igraph::triad_census(test_w1)
-    ```
-
-Edge-density
-    ```{r edge dens}
-# edge density
-igraph::edge_density(test_w1)
-    ```
-
-### more in depth:
- 
-reciprocity
-    ```{r recip}
-reciprocity(test_w1, ignore.loops = TRUE, mode = c("default", "ratio"))
-    ```
-reciprocity = 1 makes sense since the ties are undirected rn 
-
-
-
-degree centrality / degreee?
-    ```{r degree}
-
-degree_testw1 <- degree(test_w1)
-degree_testw1 <- as.data.frame(degree_testw1)
-ggplot(degree_testw1, aes(as.numeric(degree_testw1), colour = as.numeric(degree_testw1) )) +
-  geom_histogram(binwidth = .9) +
-  labs(
-    title = "Distribution Degrees Wave 1",
-    x = "Distribution of Degrees",
-    y = "Count"  ) +
-  ylim(0, 65)
-  
-    ```
-
-Betweenness centrality /betweenness?
-    ```{r betweenness}
-betweenness_w1 <- igraph::betweenness(test_w1, directed = T)
-betweenness_w1 <- as.data.frame(betweenness_w1)
-ggplot(betweenness_w1, aes(as.numeric(betweenness_w1), colour = as.numeric(betweenness_w1))) +
-  geom_histogram(binwidth = 1.2) +
-  labs(
-    title = "Distribution Betweenness Wave 1",
-    x = "Distribution of Betweenness",
-    y = "Count")
-
-    ```
-
-Clustering
-    ```{r clustering}
-#clustering w1
-clustering_w1 <- igraph::transitivity(test_w1, type = "local")
-clustering_w1 <- as.data.frame(clustering_w1)
-ggplot(clustering_w1, aes(as.numeric(clustering_w1), colour = as.numeric(clustering_w1) )) +
-  geom_histogram(binwidth = .05) +
-  labs(
-    title = "Distribution Clustering Wave 1",
-    x = "Distribution of Clustering",
-    y = "Count" )
-    ```
-
-## Network-level descriptives
-
-Density
-    ```{r density}
-density_w1 <- igraph::edge_density(test_w1)
-density_w1
-    ```
-
-Average path length
-    ```{r path length}
-mean((ego_size(test_w1, order = 2, mode = "out") - 1)/vcount(test_w1))
-    ```
-
-Segregation
-    - Mortons I
-    - also graphs below
-```{r plot}
-
-plot(test_w1,
-     vertex.label = NA,
-     edge.width = 0.2,
-     edge.arrow.size =0.2)
-```
-
-
-### Plotting: Gender - igraph
-#### with isolates
-```{r plot gender}
-# names(df_ego) #see labels of variables 
-
-
-plot(test_w1,
-     vertex.color = ifelse(df_ego$gender == 1, "#FFED6F", "#80B1D3"), # now, I can use actor attributes for plotting.
-# here: if gender = 1 (aka man) then red dot, if not then blue 
-  vertex.label = NA,
-  vertex.size = 7.5,
-  edge.width = 0.5,
-  edge.arrow.size = 0.1,
-  main = "Network with isolates [yellow = female, blue = male]")
-
-# if you dont want plot to turn, save the layout (look at SNASS)
-```
-
-#### without isolates
-```{r removing isolates}
-indegr_w1 <- igraph::degree(test_w1, mode = "in")
-
-isolates_w1 <- V(test_w1)[degree(test_w1, mode = "all") == 0]
-
-noisolates_w1 <- delete_vertices(test_w1, isolates_w1)
-
-gsize(noisolates_w1) # edges
-
-gorder(noisolates_w1) # vertices
-```
-
-```{r plot wo isolates}
-plot(noisolates_w1,
-  vertex.color = ifelse(df_ego$gender == 1, "#80B1D3", "#FFED6F"), # now, I can use actor attributes for plotting.
-  # here: if gender = 1 (aka man) then red dot, if not then blue 
-  vertex.label = NA,
-  vertex.size = 9,
-  vertex.frame.color = "black",
-  edge.curved = 0.2,
-  edge.arrow.size = 0.3,
-  edge.color = "gray",
-  edge.width = 0.2,
-  main = "Network without isolates [yellow = female, blue = male]")
-```
-
-
-
-### Plotting: h-index -ggraph
-Credits to Hannah Groennou for the basis of the code of these graphs. 
-
-(test line)
-
-
-#### with isolates ?
-```{r}
-
-indegr_w1 <- degree(test_w1, mode = "in")
-
-# assign h-index to scholar
-V(test_w1)$h_index <- df_ego$h_index
-V(test_w1)$indegree <- indegr_w1
-
-#set size of plot
-options(repr.plot.width = 15, repr.plot.height = 18)
-
-#plot wave 1 with isolates
-p_iso <- ggraph(test_w1,
-       layout = "fr") +
-  geom_edge_link(color = "#BEBADA", width = 0.5) +
-  geom_node_point(aes(size = indegree, color = h_index)) + 
-  scale_size(range = c(3, 10)) + 
-  scale_color_gradient(low = "red", high = "blue") + 
-  theme_void() 
-       
-p_iso + labs(title = "Network with isolates",
-        subtitle = "Plot of indegree and H-index",
-        caption = "Data refer to: Scholars RU sociology and political science departments") + theme(plot.title = element_text(hjust = 0.5, face = "bold"), plot.subtitle = element_text(hjust=0.5), plot.caption = element_text(hjust = 1))
-```
-
-#### without isolates
-```{r}
-
-indegr_w1 <- degree(test_w1, mode = "in")
-
-# assign h-index to scholar
-V(test_w1)$h_index <- df_ego$h_index
-V(test_w1)$indegree <- indegr_w1
-
-#remove isolates
-noisolates_w1 <- delete_vertices(test_w1, V(test_w1)[degree(test_w1) == 0])
-
-#set size of plot
-options(repr.plot.width = 15, repr.plot.height = 15)
-
-#plot wave 1 without isolates 
-p_noiso <- ggraph(noisolates_w1,
-       layout = "fr") +
-  geom_edge_link(color = "#BEBADA", width = 0.7) +
-  geom_node_point(aes(size = indegree, color = h_index)) + 
-  scale_size(range = c(3, 10)) + 
-  scale_color_gradient(low = "red", high = "blue") + 
-  theme_void() 
-  
-
-p_noiso + labs(title = "Network without isolates",
-        subtitle = "Plot of indegree and H-index",
-        caption = "Data refer to: Scholars RU sociology and political science departments") + theme(plot.title = element_text(hjust = 0.5, face = "bold"), plot.subtitle = element_text(hjust=0.5))
-
-# allowed values for the font face include: “plain”, “italic”, “bold” and “bold.italic”.
-
-```
-
-##### H-index per department
-```{r}
-indegr_w1 <- degree(test_w1, mode = "in")
-
-# assign h-index to scholar
-V(test_w1)$h_index <- df_ego$h_index
-# assign discipline to scholar
-V(test_w1)$discipline <- df_ego$discipline.24
-
-V(test_w1)$indegree <- indegr_w1
-
-#remove isolates
-noisolates_w1 <- delete_vertices(test_w1, V(test_w1)[degree(test_w1) == 0])
-
-#set size of plot
-options(repr.plot.width = 15, repr.plot.height = 15)
-
-#plot wave 1 without isolates 
-p_noiso <- ggraph(noisolates_w1,
-       layout = "fr") +
-  geom_edge_link(color = "#BEBADA", width = 0.7) +
-  geom_node_point(aes(size = indegree, color = h_index, shape = as.factor(discipline))) + 
-  scale_size(range = c(3, 10)) + 
-  scale_color_gradient(low = "red", high = "blue") + 
-  theme_void() 
-  
-
-p_noiso + labs(title = "Departments without isolates",
-        subtitle = "Plot of indegree and H-index",
-        caption = "Data refer to scholars from Radboud University.") + theme(plot.title = element_text(hjust = 0.5, face = "bold"), plot.subtitle = element_text(hjust=0.5))
-
-# allowed values for the font face include: “plain”, “italic”, “bold” and “bold.italic”.
-
-```
-
-
-### Plotting gender - ggraph 
-#### with isolates per department 
-```{r}
-#assign gender to scholar 
-V(test_w1)$gender <- df_ego$gender
-
-# assign discipline to scholar
-V(test_w1)$discipline <- df_ego$discipline.24
-
-
-V(test_w1)$indegree <- indegr_w1
-
-
-p_gender <- ggraph(test_w1,
-  layout = "fr") +
-  geom_edge_link(color = "#BEBADA", width = 0.5) +
-  geom_node_point(aes(size = indegree, color = as.factor(discipline), shape = as.factor(gender))) +   
-  scale_size(range = c(3, 10)) + 
-  theme_void()
-
-p_gender + labs(title = "Departments with isolates",
-        subtitle = "Plot of indegree and gender",
-        caption = "Gender: 0 = female, 1 = male.\n Data refer to scholars from Radboud University.") + theme(plot.title = element_text(hjust = 0.5, face = "bold"), plot.subtitle = element_text(hjust=0.5), plot.caption = element_text(hjust = 1))
-
-```
-
-#### without isolates per department 
-```{r}
-#assign gender to scholar 
-V(test_w1)$gender <- df_ego$gender
-
-# assign disciplines to scholars
-V(test_w1)$discipline <- df_ego$discipline.24
-V(test_w1)$indegree <- indegr_w1
-
-
-#remove isolates
-noisolates_w1 <- delete_vertices(test_w1, V(test_w1)[degree(test_w1) == 0])
-
-p_noisgender <- ggraph(noisolates_w1,
-  layout = "fr") +
-  geom_edge_link(color = "#BEBADA", width = 0.5) +
-  geom_node_point(aes(size = indegree, color = as.factor(discipline), shape = as.factor(gender))) +   
-  scale_size(range = c(3, 10)) + 
-  theme_void()
-
-p_noisgender + labs(title = "Departments without isolates",
-        subtitle = "Plot of indegree and gender",
-        caption = "Gender: 0 = female, 1 = male.\n Data refer to scholars from Radboud University.") + theme(plot.title = element_text(hjust = 0.5, face = "bold"), plot.subtitle = element_text(hjust=0.5), plot.caption = element_text(hjust = 1))
-
-
-```
-
-
-
-### Plotting h index and gender -ggraph
-#### with isolates 
-```{r}
-#assign gender to scholar 
-V(test_w1)$gender <- df_ego$gender
-# V(test_w1)$gender <- ifelse(df_ego$gender >= 0.5,1,0)
-
-# assign h-index to scholar
-V(test_w1)$h_index <- df_ego$h_index
-V(test_w1)$indegree <- indegr_w1
-
-p_gender <- ggraph(test_w1,
-  layout = "fr") +
-  geom_edge_link(color = "#BEBADA", width = 0.5) +
-  geom_node_point(aes(size = indegree, color = h_index, shape = as.factor(gender))) +   
-  scale_size(range = c(3, 10)) + 
-  scale_color_gradient(low = "red", high = "blue") + 
-  theme_void()
-
-p_gender + labs(title = "Network with isolates",
-        subtitle = "Plot of indegree, H-index and gender",
-        caption = "Gender: 0 = female, 1 = male.\n Data refer to: Scholars RU sociology and political science departments.") + theme(plot.title = element_text(hjust = 0.5, face = "bold"), plot.subtitle = element_text(hjust=0.5), plot.caption = element_text(hjust = 1))
-
- 
-```
-
-#### without isolates 
-
-```{r gen without iso}
-#assign gender to scholar 
-V(test_w1)$gender <- df_ego$gender
-
-# assign h-index to scholar
-V(test_w1)$h_index <- df_ego$h_index
-V(test_w1)$indegree <- indegr_w1
-
-
-#remove isolates
-noisolates_w1 <- delete_vertices(test_w1, V(test_w1)[degree(test_w1) == 0])
-
-p_noisogender <- ggraph(noisolates_w1,
-  layout = "fr") +
-  geom_edge_link(color = "#BEBADA", width = 0.5) +
-  geom_node_point(aes(size = indegree, color = h_index, shape = as.factor(gender))) +   
-  scale_size(range = c(3, 10)) + 
-  scale_color_gradient(low = "red", high = "blue") + 
-  theme_void()
-
-p_noisogender + labs(title = "Network without isolates",
-        subtitle = "Plot of indegree, H-index and gender",
-        caption = "Gender: 0 = female, 1 = male.\n Data refer to: Scholars RU sociology and political science departments.") + theme(plot.title = element_text(hjust = 0.5, face = "bold"), plot.subtitle = element_text(hjust=0.5))
-
-
-```
-
-# Detour: Colors
-
-```{r mypalette, include = FALSE, eval = FALSE, hide = TRUE}
-# palette i like:
-palette("Set 3");  sinplot("Set 3")
-palette.swatch("Set 3")
-palette.colors(palette = "Set 3")
- "#8DD3C7" "#FFFFB3" "#BEBADA" "#FB8072" "#80B1D3" "#FDB462"
- "#B3DE69" "#FCCDE5" "#D9D9D9" "#BC80BD" "#CCEBC5" "#FFED6F"
-```
-
-
-```{r colors in R, include = TRUE, eval = FALSE, hide = TRUE}
-colors (distinct = TRUE) # prints all colors R knows
-palette.pals()
-#  [1] "R3"              "R4"              "ggplot2"        
-#  [4] "Okabe-Ito"       "Accent"          "Dark 2"         
-#  [7] "Paired"          "Pastel 1"        "Pastel 2"       
-# [10] "Set 1"           "Set 2"           "Set 3"          
-# [13] "Tableau 10"      "Classic Tableau" "Polychrome 36"  
-# [16] "Alphabet"       
-
-palette.colors(palette = "Alphabet")
-#R3
-"#000000" "#FF0000" "#00CD00" "#0000FF" "#00FFFF" "#FF00FF" "#FFFF00" "#BEBEBE"
-
-#R4
-"#000000" "#DF536B" "#61D04F" "#2297E6" "#28E2E5" "#CD0BBC" "#F5C710" "#9E9E9E"
-
-#ggplot2
-"#000000" "#F8766D" "#00BA38" "#619CFF" "#00BFC4" "#F564E3" "#B79F00" "#9E9E9E"
-
-#Okabe Ito 
-"#000000" "#E69F00" "#56B4E9" "#009E73" "#F0E442" "#0072B2" "#D55E00" "#CC79A7" "#999999"
-
-# Accent
-"#7FC97F" "#BEAED4" "#FDC086" "#FFFF99" "#386CB0" "#F0027F" "#BF5B17" "#666666"
-
-#Paired
-"#A6CEE3" "#1F78B4" "#B2DF8A" "#33A02C" "#FB9A99" "#E31A1C" "#FDBF6F" "#FF7F00"
-"#CAB2D6" "#6A3D9A" "#FFFF99" "#B15928"
-
-#Pastel 1
-"#FBB4AE" "#B3CDE3" "#CCEBC5" "#DECBE4" "#FED9A6" "#FFFFCC" "#E5D8BD" "#FDDAEC" "#F2F2F2"
-
-#Pastel 2
-"#B3E2CD" "#FDCDAC" "#CBD5E8" "#F4CAE4" "#E6F5C9" "#FFF2AE" "#F1E2CC" "#CCCCCC"
-
-#Set 1
-"#E41A1C" "#377EB8" "#4DAF4A" "#984EA3" "#FF7F00" "#FFFF33" "#A65628" "#F781BF""#999999"
-
-#Set 2
-"#66C2A5" "#FC8D62" "#8DA0CB" "#E78AC3" "#A6D854" "#FFD92F" "#E5C494" "#B3B3B3"
-
-#Set 3
-"#8DD3C7" "#FFFFB3" "#BEBADA" "#FB8072" "#80B1D3" "#FDB462" "#B3DE69" "#FCCDE5"
-"#D9D9D9" "#BC80BD" "#CCEBC5" "#FFED6F"
-
-# Tableau 10
-"#4E79A7" "#F28E2B" "#E15759" "#76B7B2" "#59A14F" "#EDC948" "#B07AA1" "#FF9DA7"
-"#9C755F" "#BAB0AC"
-
-#Classic Tableau
-"#1F77B4" "#FF7F0E" "#2CA02C" "#D62728" "#9467BD" "#8C564B" "#E377C2" "#7F7F7F"
-"#BCBD22" "#17BECF"
-
-# Polychrome 36:
-"#5A5156" "#E4E1E3" "#F6222E" "#FE00FA" "#16FF32" "#3283FE" "#FEAF16" "#B00068"
-"#1CFFCE" "#90AD1C" "#2ED9FF" "#DEA0FD" "#AA0DFE" "#F8A19F" "#325A9B" "#C4451C"
-"#1C8356" "#85660D" "#B10DA1" "#FBE426" "#1CBE4F" "#FA0087" "#FC1CBF" "#F7E1A0"
-"#C075A6" "#782AB6" "#AAF400" "#BDCDFF" "#822E1C" "#B5EFB5" "#7ED7D1" "#1C7F93"
-"#D85FF7" "#683B79" "#66B0FF" "#3B00FB"
-
-#Alphabet
-"#AA0DFE" "#3283FE" "#85660D" "#782AB6" "#565656" "#1C8356" "#16FF32" "#F7E1A0"
-"#E2E2E2" "#1CBE4F" "#C4451C" "#DEA0FD" "#FE00FA" "#325A9B" "#FEAF16" "#F8A19F"
-"#90AD1C" "#F6222E" "#1CFFCE" "#2ED9FF" "#B10DA1" "#C075A6" "#FC1CBF" "#B00068"
-"#FBE426" "#FA0087"
-
-
-```
-
-
-```{r look at colors PLOT, include = TRUE, eval = FALSE, hide = TRUE}
-## Demonstrate the colors 1:8 in different palettes using a custom matplot()
-sinplot <- function(main=NULL, n = 8) {
-    x <- outer(
-	seq(-pi, pi, length.out = 50),
-	seq(  0, pi, length.out = n),
-	function(x, y) sin(x - y)
-    )
-    matplot(x, type = "l", lwd = 4, lty = 1, col = 1:n, ylab = "", main=main)
-}
-sinplot("default palette")
-
-palette("R3");        sinplot("R3")
-palette("Okabe-Ito"); sinplot("Okabe-Ito")
-palette("Tableau")  ; sinplot("Tableau", n = 10) # i like 
-palROB <- colorRampPalette(c("red", "darkorange2", "blue"), space = "Lab")
-palette(palROB(16)); sinplot("palROB(16)", n = 16) # the orange purple blue rainbow retro vibe yay 
-palette("default") # reset
-```
-
-
-```{r look at colors SWATCH, include = TRUE, eval = FALSE, hide = TRUE}
-palette.swatch <- function(palette = palette.pals(), n = 8, nrow = 8,
-                           border = "black", cex = 1, ...)
-{
-     cols <- sapply(palette, palette.colors, n = n, recycle = TRUE)
-     ncol <- ncol(cols)
-     nswatch <- min(ncol, nrow)
-     op <- par(mar = rep(0.1, 4),
-               mfrow = c(1, min(5, ceiling(ncol/nrow))),
-     	       cex = cex, ...)
-     on.exit(par(op))
-     while (length(palette)) {
- 	subset <- seq_len(min(nrow, ncol(cols)))
- 	plot.new()
- 	plot.window(c(0, n), c(0.25, nrow + 0.25))
- 	y <- rev(subset)
- 	text(0, y + 0.1, palette[subset], adj = c(0, 0))
- 	y <- rep(y, each = n)
- 	rect(rep(0:(n-1), n), y, rep(1:n, n), y - 0.5,
- 	     col = cols[, subset], border = border)
- 	palette <- palette[-subset]
- 	cols    <- cols [, -subset, drop = FALSE]
-     }
-}
-
-palette.swatch()
-
-palette.swatch(n = 26) # show full "Alphabet"; recycle most others
-
-
-
-```
