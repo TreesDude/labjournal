@@ -572,27 +572,59 @@ rm(list = ls())
 
 # install.packages(&#39;data.table&#39;)
 library(data.table)  # mainly for faster data handling
-library(tidyverse)  # I assume you already installed this one!
-#install.packages(&#39;httr&#39;) # we don&#39;t need this for now require(httr)
+library(tidyverse)  # I assume you already installed this one!</code></pre>
+<pre><code>## ── Attaching core tidyverse packages ─────────────
+## ✔ dplyr     1.1.4     ✔ readr     2.1.5
+## ✔ forcats   1.0.0     ✔ stringr   1.5.1
+## ✔ ggplot2   3.5.1     ✔ tibble    3.2.1
+## ✔ lubridate 1.9.3     ✔ tidyr     1.3.1
+## ✔ purrr     1.0.2     
+## ── Conflicts ──────────── tidyverse_conflicts() ──
+## ✖ dplyr::between()     masks data.table::between()
+## ✖ dplyr::filter()      masks stats::filter()
+## ✖ dplyr::first()       masks data.table::first()
+## ✖ lubridate::hour()    masks data.table::hour()
+## ✖ lubridate::isoweek() masks data.table::isoweek()
+## ✖ dplyr::lag()         masks stats::lag()
+## ✖ dplyr::last()        masks data.table::last()
+## ✖ lubridate::mday()    masks data.table::mday()
+## ✖ lubridate::minute()  masks data.table::minute()
+## ✖ lubridate::month()   masks data.table::month()
+## ✖ lubridate::quarter() masks data.table::quarter()
+## ✖ lubridate::second()  masks data.table::second()
+## ✖ purrr::transpose()   masks data.table::transpose()
+## ✖ lubridate::wday()    masks data.table::wday()
+## ✖ lubridate::week()    masks data.table::week()
+## ✖ lubridate::yday()    masks data.table::yday()
+## ✖ lubridate::year()    masks data.table::year()
+## ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+<pre class="r"><code>#install.packages(&#39;httr&#39;) # we don&#39;t need this for now require(httr)
 #install.packages(&quot;devtools&quot;)
 require(devtools)</code></pre>
-<pre><code>## Loading required package: devtools</code></pre>
-<pre><code>## Loading required package: usethis</code></pre>
+<pre><code>## Loading required package: devtools
+## Loading required package: usethis</code></pre>
 <pre class="r"><code>#install.packages(&quot;rvest&quot;)
-require(rvest)
-# rvest:This is the explanation the writers of the package give: “rvest is new package that makes it easy to scrape (or harvest) data from html web pages.” Seems like something we need, a package that stores information from webpages into relatively structured data that we can then query/manipulate.
+require(rvest)</code></pre>
+<pre><code>## Loading required package: rvest
+## 
+## Attaching package: &#39;rvest&#39;
+## 
+## The following object is masked from &#39;package:readr&#39;:
+## 
+##     guess_encoding</code></pre>
+<pre class="r"><code># rvest:This is the explanation the writers of the package give: “rvest is new package that makes it easy to scrape (or harvest) data from html web pages.” Seems like something we need, a package that stores information from webpages into relatively structured data that we can then query/manipulate.
 
 #install.packages(&quot;xml2&quot;)
 
-require(xml2)
-
-#xml2:This is what the writers of the package say about it: “Work with XML files using a simple, consistent interface.” So we can manipulate the data scraped with rvest, using the xml2 package functions
+require(xml2)</code></pre>
+<pre><code>## Loading required package: xml2</code></pre>
+<pre class="r"><code>#xml2:This is what the writers of the package say about it: “Work with XML files using a simple, consistent interface.” So we can manipulate the data scraped with rvest, using the xml2 package functions
 
 #Note we&#39;re doing something different here. We&#39;re installing a *latest* version directly from
 #GitHub This is because the released version of this packages contains some errors!
 devtools::install_github(&quot;jkeirstead/scholar&quot;)</code></pre>
-<pre><code>## Using GitHub PAT from the git credential store.</code></pre>
-<pre><code>## Skipping install of &#39;scholar&#39; from a github remote, the SHA1 (2d38dcc3) has not changed since last install.
+<pre><code>## Using GitHub PAT from the git credential store.
+## Skipping install of &#39;scholar&#39; from a github remote, the SHA1 (2d38dcc3) has not changed since last install.
 ##   Use `force = TRUE` to force installation</code></pre>
 <pre class="r"><code>require(scholar)</code></pre>
 <pre><code>## Loading required package: scholar</code></pre>
@@ -611,10 +643,10 @@ sociology</h1>
 
 head(soc_staff)</code></pre>
 <pre><code>## $node
-## &lt;pointer: 0x000002a9f11fe0d0&gt;
+## &lt;pointer: 0x000001f3295fe5d0&gt;
 ## 
 ## $doc
-## &lt;pointer: 0x000002a9eddff250&gt;</code></pre>
+## &lt;pointer: 0x000001f3294fe7e0&gt;</code></pre>
 <pre class="r"><code>#which object? 
 class(soc_staff)</code></pre>
 <pre><code>## [1] &quot;xml_document&quot; &quot;xml_node&quot;</code></pre>
@@ -882,7 +914,7 @@ get_scholar_id_fix(last_name = &quot;tolsma&quot;, first_name = &quot;jochem&quo
 ## [1] &quot;Professor, Radboud University Nijmegen / University of Groningen&quot;
 ## 
 ## $total_cites
-## [1] 3471
+## [1] 3473
 ## 
 ## $h_index
 ## [1] 27
@@ -943,8 +975,8 @@ publications, citations</h3>
 ## 26                                                                                           Social origin and occupational success at labour market entry in The Netherlands, 1931–80
 ## 27  Ethnic hostility among ethnic majority and minority groups in the Netherlands: an investigation into the impact of social mobility experiences, the local living environment and …
 ## 28                                                                                            Kudos make you run! How runners influence each other on the online social network Strava
-## 29                      Perceptions as the crucial link? The mediating role of neighborhood perceptions in the relationship between the neighborhood context and neighborhood cohesion
-## 30                                                                                                                     Preferences for work arrangements: A discrete choice experiment
+## 29                                                                                                                     Preferences for work arrangements: A discrete choice experiment
+## 30                      Perceptions as the crucial link? The mediating role of neighborhood perceptions in the relationship between the neighborhood context and neighborhood cohesion
 ## 31      Under what conditions do ethnic minority candidates attract the ethnic minority vote? How neighbourhood and candidate characteristics affected ethnic affinity voting in the …
 ## 32                                                                                                 Trust and contact in diverse neighbourhoods: An interplay of four ethnicity effects
 ## 33                                                                                          Explaining natives&#39; interethnic friendship and contact with colleagues in European regions
@@ -1062,8 +1094,8 @@ publications, citations</h3>
 ## 26                                        J Tolsma, MHJ Wolbers
 ## 27                                                     J Tolsma
 ## 28                               R Franken, H Bekhuis, J Tolsma
-## 29                                 J Laméris, JR Hipp, J Tolsma
-## 30                                   P Valet, C Sauer, J Tolsma
+## 29                                   P Valet, C Sauer, J Tolsma
+## 30                                 J Laméris, JR Hipp, J Tolsma
 ## 31                          R Van der Zwan, J Tolsma, M Lubbers
 ## 32                                   J Tolsma, TWG Van der Meer
 ## 33                           M Savelkoul, J Tolsma, P Scheepers
@@ -1181,8 +1213,8 @@ publications, citations</h3>
 ## 26                                                                  Acta Sociologica
 ## 27                                                                                  
 ## 28                                                                   Social Networks
-## 29                                                           Social Science Research
-## 30                                                                          PloS one
+## 29                                                                          PloS one
+## 30                                                           Social Science Research
 ## 31                                                               Political Geography
 ## 32                                                           Social science research
 ## 33                                           Journal of Ethnic and Migration Studies
@@ -1287,7 +1319,7 @@ publications, citations</h3>
 ## 13                                                        33 (2), 209-224    68 2017
 ## 14                                                             98, 104185    59 2019
 ## 15                                                                           53 2016
-## 16                                                      34 (5-6), 888-906    52 2013
+## 16                                                      34 (5-6), 888-906    53 2013
 ## 17                                                        14 (6), 697-719    45 2017
 ## 18                                                          42 (1), 59-83    44 2013
 ## 19                                                              54, 80-95    40 2015
@@ -1300,8 +1332,8 @@ publications, citations</h3>
 ## 26                                                        57 (3), 253-269    30 2014
 ## 27                                                                           28 2009
 ## 28                                                            72, 151-164    26 2023
-## 29                                                              72, 53-68    25 2018
-## 30                                                       16 (7), e0254483    24 2021
+## 29                                                       16 (7), e0254483    25 2021
+## 30                                                              72, 53-68    25 2018
 ## 31                                                             77, 102098    24 2020
 ## 32                                                             73, 92-106    23 2018
 ## 33                                                        41 (5), 683-709    23 2015
@@ -1419,8 +1451,8 @@ publications, citations</h3>
 ## 26                                             8248470043986462984 M3ejUd6NZC8C
 ## 27                                            10378332126833599949 IjCSPb-OGe4C
 ## 28                                            12114155743971894213 9Nmd_mFXekcC
-## 29                                            16357054384393453824 D03iK_w7-QYC
-## 30                                            14800116132549688497 tKAzc9rXhukC
+## 29                                            14800116132549688497 tKAzc9rXhukC
+## 30                                            16357054384393453824 D03iK_w7-QYC
 ## 31                                             7114430646392466648 uWQEDVKXjbEC
 ## 32                                             8349908030823257502 pyW8ca7W8N0C
 ## 33                                            18182577779862774305 -f6ydRqryjwC
@@ -1523,11 +1555,11 @@ publications, citations</h3>
 ## 10 2017   228
 ## 11 2018   289
 ## 12 2019   310
-## 13 2020   300
+## 13 2020   301
 ## 14 2021   332
 ## 15 2022   339
 ## 16 2023   334
-## 17 2024   326</code></pre>
+## 17 2024   327</code></pre>
 </div>
 <div id="get-collaborators" class="section level3" number="6.2.2">
 <h3><span class="header-section-number">6.2.2</span> get
@@ -1726,7 +1758,7 @@ Jochem Tolsma
 J. Tolsma , Jochem Tolsma, J L Tolsma
 </td>
 <td style="text-align:right;">
-8960.39
+8964.2
 </td>
 <td style="text-align:left;">
 <a href="https://openalex.org/A5087380803"
@@ -2098,7 +2130,7 @@ oa_fetch(entity= &quot;author&quot;, search = &quot;Jochem Tolsma&quot;, affilia
 <pre><code>## # A tibble: 1 × 18
 ##   id      display_name display_name_alterna…¹ relevance_score ids   orcid works_count cited_by_count
 ##   &lt;chr&gt;   &lt;chr&gt;        &lt;list&gt;                           &lt;dbl&gt; &lt;lis&gt; &lt;chr&gt;       &lt;int&gt;          &lt;int&gt;
-## 1 https:… Jochem Tols… &lt;chr [3]&gt;                        8960. &lt;chr&gt; http…          87           2064
+## 1 https:… Jochem Tols… &lt;chr [3]&gt;                        8964. &lt;chr&gt; http…          87           2064
 ## # ℹ abbreviated name: ¹​display_name_alternatives
 ## # ℹ 10 more variables: counts_by_year &lt;list&gt;, affiliation_display_name &lt;chr&gt;, affiliation_id &lt;chr&gt;,
 ## #   affiliation_ror &lt;chr&gt;, affiliation_country_code &lt;chr&gt;, affiliation_type &lt;chr&gt;,
@@ -2246,7 +2278,7 @@ Jochem Tolsma
 J. Tolsma , Jochem Tolsma, J L Tolsma
 </td>
 <td style="text-align:right;">
-8960.39
+8964.2
 </td>
 <td style="text-align:left;">
 <a href="https://openalex.org/A5087380803"
@@ -2652,7 +2684,7 @@ Maurice Johannes Wilhelmus Gesthuizen, M. Gesthuizen , Maurice
 Gesthuizen , M.J.W. Gesthuizen , Maurice J.W. Gesthuizen
 </td>
 <td style="text-align:right;">
-8419.23
+8426.79
 </td>
 <td style="text-align:left;">
 <a href="https://openalex.org/A5007673492"
@@ -3060,7 +3092,7 @@ Michael Savelkoul
 M.J. Savelkoul , M. Savelkoul , Michael Savelkoul
 </td>
 <td style="text-align:right;">
-4091.68
+4095.71
 </td>
 <td style="text-align:left;">
 <a href="https://openalex.org/A5048988743"
@@ -3465,7 +3497,7 @@ T.W.G. Tom van der Meer, Tom W. G. van der Meer , Tom Van Der Meer , T.
 Van Der Meer , TOM W.G. VAN DER MEER
 </td>
 <td style="text-align:right;">
-17144.19
+17174.27
 </td>
 <td style="text-align:left;">
 <a href="https://openalex.org/A5010780363"

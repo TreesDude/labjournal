@@ -83,12 +83,12 @@ navbar:
         - text: "Descriptives"
           href: descriptivestry.html 
       - text: "Results"
-        href: modelestimate.html #
+        href: draftdesresults.html
         menu:
         - text: "Descriptive results"
           href: draftdesresults.html 
         - text: "Model Estimation"
-          href: modelestimate.html 
+          href: modelestimate.html
         - text: "Goodness Of Fit"
           href: draftGOF.html
       - text: "Discussion & Conclusion"
@@ -113,7 +113,7 @@ navbar:
         - text: "Descriptives"
           href: finaldescriptives.html 
       - text: "Results"
-        href: finalestimate.html
+        href: finaldesresults.html
         menu:
         - text: "Descriptive results"
           href: finaldesresults.html 
