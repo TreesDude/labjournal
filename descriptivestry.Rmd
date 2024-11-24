@@ -1,8 +1,10 @@
 ---
-title: "Descriptive adventures"
+title: "draft Descriptive Data"
 author: "Verooo"
 date: "2024-11-08"
 output: html_document
+bibliography: references.bib
+csl: apa.csl
 ---
 
 <html lang="en">

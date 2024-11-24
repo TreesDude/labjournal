@@ -3,6 +3,8 @@ title: "Draft Result Descriptives"
 author: "Verooo"
 date: "2024-11-23"
 output: html_document
+bibliography: references.bib
+csl: apa.csl
 ---
 
 <html lang="en">
@@ -43,6 +45,7 @@ klippy::klippy(position = c('top', 'right'))
 knitr::opts_chunk$set(echo = TRUE)
 
 ```
+
 
 # Getting started
 

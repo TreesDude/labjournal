@@ -74,9 +74,9 @@ navbar:
       - text: "Theory"
         href: drafttheory.html
       - text: "Data"
-        href: draftdata.html 
+        href: draftdata.html
         menu:
-        - text: "Data & Methods"
+        - text: "Data & Analysis"
           href: draftdata.html 
         - text: "Data preparation"
           href: datapreptrynew.html
@@ -93,8 +93,6 @@ navbar:
           href: draftGOF.html
       - text: "Discussion & Conclusion"
         href: draftdiscussion.html
-      # - text: "Appendices"
-      #   href:         
 
 
     - text: "Final report"
@@ -106,16 +104,16 @@ navbar:
       - text: "Data"
         href: finaldata.html
         menu:
-        - text: "Data & Methods"
+        - text: "Data & Analysis"
           href: finaldata.html 
-        - text: "Data preparation"
+        - text: "Data Preparation"
           href: finaldataprep.html
-        - text: "Descriptives"
+        - text: "Data Descriptives"
           href: finaldescriptives.html 
       - text: "Results"
         href: finaldesresults.html
         menu:
-        - text: "Descriptive results"
+        - text: "Descriptive Analysis"
           href: finaldesresults.html 
         - text: "Model Estimation"
           href: finalestimate.html 
@@ -123,8 +121,6 @@ navbar:
           href: finalGOF.html      
       - text: "Discussion & Conclusion"
         href: finaldiscussion.html
-      # - text: "Appendices"
-      #   href:         
        
 
   right:

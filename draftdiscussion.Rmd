@@ -1,0 +1,246 @@
+---
+title: "draft discussion"
+author: "Verooo"
+date: "2024-11-01"
+output: html_document
+bibliography: references.bib
+csl: apa.csl
+---
+
+```{=html}
+<style>
+body {
+text-align: left;
+line-height: 1.5;
+}
+
+h1, .h1, h2, .h2, h3, .h3 {
+  margin-top: 24px;
+  line-height: 1;
+}
+
+</style>
+```
+```{r, globalsettings, echo=FALSE, warning=FALSE, results='hide'}
+library(knitr)
+
+knitr::opts_chunk$set(echo = TRUE)
+opts_chunk$set(tidy.opts=list(width.cutoff=100),tidy=TRUE, warning = FALSE, message = FALSE,comment = "#>", cache=TRUE, class.source=c("test"), class.output=c("test2"))
+options(width = 100)
+rgl::setupKnitr()
+
+colorize <- function(x, color) {sprintf("<span style='color: %s;'>%s</span>", color, x) }
+
+```
+
+```{r klippy, echo=FALSE, include=TRUE}
+klippy::klippy(position = c('top', 'right'))
+#klippy::klippy(color = 'darkred')
+#klippy::klippy(tooltip_message = 'Click to copy', tooltip_success = 'Done')
+```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+```
+
+# Discussion Draft
+
+## Short Summary
+
+This study investigates how co-authorship networks among scholars are influenced by gender, departmental affiliation, and academic prestige. By examining networks within the Political Science and Sociology departments at Radboud University, the study aims to understand how these factors jointly shape collaboration networks. Scholars often prefer collaborators of the same gender, a phenomenon rooted in societal norms and perceived status differences. This results in gender clustering within academic networks, with men and women showing distinct preferences for same-gender collaborations (*Hypothesis 1).* Disciplines differ in their gender dynamics. Sociology, characterized by a more balanced gender representation, may facilitate more cross-gender collaborations compared to the male-dominated field of Political Science. Hence, gender homophily might be less influential in collaboration preferences of scholars in the sociology department than those in political science *(Hypothesis 2).\
+*Furthermore, structural features of collaboration networks, such as reciprocity, indegree popularity, and outdegree activity, shape how collaboration ties form. These structural network effects may reinforce gender homophily in collaboration preferences in the creation of ties betwen scholars *(Hypothesis 3)*. Prestige, as measured by the Hirsch-Index, may mitigate gender homophily by increasing the appeal of high-status collaborators regardless of their gender. This hypothesis examines whether strategic collaborations dilute gendered preferences in scholarly networks. Specifically it investigates whether gender homophily is less promnounced in scholars' preference to collaborate when potential collaborators have a higher H-index *(Hypothesis 4).*
+
+#### **Gender Homophily (H1)**
+
+The results consistently support **Hypothesis 1**, showing significant evidence of gender homophily across all models. The parameter for same-gender collaboration (sameX) remains positive and significant, indicating that scholars are more likely to collaborate with same-gender peers than with different-gender peers. This aligns with previous research suggesting that gendered barriers in academia, whether structural or cultural, can lead to the formation of gendered clusters/silos in collaborative networks (**\*\*SOURCE\*\***).
+
+Interestingly, the significance of gender homophily persists even after controlling for other covariates, such as department affiliation and h-index, demonstrating that it is a robust phenomenon in these networks. While this result is not unexpected, it emphasizes the enduring influence of gender dynamics on scholarly collaborations.
+
+#### **Departmental Differences in Gender Homophily (H2)**
+
+**Hypothesi 2** proposed that scholars in the sociology department exhibit weaker gender homophily than those in the political science department. While this hypothesis was not explicitly tested using an interaction term, comparisons across models suggest no substantial department-level differences in gender homophily. The same-gender collaboration parameter (sameX for gender) is nearly identical in models 2 and 3, indicating that the inclusion of department as a covariate does not significantly alter the pattern of same-gender collaborations.
+
+However, the department-related parameter for ego’s tendency to initiate collaborations (egoX for department) becomes significant in model 4, revealing a lower likelihood for political scientists to initiate collaborations compared to sociologists. This could imply department-level differences in collaboration norms or opportunities, which might indirectly influence gender homophily. ***Future research should include interaction terms between department and gender to further investigate these nuances.***
+
+Hypothesis 2 was not supported. While scholars show a significant preference for collaborating within their own department, with sociologists more likely to initiate collaborations than political scientists, *no* substantial differences in gender homophily were observed in relation to scholars' departments.
+
+#### **Structural Network Effects and Gender Homophily (H3)**
+
+In terms of structural network effects, reciprocity emerges as a consistently significant factor, indicating that collaborations are more likely to be mutual. This aligns with existing theories of dyadic reciprocity in networks, suggesting that once a collaboration tie is initiated, it is likely to be reciprocated (**\*\*SOURCE\*\***). Interestingly, the outdegree parameter (baseline likelihood of initiating a tie) fluctuates in significance across models but remains consistently negative when significant, indicating that scholars generally show a low tendency to initiate collaborations.
+
+In line with Hypothesis 3, Gender homophily (sameX) remains significant even when controlling for these structural effects, reinforcing its importance. This finding implies that scholars' same-gender preferences in creating ties are not merely a byproduct of network structure but reflect deeper social or cultural dynamics.
+
+#### **Prestige and Gender Homophily (H4)**
+
+The results provide little to no support for **Hypothesis 4**, which proposed that gender homophily is less influential when potential collaborators have higher academic prestige (as measured by the h-index). The inclusion of h-index as a covariate in model 4 reveals that scholars with higher h-index scores are more likely to attract collaborations (significant positive alter effect, altX) but less likely to initiate them (significant negative ego effect, egoX). This is consistent with theories of preferential attachment and upward mobility, where prestigious scholars act as hubs, receiving collaboration requests rather than initiating them (\*\***SOURCE**\*\*).
+
+However, since the the same-gender parameter (sameX) remained significant and largely unchanged, the influence of genderhomophily on scholars' decisions to collaborate is not substantially impacted by scholars' h-index. This finding suggests that while prestige plays a role in shaping collaboration networks, it does mitigate the tendency of scholars to prefer same-gender collaborations over different-gendered ones. Thus, while prestigious scholars are more sought after, their collaboration patterns remain influenced by gender.
+
+------------------------------------------------------------------------
+
+------------------------------------------------------------------------
+
+***STILL DOOOOO! INSERT SOURCES IN TEXT ABOVE***
+
+***PROOF READING NEXT PARTS:***
+
+------------------------------------------------------------------------
+
+------------------------------------------------------------------------
+
+#### **Broader Implications**
+
+The findings of this study highlight the interplay between structural, departmental, and individual factors in shaping co-authorship networks. Gender homophily appears to be a robust and enduring feature of these networks, resisting the influence of prestige and departmental context. This raises important questions about the structural barriers faced by scholars, particularly women, in accessing diverse collaboration opportunities.
+
+From a policy perspective, these results underscore the need for initiatives aimed at reducing gendered collaboration silos. For example, mentorship programs or institutional incentives that encourage cross-gender and cross-department collaborations could help mitigate these patterns. Additionally, the finding that prestigious scholars are less likely to initiate collaborations suggests that early-career researchers, particularly those from underrepresented groups, may face challenges in accessing these high-prestige hubs. Institutions should consider strategies to facilitate connections between early-career and high-prestige scholars to promote equity in collaboration opportunities.
+
+#### **Limitations and Future Research**
+
+This study has several limitations that warrant consideration. First, the lack of interaction terms between gender and department or h-index limits the ability to make strong conclusions about how these factors jointly influence collaboration patterns. Future studies should include such interactions to better understand these dynamics. Second, while the h-index serves as a useful proxy for academic prestige, other measures of prestige or influence, such as grant funding or editorial roles, might yield additional insights. Finally, the generalizability of these findings is limited to the specific departments and network structures examined here.
+
+Future research should explore longitudinal changes in collaboration patterns to assess whether gender homophily weakens over time, particularly as scholars gain prestige. Additionally, examining the role of institutional interventions, such as funding programs or diversity initiatives, could provide valuable insights into strategies for fostering more equitable collaboration networks.
+
+### **Conclusion**
+
+This study contributes to our understanding of the dynamics of co-authorship networks by highlighting the persistent influence of gender homophily, even in the presence of academic prestige and structural network effects. While prestigious scholars are more likely to attract collaborations, gendered patterns of collaboration endure, underscoring the need for targeted interventions to address these disparities. By disentangling the effects of gender, department, and prestige, this research provides a foundation for future studies and practical efforts aimed at fostering more inclusive and diverse academic collaboration networks.
+
+### Key Insights
+
+\- Gender homophily is a consistent and significant driver of collaboration, resistant to the moderating effects of department or academic prestige.
+
+\- Department affiliation influences collaboration behavior, with a preference for same-department collaborators but minimal effect on gendered collaboration patterns.
+
+\- Prestige affects who is sought as a collaborator but does not weaken the gendered preferences within these networks.
+
+------------------------------------------------------------------------
+
+# Discussion Outline
+
+Hypothesis 1 was strongly supported as scholars were more likely to collaborate with same-gender peers. Gender homophily (sameX) remains consistently significant across all models,with consistent evidence that scholars prefer same-gender collaborators. This effect persists even after controlling for departmental affiliation and prestige.
+
+#### 1. **Overview of Findings**
+
+-   Briefly summarize the main results in relation to the research questions.
+
+    -   Confirmed presence of **gender homophily** (H1).
+
+    -   No significant differences in homophily between departments sociology and political science departments (H2).
+
+    -   Structural network effects, such as reciprocity and indegree popularity, amplified collaboration patterns without mitigating gender homophily (H3).
+
+    -   High academic prestige (measured by h-index) reduced gender homophily, but its impact was nuanced (H4).
+
+-   *//H1 (Gender Homophily): Supported across all models, with consistent evidence that scholars prefer same-gender collaborators. This effect persists even after controlling for departmental affiliation and prestige.*
+
+-   *H2 (Departmental Differences in Gender Homophily): Not supported; no significant variation in gender homophily is found between Sociology and Political Science departments.*
+
+-   *H3 (Structural Effects and Gender Homophily): Structural effects like reciprocity and indegree popularity consistently influence collaboration patterns, but these effects do not diminish gender homophily.*
+
+-   *H4 (Gender Homophily and Prestige): Partially supported; while prestige influences collaboration preferences, gender homophily remains significant, indicating that prestige does not weaken gender-based patterns in co-authorship. These results provide a nuanced understanding of how gender, departmental affiliation, and academic prestige shape collaboration networks, highlighting persistent gender homophily alongside structural and prestige-related effects.//*
+
+#### 2. **Interpretation of Results**
+
+##### **Gender Homophily in Academic Networks (H1 & RQ1a)**
+
+-   Discuss the observed levels of gender homophily, confirming that scholars predominantly collaborate with same-gender peers.
+
+-   Link findings to existing literature, reinforcing prior work (e.g., Kwiek & Roszka, 2021).
+
+-   Highlight implications for gender equity, particularly the potential barriers for cross-gender collaborations.
+
+##### **Disciplinary Differences in Gender Homophily (H2 & RQ1b)**
+
+-   Analyze why Sociology showed weaker gender homophily than Political Science.
+
+    -   Discuss potential cultural and structural differences in the disciplines, including gender composition and norms.
+
+    -   Relate to societal perceptions of Sociology as more inclusive and Political Science as more male-dominated.
+
+-   Compare findings to prior literature on discipline-specific collaboration patterns and stereotypes.
+
+##### **Structural Network Effects and Reinforcement of Gender Homophily (H3 & RQ2)**
+
+-   Reflect on how structural effects (reciprocity, indegree popularity) shaped collaboration patterns without diminishing homophily.
+
+    -   Structural mechanisms as amplifiers of existing preferences and inequalities.
+
+    -   Discuss potential explanations, such as the persistence of gendered trust or comfort in professional relationships.
+
+-   Consider implications for network-based interventions aimed at reducing gender disparities.
+
+##### **Prestige and Gender Homophily (H4 & RQ3)**
+
+-   Discuss the complex relationship between prestige and gender homophily.
+
+    -   Highlight how high h-index scholars were less constrained by homophilic tendencies, with collaboration patterns becoming more gender-neutral.
+
+    -   Consider why prestige might disrupt homophily: increased visibility, strategic collaborations, or less reliance on informal networks.
+
+    -   Discuss nuances, such as whether the prestige effect benefits men and women equally.
+
+-   Connect findings to upward mobility and preferential attachment theories, emphasizing prestige as a potential pathway to mitigate gender clustering.
+
+#### Theoretical implications
+
+##### H Index
+
+Results: Both an alter's and an ego's H-Index seem to be relevant in collaboration preferences. The significant and positive estimateof AltX (b = 0.0829, SE = 0.0364) suggest that scholars with higher h-index are more preferred as collaborators. The egoX estimate is significant and negative (b = -0.1591, SE = 0.0744) suggesting that scholars with higher h-index are less likely to initiate collaborations. The estimate for the Indegree Popularity weighted by h-index is insignificant, suggesting that high-prestige individuals (as measured by their h-index) do not significantly receive more indegrees
+
+Discussion part about egoX h.index: "This is in line with theories of preferential attachment and upward mobility, because as egos with higher prestige will are more likely to receive request for collaboration rather then sending request for collaboration." - Niels/
+
+#### 3. **Theoretical Implications**
+
+-   **Gender Homophily and Network Dynamics:**
+
+    -   Extend understanding of how homophily operates across different contexts and disciplines.
+
+    -   Reinforce the need for theoretical frameworks that integrate individual preferences, structural factors, and institutional dynamics.
+
+-   **Role of Prestige:**
+
+    -   Position prestige as a critical factor that can challenge entrenched gender biases in collaboration.
+
+    -   Discuss potential for upward mobility to disrupt traditional network inequalities.
+
+#### 4. **Practical Implications**
+
+-   Suggest interventions to address gender disparities in academic networks.
+
+    -   Encourage cross-gender mentoring and collaboration initiatives.
+
+    -   Highlight the importance of creating equitable opportunities for women to attain academic prestige.
+
+-   Advocate for institutional policies that recognize and reward diverse collaboration patterns.
+
+#### 5. **Limitations**
+
+-   Acknowledge constraints of the study:
+
+    -   Focus on two departments at a single university; limited generalizability.
+
+    -   Reliance on h-index as a measure of prestige, which may not capture all dimensions of academic influence.
+
+    -   Potential underreporting or misclassification of gender in the dataset.
+
+-   Discuss the impact of these limitations on the interpretation of findings.
+
+#### 6. **Future Research Directions**
+
+-   Propose avenues for further investigation:
+
+    -   Explore gender homophily across additional disciplines and institutions.
+
+    -   Examine other dimensions of prestige (e.g., leadership roles, grant funding).
+
+    -   Investigate how collaboration networks evolve over time, particularly for early-career scholars.
+
+    -   Study the role of intersectionality, including race, ethnicity, and other identities, in shaping academic networks.
+
+#### **Conclusion**
+
+-   Reiterate the study’s contributions to understanding gender homophily, disciplinary differences, and the role of prestige in academic collaboration.
+
+-   Emphasize the importance of addressing gender dynamics in networks to foster inclusivity and equity in academia.
+
+# References

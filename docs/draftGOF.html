@@ -75,6 +75,29 @@ if (window.hljs) {
 }
 </style>
 
+<style type="text/css">
+/* for pandoc --citeproc since 2.11 */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
 
 <link rel="stylesheet" href="styles.css" type="text/css" />
 
@@ -456,7 +479,7 @@ div.tocify {
       <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Data</a>
       <ul class="dropdown-menu" role="menu">
         <li>
-          <a href="draftdata.html">Data &amp; Methods</a>
+          <a href="draftdata.html">Data &amp; Analysis</a>
         </li>
         <li>
           <a href="datapreptrynew.html">Data preparation</a>
@@ -502,13 +525,13 @@ div.tocify {
       <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Data</a>
       <ul class="dropdown-menu" role="menu">
         <li>
-          <a href="finaldata.html">Data &amp; Methods</a>
+          <a href="finaldata.html">Data &amp; Analysis</a>
         </li>
         <li>
-          <a href="finaldataprep.html">Data preparation</a>
+          <a href="finaldataprep.html">Data Preparation</a>
         </li>
         <li>
-          <a href="finaldescriptives.html">Descriptives</a>
+          <a href="finaldescriptives.html">Data Descriptives</a>
         </li>
       </ul>
     </li>
@@ -516,7 +539,7 @@ div.tocify {
       <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Results</a>
       <ul class="dropdown-menu" role="menu">
         <li>
-          <a href="finaldesresults.html">Descriptive results</a>
+          <a href="finaldesresults.html">Descriptive Analysis</a>
         </li>
         <li>
           <a href="finalestimate.html">Model Estimation</a>
@@ -570,7 +593,7 @@ div.tocify {
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>
-My Descriptives
+GOF
 </title>
 <p><link rel="stylesheet" href="styles.css">
 <!-- Link to the CSS file I created for dark mode code chunks --></p>
@@ -580,41 +603,16 @@ My Descriptives
   addClassKlippyTo("pre.r, pre.markdown");
   addKlippy('right', 'top', 'auto', '1', 'Copy code', 'Copied!');
 </script>
-<div id="goodness-of-fit-change" class="section level1" number="1">
-<h1><span class="header-section-number">1</span> Goodness of fit
-<strong>CHANGE</strong></h1>
-<p>Koen:</p>
-<p>The goodness of fit of a model indicates whether an estimated model
-represents the observed data. This is important as <code>RSiena</code>
-uses simulation to estimate the changes in the network. The goodness of
-fit checks whether the simulation matches the changes in the observed
-network. Due to the nature of the research questions, which focus on the
-tie formation dependent on indegrees, I tested the goodness of fit for
-the indegree distribution for each model.</p>
-<p>For model 1, 2, and 3, which all included a quadratic effect of
-indegree popularity, there is a good fit of the data with a p-value
-between <strong>0,332 and 0,367</strong>. This means that the fit only
-slightly increases when adding ego-level effects on top of the
-structural network effects. Additionally, this means that the estimates
-for these models can be interpreted. For model 4, which replaces the
-squared estimate of indegree popularity for a non-quadratic effect,
-there is a significant difference in the observed and expected indegree
-distribution (<strong>p = 0,03</strong>), indicating the the squared
-estimate is a better fit for the data. This is also in line with the
-theoretical explanation that the more indegree someone has the the
-stronger this popularity effect will be. The estimates in Model 4 can
-thus <strong>not be interpreted reliably</strong>.</p>
-</div>
-<div id="setup" class="section level1" number="2">
-<h1><span class="header-section-number">2</span> Setup</h1>
+<div id="setup" class="section level1" number="1">
+<h1><span class="header-section-number">1</span> Setup</h1>
 <p>Clean workspace.</p>
 <pre class="r test"><code>rm(list = ls())</code></pre>
-<div id="packages" class="section level2" number="2.1">
-<h2><span class="header-section-number">2.1</span> Packages</h2>
+<div id="packages" class="section level2" number="1.1">
+<h2><span class="header-section-number">1.1</span> Packages</h2>
 <pre class="r test"><code>require(RSiena)</code></pre>
 </div>
-<div id="functions" class="section level2" number="2.2">
-<h2><span class="header-section-number">2.2</span> Functions</h2>
+<div id="functions" class="section level2" number="1.2">
+<h2><span class="header-section-number">1.2</span> Functions</h2>
 <p>Functions chunk</p>
 <pre class="r test"><code>fpackage.check &lt;- function(packages) {
     lapply(packages, FUN = function(x) {
@@ -646,6 +644,30 @@ fshowdf &lt;- function(x, ...) {
         kableExtra::scroll_box(width = &quot;100%&quot;, height = &quot;300px&quot;)
 }</code></pre>
 </div>
+</div>
+<div id="goodness-of-fit" class="section level1" number="2">
+<h1><span class="header-section-number">2</span> Goodness of Fit</h1>
+<p>The goodness of fit (GOF) for a model assesses how well the estimated
+model fits the observed data. This evaluation is crucial because
+<code>RSiena</code> relies on simulations to estimate changes within the
+network (<span class="citation">Snijders, Ripley, B’oda, V"or"os, &amp;
+Preciado (2024)</span>). GOF measures indicate whether the simulated
+network matches the changes in the observed network. The use of the
+specific GOF measure of a model’s Indegree Distribution seems most
+appropriate since the study’s focus lies on changes in directed ties
+between schoalrs. A GOF with a p-value below .05 indicates a poor fit
+and calls for adjustment of the model, while a p-value above .05 usually
+indicates an acceptable or good fit.<br />
+The GOF measures of Indegree Distribution for the null model (<em>p</em>
+= .008) and model 1 <em>(p</em> = .002) both display p-values below .05.
+This indicates that they do not fit the data well. This makes sense,
+since the null model and model 1 do not contain any network effects yet.
+This also implies that we should not interpret the estimates of these
+models. The GOF of model 2 (<em>p</em> = .096) indicates an acceptable
+fit, while model 3 (<em>p</em> = .12) seems to be even better fitting.
+Overall, the final model, model 4 (<em>p</em> = .197), including all the
+covariates investigated in this study, has the best fit.</p>
+<!--  M0: 0.008  M1: 0.002  M2: 0.096  M3: 0.12  M4: 0.197  -->
 </div>
 <div id="model-0" class="section level1" number="3">
 <h1><span class="header-section-number">3</span> Model 0</h1>
@@ -720,16 +742,27 @@ plot(GOF_M2.1, main = &quot;GOF - Model 2 \n Indegree Distribution&quot;)</code>
 <pre class="r test"><code>GOF_M3 &lt;- sienaGOF(Model3, IndegreeDistribution, verbose = FALSE, join = TRUE, varName = &quot;nets&quot;)
 
 plot(GOF_M3, main = &quot;GOF - Model 3 \n Indegree Distribution&quot;)</code></pre>
-<p><img src="draftGOF_files/figure-html/GOF%20M3-1.png" width="672" /> #
-Model 4</p>
+<p><img src="draftGOF_files/figure-html/GOF%20M3-1.png" width="672" /></p>
+</div>
+<div id="model-4" class="section level1" number="7">
+<h1><span class="header-section-number">7</span> Model 4</h1>
 <pre class="r test"><code>Model4 &lt;- fload(&quot;./data/processed/estimated_M4_20241123.rda&quot;)</code></pre>
 <pre class="r test"><code>GOF_M4 &lt;- sienaGOF(Model4, IndegreeDistribution, verbose = FALSE, join = TRUE, varName = &quot;nets&quot;)
 
 plot(GOF_M4, main = &quot;GOF - Model 4 \n Indegree Distribution&quot;)</code></pre>
 <p><img src="draftGOF_files/figure-html/GOF%20M4-1.png" width="672" /></p>
+<div id="refs" class="references csl-bib-body hanging-indent"
+entry-spacing="0" line-spacing="2">
+<div id="ref-RSiena_manual" class="csl-entry">
+Snijders, T. A. B., Ripley, R., B’oda, Z., V"or"os, A., &amp; Preciado,
+P. (2024). <em>Manual for RSiena</em>. Groningen, The Netherlands:
+University of Groningen. Retrieved from <a
+href="https://www.stats.ox.ac.uk/~snijders/siena/">https://www.stats.ox.ac.uk/~snijders/siena/</a>
+</div>
+</div>
 </div>
 
-<div id="rmd-source-code">LS0tDQp0aXRsZTogIkdPRmRyYWZ0Ig0KYXV0aG9yOiAiVmVyb29vIg0KZGF0ZTogIjIwMjQtMTEtMjMiDQpvdXRwdXQ6IGh0bWxfZG9jdW1lbnQNCi0tLQ0KDQoNCjxodG1sIGxhbmc9ImVuIj4NCjxoZWFkPg0KICAgIDxtZXRhIGNoYXJzZXQ9IlVURi04Ij4NCiAgICA8bWV0YSBuYW1lPSJ2aWV3cG9ydCIgY29udGVudD0id2lkdGg9ZGV2aWNlLXdpZHRoLCBpbml0aWFsLXNjYWxlPTEuMCI+DQogICAgPHRpdGxlPk15IERlc2NyaXB0aXZlczwvdGl0bGU+DQogICAgPGxpbmsgcmVsPSJzdHlsZXNoZWV0IiBocmVmPSJzdHlsZXMuY3NzIj4gIDwhLS0gTGluayB0byB0aGUgQ1NTIGZpbGUgSSBjcmVhdGVkIGZvciBkYXJrIG1vZGUgY29kZSBjaHVua3MgLS0+DQoNCjwvaGVhZD4NCjwvaHRtbD4NCg0KYGBge3Igc2V0dXAsIGluY2x1ZGU9RkFMU0V9DQprbml0cjo6b3B0c19jaHVuayRzZXQoZWNobyA9IFRSVUUpDQpgYGANCg0KYGBge3IsIGdsb2JhbHNldHRpbmdzLCBlY2hvPUZBTFNFLCB3YXJuaW5nPUZBTFNFLCByZXN1bHRzPSdoaWRlJ30NCmxpYnJhcnkoa25pdHIpDQoNCmtuaXRyOjpvcHRzX2NodW5rJHNldChlY2hvID0gVFJVRSkNCm9wdHNfY2h1bmskc2V0KHRpZHkub3B0cz1saXN0KHdpZHRoLmN1dG9mZj0xMDApLHRpZHk9VFJVRSwgd2FybmluZyA9IEZBTFNFLCBtZXNzYWdlID0gRkFMU0UsY29tbWVudCA9ICIjPiIsIGNhY2hlPVRSVUUsIGNsYXNzLnNvdXJjZT1jKCJ0ZXN0IiksIGNsYXNzLm91dHB1dD1jKCJ0ZXN0MiIpKQ0Kb3B0aW9ucyh3aWR0aCA9IDEwMCkNCnJnbDo6c2V0dXBLbml0cigpDQoNCmNvbG9yaXplIDwtIGZ1bmN0aW9uKHgsIGNvbG9yKSB7c3ByaW50ZigiPHNwYW4gc3R5bGU9J2NvbG9yOiAlczsnPiVzPC9zcGFuPiIsIGNvbG9yLCB4KSB9DQoNCmBgYA0KDQpgYGB7ciBrbGlwcHksIGVjaG89RkFMU0UsIGluY2x1ZGU9VFJVRX0NCmtsaXBweTo6a2xpcHB5KHBvc2l0aW9uID0gYygndG9wJywgJ3JpZ2h0JykpDQoja2xpcHB5OjprbGlwcHkoY29sb3IgPSAnZGFya3JlZCcpDQoja2xpcHB5OjprbGlwcHkodG9vbHRpcF9tZXNzYWdlID0gJ0NsaWNrIHRvIGNvcHknLCB0b29sdGlwX3N1Y2Nlc3MgPSAnRG9uZScpDQpgYGANCg0KIyBHb29kbmVzcyBvZiBmaXQgKipDSEFOR0UqKg0KS29lbjoNCg0KVGhlIGdvb2RuZXNzIG9mIGZpdCBvZiBhIG1vZGVsIGluZGljYXRlcyB3aGV0aGVyIGFuIGVzdGltYXRlZCBtb2RlbCByZXByZXNlbnRzIHRoZSBvYnNlcnZlZCBkYXRhLiBUaGlzIGlzIGltcG9ydGFudCBhcyBgUlNpZW5hYCB1c2VzIHNpbXVsYXRpb24gdG8gZXN0aW1hdGUgdGhlIGNoYW5nZXMgaW4gdGhlIG5ldHdvcmsuIFRoZSBnb29kbmVzcyBvZiBmaXQgY2hlY2tzIHdoZXRoZXIgdGhlIHNpbXVsYXRpb24gbWF0Y2hlcyB0aGUgY2hhbmdlcyBpbiB0aGUgb2JzZXJ2ZWQgbmV0d29yay4gDQpEdWUgdG8gdGhlIG5hdHVyZSBvZiB0aGUgcmVzZWFyY2ggcXVlc3Rpb25zLCB3aGljaCBmb2N1cyBvbiB0aGUgdGllIGZvcm1hdGlvbiBkZXBlbmRlbnQgb24gaW5kZWdyZWVzLCBJIHRlc3RlZCB0aGUgZ29vZG5lc3Mgb2YgZml0IGZvciB0aGUgaW5kZWdyZWUgZGlzdHJpYnV0aW9uIGZvciBlYWNoIG1vZGVsLiAgDQoNCkZvciBtb2RlbCAxLCAyLCBhbmQgMywgd2hpY2ggYWxsIGluY2x1ZGVkIGEgcXVhZHJhdGljIGVmZmVjdCBvZiBpbmRlZ3JlZSBwb3B1bGFyaXR5LCB0aGVyZSBpcyBhIGdvb2QgZml0IG9mIHRoZSBkYXRhIHdpdGggYSBwLXZhbHVlIGJldHdlZW4gKiowLDMzMiBhbmQgMCwzNjcqKi4gVGhpcyBtZWFucyB0aGF0IHRoZSBmaXQgb25seSBzbGlnaHRseSBpbmNyZWFzZXMgd2hlbiBhZGRpbmcgZWdvLWxldmVsIGVmZmVjdHMgb24gdG9wIG9mIHRoZSBzdHJ1Y3R1cmFsIG5ldHdvcmsgZWZmZWN0cy4gQWRkaXRpb25hbGx5LCB0aGlzIG1lYW5zIHRoYXQgdGhlIGVzdGltYXRlcyBmb3IgdGhlc2UgbW9kZWxzIGNhbiBiZSBpbnRlcnByZXRlZC4gDQpGb3IgbW9kZWwgNCwgd2hpY2ggcmVwbGFjZXMgdGhlIHNxdWFyZWQgZXN0aW1hdGUgb2YgaW5kZWdyZWUgcG9wdWxhcml0eSBmb3IgYSBub24tcXVhZHJhdGljIGVmZmVjdCwgdGhlcmUgaXMgYSBzaWduaWZpY2FudCBkaWZmZXJlbmNlIGluIHRoZSBvYnNlcnZlZCBhbmQgZXhwZWN0ZWQgaW5kZWdyZWUgZGlzdHJpYnV0aW9uICgqKnAgPSAwLDAzKiopLCBpbmRpY2F0aW5nIHRoZSB0aGUgc3F1YXJlZCBlc3RpbWF0ZSBpcyBhIGJldHRlciBmaXQgZm9yIHRoZSBkYXRhLiBUaGlzIGlzIGFsc28gaW4gbGluZSB3aXRoIHRoZSB0aGVvcmV0aWNhbCBleHBsYW5hdGlvbiB0aGF0IHRoZSBtb3JlIGluZGVncmVlIHNvbWVvbmUgaGFzIHRoZSB0aGUgc3Ryb25nZXIgdGhpcyBwb3B1bGFyaXR5IGVmZmVjdCB3aWxsIGJlLiBUaGUgZXN0aW1hdGVzIGluIE1vZGVsIDQgY2FuIHRodXMgKipub3QgYmUgaW50ZXJwcmV0ZWQgcmVsaWFibHkqKi4gDQoNCiMgU2V0dXANCkNsZWFuIHdvcmtzcGFjZS4gDQpgYGB7ciBjbGVhbn0NCnJtKGxpc3QgPSBscygpKQ0KYGBgDQoNCiMjIFBhY2thZ2VzDQoNCmBgYHtyIHBhY2thZ2V9DQpyZXF1aXJlKFJTaWVuYSkNCg0KYGBgDQoNCiMjIEZ1bmN0aW9ucw0KDQpGdW5jdGlvbnMgY2h1bmsNCg0KYGBge3IgZnVuY3Rpb25zIDEsIGhpZGUgPSBUUlVFfQ0KZnBhY2thZ2UuY2hlY2sgPC0gZnVuY3Rpb24ocGFja2FnZXMpIHsNCiAgICBsYXBwbHkocGFja2FnZXMsIEZVTiA9IGZ1bmN0aW9uKHgpIHsNCiAgICAgICAgaWYgKCFyZXF1aXJlKHgsIGNoYXJhY3Rlci5vbmx5ID0gVFJVRSkpIHsNCiAgICAgICAgICAgIGluc3RhbGwucGFja2FnZXMoeCwgZGVwZW5kZW5jaWVzID0gVFJVRSkNCiAgICAgICAgICAgIGxpYnJhcnkoeCwgY2hhcmFjdGVyLm9ubHkgPSBUUlVFKQ0KICAgICAgICB9DQogICAgfSkNCn0NCg0KZnNhdmUgPC0gZnVuY3Rpb24oeCwgZmlsZSA9IE5VTEwsIGxvY2F0aW9uID0gIi4vZGF0YS9wcm9jZXNzZWQvIikgew0KICAgIGlmZWxzZSghZGlyLmV4aXN0cygiZGF0YSIpLCBkaXIuY3JlYXRlKCJkYXRhIiksIEZBTFNFKQ0KICAgIGlmZWxzZSghZGlyLmV4aXN0cygiZGF0YS9wcm9jZXNzZWQiKSwgZGlyLmNyZWF0ZSgiZGF0YS9wcm9jZXNzZWQiKSwgRkFMU0UpDQogICAgaWYgKGlzLm51bGwoZmlsZSkpDQogICAgICAgIGZpbGUgPSBkZXBhcnNlKHN1YnN0aXR1dGUoeCkpDQogICAgZGF0ZW5hbWUgPC0gc3Vic3RyKGdzdWIoIls6LV0iLCAiIiwgU3lzLnRpbWUoKSksIDEsIDgpDQogICAgdG90YWxuYW1lIDwtIHBhc3RlKGxvY2F0aW9uLCBmaWxlLCAiXyIsIGRhdGVuYW1lLCAiLnJkYSIsIHNlcCA9ICIiKQ0KICAgIHNhdmUoeCwgZmlsZSA9IHRvdGFsbmFtZSkgICNuZWVkIHRvIGZpeCBpZiBmaWxlIGlzIHJlbG9hZGVkIGFzIGlucHV0IG5hbWUsIG5vdCBhcyB4LiANCn0NCg0KZmxvYWQgPC0gZnVuY3Rpb24oZmlsZW5hbWUpIHsNCiAgICBsb2FkKGZpbGVuYW1lKQ0KICAgIGdldChscygpW2xzKCkgIT0gImZpbGVuYW1lIl0pDQp9DQoNCmZzaG93ZGYgPC0gZnVuY3Rpb24oeCwgLi4uKSB7DQogICAga25pdHI6OmthYmxlKHgsIGRpZ2l0cyA9IDIsICJodG1sIiwgLi4uKSAlPiUNCiAgICAgICAga2FibGVFeHRyYTo6a2FibGVfc3R5bGluZyhib290c3RyYXBfb3B0aW9ucyA9IGMoInN0cmlwZWQiLCAiaG92ZXIiKSkgJT4lDQogICAgICAgIGthYmxlRXh0cmE6OnNjcm9sbF9ib3god2lkdGggPSAiMTAwJSIsIGhlaWdodCA9ICIzMDBweCIpDQp9DQoNCmBgYA0KDQoNCg0KIyBNb2RlbCAwDQpgYGB7cn0NCk1vZGVsMC4xIDwtIGZsb2FkKCIuL2RhdGEvcHJvY2Vzc2VkL2VzdGltYXRlZF9NMC4xXzIwMjQxMTIzLnJkYSIpDQpNb2RlbDAuMQ0KYGBgDQoNCmBgYHtyIEdPRiBNMH0NCkdPRl9NMC4xIDwtIHNpZW5hR09GKE1vZGVsMC4xLCBJbmRlZ3JlZURpc3RyaWJ1dGlvbiwgdmVyYm9zZSA9IEZBTFNFLCBqb2luID0gVFJVRSwgdmFyTmFtZSA9ICJuZXRzIikNCg0KcGxvdChHT0ZfTTAuMSwgbWFpbiA9ICdHT0YgLSAiTnVsbCIgTW9kZWwgMC4xIFxuIEluZGVncmVlIERpc3RyaWJ1dGlvbicpDQoNCg0KYGBgDQoNCg0KIyBNb2RlbCAxDQpgYGB7cn0NCk1vZGVsMS4xIDwtIGZsb2FkKCIuL2RhdGEvcHJvY2Vzc2VkL2VzdGltYXRlZF9NMS4xXzIwMjQxMTIzLnJkYSIpDQpgYGANCg0KYGBge3IgR09GIE0xfQ0KR09GX00xLjEgPC0gc2llbmFHT0YoTW9kZWwxLjEsIEluZGVncmVlRGlzdHJpYnV0aW9uLCB2ZXJib3NlID0gRkFMU0UsIGpvaW4gPSBUUlVFLCB2YXJOYW1lID0gIm5ldHMiKQ0KDQpwbG90KEdPRl9NMS4xLCBtYWluID0gIkdPRiAtIE1vZGVsIDEgXG4gSW5kZWdyZWUgRGlzdHJpYnV0aW9uIikNCmBgYA0KDQoNCiMgTW9kZWwgMg0KYGBge3J9DQpNb2RlbDIuMSA8LSBmbG9hZCAoIi4vZGF0YS9wcm9jZXNzZWQvZXN0aW1hdGVkX00yLjFfMjAyNDExMjMucmRhIikNCk1vZGVsMi4xDQpgYGANCg0KYGBge3IgR09GIE0yfQ0KR09GX00yLjEgPC0gc2llbmFHT0YoTW9kZWwyLjEsIEluZGVncmVlRGlzdHJpYnV0aW9uLCB2ZXJib3NlID0gRkFMU0UsIGpvaW4gPSBUUlVFLCB2YXJOYW1lID0gIm5ldHMiKQ0KDQpwbG90KEdPRl9NMi4xLCBtYWluID0gIkdPRiAtIE1vZGVsIDIgXG4gSW5kZWdyZWUgRGlzdHJpYnV0aW9uIikNCmBgYA0KDQoNCiMgTW9kZWwgMw0KYGBge3IsIGhpZGU9VFJVRX0NCk1vZGVsMyA8LSBmbG9hZCgiLi9kYXRhL3Byb2Nlc3NlZC9lc3RpbWF0ZWRfTTNfMjAyNDExMjMucmRhIikNCmBgYA0KDQpgYGB7ciBHT0YgTTMsIGhpZGU9VFJVRX0NCkdPRl9NMyA8LSBzaWVuYUdPRihNb2RlbDMsIEluZGVncmVlRGlzdHJpYnV0aW9uLCB2ZXJib3NlID0gRkFMU0UsIGpvaW4gPSBUUlVFLCB2YXJOYW1lID0gIm5ldHMiKQ0KDQpwbG90KEdPRl9NMywgbWFpbiA9ICJHT0YgLSBNb2RlbCAzIFxuIEluZGVncmVlIERpc3RyaWJ1dGlvbiIpDQpgYGANCiMgTW9kZWwgNA0KYGBge3IsIGhpZGU9VFJVRX0NCk1vZGVsNCA8LSBmbG9hZCgiLi9kYXRhL3Byb2Nlc3NlZC9lc3RpbWF0ZWRfTTRfMjAyNDExMjMucmRhIikNCmBgYA0KDQpgYGB7ciBHT0YgTTQsIGhpZGU9VFJVRX0NCkdPRl9NNCA8LSBzaWVuYUdPRihNb2RlbDQsIEluZGVncmVlRGlzdHJpYnV0aW9uLCB2ZXJib3NlID0gRkFMU0UsIGpvaW4gPSBUUlVFLCB2YXJOYW1lID0gIm5ldHMiKQ0KDQpwbG90KEdPRl9NNCwgbWFpbiA9ICJHT0YgLSBNb2RlbCA0IFxuIEluZGVncmVlIERpc3RyaWJ1dGlvbiIpDQpgYGA=</div>
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIkdPRmRyYWZ0Ig0KYXV0aG9yOiAiVmVyb29vIg0KZGF0ZTogIjIwMjQtMTEtMjMiDQpvdXRwdXQ6IGh0bWxfZG9jdW1lbnQNCmJpYmxpb2dyYXBoeTogcmVmZXJlbmNlcy5iaWINCmNzbDogYXBhLmNzbA0KLS0tDQoNCjxodG1sIGxhbmc9ImVuIj4NCg0KPGhlYWQ+DQoNCjxtZXRhIGNoYXJzZXQ9IlVURi04Ij4NCg0KPG1ldGEgbmFtZT0idmlld3BvcnQiIGNvbnRlbnQ9IndpZHRoPWRldmljZS13aWR0aCwgaW5pdGlhbC1zY2FsZT0xLjAiPg0KDQo8dGl0bGU+R09GPC90aXRsZT4NCg0KPGxpbmsgcmVsPSJzdHlsZXNoZWV0IiBocmVmPSJzdHlsZXMuY3NzIj4gPCEtLSBMaW5rIHRvIHRoZSBDU1MgZmlsZSBJIGNyZWF0ZWQgZm9yIGRhcmsgbW9kZSBjb2RlIGNodW5rcyAtLT4NCg0KPC9oZWFkPg0KDQo8L2h0bWw+DQoNCmBgYHtyIHNldHVwLCBpbmNsdWRlPUZBTFNFfQ0Ka25pdHI6Om9wdHNfY2h1bmskc2V0KGVjaG8gPSBUUlVFKQ0KYGBgDQoNCmBgYHtyLCBnbG9iYWxzZXR0aW5ncywgZWNobz1GQUxTRSwgd2FybmluZz1GQUxTRSwgcmVzdWx0cz0naGlkZSd9DQpsaWJyYXJ5KGtuaXRyKQ0KDQprbml0cjo6b3B0c19jaHVuayRzZXQoZWNobyA9IFRSVUUpDQpvcHRzX2NodW5rJHNldCh0aWR5Lm9wdHM9bGlzdCh3aWR0aC5jdXRvZmY9MTAwKSx0aWR5PVRSVUUsIHdhcm5pbmcgPSBGQUxTRSwgbWVzc2FnZSA9IEZBTFNFLGNvbW1lbnQgPSAiIz4iLCBjYWNoZT1UUlVFLCBjbGFzcy5zb3VyY2U9YygidGVzdCIpLCBjbGFzcy5vdXRwdXQ9YygidGVzdDIiKSkNCm9wdGlvbnMod2lkdGggPSAxMDApDQpyZ2w6OnNldHVwS25pdHIoKQ0KDQpjb2xvcml6ZSA8LSBmdW5jdGlvbih4LCBjb2xvcikge3NwcmludGYoIjxzcGFuIHN0eWxlPSdjb2xvcjogJXM7Jz4lczwvc3Bhbj4iLCBjb2xvciwgeCkgfQ0KDQpgYGANCg0KYGBge3Iga2xpcHB5LCBlY2hvPUZBTFNFLCBpbmNsdWRlPVRSVUV9DQprbGlwcHk6OmtsaXBweShwb3NpdGlvbiA9IGMoJ3RvcCcsICdyaWdodCcpKQ0KI2tsaXBweTo6a2xpcHB5KGNvbG9yID0gJ2RhcmtyZWQnKQ0KI2tsaXBweTo6a2xpcHB5KHRvb2x0aXBfbWVzc2FnZSA9ICdDbGljayB0byBjb3B5JywgdG9vbHRpcF9zdWNjZXNzID0gJ0RvbmUnKQ0KYGBgDQoNCiMgU2V0dXANCg0KQ2xlYW4gd29ya3NwYWNlLg0KDQpgYGB7ciBjbGVhbn0NCnJtKGxpc3QgPSBscygpKQ0KYGBgDQoNCiMjIFBhY2thZ2VzDQoNCmBgYHtyIHBhY2thZ2V9DQpyZXF1aXJlKFJTaWVuYSkNCg0KYGBgDQoNCiMjIEZ1bmN0aW9ucw0KDQpGdW5jdGlvbnMgY2h1bmsNCg0KYGBge3IgZnVuY3Rpb25zIDEsIGhpZGUgPSBUUlVFfQ0KZnBhY2thZ2UuY2hlY2sgPC0gZnVuY3Rpb24ocGFja2FnZXMpIHsNCiAgICBsYXBwbHkocGFja2FnZXMsIEZVTiA9IGZ1bmN0aW9uKHgpIHsNCiAgICAgICAgaWYgKCFyZXF1aXJlKHgsIGNoYXJhY3Rlci5vbmx5ID0gVFJVRSkpIHsNCiAgICAgICAgICAgIGluc3RhbGwucGFja2FnZXMoeCwgZGVwZW5kZW5jaWVzID0gVFJVRSkNCiAgICAgICAgICAgIGxpYnJhcnkoeCwgY2hhcmFjdGVyLm9ubHkgPSBUUlVFKQ0KICAgICAgICB9DQogICAgfSkNCn0NCg0KZnNhdmUgPC0gZnVuY3Rpb24oeCwgZmlsZSA9IE5VTEwsIGxvY2F0aW9uID0gIi4vZGF0YS9wcm9jZXNzZWQvIikgew0KICAgIGlmZWxzZSghZGlyLmV4aXN0cygiZGF0YSIpLCBkaXIuY3JlYXRlKCJkYXRhIiksIEZBTFNFKQ0KICAgIGlmZWxzZSghZGlyLmV4aXN0cygiZGF0YS9wcm9jZXNzZWQiKSwgZGlyLmNyZWF0ZSgiZGF0YS9wcm9jZXNzZWQiKSwgRkFMU0UpDQogICAgaWYgKGlzLm51bGwoZmlsZSkpDQogICAgICAgIGZpbGUgPSBkZXBhcnNlKHN1YnN0aXR1dGUoeCkpDQogICAgZGF0ZW5hbWUgPC0gc3Vic3RyKGdzdWIoIls6LV0iLCAiIiwgU3lzLnRpbWUoKSksIDEsIDgpDQogICAgdG90YWxuYW1lIDwtIHBhc3RlKGxvY2F0aW9uLCBmaWxlLCAiXyIsIGRhdGVuYW1lLCAiLnJkYSIsIHNlcCA9ICIiKQ0KICAgIHNhdmUoeCwgZmlsZSA9IHRvdGFsbmFtZSkgICNuZWVkIHRvIGZpeCBpZiBmaWxlIGlzIHJlbG9hZGVkIGFzIGlucHV0IG5hbWUsIG5vdCBhcyB4LiANCn0NCg0KZmxvYWQgPC0gZnVuY3Rpb24oZmlsZW5hbWUpIHsNCiAgICBsb2FkKGZpbGVuYW1lKQ0KICAgIGdldChscygpW2xzKCkgIT0gImZpbGVuYW1lIl0pDQp9DQoNCmZzaG93ZGYgPC0gZnVuY3Rpb24oeCwgLi4uKSB7DQogICAga25pdHI6OmthYmxlKHgsIGRpZ2l0cyA9IDIsICJodG1sIiwgLi4uKSAlPiUNCiAgICAgICAga2FibGVFeHRyYTo6a2FibGVfc3R5bGluZyhib290c3RyYXBfb3B0aW9ucyA9IGMoInN0cmlwZWQiLCAiaG92ZXIiKSkgJT4lDQogICAgICAgIGthYmxlRXh0cmE6OnNjcm9sbF9ib3god2lkdGggPSAiMTAwJSIsIGhlaWdodCA9ICIzMDBweCIpDQp9DQoNCmBgYA0KDQojIEdvb2RuZXNzIG9mIEZpdA0KDQpUaGUgZ29vZG5lc3Mgb2YgZml0IChHT0YpIGZvciBhIG1vZGVsIGFzc2Vzc2VzIGhvdyB3ZWxsIHRoZSBlc3RpbWF0ZWQgbW9kZWwgZml0cyB0aGUgb2JzZXJ2ZWQgZGF0YS4gVGhpcyBldmFsdWF0aW9uIGlzIGNydWNpYWwgYmVjYXVzZSBgUlNpZW5hYCByZWxpZXMgb24gc2ltdWxhdGlvbnMgdG8gZXN0aW1hdGUgY2hhbmdlcyB3aXRoaW4gdGhlIG5ldHdvcmsgKEBSU2llbmFfbWFudWFsKS4gR09GIG1lYXN1cmVzIGluZGljYXRlIHdoZXRoZXIgdGhlIHNpbXVsYXRlZCBuZXR3b3JrIG1hdGNoZXMgdGhlIGNoYW5nZXMgaW4gdGhlIG9ic2VydmVkIG5ldHdvcmsuIFRoZSB1c2Ugb2YgdGhlIHNwZWNpZmljIEdPRiBtZWFzdXJlIG9mIGEgbW9kZWwncyBJbmRlZ3JlZSBEaXN0cmlidXRpb24gc2VlbXMgbW9zdCBhcHByb3ByaWF0ZSBzaW5jZSB0aGUgc3R1ZHkncyBmb2N1cyBsaWVzIG9uIGNoYW5nZXMgaW4gZGlyZWN0ZWQgdGllcyBiZXR3ZWVuIHNjaG9hbHJzLiBBIEdPRiB3aXRoIGEgcC12YWx1ZSBiZWxvdyAuMDUgaW5kaWNhdGVzIGEgcG9vciBmaXQgYW5kIGNhbGxzIGZvciBhZGp1c3RtZW50IG9mIHRoZSBtb2RlbCwgd2hpbGUgYSBwLXZhbHVlIGFib3ZlIC4wNSB1c3VhbGx5IGluZGljYXRlcyBhbiBhY2NlcHRhYmxlIG9yIGdvb2QgZml0LiBcDQpUaGUgR09GIG1lYXN1cmVzIG9mIEluZGVncmVlIERpc3RyaWJ1dGlvbiBmb3IgdGhlIG51bGwgbW9kZWwgKCpwKiA9IC4wMDgpIGFuZCBtb2RlbCAxICoocCogPSAuMDAyKSBib3RoIGRpc3BsYXkgcC12YWx1ZXMgYmVsb3cgLjA1LiBUaGlzIGluZGljYXRlcyB0aGF0IHRoZXkgZG8gbm90IGZpdCB0aGUgZGF0YSB3ZWxsLiBUaGlzIG1ha2VzIHNlbnNlLCBzaW5jZSB0aGUgbnVsbCBtb2RlbCBhbmQgbW9kZWwgMSBkbyBub3QgY29udGFpbiBhbnkgbmV0d29yayBlZmZlY3RzIHlldC4gVGhpcyBhbHNvIGltcGxpZXMgdGhhdCB3ZSBzaG91bGQgbm90IGludGVycHJldCB0aGUgZXN0aW1hdGVzIG9mIHRoZXNlIG1vZGVscy4gVGhlIEdPRiBvZiBtb2RlbCAyICgqcCogPSAuMDk2KSBpbmRpY2F0ZXMgYW4gYWNjZXB0YWJsZSBmaXQsIHdoaWxlIG1vZGVsIDMgKCpwKiA9IC4xMikgc2VlbXMgdG8gYmUgZXZlbiBiZXR0ZXIgZml0dGluZy4gT3ZlcmFsbCwgdGhlIGZpbmFsIG1vZGVsLCBtb2RlbCA0ICgqcCogPSAuMTk3KSwgaW5jbHVkaW5nIGFsbCB0aGUgY292YXJpYXRlcyBpbnZlc3RpZ2F0ZWQgaW4gdGhpcyBzdHVkeSwgaGFzIHRoZSBiZXN0IGZpdC4NCg0KYGBgez1odG1sfQ0KPCEtLSAgTTA6IDAuMDA4ICBNMTogMC4wMDIgIE0yOiAwLjA5NiAgTTM6IDAuMTIgIE00OiAwLjE5NyAgLS0+DQpgYGANCiMgTW9kZWwgMA0KDQpgYGB7cn0NCk1vZGVsMC4xIDwtIGZsb2FkKCIuL2RhdGEvcHJvY2Vzc2VkL2VzdGltYXRlZF9NMC4xXzIwMjQxMTIzLnJkYSIpDQpNb2RlbDAuMQ0KYGBgDQoNCmBgYHtyIEdPRiBNMH0NCkdPRl9NMC4xIDwtIHNpZW5hR09GKE1vZGVsMC4xLCBJbmRlZ3JlZURpc3RyaWJ1dGlvbiwgdmVyYm9zZSA9IEZBTFNFLCBqb2luID0gVFJVRSwgdmFyTmFtZSA9ICJuZXRzIikNCg0KcGxvdChHT0ZfTTAuMSwgbWFpbiA9ICdHT0YgLSAiTnVsbCIgTW9kZWwgMC4xIFxuIEluZGVncmVlIERpc3RyaWJ1dGlvbicpDQoNCg0KYGBgDQoNCiMgTW9kZWwgMQ0KDQpgYGB7cn0NCk1vZGVsMS4xIDwtIGZsb2FkKCIuL2RhdGEvcHJvY2Vzc2VkL2VzdGltYXRlZF9NMS4xXzIwMjQxMTIzLnJkYSIpDQoNCmBgYA0KDQpgYGB7ciBHT0YgTTF9DQpHT0ZfTTEuMSA8LSBzaWVuYUdPRihNb2RlbDEuMSwgSW5kZWdyZWVEaXN0cmlidXRpb24sIHZlcmJvc2UgPSBGQUxTRSwgam9pbiA9IFRSVUUsIHZhck5hbWUgPSAibmV0cyIpDQoNCnBsb3QoR09GX00xLjEsIG1haW4gPSAiR09GIC0gTW9kZWwgMSBcbiBJbmRlZ3JlZSBEaXN0cmlidXRpb24iKQ0KYGBgDQoNCiMgTW9kZWwgMg0KDQpgYGB7cn0NCk1vZGVsMi4xIDwtIGZsb2FkICgiLi9kYXRhL3Byb2Nlc3NlZC9lc3RpbWF0ZWRfTTIuMV8yMDI0MTEyMy5yZGEiKQ0KTW9kZWwyLjENCmBgYA0KDQpgYGB7ciBHT0YgTTJ9DQpHT0ZfTTIuMSA8LSBzaWVuYUdPRihNb2RlbDIuMSwgSW5kZWdyZWVEaXN0cmlidXRpb24sIHZlcmJvc2UgPSBGQUxTRSwgam9pbiA9IFRSVUUsIHZhck5hbWUgPSAibmV0cyIpDQoNCnBsb3QoR09GX00yLjEsIG1haW4gPSAiR09GIC0gTW9kZWwgMiBcbiBJbmRlZ3JlZSBEaXN0cmlidXRpb24iKQ0KYGBgDQoNCiMgTW9kZWwgMw0KDQpgYGB7ciwgaGlkZT1UUlVFfQ0KTW9kZWwzIDwtIGZsb2FkKCIuL2RhdGEvcHJvY2Vzc2VkL2VzdGltYXRlZF9NM18yMDI0MTEyMy5yZGEiKQ0KYGBgDQoNCmBgYHtyIEdPRiBNMywgaGlkZT1UUlVFfQ0KR09GX00zIDwtIHNpZW5hR09GKE1vZGVsMywgSW5kZWdyZWVEaXN0cmlidXRpb24sIHZlcmJvc2UgPSBGQUxTRSwgam9pbiA9IFRSVUUsIHZhck5hbWUgPSAibmV0cyIpDQoNCnBsb3QoR09GX00zLCBtYWluID0gIkdPRiAtIE1vZGVsIDMgXG4gSW5kZWdyZWUgRGlzdHJpYnV0aW9uIikNCmBgYA0KDQojIE1vZGVsIDQNCg0KYGBge3IsIGhpZGU9VFJVRX0NCk1vZGVsNCA8LSBmbG9hZCgiLi9kYXRhL3Byb2Nlc3NlZC9lc3RpbWF0ZWRfTTRfMjAyNDExMjMucmRhIikNCmBgYA0KDQpgYGB7ciBHT0YgTTQsIGhpZGU9VFJVRX0NCkdPRl9NNCA8LSBzaWVuYUdPRihNb2RlbDQsIEluZGVncmVlRGlzdHJpYnV0aW9uLCB2ZXJib3NlID0gRkFMU0UsIGpvaW4gPSBUUlVFLCB2YXJOYW1lID0gIm5ldHMiKQ0KDQpwbG90KEdPRl9NNCwgbWFpbiA9ICJHT0YgLSBNb2RlbCA0IFxuIEluZGVncmVlIERpc3RyaWJ1dGlvbiIpDQpgYGANCg==</div>
 
 
 </div>

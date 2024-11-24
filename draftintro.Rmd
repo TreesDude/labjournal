@@ -52,11 +52,11 @@ knitr::opts_chunk$set(echo = TRUE)
 
 Collaboration has become a cornerstone of modern academic practice, with scholars increasingly working together to leverage diverse expertise, share resources, and enhance their research output. Co-authorship, in particular, is a key indicator of collaboration, often reflecting the dynamics of professional relationships and the distribution of academic opportunities. As Cheong (@Cheong2009) highlights, collaboration enables researchers to combine intellectual and institutional resources, contributing significantly to their scholarly success.
 
-However, collaboration is not free from social patterns and biases. Academic networks often mirror broader societal inequalities, with persistent disparities in opportunities and recognition. One such disparity is gender inequality, which continues to shape interactions, opportunities, and outcomes within academia.
+However, collaboration is not free from social patterns and biases. Academic networks often mirror broader societal inequalities, with persistent disparities in opportunities and recognition. One such disparity id gender inequality, which continues to shape interactions, opportunities, and outcomes within academia.
 
 ## Research Problem and Goal
 
-In this study, I examine the role of gender homophily in shaping co-authorship networks in the Sociology and Political Science Departments at Radboud University. Gender homophily refers to the tendency of individuals to collaborate with others of the same gender. This phenomenon can influence who gains access to collaboration opportunities, thereby shaping academic trajectories and reinforcing existing inequalities. Understanding these dynamics is essential to uncovering how collaboration networks may perpetuate or mitigate gender-based disparities in academia.
+In this study, I examine the role of gender homophily in shaping co-authorship networks in the Sociology and Political Science Departments at Radboud University. Gender homophily refers to the tendency of individuals to collaborate with others of the same gender. This phenomenon can influence who gains access to collaboration opportunities, thereby shaping academic trajectories and reinforcing existing inequalities. Understanding these dynamics is essential to uncovering how collaboration networks may perpetuate or lessen gender-based disparities in academia.
 
 ## Prior findings
 
@@ -66,13 +66,13 @@ Previous research has consistently shown that gender plays a significant role in
 
 Kwiek and Roszka (@Kwiek2021) found that such patterns contributes to the persistence of gender imbalances in co-authorship, where all-male teams remain more common than all-female teams. These trends are particularly concerning in fields such as Sociology and Political Science, where collaboration is vital for career advancement (@Cheong2009).
 
-The structure of these networks affects not only who collaborates but also how academic recognition and resources are distributed (@Cheong2009). For example, male-dominated networks may facilitate better access to high-impact collaborations and grant opportunities for men, further perpetuating the gender gap in academic success.
+The structure of these networks affects not only who collaborates but also how academic recognition and resources are distributed (@Cheong2009). For example, male-dominated networks may provide better access to high-impact collaborations and grant opportunities for men, further perpetuating the gender gap in academic successes.
 
 ### Prestige and Collaboration
 
-Another crucial factor influencing collaboration is academic prestige, often measured by publication in high-impact journals. Scholars with higher prestige, indicated by metrics such as the h-index or publication in top-tier journals, are generally more sought after as collaborators. Existing research suggests that prestige might interact with gender homophily in significant ways. Bellotti et al. (@Bellotti2022) found that prestigious male scholars often form networks that exclude women, while McDowell, Singell, and Stater (@Mcdowell2007) observed that female scholars, despite demonstrating similar academic competence, face greater challenges in accessing high-prestige collaborative networks.
+Another crucial factor influencing collaboration id academic prestige. Scholars with higher prestige, indicated by metrics such as the h-index or publication in top-tier journals, are generally more sought after as collaborators. Existing research suggests that prestige might interact with gender homophily in significant ways. Bellotti et al. (@Bellotti2022) found that prestigious male scholars often form networks that exclude women, while McDowell and colleagues (@Mcdowell2007) also observed that female scholars, despite demonstrating similar academic competence, face greater challenges in accessing high-prestige collaborative networks.
 
-In this context, it is crucial to explore whether the tendency for gender-based collaboration shifts when prestige factors come into play. Specifically, does publishing in prestigious journals mitigate or exacerbate gender homophily in academic networks?
+In this context, it is crucial to explore whether the tendency for gender-based collaboration shifts when prestige factors come into play. Specifically, do scholars' h-indeces exacerbate gender homophily in academic networks?
 
 ## Research Focus and Questions
 
@@ -94,7 +94,7 @@ This question explores whether prestige interacts with gender homophily, sheddin
 
 ## Relevance and Contribution
 
-This study contributes to the growing body of literature on gender inequalities in academia by focusing on the intersection of gender and academic prestige in shaping collaboration networks. By applying a social network perspective, it offers insights into how gender-based preferences influence co-authorship patterns and how these dynamics vary between disciplines. Moreover, by exploring the role of journal prestige, this research highlights how structural factors may intersect with social biases to shape academic opportunities, providing a nuanced understanding of the mechanisms underlying gender disparities in academia.
+This study contributes to the growing body of literature on gender inequalities in academia by focusing on the intersection of gender and academic prestige in shaping collaboration networks. By applying a social network perspective, it offers insights into how gender-based preferences influence co-authorship patterns and how these dynamics vary between disciplines. Moreover, by exploring the role of journal prestige, this research highlights how structural factors may intersect with social biases to shapw academic opportunities, providing a nuanced understanding of the mechanisms underlying gender disparities in academia.
 
 # Written references (remove in final paper)
 

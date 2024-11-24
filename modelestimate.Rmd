@@ -3,6 +3,8 @@ title: "Model estimation"
 author: "Verooo"
 date: "2024-11-20"
 output: html_document
+bibliography: references.bib
+csl: apa.csl
 editor_options: 
   markdown: 
     wrap: 72
@@ -46,6 +48,16 @@ klippy::klippy(position = c('top', 'right'))
 #klippy::klippy(color = 'darkred')
 #klippy::klippy(tooltip_message = 'Click to copy', tooltip_success = 'Done')
 ```
+
+Note to self. Keep in mind: \
+**meaning of significance in RSiena** "It is important to mention that
+significance in RSiena means something different than in conventional
+statistics. In normal statistics, such as OLS-regression, significance
+of estimates refers to the fact that they are not 0 (**RELEVANT?**). In
+RSiena, however, it refers to the fact that the estimates were precisely
+determined (Ripley et al. 2011). Going forward with this chapter,
+significance will refer to this definition of significance." - Niels
+Vullings
 
 # Setup
 
@@ -432,7 +444,7 @@ myeff <- includeEffects(myeff, isolateNet, inPop, outAct)
 # inPop: ppl like to collab with people who are popular
   # over time: inpop: ppl with lots of indegrees will havelot of indegrees
 
-#n-degree related popularity effect (inPop) (earlier called popularity or popularity of alter effect), defined by the sum of the in-degrees of the others to whom i is tied,
+#in-degree related popularity effect (inPop) (earlier called popularity or popularity of alter effect), defined by the sum of the in-degrees of the others to whom i is tied,
 
 # later (in population) outAct: ppl with lots of outdegrees will have lot
 # of indegrees later
@@ -484,6 +496,19 @@ egoX - [definition?]
 -   since male = 1 egoX only "looks at" men's ties 
 -   if egoX significant then men's ties sign. diff. based on whether its to a man or woman (look at direction of effect to know which gender) 
 
+
+
+sameX (Gender): Tests whether scholars prefer same-gender collaborators (direct measure of gender homophily).
+model the general tendency for scholars to collaborate with same-gender peers.
+
+  Confirmation:
+
+    Significant and positive coefficient for sameX in the RSiena output would confirm that gender homophily exists.
+
+    A non-significant or negative coefficient would disconfirm this hypothesis.
+
+
+    
 
 "interaction1" HAS NOTHING TO DO WITH AN INTERACTION EFFECT
 
@@ -671,46 +696,25 @@ RSiena works with ministeps indeed not just Twosteps (that works with two steps 
 ```
 ## \<\> Model 0 - Null Model
 
-First, I estimate a null model with only reciprocity and degree.
-
-The maximum convergence ratio of the model is 0.084. The GOF on the
-Indegree Distribution is zero**.** This indicates that the model is a
-very bad fit for the data. This is not suprising since we ran a null
-model without any network effects.ffects.
-
-For all GOF plots compiled in one place, see here:
-<https://treesdude.github.io/labjournal/finalGOF.html>
-
-CHANGE Both reciprocity and density are significant for an alpha of
-**NUMBER**.
-
-Estimates and standard errors
-
-Rate parameters:
-
-0\. Rate parameter 2.117 ( 0.3561)
-
-Other parameters:
-
-1\. eval: outdegree (density) -2.6388 ( 0.1460) convergence t ratio:
-0.0182
-
-2\. eval: reciprocity 1.8035 ( 0.4343) convergence t ratio: -0.0668
-
-**meaning of significance in RSiena** "It is important to mention that
-significance in RSiena means something different than in conventional
-statistics. In normal statistics, such as OLS-regression, significance
-of estimates refers to the fact that they are not 0 (**RELEVANT?**). In
-RSiena, however, it refers to the fact that the estimates were precisely
-determined (Ripley et al. 2011). Going forward with this chapter,
-significance will refer to this definition of significance." - Niels
-Vullings
-
-This model has a density parameter of **NUMBER**, suggesting that
-"people generally do not want to have a dense network".
-
-The reciprocity parameter of **NUMBER** indicates that "people like to
-send ties back to people who have sent a tie to them."
+First, I estimated a null model with only reciprocity and degree. The
+maximum convergence ratio of the model is 0.084. The GOF on the Indegree
+Distribution is zero**.** This indicates that the model is a very bad
+fit for the data and estimates of this model do not give us reliable
+information. \
+*For all GOF plots compiled in one place, see here:
+<https://treesdude.github.io/labjournal/finalGOF.html>.\
+*For the sake of practise, here they are anyways:\
+The outdegree (density) effect assesses the tendency of nodes to
+establish outgoing connections, serving as a baseline for the likelihood
+that any given node will initiate an outgoing tie. In the context of
+this study, these outgoing ties represent the initiation of
+co-publications. The outdegree estimate is significant and negative (b =
+-2.6388, SE = 0.1460), suggesting that a scholar's tendency to initiate
+collaboration is low and dense networks are less sought after. The
+reciprocity parameter id significant and positive (b = 1.8035, SE =
+0.4343), which implies that directed ties are likely to be reciprocated.
+Specific to our case, it describes that scholars tend to initiate
+collaborations with those alters who sent a tie to them too.
 
 ### ---Step 1: Define Siena Data & Variables
 
@@ -762,15 +766,11 @@ Model0 <- siena07(myAlgorithm_M0, data = mydata_M0, effects = myeff_M0, returnDe
 Model0
 
 fsave(Model0, file ="estimated_M0")
-
-
 ```
 
 ```{r load M0 output, echo=FALSE}
 Model0 <- fload("./data/processed/estimated_M0_20241123.rda")
 Model0
-
-
 ```
 
 ```{r GOF M0}
@@ -783,75 +783,33 @@ plot(GOF_M0, main = 'GOF - "Null" Model 0 \n Indegree Distribution')
 
 ## \<\> Model 1 - Structural Effects
 
-This model additionally entails InPop, outAct, isolateNet as network
-statistics.
+This model additionally entails InPop, outAct, isolateNet to control for
+effects of network statistics. The maximum convergence ratio of this
+model is **0.17** and a Goodness of Fit on the indegree distribution is
+**0.002.** Estimates of this model do not fit the data well and thus do
+not give us reliable information.
 
-"The model has a maximum convergence ratio of **0.17** and a Goodness of
-Fit on the indegree distribution of **.002.**"
+For the sake of practise, here they are anyways:\
+As in our null model, the parameters for outdegree (b = -2.0862, SE =
+0.7050) and reciprocity (b = 1.0894, SE = 0.4144) remain significant and
+unchanged on their 'direction'.
 
-"Indegree Popularity (inPop) is defined as the extent to which people
-who have a lot of indegrees are more popular to connect with. This
-parameter is NUMBER, meaning that actors have a preference to connect
-with actors who have a lot of indegrees. The parameter is significant
-for an alpha of **NUMBER**."
+The added parameter for indegree popularity tells us something about the
+popularity of people who have a lot of outgoing ties. In our model the
+estimate for this parameter is significantly positive (b =0.2549, SE
+=0.0439), suggesting that scholars specifically like to initiate
+collaborations with those who have a lot of indegrees.
 
-"Outdegree Activity (outAct) has a value of **NUMBER**, but is not
-significant. IsolateNet is significant andhas a value of NUMBER and
-refers to the preference of remaining an isolate. As this value is
-positive (\*IS IT??!\*\*), it means that people prefer to be an isolate
-in the network."
+Further, the parameter for outdegree activity conveys information about
+scholars' preferences to collaborate with others who have a lot of
+outdegrees. In our case, the estimate is insignificant and cannot be
+reliably interpreted.
 
----------------------------
-
-Estimates and standard errors
-
-Rate parameters:
-
-0\. Rate parameter 3.3566 ( 0.5773)
-
-Other parameters:
-
-1\. eval: outdegree (density) -2.0862 ( 0.7050)
-
-2\. eval: reciprocity 1.0894 ( 0.4144)
-
-3\. eval: indegree - popularity 0.2549 ( 0.0439)
-
-4\. eval: outdegree - activity -0.0936 ( 0.1301)
-
-5\. eval: network-isolate 4.9645 ( 1.1146)
-
-convergence t ratio:
-
-```         
-1
-0.0232
-```
-
-```         
-2
-0.0467
-```
-
-```         
-3
--0.0195
-```
-
-```         
-4
--0.0423
-```
-
-```         
-5
--0.061
-```
-
-```         
-6
--0.0617
-```
+Lastly, the network isolate parameter can be used to infer about
+scholars' tendency to neither send nor receive ties. The estimate for
+this parameter is significantly positive (b = 4.9645, SE = 1.1146) in
+our model, indicating that the scholars of our sample tend to remain
+isolates.
 
 ### ---Step 1: Define Siena Data & Variables
 
@@ -938,7 +896,16 @@ plot(GOF_M1.1, main = "GOF - Model 1 \n Indegree Distribution")
 
 This model is partly similar to Model 1 but additionally holds the
 network statistics sameX, diffXTransTrip, egoX & altX of the covariate
-gender.
+gender. EgoX and AltX ought to indicate whether male or female scholars
+are more likely to initiate or receive ties, while sameX models the
+general tendency for scholars to collaborate with same-gender peers.
+
+The statistic for transitive triplets based on a different covariate
+value (here: different gender) was originally included to control for
+relationships of triadic nature (diffXTransTrip), but will be
+disregarded in the interpretation of the results since a more
+appropriate control statistic would have been that of transitive
+triplets (TransTrip), but I simply lack the time to adjust the models.
 
 ```         
 Estimates, standard errors and convergence t-ratios                                                
@@ -948,53 +915,49 @@ Rate parameters:
 0       Rate parameter                       2.9204  ( 0.4617   )               
 
 Other parameters:    
-1. eval outdegree (density)                 -1.8628  ( 1.1060   )    0.0703      
-2. eval reciprocity                          1.3341  ( 0.4543   )   -0.0152      
-3. eval indegree - popularity                0.2209  ( 0.0470   )   -0.0083      
-4. eval outdegree - activity                -0.3017  ( 0.2287   )    0.0806      
-5. eval network-isolate                      4.7507  ( 1.5194   )   -0.0379      
-6. eval gender_RS alter                      0.3254  ( 0.2701   )    0.0411      
-7. eval gender_RS ego                       -1.0642  ( 0.6055   )   -0.0400      
-8. eval same gender_RS                       0.6637  ( 0.2685   )    0.0308      
-9. eval transitive triplets diff. gender_RS  2.1787  ( 0.6027   )    0.0416   
+1. eval outdegree (density)                 -1.8628  ( 1.1060   )    0.0703 --> insign. (-1.684268)    
+2. eval reciprocity                          1.3341  ( 0.4543   )   -0.0152 --> sign.    (2.936606)***     
+3. eval indegree - popularity                0.2209  ( 0.0470   )   -0.0083 --> sign.    (4.7)     ***
+4. eval outdegree - activity                -0.3017  ( 0.2287   )    0.0806 --> insign. (-1.319195)    
+5. eval network-isolate                      4.7507  ( 1.5194   )   -0.0379 --> sign.    (3.126695)***     
+
+6. eval gender_RS alter                      0.3254  ( 0.2701   )    0.0411 --> insign.  (1.204739)      
+7. eval gender_RS ego                       -1.0642  ( 0.6055   )   -0.0400 --> insign. (-1.757556)     
+8. eval same gender_RS                       0.6637  ( 0.2685   )    0.0308 --> sign.    (2.471881)***     
+9. eval transitive triplets diff. gender_RS  2.1787  ( 0.6027   )    0.0416 --> sign.    (3.6149)  ***
 ```
 
 The maximum convergence ratio for model 2 is **0.132** and the Goodness
 of Fit on the indegree distribution is **0.096**.
 
-**CHANGE!!**
+Looking at our 'base-line' network statistics, it bears noting that the
+estimate for Outdegree is not significant anymore. This statistic's
+prior significance can seemingly be explained by a parameter relating to
+the covariate gender that I added to this model. However, the estimate
+of the outdegree parameter is still nearing the significance 'threshold'
+(b = -1.8628, SE = 1.1060, b/SE = -1.684268).
 
-"For the structural network statistics we find similar results, in terms
-of estimate size and significance, as in Model 1. However, the outdegree
-activity parameter almost reaches significance (**-1.7135484**).
+Comparing this model to the prior ones, we see that the reciprocity
+estimate is still significantly positive (b = 1.3341, SE = 0.4543).
 
-With regard to the covariate network statistics, we find that the gender
-of ego (egoX), the gender of alter (altX) **are not significant and thus
-the estimate cannot be trusted**."
+The parameters of the structural network statistics also show similar
+patterns in estimates and significance as they did in model 1.
 
-egoX and altX: model whether male or female scholars are more likely to
-initiate or receive ties.
+Concerning the added covariate "gender", we find that the parameter
+estimates for both covariate-related activity (egoX) , pertaining to the
+gender of the ego, and covariate-related popularity (altX), relating to
+the gender of the alter, do **not** show any significance and hence do
+not allow for reliable inferences.
 
-**sameX (Gender)**: Tests whether scholars prefer same-gender
-collaborators (direct measure of gender homophily).\
-model the general tendency for scholars to collaborate with same-gender
-peers.
+The 'same-covariate' measure (sameX) for gender is significantly
+positive (b = 0.6637, SE =0.2685). It reveals that scholars, indeed,
+prefer same-gender collaborators. This supports H1, which posits gender
+homophily in collaboration patterns.
 
-**Confirmation**:
-
--   Significant and positive coefficient for `sameX` in the RSiena
-    output would confirm that gender homophily exists.
-
--   A non-significant or negative coefficient would disconfirm this
-    hypothesis.
-
-**Confirmation**:
-
--   Significant and positive coefficient for `sameX` in the RSiena
-    output would confirm that gender homophily exists.
-
--   A non-significant or negative coefficient would disconfirm this
-    hypothesis.
+Model 2 provides strong evidence for gender homophily (H1), with
+scholars more likely to collaborate with same-gender peers, but no
+significant differences in collaboration tendencies based on the gender
+of ego or alter.
 
 Hypothesis about structural effects
 
@@ -1015,6 +978,10 @@ Hypothesis about structural effects
     -   If `sameX` becomes non-significant after controls, it suggests
         structural factors, not individual preferences, explain gender
         clustering.
+
+--\> unsure if this hpold true for me, since I added gender only after
+running a model that controls for structural effects so I cannot really
+infer that but it'S too late to change that now.
 
 ### ---Step 1: Define Siena Data & Variables
 
@@ -1123,53 +1090,88 @@ plot(GOF_M2.1, main = "GOF - Model 2 \n Indegree Distribution")
 
 This model is partly similar to Model 2 but additionally holds the
 network statistics egoX and altX for the main effect of department, to
-control for differences in collaboration patterns between the two
-departments.
+investigate differences in same-gender collaboration patterns based on
+the two departments.
+
+Originally, I planned to also include an interaction term of departm_RS
+and gender_RS to obtain clearer insights into variations in patterns of
+gender homophily in relation to scholars' departments. However, I have
+refrained from adding another model to this project. I decided against
+this partly due to time constraints but I also reason that I can use the
+comparison of model 2 and 3 to examine changes in the estimate of
+'sameX' (gender), to *tentatively* infer whether the department of
+scholars modifies the collaboration patterns at hand.
 
 Model 3 has a maximum convergence ratio of **0.182** and a Goodness of
 Fit on the indegree distribution of **0.108**.
 
-**CHANGE** !!!!
+Interestingly, the estimate for outdegree (density) that had lost its
+significance in model 2, is now back to being significant and negative
+(b = -4.3233, SE = 1.0871).
 
-For the structural network statistics we find similar results, in terms
-of estimate size and significance, as in Model 1. However, the outdegree
-activity parameter almost reaches significance (**-1.7135484**).
+In terms of estimate size and significance of the structural network
+statistics we, once again, find similar patterns as in models 1 and 2.
+However, the outdegree parameter has now reached significance (b =
+-4.3233, SE = 1.0871).
 
-With regard to the covariate network statistics, we find that the gender
-of ego (egoX), the gender of alter (altX) **are not significant and thus
-the estimate cannot be trusted**."
+With regard to the network statistics of the covariate 'gender', we find
+that the estimates relating to the gender of an ego (egoX) and the
+gender of an alter (altX) remain non-significant. The parameter
+estimates for sameX remains significantly positive (b = 0.6632, SE =
+0.2623) and are almost identical to those of model 2 (b = 0.6632, SE =
+0.2623). This suggests that adding the covariate 'department' did not
+bring about any noteworthy changes in patterns of scholars seeking out
+same-gendered scholars to collaborate.
 
-Estimates and standard errors
+When it comes to the parameters pertaining to the added covariate
+'department', we find that any differences in collaboration based on the
+department of an ego (egoX) or of an alter (altX) are not warranted, as
+the estimates of these parameters are insignificant. However, we find a
+significantly positive estimate for the parameter of 'covariate-related
+identity' (sameX), which indicates that scholars are more likely to
+collaborate with people from their own department, indicating
+**department-based homophily**. (b = 2.7240, SE = 0.7277).
 
-Rate parameters:
+Model 3 highlights persistent gender homophily (H1) across departments
+but does not provide evidence for differences in gender homophily
+between Sociology and Political Science, contrary to H2.
 
-0\. Rate parameter 3.1013 ( 0.5186)
+------------------------------------------------------
 
-Other parameters:
+Estimates and SEs model 3:
 
-1\. eval: outdegree (density) -4.3233 ( 1.0871)
+1\. eval: outdegree (density) -4.3233 ( 1.0871) \*\*\*
 
-2\. eval: reciprocity 1.0725 ( 0.4174)
+2\. eval: reciprocity 1.0725 ( 0.4174) \*\*\*
 
-3\. eval: indegree - popularity 0.2122 ( 0.0517)
+3\. eval: indegree - popularity 0.2122 ( 0.0517) \*\*\*
 
-4\. eval: outdegree - activity -0.3364 ( 0.2182)
+4\. eval: outdegree - activity -0.3364 ( 0.2182) insign. (-1.541705)
 
-5\. eval: network-isolate 4.2006 ( 1.3007)
+5\. eval: network-isolate 4.2006 ( 1.3007) \*\*\*
 
-6\. eval: gender_RS alter 0.3356 ( 0.2659)
+6\. eval: gender_RS alter 0.3356 ( 0.2659) insign (1.262129)
 
-7\. eval: gender_RS ego -1.0066 ( 0.5121)
+7\. eval: gender_RS ego -1.0066 ( 0.5121) insign (-1.965632) almost
+significant
 
-8\. eval: same gender_RS 0.6632 ( 0.2623)
+8\. eval: same gender_RS 0.6632 ( 0.2623) sign. (2.52840) \*\*\* \
+(sameX: comparison model 2 and 3:\
+estimate got hardly any smaller (0.6637--\>0.6632), SE got hardly any
+smaller (0.2685--\>0.2623), significance value got bigger
+(2.47881--\>2.52840))
 
-9\. eval: transitive triplets diff. gender_RS 1.5479 ( 0.5403)
+9\. eval: tr. tripl. diff. gend. 1.5479 ( 0.5403) sign. (2.86489)
+\*\*\*\
+(diffxTrTrip comparison model 2 and 3:\
+estimate got smaller and NEGATIVE (2.1787 –\>-1.5479), SE got smaller
+(0.6027 –\> 0.5403), significance value got smaller (3.6149--\>2.86489))
 
-10\. eval: departm_RS alter 0.4141 ( 0.7546)
+10\. eval: departm_RS alter 0.4141 ( 0.7546) insign. (0.549)
 
-11\. eval: departm_RS ego -1.1573 ( 0.9148)
+11\. eval: departm_RS ego -1.1573 ( 0.9148) insign (-1.27)
 
-12\. eval: same departm_RS 2.7240 ( 0.7277)
+12\. eval: same departm_RS 2.7240 ( 0.7277) \*\*\*
 
 -   **Network Statistics**:
 
@@ -1186,6 +1188,22 @@ Other parameters:
 
     -   Similar coefficients or reversed patterns would disconfirm the
         hypothesis.
+
+altX - egos send more ties who have more on gender (aka. gender =1)
+(iiiish look at egoX explanantion, this is basically the same but in
+"reverse", aka about receiving rather than sending)
+
+-   covariate-alter or covariate-related popularity (altX), defined by
+    the sum of the covariate over all actors to whom ***i*** has a tie,
+-   same as egoX but RECEIVING ties
+
+egoX - [definition?]
+
+-   covariate-ego or covariate-related activity (egoX), defined by i’s
+    out-degree weighted by his covariate value,
+-   since male = 1 egoX only "looks at" men's ties
+-   if egoX significant then men's ties sign. diff. based on whether its
+    to a man or woman (look at direction of effect to know which gender)
 
 ### ---Step 1: Define Siena Data & Variables
 
@@ -1302,12 +1320,21 @@ plot(GOF_M3.1, main = "GOF - Model 3 \n Indegree Distribution")
 
 ## \<\> Model 4 - H-Index
 
-This model further builds on the prior model and also includes the
-network statistics of the covariat H-index, namely **egoX, altX and
-inPopX**.
-
-"The last model has a maximum convergence ratio of **0.23** and a a
-Goodness of Fit on the indegree distribution of **0.197**.
+This model further builds on the prior model and also includes network
+statistics of the covariate H-Index, namely egoX, altX and inPopX. By
+adding these effects we can model how the h-index of a scholar
+influences their preferences regarding same-gendered collaborations.
+Similarly, to model 3, this model could have profited from a 'follow-up'
+model that includes and interaction term between h-index and gender to
+better infer about their influences. The same reasoning for my decision
+to stick with one model prior also applies to this case. EgoX for this
+covariate examines how the h-index of a scholar affects their
+collaboration behavior, while AltX examines how the h-index of potential
+collaborators affects their attractiveness as partners. With the help of
+these effects we can test prestigious scholars are more likely to
+initiate or receive ties. By looking at in-degree popularity weighted by
+sender’s H-index (inPopXi) we can assesse whether a high h-index
+increases the likelihood of being sought out as a collaborator.\
 
 ```         
 Estimates, standard errors and convergence t-ratios
@@ -1317,104 +1344,111 @@ Rate parameters:
   0      Rate parameter                       2.6891  ( 0.3675   )               
 
 Other parameters:     
-   1. eval outdegree (density)                 -2.7693  ( 1.9205   )    0.0698       
-   2. eval reciprocity                          2.1770  ( 0.5960   )    0.0919       
-   3. eval indegree - popularity               -0.0653  ( 0.1654   )   -0.0104       
-   4. eval outdegree - activity                -0.6851  ( 0.4029   )    0.0527       
-   5. eval network-isolate                      5.4634  ( 2.2770   )    0.0028       
-   6. eval gender_RS alter                     -0.0903  ( 0.3372   )    0.0129       
-   7. eval gender_RS ego                        0.2993  ( 0.4934   )   -0.0503       
-   8. eval same gender_RS                       0.6820  ( 0.2804   )    0.0201       
-   9. eval transitive triplets diff. gender_RS  2.4871  ( 0.6670   )    0.0505      
-  10. eval departm_RS alter                     0.3929  ( 0.6128   )   -0.0061      
-  11. eval departm_RS ego                      -1.4652  ( 0.6963   )   -0.0115      
-  12. eval same departm_RS                      2.6327  ( 0.6080   )    0.0173      
-  13. eval h_index_RS alter                     0.0829  ( 0.0364   )   -0.0031      
-  14. eval h_index_RS ego                      -0.1591  ( 0.0744   )    0.0161      
-  15. eval ind. pop.^(1/1) weighted h_index_RS -0.0287  ( 0.0570   )   -0.0129
+   1. eval outdegree (density)                 -2.7693  ( 1.9205   )    0.0698 --> insign. (-1.441968)       
+   2. eval reciprocity                          2.1770  ( 0.5960   )    0.0919 --> sign.    (3.652685)***      
+   3. eval indegree - popularity               -0.0653  ( 0.1654   )   -0.0104 --> insign. (-0.3948005)      
+   4. eval outdegree - activity                -0.6851  ( 0.4029   )    0.0527 --> insign. (-1.700422)      
+   5. eval network-isolate                      5.4634  ( 2.2770   )    0.0028 --> sign.    (2.399385)***      
+   6. eval gender_RS alter                     -0.0903  ( 0.3372   )    0.0129 --> insign. (-0.2677936)       
+   7. eval gender_RS ego                        0.2993  ( 0.4934   )   -0.0503 --> insign. (0.6066072)      
+   8. eval same gender_RS                       0.6820  ( 0.2804   )    0.0201 --> sign.   (2.43224)  ***       
+   9. eval transitive triplets diff. gender_RS  2.4871  ( 0.6670   )    0.0505 --> sign.   (3.728786) ***    
+  10. eval departm_RS alter                     0.3929  ( 0.6128   )   -0.0061 --> insign. (0.6411554)    
+  11. eval departm_RS ego                      -1.4652  ( 0.6963   )   -0.0115 --> SIGN.   (-2.104265)***
+  12. eval same departm_RS                      2.6327  ( 0.6080   )    0.0173 --> sign    (4.330099) ***    
+  13. eval h_index_RS alter                     0.0829  ( 0.0364   )   -0.0031 --> SIGN    (2.277473) ***
+  14. eval h_index_RS ego                      -0.1591  ( 0.0744   )    0.0161 --> SIGN.  (-2.138441) ***   
+  15. eval ind. pop.^(1/1) weighted h_index_RS -0.0287  ( 0.0570   )   -0.0129 --> insign.(-0.5035088)
 ```
 
-**CHANGE!!!**
+Model 4 has a maximum convergence ratio of **0.23,** and a a Goodness of
+Fit on the indegree distribution of **0.197**.
 
-"In this model, the parameters for density and reciprocity are still
-significant, with values of **-1.98** (se = **0.71**) and **2.59** (se =
-**0.38**) respectively, meaning that actors prefer sparse networks, but
-do prefer to send ties to alters who have sent ties to them.
+Structural network statistics:
 
-IsolateNet is still significant with a value of **3.23** (se =
-**1.06**), implying that actors prefer to be isolates.
+The estimate for outdegree is negative but not significant. This
+suggests that, after accounting for other variables, the baseline
+likelihood of forming ties remains low and is not a major driver of
+collaboration patterns. Reciprocity has a significant positive estimate
+(b = 2.1770, SE = 0.5960). This reflects a strong tendency for mutual
+collaborations, meaning if one scholar collaborates with another, the
+latter is likely to collaborate back (dyadic reciprocity). The paramters
+Indegree Popularity and Outdegree Activity are both insignificant,
+suggesting that neither the tendency to receive many collaborations
+(indegree popularity) nor the tendency to initiate them (outdegree
+activity) is significantly relevant to the network structure. The
+network isolate estimate is, once again, significantly positive ( b =
+5.4634, SE = 2.2770), indicating that as isolates tend to remain
+isolated.
 
-In this model, **indegree popularity squared** (b = **0.17**, se =
-**0.21**) is no longer significant, implying that this might be
-explained by other network statistics in the model.
+Gender:
 
-The covariate statistics for gender show similar findings as Model 2,
-namely that actors prefer to close triads with alters that have a
-different score for gender (b = **1.51**, se = **0.44**).
+Similar to AltX and EgoX in prior models, both an alter's gender (b =
+-0.0903, SE = 0.3372) and an ego's gender (b = 0.2993, SE = 0.4934)
+still have insignificant effects. The parameter SameX shows a
+significant positive estimate (b = 0.6820, SE = 0.2804) which barely
+differs from the two prior models. This suggests that adding the
+covariate 'H-Index' did not prompt any major changes in scholars'
+preferences for same-gendered collaborators.
 
-The ego effect and alter effect for gender are **non-significant**, as
-was the case in Model 2.
+Department:
 
-Lastly, Model 3 shows some significant results with regards to the
-covariate network statistics for prestige. The prestige effect for
-alters is positive, implying that people prefer to send ties to people
-who have a higher amount of prestige (b = **0.042**, se = **0.0089**).
+While an alter's departmen**t** (AltX) remained insignificant to the
+collaboration patterns, the estimates for an ego's department changed
+incomparison to the prior model. In this model, egoX seems to be of
+significant relevance (b = -1.4652, SE = 0.6963), with its negative
+estimate indicating that, once effects of h-index are controlled for,
+scholars from the political science (coded as 1) department have a lower
+tendency to initiate collaborations than scholars from the sociology
+department (coded as 0). \
+Similar to the prior model, the sameX parameter for department shows a
+significant positive estimate (b = 2.6327, SE = 0.6080) scholars are
+still more likely to collaborate with others from the same department.
 
-Additionally, the prestige effect for egos is negative, which indicates
-that people who have higher prestige send less ties (b = **-0.030**, se
-= **0.015**). **This is in line with theories of preferential attachment
-and upward mobility, because as egos with higher prestige will are more
-likely to receive request for collaboration rather then sending request
-for collaboration.**
+H-Index:
 
-Interestingly enough, the indegree popularity statistic for prestige is
-not significant (b = **-0.012**, se = **0.023**), implying that actors
-who are more prestigious do not receive more indegrees."
+Both an alter's and an ego's H-Index seem to be relevant in
+collaboration preferences. The significant and positive estimateof AltX
+(b = 0.0829, SE = 0.0364) suggest that scholars with higher h-index are
+more preferred as collaborators. The egoX estimate is significant and
+negative (b = -0.1591, SE = 0.0744) suggesting that scholars with higher
+h-index are less likely to initiate collaborations.
 
-About Hypothesis 4
+*Discussion part about egoX h.index: **"This is in line with theories of
+preferential attachment and upward mobility, because as egos with higher
+prestige will are more likely to receive request for collaboration
+rather then sending request for collaboration." - Niels***
 
-modeling how the department of the actor (Sociology or Political
-Science) influences their collaboration choices in terms of gender.
+The estimate for the Indegree Popularity weighted by h-index is
+insignificant, suggesting that high-prestige individuals (as measured by
+their h-index) do not significantly receive more indegrees
 
-**Interaction1 = "departm_RS"**: This allows you to test how department
-(Sociology vs Political Science) influences the probability of forming
-collaborations, potentially differing by gender. This means that gender
-homophily (whether a person collaborates more often with same-gender
-peers) might be different in the two departments.
+The results partially support **H4**, as the h-index is shown to
+influence collaboration patterns, with prestigious scholars being more
+likely to attract collaborations as alters but less likely to initiate
+them as egos. However, gender homophily remains significant even after
+controlling for the h-index, suggesting that prestige does not
+substantially weaken the influence of gender homophily in co-authorship
+networks.
 
-allows you to explore how **department** influences the likelihood of
-**same-gender** collaborations (`sameX`), which is central to your
-research question. If the **department variable** is acting as an
-important covariate influencing collaboration patterns, this line
-captures that effect.
+Transitive Triplets (Diff Gender): A positive significant effect
+(b=2.4871, SE = 0.6670). This suggests that transitive structures (where
+two people connected to a common third party collaborate) are more
+likely even across gender differences. Could be a potential
+counterbalance to homophily.
 
-testing how being in a particular department influences the likelihood
-of collaborating with someone of the same gender. In other words, it
-checks if the department modifies the strength of gender homophily
-(`sameX`).
+R-Manual: in-degree popularity weighted by sender’s V (inPopX)
+defined by the sum of values of V for actors h for which there are ties
+i → j ← h
 
-**Network Statistics**:
-
--   **egoX (h-index)**: Examines how the h-index of the focal scholar
-    affects their collaboration behavior.
-
--   **altX (h-index)**: Examines how the h-index of potential
-    collaborators affects their attractiveness as partners.
-
-    Add `egoX` and `altX` effects for `HIndex_RS` to test if prestigious
-    scholars are more likely to initiate or receive ties.
-
--   **inPopX (h-index)**: Assesses whether prestige increases the
-    likelihood of being sought out as a collaborator.
-
-**Confirmation**:
-
--   A significant negative interaction term between `sameX` and h-index
-    statistics would confirm that prestige reduces the strength of
-    gender homophily.
-
--   If h-index variables do not significantly influence `sameX`, this
-    would disconfirm H3.
+note that to use this effect for p = 2 the variable V must be
+nonnegative, which
+implies that it must be non-centered;
+further note that if V is a behavioral variable, it will be used in the
+centered version,
+so that p must be 1; if weighting by a non-centered behavioral variable
+is desired, a
+new effect is necessary;
 
 ### ---Step 1: Define Siena Data & Variables
 
