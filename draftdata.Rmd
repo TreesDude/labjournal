@@ -21,6 +21,7 @@ h1, .h1, h2, .h2, h3, .h3 {
 
 </style>
 ```
+
 ```{r, globalsettings, echo=FALSE, warning=FALSE, results='hide'}
 library(knitr)
 
@@ -46,13 +47,13 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Getting started
 
-```{r clean, results='hide', hide =TRUE}
+```{r clean, echo=FALSE}
 rm(list = ls())
 ```
 
 ### Packages
 
-```{r package, hide=TRUE, results='hide'}
+```{r package, echo=FALSE}
 require(tidyverse)
 require(RSiena)
 require(RsienaTwoStep)
@@ -82,7 +83,7 @@ require(RColorBrewer)
 
 ### Functions
 
-```{r functions 1, hide =TRUE, results='hide'}
+```{r functions 1, echo=FALSE}
 fpackage.check <- function(packages) {
     lapply(packages, FUN = function(x) {
         if (!require(x, character.only = TRUE)) {
@@ -190,7 +191,7 @@ f_pubnets <- function(df_scholars = df, list_publications = publications, discip
 
 ```
 
-```{r functions 2, hide=TRUE, results='hide'}
+```{r functions 2, echo=FALSE}
 fcolnet <- function(data = scholars, university = "RU", discipline = "sociology"+"political science", waves = list(c(2015,
     2018), c(2019, 2023)), type = c("first")) {
 
@@ -336,6 +337,7 @@ Various centrality measures were also calculated and analyzed to determine their
 ------------------------------------------------------------------------
 
 # Ego-Level Descriptives
+Below you can find some descriptive information about the ego-level data after data preparation. For more information, consult the 'data preparation' part of this final report. 
 
 **Load data**
 
@@ -378,19 +380,19 @@ test_w1 <- igraph::graph_from_adjacency_matrix(
 
 Descriptives (mean, distibution, etc.) in whole sample
 
-```{r sum gender, hide = TRUE, echo=FALSE }
+```{r sum gender, echo=FALSE }
 summary(df_ego$gender)
 ```
 
 gender counts across whole sample (0 = female, 1 = male)
 
-```{r counts gender-all, hide = TRUE, echo=FALSE }
+```{r counts gender-all, echo=FALSE }
 table(df_ego$gender)
 ```
 
 Histogram: overall gender distribution in sample
 
-```{r histogram gender, hide = TRUE, echo=FALSE }
+```{r histogram gender, echo=FALSE }
 # Convert gender to a factor to avoid errors
 df_ego$gender <- as.factor(df_ego$gender)
 # Create the histogram with a dark theme and two colors for bars
@@ -425,7 +427,7 @@ ggplot(df_ego, aes(x = gender, fill = gender)) +
 
 Genders per department (0 = female, 1 = male)
 
-```{r gender per dep., hide = TRUE, echo=FALSE }
+```{r gender per dep., echo=FALSE }
    
 # Wave 1: Gender count per department 
 table(df_ego$discipline.24, df_ego$gender)
@@ -435,13 +437,13 @@ table(df_ego$discipline.24, df_ego$gender)
 
 Descriptives (mean, distribution, etc.)
 
-```{r summary h index, hide = TRUE, echo=FALSE }
+```{r summary h index, echo=FALSE }
 summary(df_ego$h_index)
 ```
 
 H-Index Whole sample
 
-```{r hist h index, hide = TRUE, echo=FALSE }
+```{r hist h index, echo=FALSE }
 # Histogram of prestige scores for Wave 1 
 
 # Create a data frame for ggplot2 
@@ -474,7 +476,7 @@ ggplot(df_h_index, aes(x = h_index)) +
 
 H index per department
 
-```{r table per dep h index, hide = TRUE, echo=FALSE }
+```{r table per dep h index, echo=FALSE }
 # Wave 1: Prestige distribution by dep. and total
 df_ego %>%
     group_by(discipline.24) %>%

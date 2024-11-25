@@ -108,8 +108,6 @@ navbar:
           href: finaldata.html 
         - text: "Data Preparation"
           href: finaldataprep.html
-        - text: "Data Descriptives"
-          href: finaldescriptives.html 
       - text: "Results"
         href: finaldesresults.html
         menu:

@@ -316,6 +316,8 @@ test_w1 <- igraph::graph_from_adjacency_matrix(
 
 # Network Description
 
+[For Ego-level descriptives on gender and h-index, please consult the latter part of the Data & Analysis part of this final report]
+
 The network data we are looking at pertains to 101 scholars and their publications. In the time frame of the wave at hand, namely form 2015 to 2018, we find 47 edges, with 6 reciprocated collaborations 36 ties that are asymmetric. Additionally, there were 5009 occasions in which a ties could have been made but was not. The edge density of 0.004 suggests that from all possible edges, this sample contains relatively few.
 
 In terms of triad-configurations, pertaining to the different possibilities three scholars could collaborate, we find that the most common one is no collaboration at all (configuration '003'). Beyond that, the configuration '012' is also common, meaning that only one directed edge is present in the triad. In our sample it is also common for such edge to be reciprocated, as seen in the third-highes-t count of the triad-configuration '102', a graph with a mutual connection between two vertices. Overall, the seems to be high number of isolates in the sample network.
