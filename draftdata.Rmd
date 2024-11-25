@@ -326,13 +326,11 @@ Expanding on model 2, **model 3** incorporates departmental effects, such as ego
 
 First, ego-level descriptives such as the counts and distributions of gender and h-indices in both departments were generated to establish a clearer picture of the data at hand.
 
-I also examined descriptives of the ego network and of the whole collaboration network of scholars. Among others, these included the number of nodes, edges, reciprocity, degreee centrality, clustering, density, and path-length. **[INSERT RELEVANT DESCRIPTIVES HERE]**\
-\
-Then, the networks were visualized using graphs to identify the presence of clustering and examine whether they are concentrated among individuals with the highest h-index or around specifically gendered scholars.
+Then, to identify the presence of clustering and examine whether they are concentrated among individuals with the highest h-index or around specifically gendered scholars, the networks were visualized. Further, centrality measures were examined to investigate their correlation to the ego-level variables gender and H-index.
 
-**[UNSURE IF THIS IS NEEDED IF GENDER IS FIRST COVARIATE AND H INDEX ONLY CONTRL VARIABLE]**
 
-Various centrality measures were also calculated and analyzed to determine their correlation with the scholars' h-index, providing further insight into whether network hubs tend to form around those with the highest h-index.
+
+.  Among others, these included the number of nodes, edges, reciprocity, degreee centrality, clustering, density, and path-length. **[INSERT RELEVANT DESCRIPTIVES HERE]**\visualized using graphs 
 
 ------------------------------------------------------------------------
 
