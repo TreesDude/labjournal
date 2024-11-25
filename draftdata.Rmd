@@ -47,13 +47,13 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```
 
-## Getting started
+# Getting started
 
 ```{r clean, echo=FALSE}
 rm(list = ls())
 ```
 
-### Packages
+## Packages
 
 ```{r package, echo=FALSE}
 require(tidyverse)
@@ -83,7 +83,7 @@ require(RColorBrewer)
 
 ```
 
-### Functions
+## Functions
 
 ```{r functions 1, echo=FALSE}
 fpackage.check <- function(packages) {
@@ -274,6 +274,10 @@ fcolnet <- function(data = scholars, university = "RU", discipline = "sociology"
 }
 ```
 
+------------------------------------------------------------------------
+
+------------------------------------------------------------------------
+
 # Data
 
 ## Sample data
@@ -310,6 +314,10 @@ Despite these precautions, the fundamental issue of using non-consensual data pe
 
 An additional ethical concern relates to the treatment of gender in this study. The method used to infer gender, based on names and a binary framework, may raise issues regarding inclusivity and respect for individuals’ self-identified gender. This approach disregards the complexity of gender identity and risks misrepresentation.
 
+------------------------------------------------------------------------
+
+------------------------------------------------------------------------
+
 # Analysis
 
 To evaluate the homophiliy in collaboration networks by gender and h-index, the analysis of the data will be as follows. The first step involves examining descriptive analyses and visualisaitons of the data which will then serve as a foundation for the second phase of the analysis, which focuses on answering the explanatory research question of this study. This latter phase investigates the impact of same-gender preference in scholars' collaboration networks and explores the interaction between the gender and h-index of scholars. Descriptive analyses will utilize functions of the igraph and ggraph packages, while the explanatory questions will be examined using Stochastic Actor-Based Models implemented via the RSiena package (@igraph, @ggraph, @RSiena_package, @RSiena_manual).
@@ -323,15 +331,9 @@ Expanding on model 2, **model 3** incorporates departmental effects, such as ego
 
 ## Descriptives
 
-**[Revisit and only talk about those that make sense to examine here]**
+First, ego-level descriptives such as the counts and distributions of gender and h-indices in both departments were generated to establish a clearer picture of the data at hand. Consult them below on this page. Then, several statistics describing the network were generated, including measures such as the number of nodes, edges, reciprocity, degreee centrality, clustering to investigate the structure of the network further. Lastly, to better identify the presence of clustering in the collaboration network and examine whether such patterns occur in connection with scholars' gender or h-index, the networks were visualized. The description of the latter two approaches is found under "Descriptive Analysis" in this final report. 
 
-First, ego-level descriptives such as the counts and distributions of gender and h-indices in both departments were generated to establish a clearer picture of the data at hand.
-
-Then, to identify the presence of clustering and examine whether they are concentrated among individuals with the highest h-index or around specifically gendered scholars, the networks were visualized. Further, centrality measures were examined to investigate their correlation to the ego-level variables gender and H-index.
-
-
-
-.  Among others, these included the number of nodes, edges, reciprocity, degreee centrality, clustering, density, and path-length. **[INSERT RELEVANT DESCRIPTIVES HERE]**\visualized using graphs 
+------------------------------------------------------------------------
 
 ------------------------------------------------------------------------
 
