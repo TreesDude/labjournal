@@ -7,6 +7,23 @@ bibliography: references.bib
 csl: apa.csl
 ---
 
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>My Descriptives</title>
+
+<link rel="stylesheet" href="styles.css"> <!-- Link to the CSS file I created for dark mode code chunks -->
+
+</head>
+
+</html>
+
+
 ```{=html}
 <style>
 body {
@@ -318,7 +335,7 @@ To evaluate the homophiliy in collaboration networks by gender and h-index, the 
 SIENA, which stands for *Simulation Investigation for Empirical Network Analysis*, is a software tool designed to perform statistical estimation of models for longitudinal social network data. SIENA version 4.0, also known as RSiena, is a package for the R statistical software and was developed by Ruth Ripley and Krists Boitmanis, in collaboration with Tom Snijders (@RSiena_package, @RSiena_manual). The use of RSiena for this project is highly based on the practical information provided in "[Social Network Analysis for Social Scientists](https://jochemtolsma.github.io/SNA-4-Social-Scientists/)**"** (@SNASS).
 
 To ensure the model accurately represents the collaboration network, I developed it iteratively, beginning with a null model (Model 0) and gradually building up to a more comprehensive model (Model 4). Each successive model incorporates additional effects, allowing for targeted testing of specific hypotheses. The **null model** serves as the foundation and includes only basic structural effects: reciprocity and outdegree (density), as is standard in RSiena. This model provides a baseline for comparison but does not address any hypotheses directly. The **first model** incorporates additional structural network effects, such as isolates, indegree popularity, and outdegree activity, to examine how these features influence collaboration dynamics. This model offers insights into *Hypothesis 3*, as it highlights the structural factors shaping network patterns. Building on model 1, this model introduces covariate effects for gender, including ego, alter, and same-gender preferences (sameX), as well as a structural effect for gender-differentiated transitivity (diffXTransTrip). By analyzing gender-based network patterns, this model tests *Hypothesis 1*, which focuses on gender homophily.\
-Expanding on model 2, **model 3** incorporates departmental effects, such as ego and alter preferences for department membership, as well as same-department collaboration tendencies (sameX). This addition allows for a more nuanced analysis of departmental differences in gender homophily, addressing *Hypothesis 2*. The final model (**model 4**) integrates prestige effects through covariate interactions for the h-index, including ego, alter, and indegree popularity weighted by the h-index. These additions test *Hypothesis 4*, examining whether prestige moderates gender homophily in collaboration patterns. The fit of each model and its relevance interpreting the estimates will be reported in the Analysis chapter and further detailed in the [GOFpart](https://treesdude.github.io/labjournal/finalGOF.html) of this final report webpage.
+Expanding on model 2, **model 3** incorporates departmental effects, such as ego and alter preferences for department membership, as well as same-department collaboration tendencies (sameX). This addition allows for a more nuanced analysis of departmental differences in gender homophily, addressing *Hypothesis 2*. The final model (**model 4**) integrates prestige effects through covariate interactions for the h-index, including ego, alter, and indegree popularity weighted by the h-index. These additions test *Hypothesis 4*, examining whether prestige moderates gender homophily in collaboration patterns. The fit of each model and its relevance interpreting the estimates will be reported in the Analysis chapter and further detailed in the GOF part of this final report webpage.
 
 ## Descriptives
 
