@@ -15,7 +15,7 @@ csl: apa.csl
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>My Descriptives</title>
+<title>My Data</title>
 
 <link rel="stylesheet" href="styles.css"> <!-- Link to the CSS file I created for dark mode code chunks -->
 
@@ -23,21 +23,6 @@ csl: apa.csl
 
 </html>
 
-
-```{=html}
-<style>
-body {
-text-align: left;
-line-height: 1.5;
-}
-
-h1, .h1, h2, .h2, h3, .h3 {
-  margin-top: 24px;
-  line-height: 1;
-}
-
-</style>
-```
 
 ```{r, globalsettings, echo=FALSE, warning=FALSE, results='hide'}
 library(knitr)
@@ -297,10 +282,9 @@ The data for this study was obtained by collecting information from all Sociolog
 
 ## Dependent variable
 
-The dependent variable in this dataset, indicated by the ties between scholars, refers to academic collaborations between them and are often called co-authorships. The data was scraped from OpenAlex API using the rvest and xml2 packages in R ( @Priem2022, @xml2, @rvest). The dependent variable, represented by an *adjacency matrix*, shows whether two actors or writers collaborated on one of their publications in the specified wave.\
-Each dyad (author combination) is assessed based on whether they collaborated (1) or not (0) throughout the data period.
+The dependent variable in this dataset, indicated by the ties between scholars, refers to academic collaborations between them and are often called co-authorships. The data was scraped from OpenAlex API using the rvest and xml2 packages in R ( @Priem2022, @xml2, @rvest). The dependent variable, represented by an *adjacency matrix*, shows whether two actors or writers collaborated on one of their publications in the specified wave. Each dyad (author combination) is assessed based on whether they collaborated (1) or not (0) throughout the data period.
 
-**I**n the collboartion networks analysed in this study, ties are described as directional, which implies that they are delivered by one actor and received by another. This means each actor has both outdegrees and indegrees. Outdegrees refer to 'sent' connections that refer to being the first author of a publication. Indegrees, or 'received' connections, imply collaboration on an article without being the 'initial' author. The generated adjacency matrix is thus holds a network, indicating the collaboration patterns of the academics at Radboud University between 2015-2018.
+In the collboartion networks analysed in this study, ties are described as directional, which implies that they are delivered by one actor and received by another. This means each actor has both outdegrees and indegrees. Outdegrees refer to 'sent' connections that refer to being the first author of a publication. Indegrees, or 'received' connections, imply collaboration on an article without being the 'initial' author. The generated adjacency matrix is thus holds a network, indicating the collaboration patterns of the academics at Radboud University between 2015-2018.
 
 ## Independent variables
 
@@ -312,7 +296,7 @@ For the sake of simplicity, scholars' gender in this study was inferred from sch
 
 ### Prestige
 
-The scholars' h-indices will serve as a control variable in this research design (@Bornmann2020, @Bornmann2021). The h-index calculates the number of publications that have been cited at least as frequently as the author's total number of publications. This number can then be used as measure for the author's 'prestige' (@Hirsch2005). The number of citations and publications needed for this calculation were webscraped through OpenAlex API (@Priem2022**).** The code for this process was provided by Lucan Bovens.
+The scholars' h-indices will serve as a control variable in this research design (@Bornmann2020, @Bornmann2021). The h-index calculates the number of publications that have been cited at least as frequently as the author's total number of publications. This number can then be used as measure for the author's 'prestige' (@Hirsch2005). The number of citations and publications needed for this calculation were webscraped through OpenAlex API (@Priem2022). The code for this process was provided by Lucan Bovens.
 
 ## Ethical concerns
 
@@ -395,19 +379,19 @@ test_w1 <- igraph::graph_from_adjacency_matrix(
 
 Descriptives (mean, distibution, etc.) in whole sample
 
-```{r sum gender, echo=FALSE }
+```{r sum gender, echo=FALSE}
 summary(df_ego$gender)
 ```
 
 gender counts across whole sample (0 = female, 1 = male)
 
-```{r counts gender-all, echo=FALSE }
+```{r counts gender-all, echo=FALSE}
 table(df_ego$gender)
 ```
 
 Histogram: overall gender distribution in sample
 
-```{r histogram gender, echo=FALSE }
+```{r histogram gender, echo=FALSE}
 # Convert gender to a factor to avoid errors
 df_ego$gender <- as.factor(df_ego$gender)
 # Create the histogram with a dark theme and two colors for bars
@@ -442,7 +426,7 @@ ggplot(df_ego, aes(x = gender, fill = gender)) +
 
 Genders per department (0 = female, 1 = male)
 
-```{r gender per dep., echo=FALSE }
+```{r gender per dep., echo=FALSE}
    
 # Wave 1: Gender count per department 
 table(df_ego$discipline.24, df_ego$gender)
@@ -452,13 +436,13 @@ table(df_ego$discipline.24, df_ego$gender)
 
 Descriptives (mean, distribution, etc.)
 
-```{r summary h index, echo=FALSE }
+```{r summary h index, echo=FALSE}
 summary(df_ego$h_index)
 ```
 
 H-Index Whole sample
 
-```{r hist h index, echo=FALSE }
+```{r hist h index, echo=FALSE}
 # Histogram of prestige scores for Wave 1 
 
 # Create a data frame for ggplot2 
@@ -491,7 +475,7 @@ ggplot(df_h_index, aes(x = h_index)) +
 
 H index per department
 
-```{r table per dep h index, echo=FALSE }
+```{r table dep h index, echo=FALSE}
 # Wave 1: Prestige distribution by dep. and total
 df_ego %>%
     group_by(discipline.24) %>%
