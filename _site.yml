@@ -46,14 +46,6 @@ navbar:
       - text: "3rd draft"
         href: RQdraft3.html
 
-    - text: "Project design"
-      menu:
-      - text: "Clarify RQs"
-        href: clarifyRQsandDesign.html   
-      - text: "Plotting"
-        href: plotting1.html
-      - text: "Check-in with Jochem"
-        href: revisitwithJochem.html
         
     - text: "Step-by-step analysis"
       menu:
@@ -63,8 +55,6 @@ navbar:
         href: descriptivestry.html 
       - text: "Step 4&5: Specify & Estimate model"
         href: RSienatry.html
-      - text: "Test estimate display"
-        href: estimate_M0.html
 
 
     - text: "Draft report"
@@ -76,12 +66,12 @@ navbar:
       - text: "Data"
         href: draftdata.html
         menu:
-        - text: "Data & Analysis"
+        - text: "Data(dont click,its bugged)"
           href: draftdata.html 
         - text: "Data preparation"
           href: datapreptrynew.html
         - text: "Descriptives"
-          href: descriptivestry.html 
+          href: descriptivestry.html
       - text: "Results"
         href: draftdesresults.html
         menu:
