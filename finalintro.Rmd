@@ -6,6 +6,7 @@ output: html_document
 bibliography: references.bib
 csl: apa.csl
 ---
+
 ```{=html}
 <style>
 body {
@@ -20,7 +21,6 @@ h1, .h1, h2, .h2, h3, .h3 {
 
 </style>
 ```
-
 ```{r, globalsettings, echo=FALSE, warning=FALSE, results='hide'}
 library(knitr)
 
@@ -41,5 +41,52 @@ klippy::klippy(position = c('top', 'right'))
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-
 ```
+
+------------------------------------------------------------------------
+
+# Introduction
+
+## Contextualization
+
+Collaboration has become a cornerstone of modern academic practice, with scholars increasingly working together to leverage diverse expertise, share resources, and enhance their research output. Co-authorship, in particular, is a key indicator of collaboration, often reflecting the dynamics of professional relationships and the distribution of academic opportunities. As Cheong (@Cheong2009) highlights, collaboration enables researchers to combine intellectual and institutional resources, contributing significantly to their scholarly success. However, collaboration is not free from social patterns and biases. Academic networks often mirror broader societal inequalities, with persistent disparities in opportunities and recognition. One such disparity id gender inequality, which continues to shape interactions, opportunities, and outcomes within academia.
+
+## Research Problem and Goal
+
+In this study, I examine the role of gender homophily in shaping co-authorship networks in the Sociology and Political Science Departments at Radboud University. Gender homophily refers to the tendency of individuals to collaborate with others of the same gender. This phenomenon can influence who gains access to collaboration opportunities, thereby shaping academic trajectories and reinforcing existing inequalities. Understanding these dynamics is essential to uncovering how collaboration networks may perpetuate or lessen gender-based disparities in academia.
+
+## Prior findings
+
+### Gender and Collaboration
+
+Previous research has consistently shown that gender plays a significant role in academic collaboration. Horta and colleagues (@Horta2022) reveal that male researchers are more likely to collaborate with other men, while female researchers exhibit a weaker but still present tendency towards homophily. Kwiek and Roszka (@Kwiek2021) found that such patterns contributes to the persistence of gender imbalances in co-authorship, where all-male teams remain more common than all-female teams. These trends are particularly concerning in fields such as Sociology and Political Science, where collaboration is vital for career advancement (@Cheong2009). The structure of these networks affects not only who collaborates but also how academic recognition and resources are distributed (@Cheong2009). For example, male-dominated networks may provide better access to high-impact collaborations and grant opportunities for men, further perpetuating the gender gap in academic successes.
+
+### Prestige and Collaboration
+
+Another crucial factor influencing collaboration id academic prestige. Scholars with higher prestige, indicated by metrics such as the h-index or publication in top-tier journals, are generally more sought after as collaborators. Existing research suggests that prestige might interact with gender homophily in significant ways. Bellotti et al. (@Bellotti2022) found that prestigious male scholars often form networks that exclude women, while McDowell and colleagues (@Mcdowell2007) also observed that female scholars, despite demonstrating similar academic competence, face greater challenges in accessing high-prestige collaborative networks. In this context, it is crucial to explore whether the tendency for gender-based collaboration shifts when prestige factors come into play. Specifically, do scholars' h-indeces exacerbate gender homophily in academic networks?
+
+## Research Focus and Questions
+
+This study aims to analyze gender homophily within the co-authorship networks of the Sociology and Political Science Departments at Radboud University, focusing on the role of prestige. The research is guided by the following questions:
+
+-   ***RQ1a:** To what extent does gender homophily occur across all co-publications of the staff in the Sociology and Political Science Departments at Radboud University?*
+
+-   ***RQ1b:** To what extent do the two departments differ in their levels of gender homophily?*
+
+These questions focus on descriptive patterns, providing a macro-level view of gender clustering in academic networks.
+
+-   ***RQ2:** To what extent can gender homophily in collaboration networks be explained by preferences at the dyadic level, controlling for structural network and individual-level covariates?*
+
+This question shifts the focus to the micro-level, examining whether individual choices and structural factors drive homophily in co-authorship.
+
+-   **RQ3:** How does the prestige of scholars, measured by scholars' h-index, influence gender homophily in co-authorship networks?
+
+This question explores whether prestige interacts with gender homophily, shedding light on how academic recognition impacts collaborative behaviors. Specifically, it investigates whether male and female scholars with similar prestige levels experience different patterns of collaboration and whether prestige reduces or amplifies gender clustering.
+
+## Relevance and Contribution
+
+This study contributes to the growing body of literature on gender inequalities in academia by focusing on the intersection of gender and academic prestige in shaping collaboration networks. By applying a social network perspective, it offers insights into how gender-based preferences influence co-authorship patterns and how these dynamics vary between disciplines. Moreover, by exploring the role of journal prestige, this research highlights how structural factors may intersect with social biases to shapw academic opportunities, providing a nuanced understanding of the mechanisms underlying gender disparities in academia.
+
+------------------------------------------------------------------------
+
+# References

@@ -6,20 +6,23 @@ output: html_document
 bibliography: references.bib
 csl: apa.csl
 ---
-```{=html}
-<style>
-body {
-text-align: left;
-line-height: 1.5;
-}
 
-h1, .h1, h2, .h2, h3, .h3 {
-  margin-top: 24px;
-  line-height: 1;
-}
 
-</style>
-```
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>My Models</title>
+
+<link rel="stylesheet" href="styles.css"> <!-- Link to the CSS file I created for dark mode code chunks -->
+
+</head>
+
+</html>
 
 ```{r, globalsettings, echo=FALSE, warning=FALSE, results='hide'}
 library(knitr)
@@ -43,3 +46,457 @@ klippy::klippy(position = c('top', 'right'))
 knitr::opts_chunk$set(echo = TRUE)
 
 ```
+
+# Getting started
+
+```{r clean}
+rm(list = ls())
+```
+
+## Packages
+
+```{r package}
+require(tidyverse)
+require(RSiena)
+require(RsienaTwoStep)
+
+#install.packages("data.table")
+require(data.table)  # mainly for faster data handling
+# install.packages('xml2')
+require(xml2)
+# install.packages('rvest')
+require(rvest)
+require(igraph)
+
+require(ggraph)
+#install.packages('visNetwork')
+require(visNetwork)
+#install.packages('threejs')
+require(threejs)
+#install.packages('networkD3')
+require(networkD3)
+
+
+```
+
+## Functions
+
+```{r functions 1}
+fpackage.check <- function(packages) {
+    lapply(packages, FUN = function(x) {
+        if (!require(x, character.only = TRUE)) {
+            install.packages(x, dependencies = TRUE)
+            library(x, character.only = TRUE)
+        }
+    })
+}
+
+fsave <- function(x, file = NULL, location = "./data/processed/") {
+    ifelse(!dir.exists("data"), dir.create("data"), FALSE)
+    ifelse(!dir.exists("data/processed"), dir.create("data/processed"), FALSE)
+    if (is.null(file))
+        file = deparse(substitute(x))
+    datename <- substr(gsub("[:-]", "", Sys.time()), 1, 8)
+    totalname <- paste(location, file, "_", datename, ".rda", sep = "")
+    save(x, file = totalname)  #need to fix if file is reloaded as input name, not as x. 
+}
+
+fload <- function(filename) {
+    load(filename)
+    get(ls()[ls() != "filename"])
+}
+
+fshowdf <- function(x, ...) {
+    knitr::kable(x, digits = 2, "html", ...) %>%
+        kableExtra::kable_styling(bootstrap_options = c("striped", "hover")) %>%
+        kableExtra::scroll_box(width = "100%", height = "300px")
+}
+
+
+# this is the most important one. We created it in the previous script
+
+f_pubnets <- function(df_scholars = df, list_publications = publications, discip = "sociology"+"political science", affiliation = "RU",
+    waves = list(wave1 = c(2018, 2019, 2020), wave2 = c(2021, 2022, 2023))) {
+
+    publications <- list_publications %>%
+        bind_rows() %>%
+        distinct(title, .keep_all = TRUE)
+
+    df_scholars %>%
+        filter(affil1 == affiliation | affil2 == affiliation) %>%
+        filter(discipline == discip) -> df_sel
+
+    networklist <- list()
+    for (wave in 1:length(waves)) {
+        networklist[[wave]] <- matrix(0, nrow = nrow(df_sel), ncol = nrow(df_sel))
+    }
+
+    publicationlist <- list()
+    for (wave in 1:length(waves)) {
+        publicationlist[[wave]] <- publications %>%
+            filter(gs_id %in% df_sel$gs_id) %>%
+            filter(year %in% waves[[wave]]) %>%
+            select(author) %>%
+            lapply(str_split, pattern = ",")
+    }
+
+    publicationlist2 <- list()
+    for (wave in 1:length(waves)) {
+        publicationlist2[[wave]] <- publicationlist[[wave]]$author %>%
+            # lowercase
+        lapply(tolower) %>%
+            # Removing diacritics
+        lapply(stri_trans_general, id = "latin-ascii") %>%
+            # only last name
+        lapply(word, start = -1, sep = " ") %>%
+            # only last last name
+        lapply(word, start = -1, sep = "-")
+    }
+
+    for (wave in 1:length(waves)) {
+        # let us remove all publications with only one author
+        remove <- which(sapply(publicationlist2[[wave]], FUN = function(x) length(x) == 1) == TRUE)
+        publicationlist2[[wave]] <- publicationlist2[[wave]][-remove]
+    }
+
+    for (wave in 1:length(waves)) {
+        pubs <- publicationlist2[[wave]]
+        for (ego in 1:nrow(df_sel)) {
+            # which ego?
+            lastname_ego <- df_sel$lastname[ego]
+            # for all publications
+            for (pub in 1:length(pubs)) {
+                # only continue if ego is author of pub
+                if (lastname_ego %in% pubs[[pub]]) {
+                  aut_pot <- which.max(pubs[[pub]] %in% lastname_ego)
+                  # only continue if ego is first author of pub
+                  if (aut_pot == 1) {
+                    # check all alters/co-authors
+                    for (alter in 1:nrow(df_sel)) {
+                      # which alter
+                      lastname_alter <- df_sel$lastname[alter]
+                      if (lastname_alter %in% pubs[[pub]]) {
+                        networklist[[wave]][ego, alter] <- networklist[[wave]][ego, alter] + 1
+                      }
+                    }
+                  }
+                }
+            }
+        }
+    }
+    return(list(df = df_sel, network = networklist))
+}
+
+```
+
+## More functions
+
+```{r functions 2}
+fcolnet <- function(data = scholars, university = "RU", discipline = "sociology"+"political science", waves = list(c(2015,
+    2018), c(2019, 2023)), type = c("first")) {
+
+    # step 1
+    demographics <- do.call(rbind.data.frame, data$demographics)
+    demographics <- demographics %>%
+        mutate(Universiteit1.22 = replace(Universiteit1.22, is.na(Universiteit1.22), ""), Universiteit2.22 = replace(Universiteit2.22,
+            is.na(Universiteit2.22), ""), Universiteit1.24 = replace(Universiteit1.24, is.na(Universiteit1.24),
+            ""), Universiteit2.24 = replace(Universiteit2.24, is.na(Universiteit2.24), ""), discipline.22 = replace(discipline.22,
+            is.na(discipline.22), ""), discipline.24 = replace(discipline.24, is.na(discipline.24), ""))
+
+    sample <- which((demographics$Universiteit1.22 %in% university | demographics$Universiteit2.22 %in%
+        university | demographics$Universiteit1.24 %in% university | demographics$Universiteit2.24 %in%
+        university) & (demographics$discipline.22 %in% discipline | demographics$discipline.24 %in% discipline))
+
+    demographics_soc <- demographics[sample, ]
+    scholars_sel <- lapply(scholars, "[", sample)
+
+    # step 2
+    ids <- demographics_soc$au_id
+    nwaves <- length(waves)
+    nets <- array(0, dim = c(nwaves, length(ids), length(ids)), dimnames = list(wave = 1:nwaves, ids,
+        ids))
+    dimnames(nets)
+
+    # step 3
+    df_works <- tibble(works_id = unlist(lapply(scholars_sel$work, function(l) l$id)), works_author = unlist(lapply(scholars_sel$work,
+        function(l) l$author), recursive = FALSE), works_year = unlist(lapply(scholars_sel$work, function(l) l$publication_year),
+        recursive = FALSE))
+
+    df_works <- df_works[!duplicated(df_works), ]
+
+    # step 4
+    if (type == "first") {
+        for (j in 1:nwaves) {
+            df_works_w <- df_works[df_works$works_year >= waves[[j]][1] & df_works$works_year <= waves[[j]][2],
+                ]
+            for (i in 1:nrow(df_works_w)) {
+                ego <- df_works_w$works_author[i][[1]]$au_id[1]
+                alters <- df_works_w$works_author[i][[1]]$au_id[-1]
+                if (sum(ids %in% ego) > 0 & sum(ids %in% alters) > 0) {
+                  nets[j, which(ids %in% ego), which(ids %in% alters)] <- 1
+                }
+            }
+        }
+    }
+
+    if (type == "last") {
+        for (j in 1:nwaves) {
+            df_works_w <- df_works[df_works$works_year >= waves[[j]][1] & df_works$works_year <= waves[[j]][2],
+                ]
+            for (i in 1:nrow(df_works_w)) {
+                ego <- rev(df_works_w$works_author[i][[1]]$au_id)[1]
+                alters <- rev(df_works_w$works_author[i][[1]]$au_id)[-1]
+                if (sum(ids %in% ego) > 0 & sum(ids %in% alters) > 0) {
+                  nets[j, which(ids %in% ego), which(ids %in% alters)] <- 1
+                }
+            }
+        }
+    }
+
+    if (type == "all") {
+        for (j in 1:nwaves) {
+            df_works_w <- df_works[df_works$works_year >= waves[[j]][1] & df_works$works_year <= waves[[j]][2],
+                ]
+            for (i in 1:nrow(df_works_w)) {
+                egos <- df_works_w$works_author[i][[1]]$au_id
+                if (sum(ids %in% egos) > 0) {
+                  nets[j, which(ids %in% egos), which(ids %in% egos)] <- 1
+                }
+            }
+        }
+    }
+    output <- list()
+    output$data <- scholars_sel
+    output$nets <- nets
+    return(output)
+}
+```
+
+## Load data
+
+```{r data}
+scholars <- fload("./data/processed/scholars_20240924.rda") 
+```
+
+```{r saving output}
+# save the output of your function
+
+test  <- fcolnet(data = scholars, 
+                university = "RU", 
+                discipline = c("sociology", "political science"),
+                waves = list(c(2015, 2018), c(2019, 2023)), 
+                type = c("all")) # all, first, last # which ties in there
+
+```
+
+
+# Saving data 
+
+This part, despite being lengthy and principally unnecessary, needed to stay in my code for the sake of transparency. AFterall, this code and the following code on this page is what accumulated in the gender-data of each department in my data set. 
+
+
+```{r}
+
+# save the output of your function
+testsoc  <- fcolnet(data = scholars, 
+                university = "RU", 
+                discipline = "sociology", 
+                waves = list(c(2015, 2018), c(2019, 2023)), 
+    
+                            type = c("first"))
+
+testpolsci <- fcolnet(data = scholars, 
+                university = "RU", 
+                discipline = "political science", 
+                waves = list(c(2015, 2018), c(2019, 2023)), 
+                type = c("first"))
+```
+
+## Sociology Department
+
+```{r}
+soc_nets <- testsoc$nets
+
+ 
+df_ego_demo <- testsoc$data$demographics
+df_ego_oa <- testsoc$data$scholars_oa
+df_ego_works <- testsoc$data$works
+
+
+# DEMO
+  str(df_ego_demo, 1) 
+  
+  df_ego_demo <- do.call(rbind.data.frame, df_ego_demo)
+  df_ego_demo[[1]]
+
+# OA
+  #str(df_ego_oa, 1)
+  df_ego_oa[[1]]
+  df_ego_oa <- do.call(rbind.data.frame, df_ego_oa)
+
+
+  # --> EGO DATAFRAME with demo and oa (sociology)
+
+  df_soc_ego <- left_join(df_ego_demo, df_ego_oa, by = join_by(au_id == id))
+  
+  rownames(soc_nets[1,,]) == df_soc_ego$au_id # checking if the author id's are the same as in df_ego in nets dataframe 
+  # --> yes, the correct ones!!!
+  
+  
+  df_ego_works[[1]]$author 
+#authors of all the works that first scholar (here: Ana Macanovic) is part of 
+
+
+```
+
+## Political Science Department
+
+```{r}
+# dependent
+# pol_net <- sienaDependent(net_pol_array)
+
+
+# dependent 
+pol_nets <- testpolsci$nets
+
+ 
+df_pol_ego_demo <- testpolsci$data$demographics
+df_pol_ego_oa <- testpolsci$data$scholars_oa
+df_pol_ego_works <- testpolsci$data$works
+
+
+# DEMO
+  #str(df_pol_ego_demo, 1) 
+  
+  df_pol_ego_demo <- do.call(rbind.data.frame, df_pol_ego_demo)
+  df_pol_ego_demo[[1]]
+
+# OA
+  #str(df_pol_ego_oa, 1)
+  df_pol_ego_oa[[1]]
+  df_pol_ego_oa <- do.call(rbind.data.frame, df_pol_ego_oa)
+  
+  
+# --> EGO DATAFRAME with demo and oa (political science)
+  df_pol_ego <- left_join(df_pol_ego_demo, df_pol_ego_oa, by = join_by(au_id == id))
+
+  rownames(pol_nets[1,,]) == df_pol_ego$au_id # checking if the author id's are the same as in df_ego in nets dataframe 
+  # --> yes, the correct ones!!!
+```
+
+# Gender
+### Sociology Department SCholars 
+
+```{r gender s}
+df_soc_ego$Naam # list of all names in sociology department 
+
+df_soc_ego$gender <- c(0,1,0,1,0,0,1,1,0,0,
+                       0,1,1,0,1,0,1,1,1,1,
+                       0,1,1,0,1,1,0,1,0,1,
+                       0,1,0,0,0,0,0,0,1,0,
+                       0,1,1,1,0,1,0,1,0,0) 
+# manually filled in gender 0 = woman, 1 = man, based on majority given in NL voornamen bank 
+
+# check if it went smoothly 
+# view(df_soc_ego[c('Naam', 'gender', 'au_id')])
+
+# fsave(df_soc_ego)
+
+```
+
+### Politicla Science Scholars
+
+```{r gender p}
+df_pol_ego$Naam # list of all names 
+
+df_pol_ego$gender <- c(1,0,1,0,0,0,1,0,1,0,
+                       1,1,0,0,1,1,1,0,0,1,
+                       0,1,1,0,0,1,1,1,0,0,
+                       0,0,0,1,1,0,0,1,1,0,
+                       0,0,0,1,0,1,1,1,0,0,0) 
+    # manually filled in gender 0 = woman, 1 = man, based on majority given in NL voornamen bank, Guangyu was not in name bank but based on the employee-picture of RU, this person presents feminine, thus I assumed 0. 
+
+# check if it went smoothly 
+# view(df_pol_ego[c('Naam', 'gender', 'au_id')])
+
+#covariate 
+# gender <- coCovar(df_ego$gender)
+
+# fsave(df_pol_ego)
+```
+
+Save gender data
+
+```{r gender data}
+soc_gender <- fload("./data/processed/df_soc_ego_20241105.rda")
+pol_gender <- fload("./data/processed/df_pol_ego_20241105.rda")
+```
+
+Combine data 
+
+```{r combine gender set}
+df <- test$data # make dataset with all data 
+df_ego <- do.call(rbind.data.frame, df$demographics) # data set with demographic information
+
+
+soc_gender <- soc_gender[,c("Naam", "gender")] # selecting only the content we need
+pol_gender <- pol_gender[,c("Naam", "gender")] # selecting only the content we need
+
+gender <- rbind(soc_gender, pol_gender) # combining the gender data sets 
+
+df_ego <- df_ego %>% 
+            left_join(gender) #dcombining data set of gender with the one with demographic information 
+```
+
+
+# H-index
+
+Credits to Lucan Bovens for the code.
+
+```{r h-index}
+# Add h-index and i10-index columns to df_ego
+df_ego <- df_ego %>%
+  mutate(h_index = NA_real_, i10_index = NA_real_)
+
+# Get H-index and i10-index 
+get_openalex_metrics <- function(openalex_id) {
+  url <- paste0("https://api.openalex.org/authors/", openalex_id)
+  author_data <- tryCatch({
+    jsonlite::fromJSON(url)
+  }, error = function(e) {
+    message(paste("Error fetching data for OpenAlex ID:", openalex_id))
+    return(NULL)
+  })
+  
+  if (!is.null(author_data)) {
+    h_index <- author_data$summary_stats$h_index
+    i10_index <- author_data$summary_stats$i10_index
+    works_count <- author_data$works_count
+    cited_by_count <- author_data$cited_by_count
+    return(list(h_index = h_index, i10_index = i10_index, works_count = works_count, cited_by_count = cited_by_count))
+  } else {
+    return(list(h_index = NA, i10_index = NA, works_count = NA, cited_by_count = NA))
+  }
+}
+
+# Loop for each scholar 
+for (i in 1:nrow(df_ego)) {
+  openalex_id <- df_ego$au_id[i]  # assuming au_id is the OpenAlex ID in df_ego
+  metrics <- get_openalex_metrics(openalex_id)
+  df_ego$h_index[i] <- metrics$h_index
+  df_ego$i10_index[i] <- metrics$i10_index
+  df_ego$works_count[i] <- metrics$works_count
+  df_ego$cited_by_count[i] <- metrics$cited_by_count
+}
+
+# View updated df_ego with h-index and i10-index
+view(df_ego[c('au_id','Naam','gender','h_index','i10_index')])
+
+
+# fsave(df_ego)
+
+```
+
+Throughout my code I will use two data sets called "scholars_..." and called "ego_df_...". I am aware that it would be more convenient to use a single dataset as a fondation for many analyses. However, as I went down a few rabbit holes in trying to prepare my data, a lot of my code relied on either two fo these data frames. I had passed a 'point of no return' in terms of the data frames and files I generated as re-doing this part yielded in messing up most of the code for other parts of this project. Hence, the two data sets. 
+
+

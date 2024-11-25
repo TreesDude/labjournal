@@ -304,14 +304,13 @@ df_ego <- fload("./data/processed/df_ego_20241108.rda")
 ```
 
 ---
----
+
 ---
 
 # Descriptive Analysis
 
 The network statistics, and descriptives, just as visualizations of the collaboration network can be found on this page. For Ego-level descriptives on gender and h-index, please consult the latter part of the Data & Analysis part of this final report.
 
-------------------------------------------------------------------------
 
 ## Network Description
 

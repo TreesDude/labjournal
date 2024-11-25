@@ -562,24 +562,753 @@ div.tocify {
 </div>
 
 
-<style>
-body {
-text-align: left;
-line-height: 1.5;
-}
-
-h1, .h1, h2, .h2, h3, .h3 {
-  margin-top: 24px;
-  line-height: 1;
-}
-
-</style>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+My Models
+</title>
+<p><link rel="stylesheet" href="styles.css">
+<!-- Link to the CSS file I created for dark mode code chunks --></p>
+</head>
+</html>
 <script>
   addClassKlippyTo("pre.r, pre.markdown");
   addKlippy('right', 'top', 'auto', '1', 'Copy code', 'Copied!');
 </script>
+<div id="getting-started" class="section level1" number="1">
+<h1><span class="header-section-number">1</span> Getting started</h1>
+<pre class="r test"><code>rm(list = ls())</code></pre>
+<div id="packages" class="section level2" number="1.1">
+<h2><span class="header-section-number">1.1</span> Packages</h2>
+<pre class="r test"><code>require(tidyverse)
+require(RSiena)
+require(RsienaTwoStep)
 
-<div id="rmd-source-code">LS0tDQp0aXRsZTogIkRhdGEgcHJlcGFyYXRpb24iDQphdXRob3I6ICJWZXJvb28iDQpkYXRlOiAiMjAyNC0xMS0yMyINCm91dHB1dDogaHRtbF9kb2N1bWVudA0KYmlibGlvZ3JhcGh5OiByZWZlcmVuY2VzLmJpYg0KY3NsOiBhcGEuY3NsDQotLS0NCmBgYHs9aHRtbH0NCjxzdHlsZT4NCmJvZHkgew0KdGV4dC1hbGlnbjogbGVmdDsNCmxpbmUtaGVpZ2h0OiAxLjU7DQp9DQoNCmgxLCAuaDEsIGgyLCAuaDIsIGgzLCAuaDMgew0KICBtYXJnaW4tdG9wOiAyNHB4Ow0KICBsaW5lLWhlaWdodDogMTsNCn0NCg0KPC9zdHlsZT4NCmBgYA0KDQpgYGB7ciwgZ2xvYmFsc2V0dGluZ3MsIGVjaG89RkFMU0UsIHdhcm5pbmc9RkFMU0UsIHJlc3VsdHM9J2hpZGUnfQ0KbGlicmFyeShrbml0cikNCg0Ka25pdHI6Om9wdHNfY2h1bmskc2V0KGVjaG8gPSBUUlVFKQ0Kb3B0c19jaHVuayRzZXQodGlkeS5vcHRzPWxpc3Qod2lkdGguY3V0b2ZmPTEwMCksdGlkeT1UUlVFLCB3YXJuaW5nID0gRkFMU0UsIG1lc3NhZ2UgPSBGQUxTRSxjb21tZW50ID0gIiM+IiwgY2FjaGU9VFJVRSwgY2xhc3Muc291cmNlPWMoInRlc3QiKSwgY2xhc3Mub3V0cHV0PWMoInRlc3QyIikpDQpvcHRpb25zKHdpZHRoID0gMTAwKQ0KcmdsOjpzZXR1cEtuaXRyKCkNCg0KY29sb3JpemUgPC0gZnVuY3Rpb24oeCwgY29sb3IpIHtzcHJpbnRmKCI8c3BhbiBzdHlsZT0nY29sb3I6ICVzOyc+JXM8L3NwYW4+IiwgY29sb3IsIHgpIH0NCg0KYGBgDQoNCmBgYHtyIGtsaXBweSwgZWNobz1GQUxTRSwgaW5jbHVkZT1UUlVFfQ0Ka2xpcHB5OjprbGlwcHkocG9zaXRpb24gPSBjKCd0b3AnLCAncmlnaHQnKSkNCiNrbGlwcHk6OmtsaXBweShjb2xvciA9ICdkYXJrcmVkJykNCiNrbGlwcHk6OmtsaXBweSh0b29sdGlwX21lc3NhZ2UgPSAnQ2xpY2sgdG8gY29weScsIHRvb2x0aXBfc3VjY2VzcyA9ICdEb25lJykNCmBgYA0KDQpgYGB7ciBzZXR1cCwgaW5jbHVkZT1GQUxTRX0NCmtuaXRyOjpvcHRzX2NodW5rJHNldChlY2hvID0gVFJVRSkNCg0KYGBgDQo=</div>
+# install.packages(&#39;data.table&#39;)
+require(data.table)  # mainly for faster data handling
+# install.packages(&#39;xml2&#39;)
+require(xml2)
+# install.packages(&#39;rvest&#39;)
+require(rvest)
+require(igraph)
+
+require(ggraph)
+# install.packages(&#39;visNetwork&#39;)
+require(visNetwork)
+# install.packages(&#39;threejs&#39;)
+require(threejs)
+# install.packages(&#39;networkD3&#39;)
+require(networkD3)</code></pre>
+</div>
+<div id="functions" class="section level2" number="1.2">
+<h2><span class="header-section-number">1.2</span> Functions</h2>
+<pre class="r test"><code>fpackage.check &lt;- function(packages) {
+    lapply(packages, FUN = function(x) {
+        if (!require(x, character.only = TRUE)) {
+            install.packages(x, dependencies = TRUE)
+            library(x, character.only = TRUE)
+        }
+    })
+}
+
+fsave &lt;- function(x, file = NULL, location = &quot;./data/processed/&quot;) {
+    ifelse(!dir.exists(&quot;data&quot;), dir.create(&quot;data&quot;), FALSE)
+    ifelse(!dir.exists(&quot;data/processed&quot;), dir.create(&quot;data/processed&quot;), FALSE)
+    if (is.null(file))
+        file = deparse(substitute(x))
+    datename &lt;- substr(gsub(&quot;[:-]&quot;, &quot;&quot;, Sys.time()), 1, 8)
+    totalname &lt;- paste(location, file, &quot;_&quot;, datename, &quot;.rda&quot;, sep = &quot;&quot;)
+    save(x, file = totalname)  #need to fix if file is reloaded as input name, not as x. 
+}
+
+fload &lt;- function(filename) {
+    load(filename)
+    get(ls()[ls() != &quot;filename&quot;])
+}
+
+fshowdf &lt;- function(x, ...) {
+    knitr::kable(x, digits = 2, &quot;html&quot;, ...) %&gt;%
+        kableExtra::kable_styling(bootstrap_options = c(&quot;striped&quot;, &quot;hover&quot;)) %&gt;%
+        kableExtra::scroll_box(width = &quot;100%&quot;, height = &quot;300px&quot;)
+}
+
+
+# this is the most important one. We created it in the previous script
+
+f_pubnets &lt;- function(df_scholars = df, list_publications = publications, discip = &quot;sociology&quot; + &quot;political science&quot;,
+    affiliation = &quot;RU&quot;, waves = list(wave1 = c(2018, 2019, 2020), wave2 = c(2021, 2022, 2023))) {
+
+    publications &lt;- list_publications %&gt;%
+        bind_rows() %&gt;%
+        distinct(title, .keep_all = TRUE)
+
+    df_scholars %&gt;%
+        filter(affil1 == affiliation | affil2 == affiliation) %&gt;%
+        filter(discipline == discip) -&gt; df_sel
+
+    networklist &lt;- list()
+    for (wave in 1:length(waves)) {
+        networklist[[wave]] &lt;- matrix(0, nrow = nrow(df_sel), ncol = nrow(df_sel))
+    }
+
+    publicationlist &lt;- list()
+    for (wave in 1:length(waves)) {
+        publicationlist[[wave]] &lt;- publications %&gt;%
+            filter(gs_id %in% df_sel$gs_id) %&gt;%
+            filter(year %in% waves[[wave]]) %&gt;%
+            select(author) %&gt;%
+            lapply(str_split, pattern = &quot;,&quot;)
+    }
+
+    publicationlist2 &lt;- list()
+    for (wave in 1:length(waves)) {
+        publicationlist2[[wave]] &lt;- publicationlist[[wave]]$author %&gt;%
+            # lowercase
+        lapply(tolower) %&gt;%
+            # Removing diacritics
+        lapply(stri_trans_general, id = &quot;latin-ascii&quot;) %&gt;%
+            # only last name
+        lapply(word, start = -1, sep = &quot; &quot;) %&gt;%
+            # only last last name
+        lapply(word, start = -1, sep = &quot;-&quot;)
+    }
+
+    for (wave in 1:length(waves)) {
+        # let us remove all publications with only one author
+        remove &lt;- which(sapply(publicationlist2[[wave]], FUN = function(x) length(x) == 1) == TRUE)
+        publicationlist2[[wave]] &lt;- publicationlist2[[wave]][-remove]
+    }
+
+    for (wave in 1:length(waves)) {
+        pubs &lt;- publicationlist2[[wave]]
+        for (ego in 1:nrow(df_sel)) {
+            # which ego?
+            lastname_ego &lt;- df_sel$lastname[ego]
+            # for all publications
+            for (pub in 1:length(pubs)) {
+                # only continue if ego is author of pub
+                if (lastname_ego %in% pubs[[pub]]) {
+                  aut_pot &lt;- which.max(pubs[[pub]] %in% lastname_ego)
+                  # only continue if ego is first author of pub
+                  if (aut_pot == 1) {
+                    # check all alters/co-authors
+                    for (alter in 1:nrow(df_sel)) {
+                      # which alter
+                      lastname_alter &lt;- df_sel$lastname[alter]
+                      if (lastname_alter %in% pubs[[pub]]) {
+                        networklist[[wave]][ego, alter] &lt;- networklist[[wave]][ego, alter] + 1
+                      }
+                    }
+                  }
+                }
+            }
+        }
+    }
+    return(list(df = df_sel, network = networklist))
+}</code></pre>
+</div>
+<div id="more-functions" class="section level2" number="1.3">
+<h2><span class="header-section-number">1.3</span> More functions</h2>
+<pre class="r test"><code>fcolnet &lt;- function(data = scholars, university = &quot;RU&quot;, discipline = &quot;sociology&quot; + &quot;political science&quot;,
+    waves = list(c(2015, 2018), c(2019, 2023)), type = c(&quot;first&quot;)) {
+
+    # step 1
+    demographics &lt;- do.call(rbind.data.frame, data$demographics)
+    demographics &lt;- demographics %&gt;%
+        mutate(Universiteit1.22 = replace(Universiteit1.22, is.na(Universiteit1.22), &quot;&quot;), Universiteit2.22 = replace(Universiteit2.22,
+            is.na(Universiteit2.22), &quot;&quot;), Universiteit1.24 = replace(Universiteit1.24, is.na(Universiteit1.24),
+            &quot;&quot;), Universiteit2.24 = replace(Universiteit2.24, is.na(Universiteit2.24), &quot;&quot;), discipline.22 = replace(discipline.22,
+            is.na(discipline.22), &quot;&quot;), discipline.24 = replace(discipline.24, is.na(discipline.24), &quot;&quot;))
+
+    sample &lt;- which((demographics$Universiteit1.22 %in% university | demographics$Universiteit2.22 %in%
+        university | demographics$Universiteit1.24 %in% university | demographics$Universiteit2.24 %in%
+        university) &amp; (demographics$discipline.22 %in% discipline | demographics$discipline.24 %in% discipline))
+
+    demographics_soc &lt;- demographics[sample, ]
+    scholars_sel &lt;- lapply(scholars, &quot;[&quot;, sample)
+
+    # step 2
+    ids &lt;- demographics_soc$au_id
+    nwaves &lt;- length(waves)
+    nets &lt;- array(0, dim = c(nwaves, length(ids), length(ids)), dimnames = list(wave = 1:nwaves, ids,
+        ids))
+    dimnames(nets)
+
+    # step 3
+    df_works &lt;- tibble(works_id = unlist(lapply(scholars_sel$work, function(l) l$id)), works_author = unlist(lapply(scholars_sel$work,
+        function(l) l$author), recursive = FALSE), works_year = unlist(lapply(scholars_sel$work, function(l) l$publication_year),
+        recursive = FALSE))
+
+    df_works &lt;- df_works[!duplicated(df_works), ]
+
+    # step 4
+    if (type == &quot;first&quot;) {
+        for (j in 1:nwaves) {
+            df_works_w &lt;- df_works[df_works$works_year &gt;= waves[[j]][1] &amp; df_works$works_year &lt;= waves[[j]][2],
+                ]
+            for (i in 1:nrow(df_works_w)) {
+                ego &lt;- df_works_w$works_author[i][[1]]$au_id[1]
+                alters &lt;- df_works_w$works_author[i][[1]]$au_id[-1]
+                if (sum(ids %in% ego) &gt; 0 &amp; sum(ids %in% alters) &gt; 0) {
+                  nets[j, which(ids %in% ego), which(ids %in% alters)] &lt;- 1
+                }
+            }
+        }
+    }
+
+    if (type == &quot;last&quot;) {
+        for (j in 1:nwaves) {
+            df_works_w &lt;- df_works[df_works$works_year &gt;= waves[[j]][1] &amp; df_works$works_year &lt;= waves[[j]][2],
+                ]
+            for (i in 1:nrow(df_works_w)) {
+                ego &lt;- rev(df_works_w$works_author[i][[1]]$au_id)[1]
+                alters &lt;- rev(df_works_w$works_author[i][[1]]$au_id)[-1]
+                if (sum(ids %in% ego) &gt; 0 &amp; sum(ids %in% alters) &gt; 0) {
+                  nets[j, which(ids %in% ego), which(ids %in% alters)] &lt;- 1
+                }
+            }
+        }
+    }
+
+    if (type == &quot;all&quot;) {
+        for (j in 1:nwaves) {
+            df_works_w &lt;- df_works[df_works$works_year &gt;= waves[[j]][1] &amp; df_works$works_year &lt;= waves[[j]][2],
+                ]
+            for (i in 1:nrow(df_works_w)) {
+                egos &lt;- df_works_w$works_author[i][[1]]$au_id
+                if (sum(ids %in% egos) &gt; 0) {
+                  nets[j, which(ids %in% egos), which(ids %in% egos)] &lt;- 1
+                }
+            }
+        }
+    }
+    output &lt;- list()
+    output$data &lt;- scholars_sel
+    output$nets &lt;- nets
+    return(output)
+}</code></pre>
+</div>
+<div id="load-data" class="section level2" number="1.4">
+<h2><span class="header-section-number">1.4</span> Load data</h2>
+<pre class="r test"><code>scholars &lt;- fload(&quot;./data/processed/scholars_20240924.rda&quot;)</code></pre>
+<pre class="r test"><code># save the output of your function
+
+test &lt;- fcolnet(data = scholars, university = &quot;RU&quot;, discipline = c(&quot;sociology&quot;, &quot;political science&quot;),
+    waves = list(c(2015, 2018), c(2019, 2023)), type = c(&quot;all&quot;))  # all, first, last # which ties in there</code></pre>
+</div>
+</div>
+<div id="saving-data" class="section level1" number="2">
+<h1><span class="header-section-number">2</span> Saving data</h1>
+<p>This part, despite being lengthy and principally unnecessary, needed
+to stay in my code for the sake of transparency. AFterall, this code and
+the following code on this page is what accumulated in the gender-data
+of each department in my data set.</p>
+<pre class="r test"><code># save the output of your function
+testsoc  &lt;- fcolnet(data = scholars, 
+                university = &quot;RU&quot;, 
+                discipline = &quot;sociology&quot;, 
+                waves = list(c(2015, 2018), c(2019, 2023)), 
+    
+                            type = c(&quot;first&quot;))
+
+testpolsci &lt;- fcolnet(data = scholars, 
+                university = &quot;RU&quot;, 
+                discipline = &quot;political science&quot;, 
+                waves = list(c(2015, 2018), c(2019, 2023)), 
+                type = c(&quot;first&quot;))</code></pre>
+<div id="sociology-department" class="section level2" number="2.1">
+<h2><span class="header-section-number">2.1</span> Sociology
+Department</h2>
+<pre class="r test"><code>soc_nets &lt;- testsoc$nets
+
+
+df_ego_demo &lt;- testsoc$data$demographics
+df_ego_oa &lt;- testsoc$data$scholars_oa
+df_ego_works &lt;- testsoc$data$works
+
+
+# DEMO
+str(df_ego_demo, 1)</code></pre>
+<pre class="test2"><code>#&gt; List of 50
+#&gt;  $ 22 : tibble [1 × 21] (S3: tbl_df/tbl/data.frame)
+#&gt;  $ 49 : tibble [1 × 21] (S3: tbl_df/tbl/data.frame)
+#&gt;  $ 50 : tibble [1 × 21] (S3: tbl_df/tbl/data.frame)
+#&gt;  $ 51 : tibble [1 × 21] (S3: tbl_df/tbl/data.frame)
+#&gt;  $ 52 : tibble [1 × 21] (S3: tbl_df/tbl/data.frame)
+#&gt;  $ 53 : tibble [1 × 21] (S3: tbl_df/tbl/data.frame)
+#&gt;  $ 54 : tibble [1 × 21] (S3: tbl_df/tbl/data.frame)
+#&gt;  $ 55 : tibble [1 × 21] (S3: tbl_df/tbl/data.frame)
+#&gt;  $ 56 : tibble [1 × 21] (S3: tbl_df/tbl/data.frame)
+#&gt;  $ 57 : tibble [1 × 21] (S3: tbl_df/tbl/data.frame)
+#&gt;  $ 58 : tibble [1 × 21] (S3: tbl_df/tbl/data.frame)
+#&gt;  $ 59 : tibble [1 × 21] (S3: tbl_df/tbl/data.frame)
+#&gt;  $ 60 : tibble [1 × 21] (S3: tbl_df/tbl/data.frame)
+#&gt;  $ 61 : tibble [1 × 21] (S3: tbl_df/tbl/data.frame)
+#&gt;  $ 62 : tibble [1 × 21] (S3: tbl_df/tbl/data.frame)
+#&gt;  $ 63 : tibble [1 × 21] (S3: tbl_df/tbl/data.frame)
+#&gt;  $ 64 : tibble [1 × 21] (S3: tbl_df/tbl/data.frame)
+#&gt;  $ 65 : tibble [1 × 21] (S3: tbl_df/tbl/data.frame)
+#&gt;  $ 66 : tibble [1 × 21] (S3: tbl_df/tbl/data.frame)
+#&gt;  $ 67 : tibble [1 × 21] (S3: tbl_df/tbl/data.frame)
+#&gt;  $ 68 : tibble [1 × 21] (S3: tbl_df/tbl/data.frame)
+#&gt;  $ 69 : tibble [1 × 21] (S3: tbl_df/tbl/data.frame)
+#&gt;  $ 70 : tibble [1 × 21] (S3: tbl_df/tbl/data.frame)
+#&gt;  $ 71 : tibble [1 × 21] (S3: tbl_df/tbl/data.frame)
+#&gt;  $ 72 : tibble [1 × 21] (S3: tbl_df/tbl/data.frame)
+#&gt;  $ 73 : tibble [1 × 21] (S3: tbl_df/tbl/data.frame)
+#&gt;  $ 74 : tibble [1 × 21] (S3: tbl_df/tbl/data.frame)
+#&gt;  $ 75 : tibble [1 × 21] (S3: tbl_df/tbl/data.frame)
+#&gt;  $ 76 : tibble [1 × 21] (S3: tbl_df/tbl/data.frame)
+#&gt;  $ 77 : tibble [1 × 21] (S3: tbl_df/tbl/data.frame)
+#&gt;  $ 78 : tibble [1 × 21] (S3: tbl_df/tbl/data.frame)
+#&gt;  $ 79 : tibble [1 × 21] (S3: tbl_df/tbl/data.frame)
+#&gt;  $ 80 : tibble [1 × 21] (S3: tbl_df/tbl/data.frame)
+#&gt;  $ 81 : tibble [1 × 21] (S3: tbl_df/tbl/data.frame)
+#&gt;  $ 82 : tibble [1 × 21] (S3: tbl_df/tbl/data.frame)
+#&gt;  $ 83 : tibble [1 × 21] (S3: tbl_df/tbl/data.frame)
+#&gt;  $ 84 : tibble [1 × 21] (S3: tbl_df/tbl/data.frame)
+#&gt;  $ 85 : tibble [1 × 21] (S3: tbl_df/tbl/data.frame)
+#&gt;  $ 86 : tibble [1 × 21] (S3: tbl_df/tbl/data.frame)
+#&gt;  $ 87 : tibble [1 × 21] (S3: tbl_df/tbl/data.frame)
+#&gt;  $ 88 : tibble [1 × 21] (S3: tbl_df/tbl/data.frame)
+#&gt;  $ 89 : tibble [1 × 21] (S3: tbl_df/tbl/data.frame)
+#&gt;  $ 90 : tibble [1 × 21] (S3: tbl_df/tbl/data.frame)
+#&gt;  $ 91 : tibble [1 × 21] (S3: tbl_df/tbl/data.frame)
+#&gt;  $ 92 : tibble [1 × 21] (S3: tbl_df/tbl/data.frame)
+#&gt;  $ 129: tibble [1 × 21] (S3: tbl_df/tbl/data.frame)
+#&gt;  $ 618: tibble [1 × 21] (S3: tbl_df/tbl/data.frame)
+#&gt;  $ 619: tibble [1 × 21] (S3: tbl_df/tbl/data.frame)
+#&gt;  $ 620: tibble [1 × 21] (S3: tbl_df/tbl/data.frame)
+#&gt;  $ 621: tibble [1 × 21] (S3: tbl_df/tbl/data.frame)</code></pre>
+<pre class="r test"><code>df_ego_demo &lt;- do.call(rbind.data.frame, df_ego_demo)
+df_ego_demo[[1]]</code></pre>
+<pre class="test2"><code>#&gt;  [1] &quot;Ana Macanovic&quot;            &quot;Ronald Batenburg&quot;         &quot;Katia Begall&quot;            
+#&gt;  [4] &quot;Hidde Bekhuis&quot;            &quot;Lonneke van den Berg&quot;     &quot;Lieselotte Blommaert&quot;    
+#&gt;  [7] &quot;Rob Eisinga&quot;              &quot;Maurice Gesthuizen&quot;       &quot;Nella Geurts&quot;            
+#&gt; [10] &quot;Saskia Glas&quot;              &quot;Margriet van Hek&quot;         &quot;Remco Hoekman&quot;           
+#&gt; [13] &quot;Bas Hofstra&quot;              &quot;Judith Koops&quot;             &quot;Gerbert Kraaykamp&quot;       
+#&gt; [16] &quot;Roza Meuleman&quot;            &quot;Michael Savelkoul&quot;        &quot;Peer Scheepers&quot;          
+#&gt; [19] &quot;Niels Spierings&quot;          &quot;Jochem Tolsma&quot;            &quot;Ellen Verbakel&quot;          
+#&gt; [22] &quot;Mark Visser&quot;              &quot;Maarten Wolbers&quot;          &quot;Carlijn Bussemakers&quot;     
+#&gt; [25] &quot;Rob Franken&quot;              &quot;Mustafa Firat&quot;            &quot;Inge Hendriks&quot;           
+#&gt; [28] &quot;Thijmen Jeroense&quot;         &quot;Rachel Kollar&quot;            &quot;Nik Linders&quot;             
+#&gt; [31] &quot;Renae  Loh&quot;               &quot;Maikel Meijeren&quot;          &quot;Carly van Mensvoort&quot;     
+#&gt; [34] &quot;Anne Maaike Mulders&quot;      &quot;Katrin Müller&quot;            &quot;Klara Raiber&quot;            
+#&gt; [37] &quot;Marlou Ramaekers&quot;         &quot;Sara Wiertsema&quot;           &quot;Janos Betko&quot;             
+#&gt; [40] &quot;Jansje van Middendorp&quot;    &quot;Elize Vis&quot;                &quot;Tijmen Weber&quot;            
+#&gt; [43] &quot;Carl Sterkens&quot;            &quot;Paul Vermeer&quot;             &quot;Malou Grubben&quot;           
+#&gt; [46] &quot;Marcel Lubbers&quot;           &quot;Annick van Brouwershaven&quot; &quot;Lex Thijssen&quot;            
+#&gt; [49] &quot;Renate Wit&quot;               &quot;Samira Azabar&quot;</code></pre>
+<pre class="r test"><code># OA str(df_ego_oa, 1)
+df_ego_oa[[1]]</code></pre>
+<pre class="test2"><code>#&gt; # A tibble: 1 × 18
+#&gt;   id      display_name display_name_alterna…¹ relevance_score ids   orcid works_count cited_by_count
+#&gt;   &lt;chr&gt;   &lt;chr&gt;        &lt;list&gt;                           &lt;dbl&gt; &lt;lis&gt; &lt;chr&gt;       &lt;int&gt;          &lt;int&gt;
+#&gt; 1 https:… Ana Macanov… &lt;chr [1]&gt;                        1498. &lt;chr&gt; http…           9             70
+#&gt; # ℹ abbreviated name: ¹​display_name_alternatives
+#&gt; # ℹ 10 more variables: counts_by_year &lt;list&gt;, affiliation_display_name &lt;chr&gt;, affiliation_id &lt;chr&gt;,
+#&gt; #   affiliation_ror &lt;chr&gt;, affiliation_country_code &lt;chr&gt;, affiliation_type &lt;chr&gt;,
+#&gt; #   affiliation_lineage &lt;chr&gt;, affiliations_other &lt;list&gt;, x_concepts &lt;list&gt;, works_api_url &lt;chr&gt;</code></pre>
+<pre class="r test"><code>df_ego_oa &lt;- do.call(rbind.data.frame, df_ego_oa)
+
+
+# --&gt; EGO DATAFRAME with demo and oa (sociology)
+
+df_soc_ego &lt;- left_join(df_ego_demo, df_ego_oa, by = join_by(au_id == id))
+
+rownames(soc_nets[1, , ]) == df_soc_ego$au_id  # checking if the author id&#39;s are the same as in df_ego in nets dataframe </code></pre>
+<pre class="test2"><code>#&gt;  [1] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
+#&gt; [20] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
+#&gt; [39] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE</code></pre>
+<pre class="r test"><code># --&gt; yes, the correct ones!!!
+
+
+df_ego_works[[1]]$author</code></pre>
+<pre class="test2"><code>#&gt; [[1]]
+#&gt;                              au_id   au_display_name                              au_orcid
+#&gt; 1 https://openalex.org/A5022704573    Étienne Ollion https://orcid.org/0000-0003-3099-5240
+#&gt; 2 https://openalex.org/A5077634022       Rubing Shen https://orcid.org/0000-0002-5504-6108
+#&gt; 3 https://openalex.org/A5011326378     Ana Macanovic https://orcid.org/0000-0003-0800-5271
+#&gt; 4 https://openalex.org/A5005519980 Arnault Chatelain https://orcid.org/0009-0002-6450-2176
+#&gt;   author_position is_corresponding
+#&gt; 1           first             TRUE
+#&gt; 2          middle            FALSE
+#&gt; 3          middle            FALSE
+#&gt; 4            last            FALSE
+#&gt;                                                                                                                                              au_affiliation_raw
+#&gt; 1 Centre de Recherche en Économie et de Statistiques (CREST), CNRS, École polytechnique, GENES, ENSAE Paris, Institut Polytechnique de Paris, Palaiseau, France
+#&gt; 2 Centre de Recherche en Économie et de Statistiques (CREST), CNRS, École polytechnique, GENES, ENSAE Paris, Institut Polytechnique de Paris, Palaiseau, France
+#&gt; 3                                                                                     Department of Sociology, Utrecht University/ICS, Utrecht, The Netherlands
+#&gt; 4 Centre de Recherche en Économie et de Statistiques (CREST), CNRS, École polytechnique, GENES, ENSAE Paris, Institut Polytechnique de Paris, Palaiseau, France
+#&gt;                     institution_id
+#&gt; 1 https://openalex.org/I1294671590
+#&gt; 2  https://openalex.org/I142476485
+#&gt; 3  https://openalex.org/I193662353
+#&gt; 4   https://openalex.org/I84009706
+#&gt;                                              institution_display_name           institution_ror
+#&gt; 1                        Centre National de la Recherche Scientifique https://ror.org/02feahw73
+#&gt; 2                                                 École Polytechnique https://ror.org/05hy3tk52
+#&gt; 3                                                  Utrecht University https://ror.org/04pp8hn57
+#&gt; 4 École Nationale de la Statistique et de l&#39;Administration Économique https://ror.org/01fz7mn40
+#&gt;   institution_country_code institution_type
+#&gt; 1                       FR       government
+#&gt; 2                       FR        education
+#&gt; 3                       NL        education
+#&gt; 4                       FR        education
+#&gt;                                                 institution_lineage
+#&gt; 1                                  https://openalex.org/I1294671590
+#&gt; 2 https://openalex.org/I142476485, https://openalex.org/I4210145102
+#&gt; 3                                   https://openalex.org/I193662353
+#&gt; 4  https://openalex.org/I4210108488, https://openalex.org/I84009706
+#&gt; 
+#&gt; [[2]]
+#&gt;                              au_id au_display_name                              au_orcid
+#&gt; 1 https://openalex.org/A5011326378   Ana Macanovic https://orcid.org/0000-0003-0800-5271
+#&gt;   author_position is_corresponding
+#&gt; 1           first             TRUE
+#&gt;                                                                                   au_affiliation_raw
+#&gt; 1 Utrecht University, Department of Sociology / ICS, Padualaan 14, 3584 CH, Utrecht, The Netherlands
+#&gt;                    institution_id institution_display_name           institution_ror
+#&gt; 1 https://openalex.org/I193662353       Utrecht University https://ror.org/04pp8hn57
+#&gt;   institution_country_code institution_type             institution_lineage
+#&gt; 1                       NL        education https://openalex.org/I193662353
+#&gt; 
+#&gt; [[3]]
+#&gt;                              au_id   au_display_name                              au_orcid
+#&gt; 1 https://openalex.org/A5011326378     Ana Macanovic https://orcid.org/0000-0003-0800-5271
+#&gt; 2 https://openalex.org/A5069791094  Milena Tsvetkova https://orcid.org/0000-0002-3552-108X
+#&gt; 3 https://openalex.org/A5042566717 Wojtek Przepiorka https://orcid.org/0000-0001-9432-8696
+#&gt; 4 https://openalex.org/A5060904065   Vincent Buskens https://orcid.org/0000-0002-4483-7238
+#&gt;   author_position is_corresponding
+#&gt; 1           first             TRUE
+#&gt; 2          middle            FALSE
+#&gt; 3          middle             TRUE
+#&gt; 4            last            FALSE
+#&gt;                                                                                  au_affiliation_raw
+#&gt; 1                  Centre for Complex Systems Studies, Utrecht University, Utrecht, The Netherlands
+#&gt; 2 Department of Methodology, London School of Economics and Political Science, London, WC2A 2AE, UK
+#&gt; 3                         Department of Sociology/ICS, Utrecht University, Utrecht, The Netherlands
+#&gt; 4                  Centre for Complex Systems Studies, Utrecht University, Utrecht, The Netherlands
+#&gt;                    institution_id                         institution_display_name
+#&gt; 1 https://openalex.org/I193662353                               Utrecht University
+#&gt; 2 https://openalex.org/I909854389 London School of Economics and Political Science
+#&gt; 3 https://openalex.org/I193662353                               Utrecht University
+#&gt; 4 https://openalex.org/I173063890           University of Applied Sciences Utrecht
+#&gt;             institution_ror institution_country_code institution_type
+#&gt; 1 https://ror.org/04pp8hn57                       NL        education
+#&gt; 2 https://ror.org/0090zs177                       GB        education
+#&gt; 3 https://ror.org/04pp8hn57                       NL        education
+#&gt; 4 https://ror.org/028z9kw20                       NL        education
+#&gt;                                                institution_lineage
+#&gt; 1                                  https://openalex.org/I193662353
+#&gt; 2 https://openalex.org/I124357947, https://openalex.org/I909854389
+#&gt; 3                                  https://openalex.org/I193662353
+#&gt; 4                                  https://openalex.org/I173063890
+#&gt; 
+#&gt; [[4]]
+#&gt;                              au_id   au_display_name                              au_orcid
+#&gt; 1 https://openalex.org/A5022704573    Étienne Ollion https://orcid.org/0000-0003-3099-5240
+#&gt; 2 https://openalex.org/A5077634022       Rubing Shen https://orcid.org/0000-0002-5504-6108
+#&gt; 3 https://openalex.org/A5011326378     Ana Macanovic https://orcid.org/0000-0003-0800-5271
+#&gt; 4 https://openalex.org/A5005519980 Arnault Chatelain https://orcid.org/0009-0002-6450-2176
+#&gt;   author_position is_corresponding au_affiliation_raw institution_id institution_display_name
+#&gt; 1           first            FALSE               &lt;NA&gt;             NA                       NA
+#&gt; 2          middle            FALSE               &lt;NA&gt;             NA                       NA
+#&gt; 3          middle            FALSE               &lt;NA&gt;             NA                       NA
+#&gt; 4            last            FALSE               &lt;NA&gt;             NA                       NA
+#&gt;   institution_ror institution_country_code institution_type institution_lineage
+#&gt; 1              NA                       NA               NA                  NA
+#&gt; 2              NA                       NA               NA                  NA
+#&gt; 3              NA                       NA               NA                  NA
+#&gt; 4              NA                       NA               NA                  NA
+#&gt; 
+#&gt; [[5]]
+#&gt;                              au_id   au_display_name                              au_orcid
+#&gt; 1 https://openalex.org/A5011326378     Ana Macanovic https://orcid.org/0000-0003-0800-5271
+#&gt; 2 https://openalex.org/A5042566717 Wojtek Przepiorka https://orcid.org/0000-0001-9432-8696
+#&gt;   author_position is_corresponding
+#&gt; 1           first            FALSE
+#&gt; 2            last            FALSE
+#&gt;                                                           au_affiliation_raw
+#&gt; 1 Department of Sociology/ICS, Utrecht University , Utrecht, The Netherlands
+#&gt; 2 Department of Sociology/ICS, Utrecht University , Utrecht, The Netherlands
+#&gt;                    institution_id institution_display_name           institution_ror
+#&gt; 1 https://openalex.org/I193662353       Utrecht University https://ror.org/04pp8hn57
+#&gt; 2 https://openalex.org/I193662353       Utrecht University https://ror.org/04pp8hn57
+#&gt;   institution_country_code institution_type             institution_lineage
+#&gt; 1                       NL        education https://openalex.org/I193662353
+#&gt; 2                       NL        education https://openalex.org/I193662353
+#&gt; 
+#&gt; [[6]]
+#&gt;                              au_id   au_display_name                              au_orcid
+#&gt; 1 https://openalex.org/A5011326378     Ana Macanovic https://orcid.org/0000-0003-0800-5271
+#&gt; 2 https://openalex.org/A5042566717 Wojtek Przepiorka https://orcid.org/0000-0001-9432-8696
+#&gt;   author_position is_corresponding
+#&gt; 1           first            FALSE
+#&gt; 2            last            FALSE
+#&gt;                                                          au_affiliation_raw
+#&gt; 1 Department of Sociology/ICS, Utrecht University, Utrecht, The Netherlands
+#&gt; 2 Department of Sociology/ICS, Utrecht University, Utrecht, The Netherlands
+#&gt;                    institution_id institution_display_name           institution_ror
+#&gt; 1 https://openalex.org/I193662353       Utrecht University https://ror.org/04pp8hn57
+#&gt; 2 https://openalex.org/I193662353       Utrecht University https://ror.org/04pp8hn57
+#&gt;   institution_country_code institution_type             institution_lineage
+#&gt; 1                       NL        education https://openalex.org/I193662353
+#&gt; 2                       NL        education https://openalex.org/I193662353
+#&gt; 
+#&gt; [[7]]
+#&gt;                              au_id   au_display_name                              au_orcid
+#&gt; 1 https://openalex.org/A5011326378     Ana Macanovic https://orcid.org/0000-0003-0800-5271
+#&gt; 2 https://openalex.org/A5069791094  Milena Tsvetkova https://orcid.org/0000-0002-3552-108X
+#&gt; 3 https://openalex.org/A5042566717 Wojtek Przepiorka https://orcid.org/0000-0001-9432-8696
+#&gt; 4 https://openalex.org/A5060904065   Vincent Buskens https://orcid.org/0000-0002-4483-7238
+#&gt;   author_position is_corresponding
+#&gt; 1           first            FALSE
+#&gt; 2          middle            FALSE
+#&gt; 3          middle            FALSE
+#&gt; 4            last            FALSE
+#&gt;                                                                                    au_affiliation_raw
+#&gt; 1                    Centre for Complex Systems Studies, Utrecht University, Utrecht, The Netherlands
+#&gt; 2 Department of Methodology, London School of Economics and Political Science, London, United Kingdom
+#&gt; 3                         Department of Sociology / ICS, Utrecht University, Utrecht, The Netherlands
+#&gt; 4                    Centre for Complex Systems Studies, Utrecht University, Utrecht, The Netherlands
+#&gt;                    institution_id                         institution_display_name
+#&gt; 1 https://openalex.org/I173063890           University of Applied Sciences Utrecht
+#&gt; 2 https://openalex.org/I909854389 London School of Economics and Political Science
+#&gt; 3 https://openalex.org/I193662353                               Utrecht University
+#&gt; 4 https://openalex.org/I173063890           University of Applied Sciences Utrecht
+#&gt;             institution_ror institution_country_code institution_type
+#&gt; 1 https://ror.org/028z9kw20                       NL        education
+#&gt; 2 https://ror.org/0090zs177                       GB        education
+#&gt; 3 https://ror.org/04pp8hn57                       NL        education
+#&gt; 4 https://ror.org/028z9kw20                       NL        education
+#&gt;                                                institution_lineage
+#&gt; 1                                  https://openalex.org/I173063890
+#&gt; 2 https://openalex.org/I124357947, https://openalex.org/I909854389
+#&gt; 3                                  https://openalex.org/I193662353
+#&gt; 4                                  https://openalex.org/I173063890
+#&gt; 
+#&gt; [[8]]
+#&gt;                              au_id au_display_name                              au_orcid
+#&gt; 1 https://openalex.org/A5011326378   Ana Macanovic https://orcid.org/0000-0003-0800-5271
+#&gt;   author_position is_corresponding au_affiliation_raw institution_id institution_display_name
+#&gt; 1           first             TRUE               &lt;NA&gt;             NA                       NA
+#&gt;   institution_ror institution_country_code institution_type institution_lineage
+#&gt; 1              NA                       NA               NA                  NA
+#&gt; 
+#&gt; [[9]]
+#&gt;                              au_id   au_display_name                              au_orcid
+#&gt; 1 https://openalex.org/A5011326378     Ana Macanovic https://orcid.org/0000-0003-0800-5271
+#&gt; 2 https://openalex.org/A5042566717 Wojtek Przepiorka https://orcid.org/0000-0001-9432-8696
+#&gt;   author_position is_corresponding                                au_affiliation_raw
+#&gt; 1           first             TRUE Utrecht University, Department of Sociology / ICS
+#&gt; 2            last            FALSE Utrecht University, Department of Sociology / ICS
+#&gt;                    institution_id institution_display_name           institution_ror
+#&gt; 1 https://openalex.org/I193662353       Utrecht University https://ror.org/04pp8hn57
+#&gt; 2 https://openalex.org/I193662353       Utrecht University https://ror.org/04pp8hn57
+#&gt;   institution_country_code institution_type             institution_lineage
+#&gt; 1                       NL        education https://openalex.org/I193662353
+#&gt; 2                       NL        education https://openalex.org/I193662353</code></pre>
+<pre class="r test"><code># authors of all the works that first scholar (here: Ana Macanovic) is part of</code></pre>
+</div>
+<div id="political-science-department" class="section level2"
+number="2.2">
+<h2><span class="header-section-number">2.2</span> Political Science
+Department</h2>
+<pre class="r test"><code># dependent pol_net &lt;- sienaDependent(net_pol_array)
+
+
+# dependent
+pol_nets &lt;- testpolsci$nets
+
+
+df_pol_ego_demo &lt;- testpolsci$data$demographics
+df_pol_ego_oa &lt;- testpolsci$data$scholars_oa
+df_pol_ego_works &lt;- testpolsci$data$works
+
+
+# DEMO str(df_pol_ego_demo, 1)
+
+df_pol_ego_demo &lt;- do.call(rbind.data.frame, df_pol_ego_demo)
+df_pol_ego_demo[[1]]</code></pre>
+<pre class="test2"><code>#&gt;  [1] &quot;Daniel DeRock&quot;            &quot;Yaël van Drunen&quot;          &quot;Teun Eikenaar&quot;           
+#&gt;  [4] &quot;Erika van Elsas&quot;          &quot;Naomi Gilhuis&quot;            &quot;Emily Gravesteijn&quot;       
+#&gt;  [7] &quot;Gijs Hablous&quot;             &quot;Carolien van Ham&quot;         &quot;Kristof Jacobs&quot;          
+#&gt; [10] &quot;Jutta Joachim&quot;            &quot;Gerry van der Kamp-Alons&quot; &quot;Gaard Kets&quot;              
+#&gt; [13] &quot;Rosa Kindt&quot;               &quot;Marijn Knieriem&quot;          &quot;Bart van Leeuwen&quot;        
+#&gt; [16] &quot;Mathijs van Leeuwen&quot;      &quot;Alex Lehr&quot;                &quot;Charlie Loopuijt&quot;        
+#&gt; [19] &quot;Sofie van der Maarel&quot;     &quot;Romain Malejacq&quot;          &quot;Katerina Manevska&quot;       
+#&gt; [22] &quot;Gustav Meibauer&quot;          &quot;Maurits Meijers&quot;          &quot;Tine Molendijk&quot;          
+#&gt; [25] &quot;Camille Munezero&quot;         &quot;Chris Nijhuis&quot;            &quot;Bob Reinalda&quot;            
+#&gt; [28] &quot;Roderik Rekker&quot;           &quot;Saskia Ruth-Lovell&quot;       &quot;Indra Römgens&quot;           
+#&gt; [31] &quot;Melisa Soto&quot;              &quot;Nora Stel&quot;                &quot;Haley Swedlund&quot;          
+#&gt; [34] &quot;Tjidde Tempels&quot;           &quot;Niels Terpstra&quot;           &quot;Marie Theuwis&quot;           
+#&gt; [37] &quot;Maya Turolla&quot;             &quot;Reinout van der Veer&quot;     &quot;Bertjan Verbeek&quot;         
+#&gt; [40] &quot;Willemijn Verkoren&quot;       &quot;Mieke Verloo&quot;             &quot;Désirée Verweij&quot;         
+#&gt; [43] &quot;Anna van der Vleuten&quot;     &quot;Koen Vossen&quot;              &quot;Angela Wigger&quot;           
+#&gt; [46] &quot;Marcel Wissenburg&quot;        &quot;Andrej Zaslove&quot;           &quot;Michal Mochtak&quot;          
+#&gt; [49] &quot;Puck Overhaart&quot;           &quot;Guangyu Qiao-Franco&quot;      &quot;Sanne Weber&quot;</code></pre>
+<pre class="r test"><code># OA str(df_pol_ego_oa, 1)
+df_pol_ego_oa[[1]]</code></pre>
+<pre class="test2"><code>#&gt; # A tibble: 1 × 18
+#&gt;   id      display_name display_name_alterna…¹ relevance_score ids   orcid works_count cited_by_count
+#&gt;   &lt;chr&gt;   &lt;chr&gt;        &lt;list&gt;                           &lt;dbl&gt; &lt;lis&gt; &lt;chr&gt;       &lt;int&gt;          &lt;int&gt;
+#&gt; 1 https:… Daniel DeRo… &lt;chr [1]&gt;                        1039. &lt;chr&gt; http…           4             28
+#&gt; # ℹ abbreviated name: ¹​display_name_alternatives
+#&gt; # ℹ 10 more variables: counts_by_year &lt;list&gt;, affiliation_display_name &lt;chr&gt;, affiliation_id &lt;chr&gt;,
+#&gt; #   affiliation_ror &lt;chr&gt;, affiliation_country_code &lt;chr&gt;, affiliation_type &lt;chr&gt;,
+#&gt; #   affiliation_lineage &lt;chr&gt;, affiliations_other &lt;list&gt;, x_concepts &lt;list&gt;, works_api_url &lt;chr&gt;</code></pre>
+<pre class="r test"><code>df_pol_ego_oa &lt;- do.call(rbind.data.frame, df_pol_ego_oa)
+
+
+# --&gt; EGO DATAFRAME with demo and oa (political science)
+df_pol_ego &lt;- left_join(df_pol_ego_demo, df_pol_ego_oa, by = join_by(au_id == id))
+
+rownames(pol_nets[1, , ]) == df_pol_ego$au_id  # checking if the author id&#39;s are the same as in df_ego in nets dataframe </code></pre>
+<pre class="test2"><code>#&gt;  [1] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
+#&gt; [20] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
+#&gt; [39] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE</code></pre>
+<pre class="r test"><code># --&gt; yes, the correct ones!!!</code></pre>
+</div>
+</div>
+<div id="gender" class="section level1" number="3">
+<h1><span class="header-section-number">3</span> Gender</h1>
+<div id="sociology-department-scholars" class="section level3"
+number="3.0.1">
+<h3><span class="header-section-number">3.0.1</span> Sociology
+Department SCholars</h3>
+<pre class="r test"><code>df_soc_ego$Naam  # list of all names in sociology department </code></pre>
+<pre class="test2"><code>#&gt;  [1] &quot;Ana Macanovic&quot;            &quot;Ronald Batenburg&quot;         &quot;Katia Begall&quot;            
+#&gt;  [4] &quot;Hidde Bekhuis&quot;            &quot;Lonneke van den Berg&quot;     &quot;Lieselotte Blommaert&quot;    
+#&gt;  [7] &quot;Rob Eisinga&quot;              &quot;Maurice Gesthuizen&quot;       &quot;Nella Geurts&quot;            
+#&gt; [10] &quot;Saskia Glas&quot;              &quot;Margriet van Hek&quot;         &quot;Remco Hoekman&quot;           
+#&gt; [13] &quot;Bas Hofstra&quot;              &quot;Judith Koops&quot;             &quot;Gerbert Kraaykamp&quot;       
+#&gt; [16] &quot;Roza Meuleman&quot;            &quot;Michael Savelkoul&quot;        &quot;Peer Scheepers&quot;          
+#&gt; [19] &quot;Niels Spierings&quot;          &quot;Jochem Tolsma&quot;            &quot;Ellen Verbakel&quot;          
+#&gt; [22] &quot;Mark Visser&quot;              &quot;Maarten Wolbers&quot;          &quot;Carlijn Bussemakers&quot;     
+#&gt; [25] &quot;Rob Franken&quot;              &quot;Mustafa Firat&quot;            &quot;Inge Hendriks&quot;           
+#&gt; [28] &quot;Thijmen Jeroense&quot;         &quot;Rachel Kollar&quot;            &quot;Nik Linders&quot;             
+#&gt; [31] &quot;Renae  Loh&quot;               &quot;Maikel Meijeren&quot;          &quot;Carly van Mensvoort&quot;     
+#&gt; [34] &quot;Anne Maaike Mulders&quot;      &quot;Katrin Müller&quot;            &quot;Klara Raiber&quot;            
+#&gt; [37] &quot;Marlou Ramaekers&quot;         &quot;Sara Wiertsema&quot;           &quot;Janos Betko&quot;             
+#&gt; [40] &quot;Jansje van Middendorp&quot;    &quot;Elize Vis&quot;                &quot;Tijmen Weber&quot;            
+#&gt; [43] &quot;Carl Sterkens&quot;            &quot;Paul Vermeer&quot;             &quot;Malou Grubben&quot;           
+#&gt; [46] &quot;Marcel Lubbers&quot;           &quot;Annick van Brouwershaven&quot; &quot;Lex Thijssen&quot;            
+#&gt; [49] &quot;Renate Wit&quot;               &quot;Samira Azabar&quot;</code></pre>
+<pre class="r test"><code>df_soc_ego$gender &lt;- c(0, 1, 0, 1, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1,
+    0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 0, 1, 0, 1, 0, 0)
+# manually filled in gender 0 = woman, 1 = man, based on majority given in NL voornamen bank
+
+# check if it went smoothly view(df_soc_ego[c(&#39;Naam&#39;, &#39;gender&#39;, &#39;au_id&#39;)])
+
+# fsave(df_soc_ego)</code></pre>
+</div>
+<div id="politicla-science-scholars" class="section level3"
+number="3.0.2">
+<h3><span class="header-section-number">3.0.2</span> Politicla Science
+Scholars</h3>
+<pre class="r test"><code>df_pol_ego$Naam  # list of all names </code></pre>
+<pre class="test2"><code>#&gt;  [1] &quot;Daniel DeRock&quot;            &quot;Yaël van Drunen&quot;          &quot;Teun Eikenaar&quot;           
+#&gt;  [4] &quot;Erika van Elsas&quot;          &quot;Naomi Gilhuis&quot;            &quot;Emily Gravesteijn&quot;       
+#&gt;  [7] &quot;Gijs Hablous&quot;             &quot;Carolien van Ham&quot;         &quot;Kristof Jacobs&quot;          
+#&gt; [10] &quot;Jutta Joachim&quot;            &quot;Gerry van der Kamp-Alons&quot; &quot;Gaard Kets&quot;              
+#&gt; [13] &quot;Rosa Kindt&quot;               &quot;Marijn Knieriem&quot;          &quot;Bart van Leeuwen&quot;        
+#&gt; [16] &quot;Mathijs van Leeuwen&quot;      &quot;Alex Lehr&quot;                &quot;Charlie Loopuijt&quot;        
+#&gt; [19] &quot;Sofie van der Maarel&quot;     &quot;Romain Malejacq&quot;          &quot;Katerina Manevska&quot;       
+#&gt; [22] &quot;Gustav Meibauer&quot;          &quot;Maurits Meijers&quot;          &quot;Tine Molendijk&quot;          
+#&gt; [25] &quot;Camille Munezero&quot;         &quot;Chris Nijhuis&quot;            &quot;Bob Reinalda&quot;            
+#&gt; [28] &quot;Roderik Rekker&quot;           &quot;Saskia Ruth-Lovell&quot;       &quot;Indra Römgens&quot;           
+#&gt; [31] &quot;Melisa Soto&quot;              &quot;Nora Stel&quot;                &quot;Haley Swedlund&quot;          
+#&gt; [34] &quot;Tjidde Tempels&quot;           &quot;Niels Terpstra&quot;           &quot;Marie Theuwis&quot;           
+#&gt; [37] &quot;Maya Turolla&quot;             &quot;Reinout van der Veer&quot;     &quot;Bertjan Verbeek&quot;         
+#&gt; [40] &quot;Willemijn Verkoren&quot;       &quot;Mieke Verloo&quot;             &quot;Désirée Verweij&quot;         
+#&gt; [43] &quot;Anna van der Vleuten&quot;     &quot;Koen Vossen&quot;              &quot;Angela Wigger&quot;           
+#&gt; [46] &quot;Marcel Wissenburg&quot;        &quot;Andrej Zaslove&quot;           &quot;Michal Mochtak&quot;          
+#&gt; [49] &quot;Puck Overhaart&quot;           &quot;Guangyu Qiao-Franco&quot;      &quot;Sanne Weber&quot;</code></pre>
+<pre class="r test"><code>df_pol_ego$gender &lt;- c(1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 0, 1, 1, 0, 0, 1,
+    1, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 1, 1, 1, 0, 0, 0)
+# manually filled in gender 0 = woman, 1 = man, based on majority given in NL voornamen bank,
+# Guangyu was not in name bank but based on the employee-picture of RU, this person presents
+# feminine, thus I assumed 0.
+
+# check if it went smoothly view(df_pol_ego[c(&#39;Naam&#39;, &#39;gender&#39;, &#39;au_id&#39;)])
+
+# covariate gender &lt;- coCovar(df_ego$gender)
+
+# fsave(df_pol_ego)</code></pre>
+<p>Save gender data</p>
+<pre class="r test"><code>soc_gender &lt;- fload(&quot;./data/processed/df_soc_ego_20241105.rda&quot;)
+pol_gender &lt;- fload(&quot;./data/processed/df_pol_ego_20241105.rda&quot;)</code></pre>
+<p>Combine data</p>
+<pre class="r test"><code>df &lt;- test$data  # make dataset with all data 
+df_ego &lt;- do.call(rbind.data.frame, df$demographics)  # data set with demographic information
+
+
+soc_gender &lt;- soc_gender[, c(&quot;Naam&quot;, &quot;gender&quot;)]  # selecting only the content we need
+pol_gender &lt;- pol_gender[, c(&quot;Naam&quot;, &quot;gender&quot;)]  # selecting only the content we need
+
+gender &lt;- rbind(soc_gender, pol_gender)  # combining the gender data sets 
+
+df_ego &lt;- df_ego %&gt;%
+    left_join(gender)  #dcombining data set of gender with the one with demographic information </code></pre>
+</div>
+</div>
+<div id="h-index" class="section level1" number="4">
+<h1><span class="header-section-number">4</span> H-index</h1>
+<p>Credits to Lucan Bovens for the code.</p>
+<pre class="r test"><code># Add h-index and i10-index columns to df_ego
+df_ego &lt;- df_ego %&gt;%
+    mutate(h_index = NA_real_, i10_index = NA_real_)
+
+# Get H-index and i10-index
+get_openalex_metrics &lt;- function(openalex_id) {
+    url &lt;- paste0(&quot;https://api.openalex.org/authors/&quot;, openalex_id)
+    author_data &lt;- tryCatch({
+        jsonlite::fromJSON(url)
+    }, error = function(e) {
+        message(paste(&quot;Error fetching data for OpenAlex ID:&quot;, openalex_id))
+        return(NULL)
+    })
+
+    if (!is.null(author_data)) {
+        h_index &lt;- author_data$summary_stats$h_index
+        i10_index &lt;- author_data$summary_stats$i10_index
+        works_count &lt;- author_data$works_count
+        cited_by_count &lt;- author_data$cited_by_count
+        return(list(h_index = h_index, i10_index = i10_index, works_count = works_count, cited_by_count = cited_by_count))
+    } else {
+        return(list(h_index = NA, i10_index = NA, works_count = NA, cited_by_count = NA))
+    }
+}
+
+# Loop for each scholar
+for (i in 1:nrow(df_ego)) {
+    openalex_id &lt;- df_ego$au_id[i]  # assuming au_id is the OpenAlex ID in df_ego
+    metrics &lt;- get_openalex_metrics(openalex_id)
+    df_ego$h_index[i] &lt;- metrics$h_index
+    df_ego$i10_index[i] &lt;- metrics$i10_index
+    df_ego$works_count[i] &lt;- metrics$works_count
+    df_ego$cited_by_count[i] &lt;- metrics$cited_by_count
+}
+
+# View updated df_ego with h-index and i10-index
+view(df_ego[c(&quot;au_id&quot;, &quot;Naam&quot;, &quot;gender&quot;, &quot;h_index&quot;, &quot;i10_index&quot;)])
+
+
+# fsave(df_ego)</code></pre>
+<p>Throughout my code I will use two data sets called “scholars_…” and
+called “ego_df_…”. I am aware that it would be more convenient to use a
+single dataset as a fondation for many analyses. However, as I went down
+a few rabbit holes in trying to prepare my data, a lot of my code relied
+on either two fo these data frames. I had passed a ‘point of no return’
+in terms of the data frames and files I generated as re-doing this part
+yielded in messing up most of the code for other parts of this project.
+Hence, the two data sets.</p>
+</div>
+
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIkRhdGEgcHJlcGFyYXRpb24iDQphdXRob3I6ICJWZXJvb28iDQpkYXRlOiAiMjAyNC0xMS0yMyINCm91dHB1dDogaHRtbF9kb2N1bWVudA0KYmlibGlvZ3JhcGh5OiByZWZlcmVuY2VzLmJpYg0KY3NsOiBhcGEuY3NsDQotLS0NCg0KDQo8aHRtbCBsYW5nPSJlbiI+DQoNCjxoZWFkPg0KDQo8bWV0YSBjaGFyc2V0PSJVVEYtOCI+DQoNCjxtZXRhIG5hbWU9InZpZXdwb3J0IiBjb250ZW50PSJ3aWR0aD1kZXZpY2Utd2lkdGgsIGluaXRpYWwtc2NhbGU9MS4wIj4NCg0KPHRpdGxlPk15IE1vZGVsczwvdGl0bGU+DQoNCjxsaW5rIHJlbD0ic3R5bGVzaGVldCIgaHJlZj0ic3R5bGVzLmNzcyI+IDwhLS0gTGluayB0byB0aGUgQ1NTIGZpbGUgSSBjcmVhdGVkIGZvciBkYXJrIG1vZGUgY29kZSBjaHVua3MgLS0+DQoNCjwvaGVhZD4NCg0KPC9odG1sPg0KDQpgYGB7ciwgZ2xvYmFsc2V0dGluZ3MsIGVjaG89RkFMU0UsIHdhcm5pbmc9RkFMU0UsIHJlc3VsdHM9J2hpZGUnfQ0KbGlicmFyeShrbml0cikNCg0Ka25pdHI6Om9wdHNfY2h1bmskc2V0KGVjaG8gPSBUUlVFKQ0Kb3B0c19jaHVuayRzZXQodGlkeS5vcHRzPWxpc3Qod2lkdGguY3V0b2ZmPTEwMCksdGlkeT1UUlVFLCB3YXJuaW5nID0gRkFMU0UsIG1lc3NhZ2UgPSBGQUxTRSxjb21tZW50ID0gIiM+IiwgY2FjaGU9VFJVRSwgY2xhc3Muc291cmNlPWMoInRlc3QiKSwgY2xhc3Mub3V0cHV0PWMoInRlc3QyIikpDQpvcHRpb25zKHdpZHRoID0gMTAwKQ0KcmdsOjpzZXR1cEtuaXRyKCkNCg0KY29sb3JpemUgPC0gZnVuY3Rpb24oeCwgY29sb3IpIHtzcHJpbnRmKCI8c3BhbiBzdHlsZT0nY29sb3I6ICVzOyc+JXM8L3NwYW4+IiwgY29sb3IsIHgpIH0NCg0KYGBgDQoNCmBgYHtyIGtsaXBweSwgZWNobz1GQUxTRSwgaW5jbHVkZT1UUlVFfQ0Ka2xpcHB5OjprbGlwcHkocG9zaXRpb24gPSBjKCd0b3AnLCAncmlnaHQnKSkNCiNrbGlwcHk6OmtsaXBweShjb2xvciA9ICdkYXJrcmVkJykNCiNrbGlwcHk6OmtsaXBweSh0b29sdGlwX21lc3NhZ2UgPSAnQ2xpY2sgdG8gY29weScsIHRvb2x0aXBfc3VjY2VzcyA9ICdEb25lJykNCmBgYA0KDQpgYGB7ciBzZXR1cCwgaW5jbHVkZT1GQUxTRX0NCmtuaXRyOjpvcHRzX2NodW5rJHNldChlY2hvID0gVFJVRSkNCg0KYGBgDQoNCiMgR2V0dGluZyBzdGFydGVkDQoNCmBgYHtyIGNsZWFufQ0Kcm0obGlzdCA9IGxzKCkpDQpgYGANCg0KIyMgUGFja2FnZXMNCg0KYGBge3IgcGFja2FnZX0NCnJlcXVpcmUodGlkeXZlcnNlKQ0KcmVxdWlyZShSU2llbmEpDQpyZXF1aXJlKFJzaWVuYVR3b1N0ZXApDQoNCiNpbnN0YWxsLnBhY2thZ2VzKCJkYXRhLnRhYmxlIikNCnJlcXVpcmUoZGF0YS50YWJsZSkgICMgbWFpbmx5IGZvciBmYXN0ZXIgZGF0YSBoYW5kbGluZw0KIyBpbnN0YWxsLnBhY2thZ2VzKCd4bWwyJykNCnJlcXVpcmUoeG1sMikNCiMgaW5zdGFsbC5wYWNrYWdlcygncnZlc3QnKQ0KcmVxdWlyZShydmVzdCkNCnJlcXVpcmUoaWdyYXBoKQ0KDQpyZXF1aXJlKGdncmFwaCkNCiNpbnN0YWxsLnBhY2thZ2VzKCd2aXNOZXR3b3JrJykNCnJlcXVpcmUodmlzTmV0d29yaykNCiNpbnN0YWxsLnBhY2thZ2VzKCd0aHJlZWpzJykNCnJlcXVpcmUodGhyZWVqcykNCiNpbnN0YWxsLnBhY2thZ2VzKCduZXR3b3JrRDMnKQ0KcmVxdWlyZShuZXR3b3JrRDMpDQoNCg0KYGBgDQoNCiMjIEZ1bmN0aW9ucw0KDQpgYGB7ciBmdW5jdGlvbnMgMX0NCmZwYWNrYWdlLmNoZWNrIDwtIGZ1bmN0aW9uKHBhY2thZ2VzKSB7DQogICAgbGFwcGx5KHBhY2thZ2VzLCBGVU4gPSBmdW5jdGlvbih4KSB7DQogICAgICAgIGlmICghcmVxdWlyZSh4LCBjaGFyYWN0ZXIub25seSA9IFRSVUUpKSB7DQogICAgICAgICAgICBpbnN0YWxsLnBhY2thZ2VzKHgsIGRlcGVuZGVuY2llcyA9IFRSVUUpDQogICAgICAgICAgICBsaWJyYXJ5KHgsIGNoYXJhY3Rlci5vbmx5ID0gVFJVRSkNCiAgICAgICAgfQ0KICAgIH0pDQp9DQoNCmZzYXZlIDwtIGZ1bmN0aW9uKHgsIGZpbGUgPSBOVUxMLCBsb2NhdGlvbiA9ICIuL2RhdGEvcHJvY2Vzc2VkLyIpIHsNCiAgICBpZmVsc2UoIWRpci5leGlzdHMoImRhdGEiKSwgZGlyLmNyZWF0ZSgiZGF0YSIpLCBGQUxTRSkNCiAgICBpZmVsc2UoIWRpci5leGlzdHMoImRhdGEvcHJvY2Vzc2VkIiksIGRpci5jcmVhdGUoImRhdGEvcHJvY2Vzc2VkIiksIEZBTFNFKQ0KICAgIGlmIChpcy5udWxsKGZpbGUpKQ0KICAgICAgICBmaWxlID0gZGVwYXJzZShzdWJzdGl0dXRlKHgpKQ0KICAgIGRhdGVuYW1lIDwtIHN1YnN0cihnc3ViKCJbOi1dIiwgIiIsIFN5cy50aW1lKCkpLCAxLCA4KQ0KICAgIHRvdGFsbmFtZSA8LSBwYXN0ZShsb2NhdGlvbiwgZmlsZSwgIl8iLCBkYXRlbmFtZSwgIi5yZGEiLCBzZXAgPSAiIikNCiAgICBzYXZlKHgsIGZpbGUgPSB0b3RhbG5hbWUpICAjbmVlZCB0byBmaXggaWYgZmlsZSBpcyByZWxvYWRlZCBhcyBpbnB1dCBuYW1lLCBub3QgYXMgeC4gDQp9DQoNCmZsb2FkIDwtIGZ1bmN0aW9uKGZpbGVuYW1lKSB7DQogICAgbG9hZChmaWxlbmFtZSkNCiAgICBnZXQobHMoKVtscygpICE9ICJmaWxlbmFtZSJdKQ0KfQ0KDQpmc2hvd2RmIDwtIGZ1bmN0aW9uKHgsIC4uLikgew0KICAgIGtuaXRyOjprYWJsZSh4LCBkaWdpdHMgPSAyLCAiaHRtbCIsIC4uLikgJT4lDQogICAgICAgIGthYmxlRXh0cmE6OmthYmxlX3N0eWxpbmcoYm9vdHN0cmFwX29wdGlvbnMgPSBjKCJzdHJpcGVkIiwgImhvdmVyIikpICU+JQ0KICAgICAgICBrYWJsZUV4dHJhOjpzY3JvbGxfYm94KHdpZHRoID0gIjEwMCUiLCBoZWlnaHQgPSAiMzAwcHgiKQ0KfQ0KDQoNCiMgdGhpcyBpcyB0aGUgbW9zdCBpbXBvcnRhbnQgb25lLiBXZSBjcmVhdGVkIGl0IGluIHRoZSBwcmV2aW91cyBzY3JpcHQNCg0KZl9wdWJuZXRzIDwtIGZ1bmN0aW9uKGRmX3NjaG9sYXJzID0gZGYsIGxpc3RfcHVibGljYXRpb25zID0gcHVibGljYXRpb25zLCBkaXNjaXAgPSAic29jaW9sb2d5IisicG9saXRpY2FsIHNjaWVuY2UiLCBhZmZpbGlhdGlvbiA9ICJSVSIsDQogICAgd2F2ZXMgPSBsaXN0KHdhdmUxID0gYygyMDE4LCAyMDE5LCAyMDIwKSwgd2F2ZTIgPSBjKDIwMjEsIDIwMjIsIDIwMjMpKSkgew0KDQogICAgcHVibGljYXRpb25zIDwtIGxpc3RfcHVibGljYXRpb25zICU+JQ0KICAgICAgICBiaW5kX3Jvd3MoKSAlPiUNCiAgICAgICAgZGlzdGluY3QodGl0bGUsIC5rZWVwX2FsbCA9IFRSVUUpDQoNCiAgICBkZl9zY2hvbGFycyAlPiUNCiAgICAgICAgZmlsdGVyKGFmZmlsMSA9PSBhZmZpbGlhdGlvbiB8IGFmZmlsMiA9PSBhZmZpbGlhdGlvbikgJT4lDQogICAgICAgIGZpbHRlcihkaXNjaXBsaW5lID09IGRpc2NpcCkgLT4gZGZfc2VsDQoNCiAgICBuZXR3b3JrbGlzdCA8LSBsaXN0KCkNCiAgICBmb3IgKHdhdmUgaW4gMTpsZW5ndGgod2F2ZXMpKSB7DQogICAgICAgIG5ldHdvcmtsaXN0W1t3YXZlXV0gPC0gbWF0cml4KDAsIG5yb3cgPSBucm93KGRmX3NlbCksIG5jb2wgPSBucm93KGRmX3NlbCkpDQogICAgfQ0KDQogICAgcHVibGljYXRpb25saXN0IDwtIGxpc3QoKQ0KICAgIGZvciAod2F2ZSBpbiAxOmxlbmd0aCh3YXZlcykpIHsNCiAgICAgICAgcHVibGljYXRpb25saXN0W1t3YXZlXV0gPC0gcHVibGljYXRpb25zICU+JQ0KICAgICAgICAgICAgZmlsdGVyKGdzX2lkICVpbiUgZGZfc2VsJGdzX2lkKSAlPiUNCiAgICAgICAgICAgIGZpbHRlcih5ZWFyICVpbiUgd2F2ZXNbW3dhdmVdXSkgJT4lDQogICAgICAgICAgICBzZWxlY3QoYXV0aG9yKSAlPiUNCiAgICAgICAgICAgIGxhcHBseShzdHJfc3BsaXQsIHBhdHRlcm4gPSAiLCIpDQogICAgfQ0KDQogICAgcHVibGljYXRpb25saXN0MiA8LSBsaXN0KCkNCiAgICBmb3IgKHdhdmUgaW4gMTpsZW5ndGgod2F2ZXMpKSB7DQogICAgICAgIHB1YmxpY2F0aW9ubGlzdDJbW3dhdmVdXSA8LSBwdWJsaWNhdGlvbmxpc3RbW3dhdmVdXSRhdXRob3IgJT4lDQogICAgICAgICAgICAjIGxvd2VyY2FzZQ0KICAgICAgICBsYXBwbHkodG9sb3dlcikgJT4lDQogICAgICAgICAgICAjIFJlbW92aW5nIGRpYWNyaXRpY3MNCiAgICAgICAgbGFwcGx5KHN0cmlfdHJhbnNfZ2VuZXJhbCwgaWQgPSAibGF0aW4tYXNjaWkiKSAlPiUNCiAgICAgICAgICAgICMgb25seSBsYXN0IG5hbWUNCiAgICAgICAgbGFwcGx5KHdvcmQsIHN0YXJ0ID0gLTEsIHNlcCA9ICIgIikgJT4lDQogICAgICAgICAgICAjIG9ubHkgbGFzdCBsYXN0IG5hbWUNCiAgICAgICAgbGFwcGx5KHdvcmQsIHN0YXJ0ID0gLTEsIHNlcCA9ICItIikNCiAgICB9DQoNCiAgICBmb3IgKHdhdmUgaW4gMTpsZW5ndGgod2F2ZXMpKSB7DQogICAgICAgICMgbGV0IHVzIHJlbW92ZSBhbGwgcHVibGljYXRpb25zIHdpdGggb25seSBvbmUgYXV0aG9yDQogICAgICAgIHJlbW92ZSA8LSB3aGljaChzYXBwbHkocHVibGljYXRpb25saXN0Mltbd2F2ZV1dLCBGVU4gPSBmdW5jdGlvbih4KSBsZW5ndGgoeCkgPT0gMSkgPT0gVFJVRSkNCiAgICAgICAgcHVibGljYXRpb25saXN0Mltbd2F2ZV1dIDwtIHB1YmxpY2F0aW9ubGlzdDJbW3dhdmVdXVstcmVtb3ZlXQ0KICAgIH0NCg0KICAgIGZvciAod2F2ZSBpbiAxOmxlbmd0aCh3YXZlcykpIHsNCiAgICAgICAgcHVicyA8LSBwdWJsaWNhdGlvbmxpc3QyW1t3YXZlXV0NCiAgICAgICAgZm9yIChlZ28gaW4gMTpucm93KGRmX3NlbCkpIHsNCiAgICAgICAgICAgICMgd2hpY2ggZWdvPw0KICAgICAgICAgICAgbGFzdG5hbWVfZWdvIDwtIGRmX3NlbCRsYXN0bmFtZVtlZ29dDQogICAgICAgICAgICAjIGZvciBhbGwgcHVibGljYXRpb25zDQogICAgICAgICAgICBmb3IgKHB1YiBpbiAxOmxlbmd0aChwdWJzKSkgew0KICAgICAgICAgICAgICAgICMgb25seSBjb250aW51ZSBpZiBlZ28gaXMgYXV0aG9yIG9mIHB1Yg0KICAgICAgICAgICAgICAgIGlmIChsYXN0bmFtZV9lZ28gJWluJSBwdWJzW1twdWJdXSkgew0KICAgICAgICAgICAgICAgICAgYXV0X3BvdCA8LSB3aGljaC5tYXgocHVic1tbcHViXV0gJWluJSBsYXN0bmFtZV9lZ28pDQogICAgICAgICAgICAgICAgICAjIG9ubHkgY29udGludWUgaWYgZWdvIGlzIGZpcnN0IGF1dGhvciBvZiBwdWINCiAgICAgICAgICAgICAgICAgIGlmIChhdXRfcG90ID09IDEpIHsNCiAgICAgICAgICAgICAgICAgICAgIyBjaGVjayBhbGwgYWx0ZXJzL2NvLWF1dGhvcnMNCiAgICAgICAgICAgICAgICAgICAgZm9yIChhbHRlciBpbiAxOm5yb3coZGZfc2VsKSkgew0KICAgICAgICAgICAgICAgICAgICAgICMgd2hpY2ggYWx0ZXINCiAgICAgICAgICAgICAgICAgICAgICBsYXN0bmFtZV9hbHRlciA8LSBkZl9zZWwkbGFzdG5hbWVbYWx0ZXJdDQogICAgICAgICAgICAgICAgICAgICAgaWYgKGxhc3RuYW1lX2FsdGVyICVpbiUgcHVic1tbcHViXV0pIHsNCiAgICAgICAgICAgICAgICAgICAgICAgIG5ldHdvcmtsaXN0W1t3YXZlXV1bZWdvLCBhbHRlcl0gPC0gbmV0d29ya2xpc3RbW3dhdmVdXVtlZ28sIGFsdGVyXSArIDENCiAgICAgICAgICAgICAgICAgICAgICB9DQogICAgICAgICAgICAgICAgICAgIH0NCiAgICAgICAgICAgICAgICAgIH0NCiAgICAgICAgICAgICAgICB9DQogICAgICAgICAgICB9DQogICAgICAgIH0NCiAgICB9DQogICAgcmV0dXJuKGxpc3QoZGYgPSBkZl9zZWwsIG5ldHdvcmsgPSBuZXR3b3JrbGlzdCkpDQp9DQoNCmBgYA0KDQojIyBNb3JlIGZ1bmN0aW9ucw0KDQpgYGB7ciBmdW5jdGlvbnMgMn0NCmZjb2xuZXQgPC0gZnVuY3Rpb24oZGF0YSA9IHNjaG9sYXJzLCB1bml2ZXJzaXR5ID0gIlJVIiwgZGlzY2lwbGluZSA9ICJzb2Npb2xvZ3kiKyJwb2xpdGljYWwgc2NpZW5jZSIsIHdhdmVzID0gbGlzdChjKDIwMTUsDQogICAgMjAxOCksIGMoMjAxOSwgMjAyMykpLCB0eXBlID0gYygiZmlyc3QiKSkgew0KDQogICAgIyBzdGVwIDENCiAgICBkZW1vZ3JhcGhpY3MgPC0gZG8uY2FsbChyYmluZC5kYXRhLmZyYW1lLCBkYXRhJGRlbW9ncmFwaGljcykNCiAgICBkZW1vZ3JhcGhpY3MgPC0gZGVtb2dyYXBoaWNzICU+JQ0KICAgICAgICBtdXRhdGUoVW5pdmVyc2l0ZWl0MS4yMiA9IHJlcGxhY2UoVW5pdmVyc2l0ZWl0MS4yMiwgaXMubmEoVW5pdmVyc2l0ZWl0MS4yMiksICIiKSwgVW5pdmVyc2l0ZWl0Mi4yMiA9IHJlcGxhY2UoVW5pdmVyc2l0ZWl0Mi4yMiwNCiAgICAgICAgICAgIGlzLm5hKFVuaXZlcnNpdGVpdDIuMjIpLCAiIiksIFVuaXZlcnNpdGVpdDEuMjQgPSByZXBsYWNlKFVuaXZlcnNpdGVpdDEuMjQsIGlzLm5hKFVuaXZlcnNpdGVpdDEuMjQpLA0KICAgICAgICAgICAgIiIpLCBVbml2ZXJzaXRlaXQyLjI0ID0gcmVwbGFjZShVbml2ZXJzaXRlaXQyLjI0LCBpcy5uYShVbml2ZXJzaXRlaXQyLjI0KSwgIiIpLCBkaXNjaXBsaW5lLjIyID0gcmVwbGFjZShkaXNjaXBsaW5lLjIyLA0KICAgICAgICAgICAgaXMubmEoZGlzY2lwbGluZS4yMiksICIiKSwgZGlzY2lwbGluZS4yNCA9IHJlcGxhY2UoZGlzY2lwbGluZS4yNCwgaXMubmEoZGlzY2lwbGluZS4yNCksICIiKSkNCg0KICAgIHNhbXBsZSA8LSB3aGljaCgoZGVtb2dyYXBoaWNzJFVuaXZlcnNpdGVpdDEuMjIgJWluJSB1bml2ZXJzaXR5IHwgZGVtb2dyYXBoaWNzJFVuaXZlcnNpdGVpdDIuMjIgJWluJQ0KICAgICAgICB1bml2ZXJzaXR5IHwgZGVtb2dyYXBoaWNzJFVuaXZlcnNpdGVpdDEuMjQgJWluJSB1bml2ZXJzaXR5IHwgZGVtb2dyYXBoaWNzJFVuaXZlcnNpdGVpdDIuMjQgJWluJQ0KICAgICAgICB1bml2ZXJzaXR5KSAmIChkZW1vZ3JhcGhpY3MkZGlzY2lwbGluZS4yMiAlaW4lIGRpc2NpcGxpbmUgfCBkZW1vZ3JhcGhpY3MkZGlzY2lwbGluZS4yNCAlaW4lIGRpc2NpcGxpbmUpKQ0KDQogICAgZGVtb2dyYXBoaWNzX3NvYyA8LSBkZW1vZ3JhcGhpY3Nbc2FtcGxlLCBdDQogICAgc2Nob2xhcnNfc2VsIDwtIGxhcHBseShzY2hvbGFycywgIlsiLCBzYW1wbGUpDQoNCiAgICAjIHN0ZXAgMg0KICAgIGlkcyA8LSBkZW1vZ3JhcGhpY3Nfc29jJGF1X2lkDQogICAgbndhdmVzIDwtIGxlbmd0aCh3YXZlcykNCiAgICBuZXRzIDwtIGFycmF5KDAsIGRpbSA9IGMobndhdmVzLCBsZW5ndGgoaWRzKSwgbGVuZ3RoKGlkcykpLCBkaW1uYW1lcyA9IGxpc3Qod2F2ZSA9IDE6bndhdmVzLCBpZHMsDQogICAgICAgIGlkcykpDQogICAgZGltbmFtZXMobmV0cykNCg0KICAgICMgc3RlcCAzDQogICAgZGZfd29ya3MgPC0gdGliYmxlKHdvcmtzX2lkID0gdW5saXN0KGxhcHBseShzY2hvbGFyc19zZWwkd29yaywgZnVuY3Rpb24obCkgbCRpZCkpLCB3b3Jrc19hdXRob3IgPSB1bmxpc3QobGFwcGx5KHNjaG9sYXJzX3NlbCR3b3JrLA0KICAgICAgICBmdW5jdGlvbihsKSBsJGF1dGhvciksIHJlY3Vyc2l2ZSA9IEZBTFNFKSwgd29ya3NfeWVhciA9IHVubGlzdChsYXBwbHkoc2Nob2xhcnNfc2VsJHdvcmssIGZ1bmN0aW9uKGwpIGwkcHVibGljYXRpb25feWVhciksDQogICAgICAgIHJlY3Vyc2l2ZSA9IEZBTFNFKSkNCg0KICAgIGRmX3dvcmtzIDwtIGRmX3dvcmtzWyFkdXBsaWNhdGVkKGRmX3dvcmtzKSwgXQ0KDQogICAgIyBzdGVwIDQNCiAgICBpZiAodHlwZSA9PSAiZmlyc3QiKSB7DQogICAgICAgIGZvciAoaiBpbiAxOm53YXZlcykgew0KICAgICAgICAgICAgZGZfd29ya3NfdyA8LSBkZl93b3Jrc1tkZl93b3JrcyR3b3Jrc195ZWFyID49IHdhdmVzW1tqXV1bMV0gJiBkZl93b3JrcyR3b3Jrc195ZWFyIDw9IHdhdmVzW1tqXV1bMl0sDQogICAgICAgICAgICAgICAgXQ0KICAgICAgICAgICAgZm9yIChpIGluIDE6bnJvdyhkZl93b3Jrc193KSkgew0KICAgICAgICAgICAgICAgIGVnbyA8LSBkZl93b3Jrc193JHdvcmtzX2F1dGhvcltpXVtbMV1dJGF1X2lkWzFdDQogICAgICAgICAgICAgICAgYWx0ZXJzIDwtIGRmX3dvcmtzX3ckd29ya3NfYXV0aG9yW2ldW1sxXV0kYXVfaWRbLTFdDQogICAgICAgICAgICAgICAgaWYgKHN1bShpZHMgJWluJSBlZ28pID4gMCAmIHN1bShpZHMgJWluJSBhbHRlcnMpID4gMCkgew0KICAgICAgICAgICAgICAgICAgbmV0c1tqLCB3aGljaChpZHMgJWluJSBlZ28pLCB3aGljaChpZHMgJWluJSBhbHRlcnMpXSA8LSAxDQogICAgICAgICAgICAgICAgfQ0KICAgICAgICAgICAgfQ0KICAgICAgICB9DQogICAgfQ0KDQogICAgaWYgKHR5cGUgPT0gImxhc3QiKSB7DQogICAgICAgIGZvciAoaiBpbiAxOm53YXZlcykgew0KICAgICAgICAgICAgZGZfd29ya3NfdyA8LSBkZl93b3Jrc1tkZl93b3JrcyR3b3Jrc195ZWFyID49IHdhdmVzW1tqXV1bMV0gJiBkZl93b3JrcyR3b3Jrc195ZWFyIDw9IHdhdmVzW1tqXV1bMl0sDQogICAgICAgICAgICAgICAgXQ0KICAgICAgICAgICAgZm9yIChpIGluIDE6bnJvdyhkZl93b3Jrc193KSkgew0KICAgICAgICAgICAgICAgIGVnbyA8LSByZXYoZGZfd29ya3NfdyR3b3Jrc19hdXRob3JbaV1bWzFdXSRhdV9pZClbMV0NCiAgICAgICAgICAgICAgICBhbHRlcnMgPC0gcmV2KGRmX3dvcmtzX3ckd29ya3NfYXV0aG9yW2ldW1sxXV0kYXVfaWQpWy0xXQ0KICAgICAgICAgICAgICAgIGlmIChzdW0oaWRzICVpbiUgZWdvKSA+IDAgJiBzdW0oaWRzICVpbiUgYWx0ZXJzKSA+IDApIHsNCiAgICAgICAgICAgICAgICAgIG5ldHNbaiwgd2hpY2goaWRzICVpbiUgZWdvKSwgd2hpY2goaWRzICVpbiUgYWx0ZXJzKV0gPC0gMQ0KICAgICAgICAgICAgICAgIH0NCiAgICAgICAgICAgIH0NCiAgICAgICAgfQ0KICAgIH0NCg0KICAgIGlmICh0eXBlID09ICJhbGwiKSB7DQogICAgICAgIGZvciAoaiBpbiAxOm53YXZlcykgew0KICAgICAgICAgICAgZGZfd29ya3NfdyA8LSBkZl93b3Jrc1tkZl93b3JrcyR3b3Jrc195ZWFyID49IHdhdmVzW1tqXV1bMV0gJiBkZl93b3JrcyR3b3Jrc195ZWFyIDw9IHdhdmVzW1tqXV1bMl0sDQogICAgICAgICAgICAgICAgXQ0KICAgICAgICAgICAgZm9yIChpIGluIDE6bnJvdyhkZl93b3Jrc193KSkgew0KICAgICAgICAgICAgICAgIGVnb3MgPC0gZGZfd29ya3NfdyR3b3Jrc19hdXRob3JbaV1bWzFdXSRhdV9pZA0KICAgICAgICAgICAgICAgIGlmIChzdW0oaWRzICVpbiUgZWdvcykgPiAwKSB7DQogICAgICAgICAgICAgICAgICBuZXRzW2osIHdoaWNoKGlkcyAlaW4lIGVnb3MpLCB3aGljaChpZHMgJWluJSBlZ29zKV0gPC0gMQ0KICAgICAgICAgICAgICAgIH0NCiAgICAgICAgICAgIH0NCiAgICAgICAgfQ0KICAgIH0NCiAgICBvdXRwdXQgPC0gbGlzdCgpDQogICAgb3V0cHV0JGRhdGEgPC0gc2Nob2xhcnNfc2VsDQogICAgb3V0cHV0JG5ldHMgPC0gbmV0cw0KICAgIHJldHVybihvdXRwdXQpDQp9DQpgYGANCg0KIyMgTG9hZCBkYXRhDQoNCmBgYHtyIGRhdGF9DQpzY2hvbGFycyA8LSBmbG9hZCgiLi9kYXRhL3Byb2Nlc3NlZC9zY2hvbGFyc18yMDI0MDkyNC5yZGEiKSANCmBgYA0KDQpgYGB7ciBzYXZpbmcgb3V0cHV0fQ0KIyBzYXZlIHRoZSBvdXRwdXQgb2YgeW91ciBmdW5jdGlvbg0KDQp0ZXN0ICA8LSBmY29sbmV0KGRhdGEgPSBzY2hvbGFycywgDQogICAgICAgICAgICAgICAgdW5pdmVyc2l0eSA9ICJSVSIsIA0KICAgICAgICAgICAgICAgIGRpc2NpcGxpbmUgPSBjKCJzb2Npb2xvZ3kiLCAicG9saXRpY2FsIHNjaWVuY2UiKSwNCiAgICAgICAgICAgICAgICB3YXZlcyA9IGxpc3QoYygyMDE1LCAyMDE4KSwgYygyMDE5LCAyMDIzKSksIA0KICAgICAgICAgICAgICAgIHR5cGUgPSBjKCJhbGwiKSkgIyBhbGwsIGZpcnN0LCBsYXN0ICMgd2hpY2ggdGllcyBpbiB0aGVyZQ0KDQpgYGANCg0KDQojIFNhdmluZyBkYXRhIA0KDQpUaGlzIHBhcnQsIGRlc3BpdGUgYmVpbmcgbGVuZ3RoeSBhbmQgcHJpbmNpcGFsbHkgdW5uZWNlc3NhcnksIG5lZWRlZCB0byBzdGF5IGluIG15IGNvZGUgZm9yIHRoZSBzYWtlIG9mIHRyYW5zcGFyZW5jeS4gQUZ0ZXJhbGwsIHRoaXMgY29kZSBhbmQgdGhlIGZvbGxvd2luZyBjb2RlIG9uIHRoaXMgcGFnZSBpcyB3aGF0IGFjY3VtdWxhdGVkIGluIHRoZSBnZW5kZXItZGF0YSBvZiBlYWNoIGRlcGFydG1lbnQgaW4gbXkgZGF0YSBzZXQuIA0KDQoNCmBgYHtyfQ0KDQojIHNhdmUgdGhlIG91dHB1dCBvZiB5b3VyIGZ1bmN0aW9uDQp0ZXN0c29jICA8LSBmY29sbmV0KGRhdGEgPSBzY2hvbGFycywgDQogICAgICAgICAgICAgICAgdW5pdmVyc2l0eSA9ICJSVSIsIA0KICAgICAgICAgICAgICAgIGRpc2NpcGxpbmUgPSAic29jaW9sb2d5IiwgDQogICAgICAgICAgICAgICAgd2F2ZXMgPSBsaXN0KGMoMjAxNSwgMjAxOCksIGMoMjAxOSwgMjAyMykpLCANCiAgICANCiAgICAgICAgICAgICAgICAgICAgICAgICAgICB0eXBlID0gYygiZmlyc3QiKSkNCg0KdGVzdHBvbHNjaSA8LSBmY29sbmV0KGRhdGEgPSBzY2hvbGFycywgDQogICAgICAgICAgICAgICAgdW5pdmVyc2l0eSA9ICJSVSIsIA0KICAgICAgICAgICAgICAgIGRpc2NpcGxpbmUgPSAicG9saXRpY2FsIHNjaWVuY2UiLCANCiAgICAgICAgICAgICAgICB3YXZlcyA9IGxpc3QoYygyMDE1LCAyMDE4KSwgYygyMDE5LCAyMDIzKSksIA0KICAgICAgICAgICAgICAgIHR5cGUgPSBjKCJmaXJzdCIpKQ0KYGBgDQoNCiMjIFNvY2lvbG9neSBEZXBhcnRtZW50DQoNCmBgYHtyfQ0Kc29jX25ldHMgPC0gdGVzdHNvYyRuZXRzDQoNCiANCmRmX2Vnb19kZW1vIDwtIHRlc3Rzb2MkZGF0YSRkZW1vZ3JhcGhpY3MNCmRmX2Vnb19vYSA8LSB0ZXN0c29jJGRhdGEkc2Nob2xhcnNfb2ENCmRmX2Vnb193b3JrcyA8LSB0ZXN0c29jJGRhdGEkd29ya3MNCg0KDQojIERFTU8NCiAgc3RyKGRmX2Vnb19kZW1vLCAxKSANCiAgDQogIGRmX2Vnb19kZW1vIDwtIGRvLmNhbGwocmJpbmQuZGF0YS5mcmFtZSwgZGZfZWdvX2RlbW8pDQogIGRmX2Vnb19kZW1vW1sxXV0NCg0KIyBPQQ0KICAjc3RyKGRmX2Vnb19vYSwgMSkNCiAgZGZfZWdvX29hW1sxXV0NCiAgZGZfZWdvX29hIDwtIGRvLmNhbGwocmJpbmQuZGF0YS5mcmFtZSwgZGZfZWdvX29hKQ0KDQoNCiAgIyAtLT4gRUdPIERBVEFGUkFNRSB3aXRoIGRlbW8gYW5kIG9hIChzb2Npb2xvZ3kpDQoNCiAgZGZfc29jX2VnbyA8LSBsZWZ0X2pvaW4oZGZfZWdvX2RlbW8sIGRmX2Vnb19vYSwgYnkgPSBqb2luX2J5KGF1X2lkID09IGlkKSkNCiAgDQogIHJvd25hbWVzKHNvY19uZXRzWzEsLF0pID09IGRmX3NvY19lZ28kYXVfaWQgIyBjaGVja2luZyBpZiB0aGUgYXV0aG9yIGlkJ3MgYXJlIHRoZSBzYW1lIGFzIGluIGRmX2VnbyBpbiBuZXRzIGRhdGFmcmFtZSANCiAgIyAtLT4geWVzLCB0aGUgY29ycmVjdCBvbmVzISEhDQogIA0KICANCiAgZGZfZWdvX3dvcmtzW1sxXV0kYXV0aG9yIA0KI2F1dGhvcnMgb2YgYWxsIHRoZSB3b3JrcyB0aGF0IGZpcnN0IHNjaG9sYXIgKGhlcmU6IEFuYSBNYWNhbm92aWMpIGlzIHBhcnQgb2YgDQoNCg0KYGBgDQoNCiMjIFBvbGl0aWNhbCBTY2llbmNlIERlcGFydG1lbnQNCg0KYGBge3J9DQojIGRlcGVuZGVudA0KIyBwb2xfbmV0IDwtIHNpZW5hRGVwZW5kZW50KG5ldF9wb2xfYXJyYXkpDQoNCg0KIyBkZXBlbmRlbnQgDQpwb2xfbmV0cyA8LSB0ZXN0cG9sc2NpJG5ldHMNCg0KIA0KZGZfcG9sX2Vnb19kZW1vIDwtIHRlc3Rwb2xzY2kkZGF0YSRkZW1vZ3JhcGhpY3MNCmRmX3BvbF9lZ29fb2EgPC0gdGVzdHBvbHNjaSRkYXRhJHNjaG9sYXJzX29hDQpkZl9wb2xfZWdvX3dvcmtzIDwtIHRlc3Rwb2xzY2kkZGF0YSR3b3Jrcw0KDQoNCiMgREVNTw0KICAjc3RyKGRmX3BvbF9lZ29fZGVtbywgMSkgDQogIA0KICBkZl9wb2xfZWdvX2RlbW8gPC0gZG8uY2FsbChyYmluZC5kYXRhLmZyYW1lLCBkZl9wb2xfZWdvX2RlbW8pDQogIGRmX3BvbF9lZ29fZGVtb1tbMV1dDQoNCiMgT0ENCiAgI3N0cihkZl9wb2xfZWdvX29hLCAxKQ0KICBkZl9wb2xfZWdvX29hW1sxXV0NCiAgZGZfcG9sX2Vnb19vYSA8LSBkby5jYWxsKHJiaW5kLmRhdGEuZnJhbWUsIGRmX3BvbF9lZ29fb2EpDQogIA0KICANCiMgLS0+IEVHTyBEQVRBRlJBTUUgd2l0aCBkZW1vIGFuZCBvYSAocG9saXRpY2FsIHNjaWVuY2UpDQogIGRmX3BvbF9lZ28gPC0gbGVmdF9qb2luKGRmX3BvbF9lZ29fZGVtbywgZGZfcG9sX2Vnb19vYSwgYnkgPSBqb2luX2J5KGF1X2lkID09IGlkKSkNCg0KICByb3duYW1lcyhwb2xfbmV0c1sxLCxdKSA9PSBkZl9wb2xfZWdvJGF1X2lkICMgY2hlY2tpbmcgaWYgdGhlIGF1dGhvciBpZCdzIGFyZSB0aGUgc2FtZSBhcyBpbiBkZl9lZ28gaW4gbmV0cyBkYXRhZnJhbWUgDQogICMgLS0+IHllcywgdGhlIGNvcnJlY3Qgb25lcyEhIQ0KYGBgDQoNCiMgR2VuZGVyDQojIyMgU29jaW9sb2d5IERlcGFydG1lbnQgU0Nob2xhcnMgDQoNCmBgYHtyIGdlbmRlciBzfQ0KZGZfc29jX2VnbyROYWFtICMgbGlzdCBvZiBhbGwgbmFtZXMgaW4gc29jaW9sb2d5IGRlcGFydG1lbnQgDQoNCmRmX3NvY19lZ28kZ2VuZGVyIDwtIGMoMCwxLDAsMSwwLDAsMSwxLDAsMCwNCiAgICAgICAgICAgICAgICAgICAgICAgMCwxLDEsMCwxLDAsMSwxLDEsMSwNCiAgICAgICAgICAgICAgICAgICAgICAgMCwxLDEsMCwxLDEsMCwxLDAsMSwNCiAgICAgICAgICAgICAgICAgICAgICAgMCwxLDAsMCwwLDAsMCwwLDEsMCwNCiAgICAgICAgICAgICAgICAgICAgICAgMCwxLDEsMSwwLDEsMCwxLDAsMCkgDQojIG1hbnVhbGx5IGZpbGxlZCBpbiBnZW5kZXIgMCA9IHdvbWFuLCAxID0gbWFuLCBiYXNlZCBvbiBtYWpvcml0eSBnaXZlbiBpbiBOTCB2b29ybmFtZW4gYmFuayANCg0KIyBjaGVjayBpZiBpdCB3ZW50IHNtb290aGx5IA0KIyB2aWV3KGRmX3NvY19lZ29bYygnTmFhbScsICdnZW5kZXInLCAnYXVfaWQnKV0pDQoNCiMgZnNhdmUoZGZfc29jX2VnbykNCg0KYGBgDQoNCiMjIyBQb2xpdGljbGEgU2NpZW5jZSBTY2hvbGFycw0KDQpgYGB7ciBnZW5kZXIgcH0NCmRmX3BvbF9lZ28kTmFhbSAjIGxpc3Qgb2YgYWxsIG5hbWVzIA0KDQpkZl9wb2xfZWdvJGdlbmRlciA8LSBjKDEsMCwxLDAsMCwwLDEsMCwxLDAsDQogICAgICAgICAgICAgICAgICAgICAgIDEsMSwwLDAsMSwxLDEsMCwwLDEsDQogICAgICAgICAgICAgICAgICAgICAgIDAsMSwxLDAsMCwxLDEsMSwwLDAsDQogICAgICAgICAgICAgICAgICAgICAgIDAsMCwwLDEsMSwwLDAsMSwxLDAsDQogICAgICAgICAgICAgICAgICAgICAgIDAsMCwwLDEsMCwxLDEsMSwwLDAsMCkgDQogICAgIyBtYW51YWxseSBmaWxsZWQgaW4gZ2VuZGVyIDAgPSB3b21hbiwgMSA9IG1hbiwgYmFzZWQgb24gbWFqb3JpdHkgZ2l2ZW4gaW4gTkwgdm9vcm5hbWVuIGJhbmssIEd1YW5neXUgd2FzIG5vdCBpbiBuYW1lIGJhbmsgYnV0IGJhc2VkIG9uIHRoZSBlbXBsb3llZS1waWN0dXJlIG9mIFJVLCB0aGlzIHBlcnNvbiBwcmVzZW50cyBmZW1pbmluZSwgdGh1cyBJIGFzc3VtZWQgMC4gDQoNCiMgY2hlY2sgaWYgaXQgd2VudCBzbW9vdGhseSANCiMgdmlldyhkZl9wb2xfZWdvW2MoJ05hYW0nLCAnZ2VuZGVyJywgJ2F1X2lkJyldKQ0KDQojY292YXJpYXRlIA0KIyBnZW5kZXIgPC0gY29Db3ZhcihkZl9lZ28kZ2VuZGVyKQ0KDQojIGZzYXZlKGRmX3BvbF9lZ28pDQpgYGANCg0KU2F2ZSBnZW5kZXIgZGF0YQ0KDQpgYGB7ciBnZW5kZXIgZGF0YX0NCnNvY19nZW5kZXIgPC0gZmxvYWQoIi4vZGF0YS9wcm9jZXNzZWQvZGZfc29jX2Vnb18yMDI0MTEwNS5yZGEiKQ0KcG9sX2dlbmRlciA8LSBmbG9hZCgiLi9kYXRhL3Byb2Nlc3NlZC9kZl9wb2xfZWdvXzIwMjQxMTA1LnJkYSIpDQpgYGANCg0KQ29tYmluZSBkYXRhIA0KDQpgYGB7ciBjb21iaW5lIGdlbmRlciBzZXR9DQpkZiA8LSB0ZXN0JGRhdGEgIyBtYWtlIGRhdGFzZXQgd2l0aCBhbGwgZGF0YSANCmRmX2VnbyA8LSBkby5jYWxsKHJiaW5kLmRhdGEuZnJhbWUsIGRmJGRlbW9ncmFwaGljcykgIyBkYXRhIHNldCB3aXRoIGRlbW9ncmFwaGljIGluZm9ybWF0aW9uDQoNCg0Kc29jX2dlbmRlciA8LSBzb2NfZ2VuZGVyWyxjKCJOYWFtIiwgImdlbmRlciIpXSAjIHNlbGVjdGluZyBvbmx5IHRoZSBjb250ZW50IHdlIG5lZWQNCnBvbF9nZW5kZXIgPC0gcG9sX2dlbmRlclssYygiTmFhbSIsICJnZW5kZXIiKV0gIyBzZWxlY3Rpbmcgb25seSB0aGUgY29udGVudCB3ZSBuZWVkDQoNCmdlbmRlciA8LSByYmluZChzb2NfZ2VuZGVyLCBwb2xfZ2VuZGVyKSAjIGNvbWJpbmluZyB0aGUgZ2VuZGVyIGRhdGEgc2V0cyANCg0KZGZfZWdvIDwtIGRmX2VnbyAlPiUgDQogICAgICAgICAgICBsZWZ0X2pvaW4oZ2VuZGVyKSAjZGNvbWJpbmluZyBkYXRhIHNldCBvZiBnZW5kZXIgd2l0aCB0aGUgb25lIHdpdGggZGVtb2dyYXBoaWMgaW5mb3JtYXRpb24gDQpgYGANCg0KDQojIEgtaW5kZXgNCg0KQ3JlZGl0cyB0byBMdWNhbiBCb3ZlbnMgZm9yIHRoZSBjb2RlLg0KDQpgYGB7ciBoLWluZGV4fQ0KIyBBZGQgaC1pbmRleCBhbmQgaTEwLWluZGV4IGNvbHVtbnMgdG8gZGZfZWdvDQpkZl9lZ28gPC0gZGZfZWdvICU+JQ0KICBtdXRhdGUoaF9pbmRleCA9IE5BX3JlYWxfLCBpMTBfaW5kZXggPSBOQV9yZWFsXykNCg0KIyBHZXQgSC1pbmRleCBhbmQgaTEwLWluZGV4IA0KZ2V0X29wZW5hbGV4X21ldHJpY3MgPC0gZnVuY3Rpb24ob3BlbmFsZXhfaWQpIHsNCiAgdXJsIDwtIHBhc3RlMCgiaHR0cHM6Ly9hcGkub3BlbmFsZXgub3JnL2F1dGhvcnMvIiwgb3BlbmFsZXhfaWQpDQogIGF1dGhvcl9kYXRhIDwtIHRyeUNhdGNoKHsNCiAgICBqc29ubGl0ZTo6ZnJvbUpTT04odXJsKQ0KICB9LCBlcnJvciA9IGZ1bmN0aW9uKGUpIHsNCiAgICBtZXNzYWdlKHBhc3RlKCJFcnJvciBmZXRjaGluZyBkYXRhIGZvciBPcGVuQWxleCBJRDoiLCBvcGVuYWxleF9pZCkpDQogICAgcmV0dXJuKE5VTEwpDQogIH0pDQogIA0KICBpZiAoIWlzLm51bGwoYXV0aG9yX2RhdGEpKSB7DQogICAgaF9pbmRleCA8LSBhdXRob3JfZGF0YSRzdW1tYXJ5X3N0YXRzJGhfaW5kZXgNCiAgICBpMTBfaW5kZXggPC0gYXV0aG9yX2RhdGEkc3VtbWFyeV9zdGF0cyRpMTBfaW5kZXgNCiAgICB3b3Jrc19jb3VudCA8LSBhdXRob3JfZGF0YSR3b3Jrc19jb3VudA0KICAgIGNpdGVkX2J5X2NvdW50IDwtIGF1dGhvcl9kYXRhJGNpdGVkX2J5X2NvdW50DQogICAgcmV0dXJuKGxpc3QoaF9pbmRleCA9IGhfaW5kZXgsIGkxMF9pbmRleCA9IGkxMF9pbmRleCwgd29ya3NfY291bnQgPSB3b3Jrc19jb3VudCwgY2l0ZWRfYnlfY291bnQgPSBjaXRlZF9ieV9jb3VudCkpDQogIH0gZWxzZSB7DQogICAgcmV0dXJuKGxpc3QoaF9pbmRleCA9IE5BLCBpMTBfaW5kZXggPSBOQSwgd29ya3NfY291bnQgPSBOQSwgY2l0ZWRfYnlfY291bnQgPSBOQSkpDQogIH0NCn0NCg0KIyBMb29wIGZvciBlYWNoIHNjaG9sYXIgDQpmb3IgKGkgaW4gMTpucm93KGRmX2VnbykpIHsNCiAgb3BlbmFsZXhfaWQgPC0gZGZfZWdvJGF1X2lkW2ldICAjIGFzc3VtaW5nIGF1X2lkIGlzIHRoZSBPcGVuQWxleCBJRCBpbiBkZl9lZ28NCiAgbWV0cmljcyA8LSBnZXRfb3BlbmFsZXhfbWV0cmljcyhvcGVuYWxleF9pZCkNCiAgZGZfZWdvJGhfaW5kZXhbaV0gPC0gbWV0cmljcyRoX2luZGV4DQogIGRmX2VnbyRpMTBfaW5kZXhbaV0gPC0gbWV0cmljcyRpMTBfaW5kZXgNCiAgZGZfZWdvJHdvcmtzX2NvdW50W2ldIDwtIG1ldHJpY3Mkd29ya3NfY291bnQNCiAgZGZfZWdvJGNpdGVkX2J5X2NvdW50W2ldIDwtIG1ldHJpY3MkY2l0ZWRfYnlfY291bnQNCn0NCg0KIyBWaWV3IHVwZGF0ZWQgZGZfZWdvIHdpdGggaC1pbmRleCBhbmQgaTEwLWluZGV4DQp2aWV3KGRmX2Vnb1tjKCdhdV9pZCcsJ05hYW0nLCdnZW5kZXInLCdoX2luZGV4JywnaTEwX2luZGV4JyldKQ0KDQoNCiMgZnNhdmUoZGZfZWdvKQ0KDQpgYGANCg0KVGhyb3VnaG91dCBteSBjb2RlIEkgd2lsbCB1c2UgdHdvIGRhdGEgc2V0cyBjYWxsZWQgInNjaG9sYXJzXy4uLiIgYW5kIGNhbGxlZCAiZWdvX2RmXy4uLiIuIEkgYW0gYXdhcmUgdGhhdCBpdCB3b3VsZCBiZSBtb3JlIGNvbnZlbmllbnQgdG8gdXNlIGEgc2luZ2xlIGRhdGFzZXQgYXMgYSBmb25kYXRpb24gZm9yIG1hbnkgYW5hbHlzZXMuIEhvd2V2ZXIsIGFzIEkgd2VudCBkb3duIGEgZmV3IHJhYmJpdCBob2xlcyBpbiB0cnlpbmcgdG8gcHJlcGFyZSBteSBkYXRhLCBhIGxvdCBvZiBteSBjb2RlIHJlbGllZCBvbiBlaXRoZXIgdHdvIGZvIHRoZXNlIGRhdGEgZnJhbWVzLiBJIGhhZCBwYXNzZWQgYSAncG9pbnQgb2Ygbm8gcmV0dXJuJyBpbiB0ZXJtcyBvZiB0aGUgZGF0YSBmcmFtZXMgYW5kIGZpbGVzIEkgZ2VuZXJhdGVkIGFzIHJlLWRvaW5nIHRoaXMgcGFydCB5aWVsZGVkIGluIG1lc3NpbmcgdXAgbW9zdCBvZiB0aGUgY29kZSBmb3Igb3RoZXIgcGFydHMgb2YgdGhpcyBwcm9qZWN0LiBIZW5jZSwgdGhlIHR3byBkYXRhIHNldHMuIA0KDQoNCg==</div>
 
 
 </div>

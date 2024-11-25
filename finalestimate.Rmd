@@ -316,6 +316,8 @@ net_array <- array(data = c(wave1, wave2), dim = c(dim(wave1), 2))
 
 ------------------------------------------------------------------------
 
+------------------------------------------------------------------------
+
 # Analysis - Model Estimation
 
 ## \<\> Model 0 - Null Model
@@ -550,7 +552,6 @@ not allow for reliable inferences. The 'same-covariate' measure (sameX)
 for gender is significantly positive (b = 0.6637, SE =0.2685). It
 reveals that scholars, indeed, prefer same-gender collaborators. This
 supports H1, which posits gender homophily in collaboration patterns.
-
 Model 2 provides strong evidence for gender homophily (H1), with
 scholars more likely to collaborate with same-gender peers, but no
 significant differences in collaboration tendencies based on the gender
@@ -647,28 +648,24 @@ plot(GOF_M2.1, main = "GOF - Model 2 \n Indegree Distribution")
 This model is partly similar to Model 2 but additionally holds the
 network statistics egoX and altX for the main effect of department, to
 investigate differences in same-gender collaboration patterns based on
-the two departments.
-
-Originally, I planned to also include an interaction term of departm_RS
-and gender_RS to obtain clearer insights into variations in patterns of
-gender homophily in relation to scholars' departments. However, I have
-refrained from adding another model to this project. I decided against
-this partly due to time constraints but I also reason that I can use the
-comparison of model 2 and 3 to examine changes in the estimate of
-'sameX' (gender), to *tentatively* infer whether the department of
-scholars modifies the collaboration patterns at hand.
+the two departments. Originally, I planned to also include an
+interaction term of departm_RS and gender_RS to obtain clearer insights
+into variations in patterns of gender homophily in relation to scholars'
+departments. However, I have refrained from adding another model to this
+project. I decided against this partly due to time constraints but I
+also reason that I can use the comparison of model 2 and 3 to examine
+changes in the estimate of 'sameX' (gender), to *tentatively* infer
+whether the department of scholars modifies the collaboration patterns
+at hand.
 
 Model 3 has a maximum convergence ratio of **0.182** and a Goodness of
-Fit on the indegree distribution of **0.108**.
-
-Interestingly, the estimate for outdegree (density) that had lost its
-significance in model 2, is now back to being significant and negative
-(b = -4.3233, SE = 1.0871).
-
-In terms of estimate size and significance of the structural network
-statistics we, once again, find similar patterns as in models 1 and 2.
-However, the outdegree parameter has now reached significance (b =
--4.3233, SE = 1.0871).
+Fit on the indegree distribution of **0.108**. Interestingly, the
+estimate for outdegree (density) that had lost its significance in model
+2, is now back to being significant and negative (b = -4.3233, SE =
+1.0871). In terms of estimate size and significance of the structural
+network statistics we, once again, find similar patterns as in models 1
+and 2. However, the outdegree parameter has now reached significance (b
+= -4.3233, SE = 1.0871).
 
 With regard to the network statistics of the covariate 'gender', we find
 that the estimates relating to the gender of an ego (egoX) and the
@@ -686,11 +683,10 @@ the estimates of these parameters are insignificant. However, we find a
 significantly positive estimate for the parameter of 'covariate-related
 identity' (sameX), which indicates that scholars are more likely to
 collaborate with people from their own department, indicating
-**department-based homophily**. (b = 2.7240, SE = 0.7277).
-
-Model 3 highlights persistent gender homophily (H1) across departments
-but does not provide evidence for differences in gender homophily
-between Sociology and Political Science, contrary to H2.
+**department-based homophily**. (b = 2.7240, SE = 0.7277). Model 3
+highlights persistent gender homophily (H1) across departments but does
+not provide evidence for differences in gender homophily between
+Sociology and Political Science, contrary to H2.
 
 ### ---Step 1: Define Siena Data & Variables
 
@@ -807,8 +803,7 @@ sender’s H-index (inPopX) we can assess whether a high h-index increases
 the likelihood of being sought out as a collaborator.
 
 Model 4 has a maximum convergence ratio of **0.23,** and a a Goodness of
-Fit on the indegree distribution of **0.197**.
-
+Fit on the indegree distribution of **0.197**. \
 **Structural network statistics.** The estimate for outdegree is
 negative but not significant. This suggests that, after accounting for
 other variables, the baseline likelihood of forming ties remains low and
@@ -822,16 +817,14 @@ receive many collaborations (indegree popularity) nor the tendency to
 initiate them (outdegree activity) is significantly relevant to the
 network structure. The network isolate estimate is, once again,
 significantly positive ( b = 5.4634, SE = 2.2770), indicating that as
-isolates tend to remain isolated.
-
+isolates tend to remain isolated.\
 **Gender.** Similar to AltX and EgoX in prior models, both an alter's
 gender (b = -0.0903, SE = 0.3372) and an ego's gender (b = 0.2993, SE =
 0.4934) still have insignificant effects. The parameter SameX shows a
 significant positive estimate (b = 0.6820, SE = 0.2804) which barely
 differs from the two prior models. This suggests that adding the
 covariate 'H-Index' did not prompt any major changes in scholars'
-preferences for same-gendered collaborators.
-
+preferences for same-gendered collaborators.\
 **Department.** While an alter's departmen**t** (AltX) remained
 insignificant to the collaboration patterns, the estimates for an ego's
 department changed incomparison to the prior model. In this model, egoX
@@ -842,15 +835,13 @@ department have a lower tendency to initiate collaborations than
 scholars from the sociology department (coded as 0).\
 Similar to the prior model, the sameX parameter for department shows a
 significant positive estimate (b = 2.6327, SE = 0.6080) scholars are
-still more likely to collaborate with others from the same department.
-
+still more likely to collaborate with others from the same department.\
 **H-Index**. Both an alter's and an ego's H-Index seem to be relevant in
 collaboration preferences. The significant and positive estimateof AltX
 (b = 0.0829, SE = 0.0364) suggest that scholars with higher h-index are
 more preferred as collaborators. The egoX estimate is significant and
 negative (b = -0.1591, SE = 0.0744) suggesting that scholars with higher
-h-index are less likely to initiate collaborations.
-
+h-index are less likely to initiate collaborations.\
 The results partially support **H4**, as the h-index is shown to
 influence collaboration patterns, with prestigious scholars being more
 likely to attract collaborations as alters but less likely to initiate

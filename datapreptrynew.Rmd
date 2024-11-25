@@ -256,7 +256,7 @@ fcolnet <- function(data = scholars, university = "RU", discipline = "sociology"
 ## Load data
 
 ```{r data}
-scholars <- fload("./data/processed/scholars_20240924.rda") #make sure to lead fload first ofcourse
+scholars <- fload("./data/processed/scholars_20240924.rda") 
 ```
 
 ```{r saving output}
@@ -268,23 +268,15 @@ test  <- fcolnet(data = scholars,
                 waves = list(c(2015, 2018), c(2019, 2023)), 
                 type = c("all")) # all, first, last # which ties in there
 
-# USE not all but first or last so the ties are directed from "perspective" of first author of the publications 
-# usually first most prestige
-
-
 ```
 
- note to self:look at publications website (sunbelt workshop) 
- 
-# Gender
 
-## saving data for each department 
-This part, despite being lengthy and principally unnecessary, needed to stay in my code for the sake of transparency. AFterall, this code is what accumulated in the gender-data of each department in my data set. 
+# Saving data 
+
+This part, despite being lengthy and principally unnecessary, needed to stay in my code for the sake of transparency. AFterall, this code and the following code on this page is what accumulated in the gender-data of each department in my data set. 
+
 
 ```{r}
-#inspecting scholars_20240924.rda object
-#df_ego <- do.call(rbind.data.frame, scholars$demographics)
-#unique(df_ego$discipline.22)
 
 # save the output of your function
 testsoc  <- fcolnet(data = scholars, 
@@ -301,7 +293,7 @@ testpolsci <- fcolnet(data = scholars,
                 type = c("first"))
 ```
 
-#### soc department save
+## Sociology Department
 
 ```{r}
 soc_nets <- testsoc$nets
@@ -338,7 +330,7 @@ df_ego_works <- testsoc$data$works
 
 ```
 
-#### polsci department save
+## Political Science Department
 
 ```{r}
 # dependent
@@ -373,7 +365,8 @@ df_pol_ego_works <- testpolsci$data$works
   # --> yes, the correct ones!!!
 ```
 
-### gender - sociology department
+# Gender
+### Sociology Department SCholars 
 
 ```{r gender s}
 df_soc_ego$Naam # list of all names in sociology department 
@@ -392,7 +385,7 @@ df_soc_ego$gender <- c(0,1,0,1,0,0,1,1,0,0,
 
 ```
 
-### gender - polsci
+### Politicla Science Scholars
 
 ```{r gender p}
 df_pol_ego$Naam # list of all names 
@@ -413,14 +406,14 @@ df_pol_ego$gender <- c(1,0,1,0,0,0,1,0,1,0,
 # fsave(df_pol_ego)
 ```
 
-### save gender data sets
+Save gender data
 
 ```{r gender data}
 soc_gender <- fload("./data/processed/df_soc_ego_20241105.rda")
 pol_gender <- fload("./data/processed/df_pol_ego_20241105.rda")
 ```
 
-### Combine data (gender)
+Combine data 
 
 ```{r combine gender set}
 df <- test$data # make dataset with all data 
@@ -485,8 +478,6 @@ view(df_ego[c('au_id','Naam','gender','h_index','i10_index')])
 
 ```
 
-Dichotomize h_index ?
-```{r dicho hindex}
-# idk if I should yet
-```
+Throughout my code I will use two data sets called "scholars_..." and called "ego_df_...". I am aware that it would be more convenient to use a single dataset as a fondation for many analyses. However, as I went down a few rabbit holes in trying to prepare my data, a lot of my code relied on either two fo these data frames. I had passed a 'point of no return' in terms of the data frames and files I generated as re-doing this part yielded in messing up most of the code for other parts of this project. Hence, the two data sets. 
+
 
