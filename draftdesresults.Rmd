@@ -194,6 +194,7 @@ f_pubnets <- function(df_scholars = df, list_publications = publications, discip
 ```
 
 More functions
+
 ```{r functions 2, echo=FALSE}
 fcolnet <- function(data = scholars, university = "RU", discipline = "sociology"+"political science", waves = list(c(2015,
     2018), c(2019, 2023)), type = c("first")) {
@@ -301,10 +302,11 @@ df_ego <- fload("./data/processed/df_ego_20241108.rda")
 
 ```
 
-
 # Descriptive Analysis
 
-[For Ego-level descriptives on gender and h-index, please consult the latter part of the Data & Analysis part of this final report]
+The network statistics, and descriptives, just as visualizations of the collaboration network can be found on this page. For Ego-level descriptives on gender and h-index, please consult the latter part of the Data & Analysis part of this final report.
+
+------------------------------------------------------------------------
 
 ## Network Description
 
@@ -312,10 +314,11 @@ The network data we are looking at pertains to 101 scholars and their publicatio
 
 In terms of triad-configurations, pertaining to the different possibilities three scholars could collaborate, we find that the most common one is no collaboration at all (configuration '003'). Beyond that, the configuration '012' is also common, meaning that only one directed edge is present in the triad. In our sample it is also common for such edge to be reciprocated, as seen in the third-highes-t count of the triad-configuration '102', a graph with a mutual connection between two vertices. Overall, the seems to be high number of isolates in the sample network.
 
-## Making graph object
+Degree centrality, often simply called 'degree', measures the number of connections a scholar, or ego, has with other scholars, known as alters. Here, we distinguish between two types of degrees: incoming connections (indegrees) and outgoing connections (outdegrees). Indegrees represent ties directed toward the ego, which in this case signify instances where the ego is **not** the primary author of a paper. Conversely, outdegrees represent ties originating from the ego, indicating collaborations where the ego assumes the role of the first author. From the histograms below we can already observe patterns of clustering in terms of scholars' publications, as only very few vertices have many infegrees, while most vertices have a low number of indegrees. Hence, there seems to be a skew in collaboration ties.
 
-```{r matrix data ego, echo=FALSE}
+**Making graph object**
 
+```{r matrix data ego}
 test_w1 <- igraph::graph_from_adjacency_matrix(
   test$nets[1,,], # first wave of data. 
   # (thus I select the array of networks and take the first matrix)
@@ -324,28 +327,27 @@ test_w1 <- igraph::graph_from_adjacency_matrix(
   diag = FALSE,
   add.colnames = NULL,
   add.rownames = NULL)
-
 ```
 
-## Nr. of nodes/vertices
+### Nr. of nodes/vertices
 
 ```{r nodes, echo=FALSE}
 vcount(test_w1)
 ```
 
-## Nr. of edges
+### Nr. of edges
 
 ```{r edges, echo=FALSE}
 ecount(test_w1)
 ```
 
-## Dyad census
+### Dyad census
 
 ```{r dyad cen, echo=FALSE}
 igraph::dyad_census(test_w1)
 ```
 
-## Triad-census
+### Triad-census
 
 ```{r triad cen, echo=FALSE}
 igraph::triad_census(test_w1)
@@ -399,16 +401,16 @@ o D, U, C
 
 -->
 ```
-## Edge-density
+### Edge-density
 
 ```{r edge dens, echo=FALSE}
 # edge density
 igraph::edge_density(test_w1)
 ```
 
-## Degree centrality
+### Degree centrality
 
-Degree centrality, often simply called 'degree', measures the number of connections a scholar, or ego, has with other scholars, known as alters. Here, we distinguish between two types of degrees: incoming connections (indegrees) and outgoing connections (outdegrees). Indegrees represent ties directed toward the ego, which in this case signify instances where the ego is **not** the primary author of a paper. Conversely, outdegrees represent ties originating from the ego, indicating collaborations where the ego assumes the role of the first author.
+(with isolates)
 
 ```{r degree, echo=FALSE}
 # Calculate degree centrality
@@ -441,9 +443,7 @@ ggplot(degree_testw1, aes(x = as.numeric(degree_testw1))) +
 
 <!-- ylim was 65 at some point priot due to one higher bar, I wonder what changed since... -->
 
-The indegree distribution is right-skewed. This suggests that only very few vertices have many infegrees, and that most vertices have a low number of indegrees.
-
-## Betweenness Centrality
+### Betweenness Centrality
 
 (with isolates)
 
@@ -476,7 +476,9 @@ ggplot(betweenness_w1, aes(as.numeric(betweenness_w1), colour = as.numeric(betwe
 
 ```
 
-## Clustering
+### Clustering
+
+(with isolates)
 
 ```{r, echo=FALSE}
 # Clustering the wave 
@@ -505,4 +507,106 @@ ggplot(clustering_w1, aes(x = as.numeric(clustering_w1))) +
   ) + guides(fill = "none")  # Remove the legend (since all bars are the same color)
 
 ```
-## Network Plots 
+
+------------------------------------------------------------------------
+
+## Network Visualization (WITHOUT isolates)
+
+The isolates of the network have been removed to allow for a better readability of the graphs. Only vertices with edges remain part of the visualizations. In other words, only scholars with collaborations are seen in the following graphs. It should be noted that this may make the graphs look different and potentially makes the networks seems more well connected than they actually are. Nonetheless, some things stand out upon first glance. Consult the texts below for a more detailed description.
+
+**Removing isolates** Remaining edges and vertices:
+
+```{r removing isolates, echo=FALSE}
+indegr_w1 <- igraph::degree(test_w1, mode = "in")
+
+isolates_w1 <- V(test_w1)[degree(test_w1, mode = "all") == 0]
+
+noisolates_w1 <- delete_vertices(test_w1, isolates_w1)
+
+gsize(noisolates_w1) # edges
+gorder(noisolates_w1) # vertices 
+```
+
+### Gender
+
+```{r plot wo isolates, echo=FALSE}
+plot(noisolates_w1,
+  vertex.color = ifelse(df_ego$gender == 1, "#80B1D3", "#FFED6F"), # now, I can use actor attributes for plotting.
+  # here: if gender = 1 (aka man) then blue dot, if not then yellow
+  vertex.label = NA,
+  vertex.size = 9,
+  vertex.frame.color = "black",
+  edge.curved = 0.1,
+  edge.arrow.size = 0.5,
+  edge.color = "#999999",
+  edge.width = 0.5,
+  main = "Network without isolates [yellow = female, blue = male]",
+  asp=0)
+```
+
+In this network visualization yellow nodes represent women, while blue nodes represent men. We find some clusters of blue nodes, which suggests that clustering based on scholars' gender might be present in their collaboration preferences. However, these patterns do not stand out as drastically as they could upon first glance.
+
+### Gender & Department (indegree)
+
+```{r without iso gender per dep old code, echo=FALSE}
+# assign gender to scholar
+V(test_w1)$gender <- df_ego$gender
+
+# assign disciplines to scholars
+V(test_w1)$discipline <- df_ego$discipline.24
+V(test_w1)$indegree <- indegr_w1
+
+
+# remove isolates
+noisolates_w1 <- delete_vertices(test_w1, V(test_w1)[degree(test_w1) == 0])
+
+p_noisgender <- ggraph(noisolates_w1, layout = "fr") + geom_edge_link(end_cap = circle(4, 'mm'),color = "#D9D9D9", width = 0.7, arrow = arrow(length = unit(2, "mm")), type = "closed") +
+    geom_node_point(aes(size = indegree, color = as.factor(discipline), shape = as.factor(gender))) +
+    scale_size(range = c(3, 10)) + theme_void() +   theme(
+    plot.background = element_rect(fill = "#2d2d2d", color = NA),  # Dark background
+    panel.background = element_rect(fill = "#2d2d2d", color = NA),
+    text = element_text(color = "#f0f0f0")  # White text
+  )
+
+p_noisgender + labs(title = "Departments without isolates", subtitle = "Plot of indegree and gender",
+    caption = "Gender: 0 = female, 1 = male.\n Data refer to scholars from Radboud University.") + theme(plot.title = element_text(hjust = 0.5, face = "bold", color = "#f0f0f0"), plot.subtitle = element_text(hjust = 0.5, color = "#f0f0f0"), plot.caption = element_text(hjust = 1, color = "#f0f0f0"))
+```
+
+In the graph above, the size of a node represents their indegree, the color represents their belonging to a department (red = political science, blue = sociology), and the shape represents the gender (circle = woman, triangle = man). Focusing on department, represented by the colors, we can see a clear difference between the indegrees of the two departments. However, there seems to be very few scholars of the political science department in the non-isolate network to begin with. This may explain some of the later findings.
+
+### Gender & H-index (indegree)
+
+```{r dark g&h without iso, echo=FALSE}
+#assign gender to scholar 
+V(test_w1)$gender <- df_ego$gender
+
+# assign h-index to scholar
+V(test_w1)$h_index <- df_ego$h_index
+V(test_w1)$indegree <- indegr_w1
+
+
+#remove isolates
+noisolates_w1 <- delete_vertices(test_w1, V(test_w1)[degree(test_w1) == 0])
+
+p_noisogender <- ggraph(noisolates_w1,
+  layout = "fr") +
+  geom_edge_link(end_cap = circle(3, 'mm'),color = "#D9D9D9", width = 0.7, arrow = arrow(length = unit(1.75, "mm"), type = "closed")) +  # Darker edge color
+  geom_node_point(aes(size = indegree, color = h_index, shape = as.factor(gender))) +   
+  scale_size(range = c(3, 10)) + 
+  scale_color_gradient(low = "#F6222E", high = "#3283FE") +  # Retain original gradient
+  theme_void() +
+  theme(
+    plot.background = element_rect(fill = "#2d2d2d", color = NA),  # Dark background
+    panel.background = element_rect(fill = "#2d2d2d", color = NA),
+    text = element_text(color = "#f0f0f0")  # White text
+  )
+
+p_noisogender + labs(title = "Network without isolates",
+        subtitle = "Plot of indegree, H-index and gender",
+        caption = "Gender: 0 = female, 1 = male.\n Data refer to: Scholars RU sociology and political science departments.") +   
+  theme(plot.title = element_text(hjust = 0.5, face = "bold", color = "#f0f0f0"), plot.subtitle = element_text(hjust = 0.5, color = "#f0f0f0"), plot.caption = element_text(hjust = 1, color = "#f0f0f0"))
+
+
+```
+
+In this graph, the colour gradient from blue to red indicates the prestige of a scholar, with blue marking the highest h-index and red marking the lowest. The size represents the indegrees that node has, which refers to the number of collaboration that other scholars initiated with this scholar within the time span of 2015-2018. The shape represents scholars' gender with triangles representing men and circles representing women. With regard to H-index, we observe that the nodes with colors that are more blue are simultaneously also the biggest ones, indicating that scholars with high H-Indeces also have more indegrees and that clustering may be present based on scholars' prestige. In terms of gender difference, we see that those aformentioned nodes are also mostly triangular in shape, which signals that the men in this non-isolate sample seem to have an overall higher h-index and high number of indegress. This implies that clustering in collaborations is present and seems to relate to both scholars' prestige and gender.

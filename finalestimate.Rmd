@@ -5,21 +5,27 @@ date: "2024-11-23"
 output: html_document
 bibliography: references.bib
 csl: apa.csl
+editor_options: 
+  markdown: 
+    wrap: 72
 ---
-```{=html}
-<style>
-body {
-text-align: left;
-line-height: 1.5;
-}
 
-h1, .h1, h2, .h2, h3, .h3 {
-  margin-top: 24px;
-  line-height: 1;
-}
+<html lang="en">
 
-</style>
-```
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>My Models</title>
+
+<link rel="stylesheet" href="styles.css">
+<!-- Link to the CSS file I created for dark mode code chunks -->
+
+</head>
+
+</html>
 
 ```{r, globalsettings, echo=FALSE, warning=FALSE, results='hide'}
 library(knitr)
@@ -44,3 +50,908 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```
 
+# Setup
+
+Clean workspace. As always.
+
+```{r clean, echo=FALSE}
+rm(list = ls())
+```
+
+## Packages
+
+```{r package, include=TRUE, echo=FALSE, eval=TRUE}
+require(tidyverse)
+require(RSiena)
+require(RsienaTwoStep)
+
+#install.packages("data.table")
+require(data.table)  # mainly for faster data handling
+# install.packages('xml2')
+require(xml2)
+# install.packages('rvest')
+require(rvest)
+require(igraph)
+require(ggraph)
+
+
+#install.packages('visNetwork')
+require(visNetwork)
+#install.packages('threejs')
+require(threejs)
+#install.packages('networkD3')
+require(networkD3)
+
+
+```
+
+## Functions
+
+```{r functions 1, echo=FALSE}
+fpackage.check <- function(packages) {
+    lapply(packages, FUN = function(x) {
+        if (!require(x, character.only = TRUE)) {
+            install.packages(x, dependencies = TRUE)
+            library(x, character.only = TRUE)
+        }
+    })
+}
+
+fsave <- function(x, file = NULL, location = "./data/processed/") {
+    ifelse(!dir.exists("data"), dir.create("data"), FALSE)
+    ifelse(!dir.exists("data/processed"), dir.create("data/processed"), FALSE)
+    if (is.null(file))
+        file = deparse(substitute(x))
+    datename <- substr(gsub("[:-]", "", Sys.time()), 1, 8)
+    totalname <- paste(location, file, "_", datename, ".rda", sep = "")
+    save(x, file = totalname)  #need to fix if file is reloaded as input name, not as x. 
+}
+
+fload <- function(filename) {
+    load(filename)
+    get(ls()[ls() != "filename"])
+}
+
+fshowdf <- function(x, ...) {
+    knitr::kable(x, digits = 2, "html", ...) %>%
+        kableExtra::kable_styling(bootstrap_options = c("striped", "hover")) %>%
+        kableExtra::scroll_box(width = "100%", height = "300px")
+}
+
+
+# this is the most important one. We created it in the previous script
+
+f_pubnets <- function(df_scholars = df, list_publications = publications, discip = "sociology"+"political science", affiliation = "RU",
+    waves = list(wave1 = c(2018, 2019, 2020), wave2 = c(2021, 2022, 2023))) {
+
+    publications <- list_publications %>%
+        bind_rows() %>%
+        distinct(title, .keep_all = TRUE)
+
+    df_scholars %>%
+        filter(affil1 == affiliation | affil2 == affiliation) %>%
+        filter(discipline == discip) -> df_sel
+
+    networklist <- list()
+    for (wave in 1:length(waves)) {
+        networklist[[wave]] <- matrix(0, nrow = nrow(df_sel), ncol = nrow(df_sel))
+    }
+
+    publicationlist <- list()
+    for (wave in 1:length(waves)) {
+        publicationlist[[wave]] <- publications %>%
+            filter(gs_id %in% df_sel$gs_id) %>%
+            filter(year %in% waves[[wave]]) %>%
+            select(author) %>%
+            lapply(str_split, pattern = ",")
+    }
+
+    publicationlist2 <- list()
+    for (wave in 1:length(waves)) {
+        publicationlist2[[wave]] <- publicationlist[[wave]]$author %>%
+            # lowercase
+        lapply(tolower) %>%
+            # Removing diacritics
+        lapply(stri_trans_general, id = "latin-ascii") %>%
+            # only last name
+        lapply(word, start = -1, sep = " ") %>%
+            # only last last name
+        lapply(word, start = -1, sep = "-")
+    }
+
+    for (wave in 1:length(waves)) {
+        # let us remove all publications with only one author
+        remove <- which(sapply(publicationlist2[[wave]], FUN = function(x) length(x) == 1) == TRUE)
+        publicationlist2[[wave]] <- publicationlist2[[wave]][-remove]
+    }
+
+    for (wave in 1:length(waves)) {
+        pubs <- publicationlist2[[wave]]
+        for (ego in 1:nrow(df_sel)) {
+            # which ego?
+            lastname_ego <- df_sel$lastname[ego]
+            # for all publications
+            for (pub in 1:length(pubs)) {
+                # only continue if ego is author of pub
+                if (lastname_ego %in% pubs[[pub]]) {
+                  aut_pot <- which.max(pubs[[pub]] %in% lastname_ego)
+                  # only continue if ego is first author of pub
+                  if (aut_pot == 1) {
+                    # check all alters/co-authors
+                    for (alter in 1:nrow(df_sel)) {
+                      # which alter
+                      lastname_alter <- df_sel$lastname[alter]
+                      if (lastname_alter %in% pubs[[pub]]) {
+                        networklist[[wave]][ego, alter] <- networklist[[wave]][ego, alter] + 1
+                      }
+                    }
+                  }
+                }
+            }
+        }
+    }
+    return(list(df = df_sel, network = networklist))
+}
+
+```
+
+```{r functions 2, echo=FALSE}
+fcolnet <- function(data = scholars, university = "RU", discipline = "sociology"+"political science", waves = list(c(2015,
+    2018), c(2019, 2023)), type = c("first")) {
+
+    # step 1
+    demographics <- do.call(rbind.data.frame, data$demographics)
+    demographics <- demographics %>%
+        mutate(Universiteit1.22 = replace(Universiteit1.22, is.na(Universiteit1.22), ""), Universiteit2.22 = replace(Universiteit2.22,
+            is.na(Universiteit2.22), ""), Universiteit1.24 = replace(Universiteit1.24, is.na(Universiteit1.24),
+            ""), Universiteit2.24 = replace(Universiteit2.24, is.na(Universiteit2.24), ""), discipline.22 = replace(discipline.22,
+            is.na(discipline.22), ""), discipline.24 = replace(discipline.24, is.na(discipline.24), ""))
+
+    sample <- which((demographics$Universiteit1.22 %in% university | demographics$Universiteit2.22 %in%
+        university | demographics$Universiteit1.24 %in% university | demographics$Universiteit2.24 %in%
+        university) & (demographics$discipline.22 %in% discipline | demographics$discipline.24 %in% discipline))
+
+    demographics_soc <- demographics[sample, ]
+    scholars_sel <- lapply(scholars, "[", sample)
+
+    # step 2
+    ids <- demographics_soc$au_id
+    nwaves <- length(waves)
+    nets <- array(0, dim = c(nwaves, length(ids), length(ids)), dimnames = list(wave = 1:nwaves, ids,
+        ids))
+    dimnames(nets)
+
+    # step 3
+    df_works <- tibble(works_id = unlist(lapply(scholars_sel$work, function(l) l$id)), works_author = unlist(lapply(scholars_sel$work,
+        function(l) l$author), recursive = FALSE), works_year = unlist(lapply(scholars_sel$work, function(l) l$publication_year),
+        recursive = FALSE))
+
+    df_works <- df_works[!duplicated(df_works), ]
+
+    # step 4
+    if (type == "first") {
+        for (j in 1:nwaves) {
+            df_works_w <- df_works[df_works$works_year >= waves[[j]][1] & df_works$works_year <= waves[[j]][2],
+                ]
+            for (i in 1:nrow(df_works_w)) {
+                ego <- df_works_w$works_author[i][[1]]$au_id[1]
+                alters <- df_works_w$works_author[i][[1]]$au_id[-1]
+                if (sum(ids %in% ego) > 0 & sum(ids %in% alters) > 0) {
+                  nets[j, which(ids %in% ego), which(ids %in% alters)] <- 1
+                }
+            }
+        }
+    }
+
+    if (type == "last") {
+        for (j in 1:nwaves) {
+            df_works_w <- df_works[df_works$works_year >= waves[[j]][1] & df_works$works_year <= waves[[j]][2],
+                ]
+            for (i in 1:nrow(df_works_w)) {
+                ego <- rev(df_works_w$works_author[i][[1]]$au_id)[1]
+                alters <- rev(df_works_w$works_author[i][[1]]$au_id)[-1]
+                if (sum(ids %in% ego) > 0 & sum(ids %in% alters) > 0) {
+                  nets[j, which(ids %in% ego), which(ids %in% alters)] <- 1
+                }
+            }
+        }
+    }
+
+    if (type == "all") {
+        for (j in 1:nwaves) {
+            df_works_w <- df_works[df_works$works_year >= waves[[j]][1] & df_works$works_year <= waves[[j]][2],
+                ]
+            for (i in 1:nrow(df_works_w)) {
+                egos <- df_works_w$works_author[i][[1]]$au_id
+                if (sum(ids %in% egos) > 0) {
+                  nets[j, which(ids %in% egos), which(ids %in% egos)] <- 1
+                }
+            }
+        }
+    }
+    output <- list()
+    output$data <- scholars_sel
+    output$nets <- nets
+    return(output)
+}
+```
+
+## Get Data
+
+Load Scholar Data
+
+```{r scholar data}
+scholars <- fload("./data/processed/scholars_20240924.rda") 
+```
+
+Save the output of the function.
+
+```{r saving output}
+# save the output of your function
+test  <- fcolnet(data = scholars, 
+                university = "RU", 
+                discipline = c("sociology", "political science"),
+                waves = list(c(2015, 2018), c(2019, 2023)), 
+                type = c("first"))
+```
+
+Load Ego Data
+
+```{r df_ego data, include= FALSE}
+df_ego <- fload("./data/processed/df_ego_20241108.rda")
+
+```
+
+# Make Network Data
+
+```{r RSiena network data}
+#step1 data
+wave1 <- test$nets[1,,]
+wave2 <- test$nets[2,,]
+
+# put nets in an array
+net_array <- array(data = c(wave1, wave2), dim = c(dim(wave1), 2))
+
+```
+
+------------------------------------------------------------------------
+
+# Analysis - Model Estimation
+
+## \<\> Model 0 - Null Model
+
+First, I estimated a null model with only reciprocity and degree. The
+maximum convergence ratio of the model is 0.084. The GOF on the Indegree
+Distribution is zero**.** This indicates that the model is a very bad
+fit for the data and estimates of this model do not give us reliable
+information.\
+\
+*For all GOF plots compiled in one place, see here:
+<https://treesdude.github.io/labjournal/finalGOF.html>.*
+
+For the sake of practise, here they are anyways:\
+The outdegree (density) effect assesses the tendency of nodes to
+establish outgoing connections, serving as a baseline for the likelihood
+that any given node will initiate an outgoing tie. In the context of
+this study, these outgoing ties represent the initiation of
+co-publications. The outdegree estimate is significant and negative (b =
+-2.6388, SE = 0.1460), suggesting that a scholar's tendency to initiate
+collaboration is low and dense networks are less sought after. The
+reciprocity parameter id significant and positive (b = 1.8035, SE =
+0.4343), which implies that directed ties are likely to be reciprocated.
+Specific to our case, it describes that scholars tend to initiate
+collaborations with those alters who sent a tie to them too.
+
+### ---Step 1: Define Siena Data & Variables
+
+```{r RSiena define m0}
+# dependent variable 
+nets <- sienaDependent(net_array)
+
+# define data object 
+mydata_M0 <- sienaDataCreate(nets)
+
+```
+
+Print short descriptive report
+
+```{r}
+ifelse(!dir.exists("results"), dir.create("results"), FALSE)
+
+```
+
+```{r}
+print01Report(mydata_M0, modelname = "./results/results_M0") # create file with report in results folder 
+```
+
+### ---Step 2: Make effects object/structure
+
+```{r RSiena myeff M0}
+# define effects structure 
+myeff_M0 <- getEffects(mydata_M0)
+
+```
+
+### ---Step 3: Add Effects
+
+Null model: none.
+
+### ---Step 4: Specify model/algorithm
+
+```{r algo M0}
+
+myAlgorithm_M0 <- sienaAlgorithmCreate (projname = "results_M0")
+
+```
+
+### ---Step 5: Estimate model
+
+```{r estimate M0, eval=FALSE}
+# estimate the model 
+Model0 <- siena07(myAlgorithm_M0, data = mydata_M0, effects = myeff_M0, returnDeps = TRUE)
+Model0
+
+fsave(Model0, file ="estimated_M0")
+```
+
+```{r load M0 output, echo=FALSE}
+Model0 <- fload("./data/processed/estimated_M0_20241123.rda")
+Model0
+```
+
+```{r GOF M0}
+GOF_M0 <- sienaGOF(Model0, IndegreeDistribution, verbose = FALSE, join = TRUE, varName = "nets")
+
+plot(GOF_M0, main = 'GOF - "Null" Model 0 \n Indegree Distribution')
+```
+
+------------------------------------------------------------------------
+
+## \<\> Model 1 - Structural Effects
+
+This model additionally entails InPop, outAct, isolateNet to control for
+effects of network statistics. The maximum convergence ratio of this
+model is **0.17** and a Goodness of Fit on the indegree distribution is
+**0.002.** Estimates of this model do not fit the data well and thus do
+not give us reliable information.
+
+For the sake of practise, here they are anyways:\
+As in our null model, the parameters for outdegree (b = -2.0862, SE =
+0.7050) and reciprocity (b = 1.0894, SE = 0.4144) remain significant and
+unchanged on their 'direction'. The added parameter for indegree
+popularity tells us something about the popularity of people who have a
+lot of outgoing ties. In our model the estimate for this parameter is
+significantly positive (b =0.2549, SE =0.0439), suggesting that scholars
+specifically like to initiate collaborations with those who have a lot
+of indegrees.
+
+Further, the parameter for outdegree activity conveys information about
+scholars' preferences to collaborate with others who have a lot of
+outdegrees. In our case, the estimate is insignificant and cannot be
+reliably interpreted. Lastly, the network isolate parameter can be used
+to infer about scholars' tendency to neither send nor receive ties. The
+estimate for this parameter is significantly positive (b = 4.9645, SE =
+1.1146) in our model, indicating that the scholars of our sample tend to
+remain isolates.
+
+### ---Step 1: Define Siena Data & Variables
+
+```{r RSiena define M1}
+# dependent variable 
+nets <- sienaDependent(net_array)
+
+# define data object 
+mydata_M1 <- sienaDataCreate(nets)
+
+```
+
+```{r, echo=FALSE}
+# make folder 
+ifelse(!dir.exists("results"), dir.create("results"), FALSE)
+
+```
+
+```{r,echo=FALSE}
+#Print short descriptive report
+print01Report(mydata_M1, modelname = "./results/results_M1") 
+```
+
+### ---Step 2: Make effects object/structure
+
+```{r RSiena myeff m1}
+# define effects structure 
+myeff_M1 <- getEffects(mydata_M1)
+
+```
+
+### ---Step 3: Add Effects
+
+```{r effects m1}
+
+myeff_M1 <- includeEffects(myeff_M1, isolateNet, inPop, outAct)
+
+```
+
+### ---Step 4: Specify model/algorithm
+
+```{r algo m1}
+
+myAlgorithm_M1 <- sienaAlgorithmCreate (projname = "results_M1")
+
+```
+
+### ---Step 5: Estimate model
+
+```{r estimate m1, eval = FALSE}
+# estimate the model 
+Model1 <- siena07(myAlgorithm_M1, data = mydata_M1, effects = myeff_M1, returnDeps = TRUE)
+Model1
+# maximum convergence >.25
+# run again:
+Model1.1 <- siena07(myAlgorithm_M1, data = mydata_M1, effects = myeff_M1, prevAns= Model1, returnDeps = TRUE)
+Model1.1
+
+#fsave(Model1, file ="estimated_M1")
+#fsave(Model1.1, file = "estimated_M1.1")
+
+```
+
+```{r load M1 output, echo=FALSE}
+
+Model1 <- fload("./data/processed/estimated_M1_20241123.rda")
+Model1
+
+Model1.1 <- fload("./data/processed/estimated_M1.1_20241123.rda")
+Model1.1
+```
+
+### ---Step 6: GOF - Goodness of Fit
+
+```{r GOF M1}
+GOF_M1.1 <- sienaGOF(Model1.1, IndegreeDistribution, verbose = FALSE, join = TRUE, varName = "nets")
+
+plot(GOF_M1.1, main = "GOF - Model 1 \n Indegree Distribution")
+```
+
+------------------------------------------------------------------------
+
+## \<\> Model 2 - Gender
+
+This model is partly similar to Model 1 but additionally holds the
+network statistics sameX, diffXTransTrip, egoX & altX of the covariate
+gender. EgoX and AltX ought to indicate whether male or female scholars
+are more likely to initiate or receive ties, while sameX models the
+general tendency for scholars to collaborate with same-gender peers. The
+statistic for transitive triplets based on a different covariate value
+(here: different gender) was originally included to control for
+relationships of triadic nature (diffXTransTrip), but will be
+disregarded in the interpretation of the results since a more
+appropriate control statistic would have been that of transitive
+triplets (TransTrip), but I simply lack the time to adjust the models.
+
+The maximum convergence ratio for model 2 is **0.132** and the Goodness
+of Fit on the indegree distribution is **0.096**. Looking at our
+'base-line' network statistics, it is noteworthy that the estimate for
+Outdegree is not significant anymore. This statistic's prior
+significance can seemingly be explained by a parameter relating to the
+covariate gender that I added to this model. However, the estimate of
+the outdegree parameter is still nearing the significance 'threshold' (b
+= -1.8628, SE = 1.1060, b/SE = -1.684268).
+
+Comparing this model to the prior ones, we see that the reciprocity
+estimate is still significantly positive (b = 1.3341, SE = 0.4543). The
+parameters of the structural network statistics also show similar
+patterns in estimates and significance as they did in model 1.
+Concerning the added covariate "gender", we find that the parameter
+estimates for both covariate-related activity (egoX) , pertaining to the
+gender of the ego, and covariate-related popularity (altX), relating to
+the gender of the alter, do **not** show any significance and hence do
+not allow for reliable inferences. The 'same-covariate' measure (sameX)
+for gender is significantly positive (b = 0.6637, SE =0.2685). It
+reveals that scholars, indeed, prefer same-gender collaborators. This
+supports H1, which posits gender homophily in collaboration patterns.
+
+Model 2 provides strong evidence for gender homophily (H1), with
+scholars more likely to collaborate with same-gender peers, but no
+significant differences in collaboration tendencies based on the gender
+of ego or alter.
+
+### ---Step 1: Define Siena Data & Variables
+
+```{r RSiena define m2}
+# dependent variable 
+nets <- sienaDependent(net_array)
+
+# put gender in object 
+gender <- df_ego$gender
+
+# covariate 1
+gender_RS <- coCovar(gender) # gender as covariate in Rsiena
+
+# define data object 
+mydata_M2 <- sienaDataCreate(nets, gender_RS)
+
+```
+
+Print short descriptive report
+
+```{r, echo=FALSE}
+ifelse(!dir.exists("results"), dir.create("results"), FALSE)
+
+```
+
+```{r, echo=FALSE}
+print01Report(mydata_M2, modelname = "./results/results_M2") # create file with report in results folder 
+```
+
+### ---Step 2: Make effects object/structure
+
+```{r RSiena myeff m2}
+# define effects structure 
+myeff_M2 <- getEffects(mydata_M2)
+```
+
+### ---Step 3: Add Effects
+
+```{r effects m2}
+myeff_M2 <- includeEffects(myeff_M2, isolateNet, inPop, outAct) 
+
+myeff_M2 <- includeEffects(myeff_M2, egoX, altX, diffXTransTrip, sameX, interaction1 = "gender_RS") 
+```
+
+### ---Step 4: Specify model/algorithm
+
+```{r algo m2}
+
+myAlgorithm_M2 <- sienaAlgorithmCreate (projname = "results_M2")
+
+```
+
+### ---Step 5: Estimate model
+
+```{r estimate m2, eval =FALSE}
+# estimate the model 
+Model2 <- siena07(myAlgorithm_M2, data = mydata_M2, effects = myeff_M2, returnDeps = TRUE)
+Model2
+# maximum convergence >.25
+# run again:
+Model2.1 <- siena07(myAlgorithm_M2, data = mydata_M2, effects = myeff_M2, prevAns= Model2, returnDeps = TRUE)
+Model2.1 
+
+#fsave(Model2, file ="estimated_M2")
+#fsave(Model2.1, file = "estimated_M2.1")
+
+```
+
+```{r load M2 output, echo=FALSE}
+
+Model2 <- fload("./data/processed/estimated_M2_20241123.rda")
+Model2
+
+Model2.1 <- fload ("./data/processed/estimated_M2.1_20241123.rda")
+Model2.1
+```
+
+### ---Step 6: GOF - Goodness of Fit
+
+```{r GOF M2}
+GOF_M2.1 <- sienaGOF(Model2.1, IndegreeDistribution, verbose = FALSE, join = TRUE, varName = "nets")
+
+plot(GOF_M2.1, main = "GOF - Model 2 \n Indegree Distribution")
+```
+
+------------------------------------------------------------------------
+
+## \<\> Model 3 - Department
+
+This model is partly similar to Model 2 but additionally holds the
+network statistics egoX and altX for the main effect of department, to
+investigate differences in same-gender collaboration patterns based on
+the two departments.
+
+Originally, I planned to also include an interaction term of departm_RS
+and gender_RS to obtain clearer insights into variations in patterns of
+gender homophily in relation to scholars' departments. However, I have
+refrained from adding another model to this project. I decided against
+this partly due to time constraints but I also reason that I can use the
+comparison of model 2 and 3 to examine changes in the estimate of
+'sameX' (gender), to *tentatively* infer whether the department of
+scholars modifies the collaboration patterns at hand.
+
+Model 3 has a maximum convergence ratio of **0.182** and a Goodness of
+Fit on the indegree distribution of **0.108**.
+
+Interestingly, the estimate for outdegree (density) that had lost its
+significance in model 2, is now back to being significant and negative
+(b = -4.3233, SE = 1.0871).
+
+In terms of estimate size and significance of the structural network
+statistics we, once again, find similar patterns as in models 1 and 2.
+However, the outdegree parameter has now reached significance (b =
+-4.3233, SE = 1.0871).
+
+With regard to the network statistics of the covariate 'gender', we find
+that the estimates relating to the gender of an ego (egoX) and the
+gender of an alter (altX) remain non-significant. The parameter
+estimates for sameX remains significantly positive (b = 0.6632, SE =
+0.2623) and are almost identical to those of model 2 (b = 0.6632, SE =
+0.2623). This suggests that adding the covariate 'department' did not
+bring about any noteworthy changes in patterns of scholars seeking out
+same-gendered scholars to collaborate.
+
+When it comes to the parameters pertaining to the added covariate
+'department', we find that any differences in collaboration based on the
+department of an ego (egoX) or of an alter (altX) are not warranted, as
+the estimates of these parameters are insignificant. However, we find a
+significantly positive estimate for the parameter of 'covariate-related
+identity' (sameX), which indicates that scholars are more likely to
+collaborate with people from their own department, indicating
+**department-based homophily**. (b = 2.7240, SE = 0.7277).
+
+Model 3 highlights persistent gender homophily (H1) across departments
+but does not provide evidence for differences in gender homophily
+between Sociology and Political Science, contrary to H2.
+
+### ---Step 1: Define Siena Data & Variables
+
+```{r RSiena define m3}
+# dependent variable 
+nets <- sienaDependent(net_array)
+
+# put gender in object 
+gender <- df_ego$gender
+
+# covariate 1
+gender_RS <- coCovar(gender) # gender as covariate in Rsiena
+
+#put department in object 
+department <- factor(df_ego$discipline.24, levels = c("sociology", "political science"))
+#make numeric
+department_numeric <- as.numeric(department) - 1 # sociology = 0, political science = 1
+# covariate 2
+departm_RS <- coCovar(department_numeric)
+
+# define data object 
+mydata_M3 <- sienaDataCreate(nets, gender_RS, departm_RS)
+
+```
+
+```{r, echo=FALSE}
+#create folder
+ifelse(!dir.exists("results"), dir.create("results"), FALSE)
+
+```
+
+```{r, echo=FALSE}
+#Print short descriptive report
+print01Report(mydata_M3, modelname = "./results/results_M3") #
+```
+
+### ---Step 2: Make effects object/structure
+
+```{r RSiena myeff m3}
+# define effects structure 
+myeff_M3 <- getEffects(mydata_M3)
+```
+
+### ---Step 3: Add Effects
+
+```{r effects m3}
+myeff_M3 <- includeEffects(myeff_M3, isolateNet, inPop, outAct) # model 1
+
+myeff_M3 <- includeEffects(myeff_M3, egoX, altX, diffXTransTrip, sameX, interaction1 = "gender_RS") #model 2
+
+myeff_M3 <- includeEffects(myeff_M3, egoX, altX, sameX, interaction1 = "departm_RS") #model 3
+
+```
+
+### ---Step 4: Specify model/algorithm
+
+```{r algo m3}
+
+myAlgorithm_M3 <- sienaAlgorithmCreate (projname = "results_M3")
+
+```
+
+### ---Step 5: Estimate model
+
+```{r estimate m3, eval =FALSE}
+# estimate the model 
+Model3 <- siena07(myAlgorithm_M3, data = mydata_M3, effects = myeff_M3, returnDeps = TRUE)
+Model3
+
+#if maximum convergence >.25: run again
+Model3.1 <- siena07(myAlgorithm_M3, data = mydata_M3, effects = myeff_M3, prevAns= Model3, returnDeps = TRUE)
+Model3.1 
+
+#fsave(Model3, file ="estimated_M3")
+#fsave(Model3.1, file = "estimated_M3.1")
+
+```
+
+```{r load M3 output, echo=FALSE}
+
+Model3 <- fload("./data/processed/estimated_M3_20241123.rda")
+Model3
+
+Model3.1 <- fload ("./data/processed/estimated_M3.1_20241123.rda")
+Model3.1
+```
+
+### ---Step 6: GOF - Goodness of Fit
+
+```{r GOF M3}
+GOF_M3.1 <- sienaGOF(Model3.1 , IndegreeDistribution, verbose = FALSE, join = TRUE, varName = "nets")
+
+plot(GOF_M3.1, main = "GOF - Model 3 \n Indegree Distribution")
+```
+
+------------------------------------------------------------------------
+
+## \<\> Model 4 - H-Index
+
+This model further builds on the prior model and also includes network
+statistics of the covariate H-Index, namely egoX, altX and inPopX. By
+adding these effects we can model how the h-index of a scholar
+influences their preferences regarding same-gendered collaborations.
+Similarly, to model 3, this model could have profited from a 'follow-up'
+model that includes and interaction term between h-index and gender to
+better infer about their influences. The same reasoning for my decision
+to stick with one model prior also applies to this case. EgoX for this
+covariate examines how the h-index of a scholar affects their
+collaboration behavior, while AltX examines how the h-index of potential
+collaborators affects their attractiveness as partners. With the help of
+these effects we can test prestigious scholars are more likely to
+initiate or receive ties. By looking at in-degree popularity weighted by
+sender’s H-index (inPopX) we can assess whether a high h-index increases
+the likelihood of being sought out as a collaborator.
+
+Model 4 has a maximum convergence ratio of **0.23,** and a a Goodness of
+Fit on the indegree distribution of **0.197**.
+
+**Structural network statistics.** The estimate for outdegree is
+negative but not significant. This suggests that, after accounting for
+other variables, the baseline likelihood of forming ties remains low and
+is not a major driver of collaboration patterns. Reciprocity has a
+significant positive estimate (b = 2.1770, SE = 0.5960). This reflects a
+strong tendency for mutual collaborations, meaning if one scholar
+collaborates with another, the latter is likely to collaborate back
+(dyadic reciprocity). The paramters Indegree Popularity and Outdegree
+Activity are both insignificant, suggesting that neither the tendency to
+receive many collaborations (indegree popularity) nor the tendency to
+initiate them (outdegree activity) is significantly relevant to the
+network structure. The network isolate estimate is, once again,
+significantly positive ( b = 5.4634, SE = 2.2770), indicating that as
+isolates tend to remain isolated.
+
+**Gender.** Similar to AltX and EgoX in prior models, both an alter's
+gender (b = -0.0903, SE = 0.3372) and an ego's gender (b = 0.2993, SE =
+0.4934) still have insignificant effects. The parameter SameX shows a
+significant positive estimate (b = 0.6820, SE = 0.2804) which barely
+differs from the two prior models. This suggests that adding the
+covariate 'H-Index' did not prompt any major changes in scholars'
+preferences for same-gendered collaborators.
+
+**Department.** While an alter's departmen**t** (AltX) remained
+insignificant to the collaboration patterns, the estimates for an ego's
+department changed incomparison to the prior model. In this model, egoX
+seems to be of significant relevance (b = -1.4652, SE = 0.6963), with
+its negative estimate indicating that, once effects of h-index are
+controlled for, scholars from the political science (coded as 1)
+department have a lower tendency to initiate collaborations than
+scholars from the sociology department (coded as 0).\
+Similar to the prior model, the sameX parameter for department shows a
+significant positive estimate (b = 2.6327, SE = 0.6080) scholars are
+still more likely to collaborate with others from the same department.
+
+**H-Index**. Both an alter's and an ego's H-Index seem to be relevant in
+collaboration preferences. The significant and positive estimateof AltX
+(b = 0.0829, SE = 0.0364) suggest that scholars with higher h-index are
+more preferred as collaborators. The egoX estimate is significant and
+negative (b = -0.1591, SE = 0.0744) suggesting that scholars with higher
+h-index are less likely to initiate collaborations.
+
+The results partially support **H4**, as the h-index is shown to
+influence collaboration patterns, with prestigious scholars being more
+likely to attract collaborations as alters but less likely to initiate
+them as egos. However, gender homophily remains significant even after
+controlling for the h-index, suggesting that prestige does not
+substantially weaken the influence of gender homophily in co-authorship
+networks.
+
+### ---Step 1: Define Siena Data & Variables
+
+```{r RSiena define m4}
+# dependent variable 
+nets <- sienaDependent(net_array)
+
+# put gender in object 
+gender <- df_ego$gender
+# covariate 1
+gender_RS <- coCovar(gender) # gender as covariate in Rsiena
+
+#put department in object 
+department <- factor(df_ego$discipline.24, levels = c("sociology", "political science"))
+#make numeric
+department_numeric <- as.numeric(department) - 1 # sociology = 0, political science = 1
+# covariate 2
+departm_RS <- coCovar(department_numeric)
+
+# put h-index in object 
+h_index <- df_ego$h_index
+df_ego$h_index
+# covariate 3
+h_index_RS <- coCovar(h_index) # h_index as covariate in RSiena
+
+# define data object 
+mydata_M4 <- sienaDataCreate(nets, gender_RS, departm_RS, h_index_RS)
+
+```
+
+```{r, echo=FALSE}
+#create folder
+ifelse(!dir.exists("results"), dir.create("results"), FALSE)
+
+```
+
+```{r, echo=FALSE}
+#Print short descriptive report
+print01Report(mydata_M4, modelname = "./results/results_M4") 
+```
+
+### ---Step 2: Make effects object/structure
+
+```{r RSiena myeff M4}
+
+# define effects structure 
+myeff_M4 <- getEffects(mydata_M4)
+
+```
+
+### ---Step 3: Add Effects
+
+```{r effects M4}
+
+myeff_M4 <- includeEffects(myeff_M4, isolateNet, inPop, outAct) # model 1
+
+myeff_M4 <- includeEffects(myeff_M4, egoX, altX, diffXTransTrip, sameX, interaction1 = "gender_RS") #model 2
+
+myeff_M4 <- includeEffects(myeff_M4, egoX, altX, sameX, interaction1 = "departm_RS") #model 3
+  
+myeff_M4 <- includeEffects(myeff_M4, egoX, altX, inPopX, interaction1 = "h_index_RS") # model 4
+
+```
+
+### ---Step 4: Specify model/algorithm
+
+```{r algo M4}
+
+myAlgorithm_M4 <- sienaAlgorithmCreate (projname = "results_M4")
+
+```
+
+### ---Step 5: Estimate model
+
+```{r estimate M4, eval =FALSE}
+# estimate the model 
+Model4 <- siena07(myAlgorithm_M4, data = mydata_M4, effects = myeff_M4, returnDeps = TRUE)
+Model4
+
+#fsave(Model4, file ="estimated_M4")
+
+```
+
+```{r load M4 output, echo=FALSE}
+
+Model4 <- fload("./data/processed/estimated_M4_20241123.rda")
+Model4
+
+```
+
+### ---Step 6: GOF - Goodness of Fit
+
+```{r GOF M4}
+GOF_M4 <- sienaGOF(Model4, IndegreeDistribution, verbose = FALSE, join = TRUE, varName = "nets")
+
+plot(GOF_M4, main = "GOF - Model 4 \n Indegree Distribution")
+```

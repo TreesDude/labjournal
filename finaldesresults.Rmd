@@ -6,20 +6,22 @@ output: html_document
 bibliography: references.bib
 csl: apa.csl
 ---
-```{=html}
-<style>
-body {
-text-align: left;
-line-height: 1.5;
-}
 
-h1, .h1, h2, .h2, h3, .h3 {
-  margin-top: 24px;
-  line-height: 1;
-}
+<html lang="en">
 
-</style>
-```
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>My Descriptive Results</title>
+
+<link rel="stylesheet" href="styles.css"> <!-- Link to the CSS file I created for dark mode code chunks -->
+
+</head>
+
+</html>
 
 ```{r, globalsettings, echo=FALSE, warning=FALSE, results='hide'}
 library(knitr)
@@ -43,3 +45,530 @@ klippy::klippy(position = c('top', 'right'))
 knitr::opts_chunk$set(echo = TRUE)
 
 ```
+
+# Getting started
+
+```{r clean, echo=FALSE}
+rm(list = ls())
+```
+
+## Packages
+
+```{r package, hide=TRUE, echo=FALSE}
+require(tidyverse)
+require(RSiena)
+require(RsienaTwoStep)
+
+#install.packages("data.table")
+require(data.table)  # mainly for faster data handling
+# install.packages('xml2')
+require(xml2)
+# install.packages('rvest')
+require(rvest)
+require(igraph)
+require(ggraph)
+require(ggplot2)
+
+
+#install.packages('visNetwork')
+require(visNetwork)
+#install.packages('threejs')
+require(threejs)
+#install.packages('networkD3')
+require(networkD3)
+
+require(RColorBrewer)
+
+
+```
+
+## Functions
+
+Functions chunk
+
+```{r functions 1, echo=FALSE}
+fpackage.check <- function(packages) {
+    lapply(packages, FUN = function(x) {
+        if (!require(x, character.only = TRUE)) {
+            install.packages(x, dependencies = TRUE)
+            library(x, character.only = TRUE)
+        }
+    })
+}
+
+fsave <- function(x, file = NULL, location = "./data/processed/") {
+    ifelse(!dir.exists("data"), dir.create("data"), FALSE)
+    ifelse(!dir.exists("data/processed"), dir.create("data/processed"), FALSE)
+    if (is.null(file))
+        file = deparse(substitute(x))
+    datename <- substr(gsub("[:-]", "", Sys.time()), 1, 8)
+    totalname <- paste(location, file, "_", datename, ".rda", sep = "")
+    save(x, file = totalname)  #need to fix if file is reloaded as input name, not as x. 
+}
+
+fload <- function(filename) {
+    load(filename)
+    get(ls()[ls() != "filename"])
+}
+
+fshowdf <- function(x, ...) {
+    knitr::kable(x, digits = 2, "html", ...) %>%
+        kableExtra::kable_styling(bootstrap_options = c("striped", "hover")) %>%
+        kableExtra::scroll_box(width = "100%", height = "300px")
+}
+
+
+# this is the most important one. We created it in the previous script
+
+f_pubnets <- function(df_scholars = df, list_publications = publications, discip = "sociology"+"political science", affiliation = "RU",
+    waves = list(wave1 = c(2018, 2019, 2020), wave2 = c(2021, 2022, 2023))) {
+
+    publications <- list_publications %>%
+        bind_rows() %>%
+        distinct(title, .keep_all = TRUE)
+
+    df_scholars %>%
+        filter(affil1 == affiliation | affil2 == affiliation) %>%
+        filter(discipline == discip) -> df_sel
+
+    networklist <- list()
+    for (wave in 1:length(waves)) {
+        networklist[[wave]] <- matrix(0, nrow = nrow(df_sel), ncol = nrow(df_sel))
+    }
+
+    publicationlist <- list()
+    for (wave in 1:length(waves)) {
+        publicationlist[[wave]] <- publications %>%
+            filter(gs_id %in% df_sel$gs_id) %>%
+            filter(year %in% waves[[wave]]) %>%
+            select(author) %>%
+            lapply(str_split, pattern = ",")
+    }
+
+    publicationlist2 <- list()
+    for (wave in 1:length(waves)) {
+        publicationlist2[[wave]] <- publicationlist[[wave]]$author %>%
+            # lowercase
+        lapply(tolower) %>%
+            # Removing diacritics
+        lapply(stri_trans_general, id = "latin-ascii") %>%
+            # only last name
+        lapply(word, start = -1, sep = " ") %>%
+            # only last last name
+        lapply(word, start = -1, sep = "-")
+    }
+
+    for (wave in 1:length(waves)) {
+        # let us remove all publications with only one author
+        remove <- which(sapply(publicationlist2[[wave]], FUN = function(x) length(x) == 1) == TRUE)
+        publicationlist2[[wave]] <- publicationlist2[[wave]][-remove]
+    }
+
+    for (wave in 1:length(waves)) {
+        pubs <- publicationlist2[[wave]]
+        for (ego in 1:nrow(df_sel)) {
+            # which ego?
+            lastname_ego <- df_sel$lastname[ego]
+            # for all publications
+            for (pub in 1:length(pubs)) {
+                # only continue if ego is author of pub
+                if (lastname_ego %in% pubs[[pub]]) {
+                  aut_pot <- which.max(pubs[[pub]] %in% lastname_ego)
+                  # only continue if ego is first author of pub
+                  if (aut_pot == 1) {
+                    # check all alters/co-authors
+                    for (alter in 1:nrow(df_sel)) {
+                      # which alter
+                      lastname_alter <- df_sel$lastname[alter]
+                      if (lastname_alter %in% pubs[[pub]]) {
+                        networklist[[wave]][ego, alter] <- networklist[[wave]][ego, alter] + 1
+                      }
+                    }
+                  }
+                }
+            }
+        }
+    }
+    return(list(df = df_sel, network = networklist))
+}
+
+```
+
+More functions
+
+```{r functions 2, echo=FALSE}
+fcolnet <- function(data = scholars, university = "RU", discipline = "sociology"+"political science", waves = list(c(2015,
+    2018), c(2019, 2023)), type = c("first")) {
+
+    # step 1
+    demographics <- do.call(rbind.data.frame, data$demographics)
+    demographics <- demographics %>%
+        mutate(Universiteit1.22 = replace(Universiteit1.22, is.na(Universiteit1.22), ""), Universiteit2.22 = replace(Universiteit2.22,
+            is.na(Universiteit2.22), ""), Universiteit1.24 = replace(Universiteit1.24, is.na(Universiteit1.24),
+            ""), Universiteit2.24 = replace(Universiteit2.24, is.na(Universiteit2.24), ""), discipline.22 = replace(discipline.22,
+            is.na(discipline.22), ""), discipline.24 = replace(discipline.24, is.na(discipline.24), ""))
+
+    sample <- which((demographics$Universiteit1.22 %in% university | demographics$Universiteit2.22 %in%
+        university | demographics$Universiteit1.24 %in% university | demographics$Universiteit2.24 %in%
+        university) & (demographics$discipline.22 %in% discipline | demographics$discipline.24 %in% discipline))
+
+    demographics_soc <- demographics[sample, ]
+    scholars_sel <- lapply(scholars, "[", sample)
+
+    # step 2
+    ids <- demographics_soc$au_id
+    nwaves <- length(waves)
+    nets <- array(0, dim = c(nwaves, length(ids), length(ids)), dimnames = list(wave = 1:nwaves, ids,
+        ids))
+    dimnames(nets)
+
+    # step 3
+    df_works <- tibble(works_id = unlist(lapply(scholars_sel$work, function(l) l$id)), works_author = unlist(lapply(scholars_sel$work,
+        function(l) l$author), recursive = FALSE), works_year = unlist(lapply(scholars_sel$work, function(l) l$publication_year),
+        recursive = FALSE))
+
+    df_works <- df_works[!duplicated(df_works), ]
+
+    # step 4
+    if (type == "first") {
+        for (j in 1:nwaves) {
+            df_works_w <- df_works[df_works$works_year >= waves[[j]][1] & df_works$works_year <= waves[[j]][2],
+                ]
+            for (i in 1:nrow(df_works_w)) {
+                ego <- df_works_w$works_author[i][[1]]$au_id[1]
+                alters <- df_works_w$works_author[i][[1]]$au_id[-1]
+                if (sum(ids %in% ego) > 0 & sum(ids %in% alters) > 0) {
+                  nets[j, which(ids %in% ego), which(ids %in% alters)] <- 1
+                }
+            }
+        }
+    }
+
+    if (type == "last") {
+        for (j in 1:nwaves) {
+            df_works_w <- df_works[df_works$works_year >= waves[[j]][1] & df_works$works_year <= waves[[j]][2],
+                ]
+            for (i in 1:nrow(df_works_w)) {
+                ego <- rev(df_works_w$works_author[i][[1]]$au_id)[1]
+                alters <- rev(df_works_w$works_author[i][[1]]$au_id)[-1]
+                if (sum(ids %in% ego) > 0 & sum(ids %in% alters) > 0) {
+                  nets[j, which(ids %in% ego), which(ids %in% alters)] <- 1
+                }
+            }
+        }
+    }
+
+    if (type == "all") {
+        for (j in 1:nwaves) {
+            df_works_w <- df_works[df_works$works_year >= waves[[j]][1] & df_works$works_year <= waves[[j]][2],
+                ]
+            for (i in 1:nrow(df_works_w)) {
+                egos <- df_works_w$works_author[i][[1]]$au_id
+                if (sum(ids %in% egos) > 0) {
+                  nets[j, which(ids %in% egos), which(ids %in% egos)] <- 1
+                }
+            }
+        }
+    }
+    output <- list()
+    output$data <- scholars_sel
+    output$nets <- nets
+    return(output)
+}
+```
+
+## Load data
+
+Scholar data
+
+```{r scholar data,echo=FALSE}
+scholars <- fload("./data/processed/scholars_20240924.rda") 
+#make sure to lead fload first of course
+```
+
+```{r saving scholar output,echo=FALSE}
+# save the output of your function
+
+test  <- fcolnet(data = scholars, 
+                university = "RU", 
+                discipline = c("sociology", "political science"),
+                waves = list(c(2015, 2018), c(2019, 2023)), 
+                type = c("first"))
+```
+
+Ego data
+
+```{r df_ego data,echo=FALSE}
+df_ego <- fload("./data/processed/df_ego_20241108.rda")
+
+```
+
+---
+---
+---
+
+# Descriptive Analysis
+
+The network statistics, and descriptives, just as visualizations of the collaboration network can be found on this page. For Ego-level descriptives on gender and h-index, please consult the latter part of the Data & Analysis part of this final report.
+
+------------------------------------------------------------------------
+
+## Network Description
+
+The network data we are looking at pertains to 101 scholars and their publications. In the time frame of the wave at hand, namely form 2015 to 2018, we find 47 edges, with 6 reciprocated collaborations 36 ties that are asymmetric. Additionally, there were 5009 occasions in which a ties could have been made but was not. The edge density of 0.004 suggests that from all possible edges, this sample contains relatively few.
+
+In terms of triad-configurations, pertaining to the different possibilities three scholars could collaborate, we find that the most common one is no collaboration at all (configuration '003'). Beyond that, the configuration '012' is also common, meaning that only one directed edge is present in the triad. In our sample it is also common for such edge to be reciprocated, as seen in the third-highes-t count of the triad-configuration '102', a graph with a mutual connection between two vertices. Overall, the seems to be high number of isolates in the sample network.
+
+Degree centrality, often simply called 'degree', measures the number of connections a scholar, or ego, has with other scholars, known as alters. Here, we distinguish between two types of degrees: incoming connections (indegrees) and outgoing connections (outdegrees). Indegrees represent ties directed toward the ego, which in this case signify instances where the ego is **not** the primary author of a paper. Conversely, outdegrees represent ties originating from the ego, indicating collaborations where the ego assumes the role of the first author. From the histograms below we can already observe patterns of clustering in terms of scholars' publications, as only very few vertices have many infegrees, while most vertices have a low number of indegrees. Hence, there seems to be a skew in collaboration ties.
+
+**Making graph object**
+
+```{r matrix data ego}
+test_w1 <- igraph::graph_from_adjacency_matrix(
+  test$nets[1,,], # first wave of data. 
+  # (thus I select the array of networks and take the first matrix)
+  mode = c("directed"),
+  weighted = NULL,
+  diag = FALSE,
+  add.colnames = NULL,
+  add.rownames = NULL)
+```
+
+### Nr. of nodes/vertices
+
+```{r nodes, echo=FALSE}
+vcount(test_w1)
+```
+
+### Nr. of edges
+
+```{r edges, echo=FALSE}
+ecount(test_w1)
+```
+
+### Dyad census
+
+```{r dyad cen, echo=FALSE}
+igraph::dyad_census(test_w1)
+```
+
+### Triad-census
+
+```{r triad cen, echo=FALSE}
+igraph::triad_census(test_w1)
+```
+
+### Edge-density
+
+```{r edge dens, echo=FALSE}
+# edge density
+igraph::edge_density(test_w1)
+```
+
+### Degree centrality
+
+(with isolates)
+
+```{r degree, echo=FALSE}
+# Calculate degree centrality
+degree_testw1 <- degree(test_w1)
+degree_testw1 <- as.data.frame(degree_testw1)
+
+ggplot(degree_testw1, aes(x = as.numeric(degree_testw1))) +
+  geom_histogram(binwidth = 0.9, fill = "#FFFFB3", color = "black") +  
+  labs(
+    title = "Distribution Degrees Wave 1",
+    x = "Distribution of Degrees",
+    y = "Count"
+  ) +
+  ylim(0, 15) +  # Set y-axis limits 
+  theme_minimal(base_family = "Arial") +  # Minimal, clean base theme
+  theme(
+    plot.background = element_rect(fill = "#2d2d2d", color = NA),  # Dark background
+    panel.background = element_rect(fill = "#2d2d2d", color = NA),  # Dark panel background
+    panel.grid.major = element_line(color = "#444444"),  # Subtle grid lines
+    panel.grid.minor = element_line(color = "#444444"),
+    axis.text = element_text(color = "#f0f0f0"),  # White axis text
+    axis.title = element_text(color = "#f0f0f0", face = "bold"),  # Bold white axis titles
+    plot.title = element_text(color = "#f0f0f0", face = "bold", hjust = 0.5),  # White centered title
+    legend.background = element_rect(fill = "#2d2d2d", color = NA),  # Dark legend background
+    legend.text = element_text(color = "#f0f0f0")  # White legend text
+  ) +
+  guides(fill = "none")  # Remove the legend
+
+```
+
+<!-- ylim was 65 at some point priot due to one higher bar, I wonder what changed since... -->
+
+### Betweenness Centrality
+
+(with isolates)
+
+```{r betweenness, echo=FALSE}
+# Calculate betweenness centrality
+betweenness_w1 <- igraph::betweenness(test_w1, directed = TRUE)
+betweenness_w1 <- as.data.frame(betweenness_w1)
+
+
+ggplot(betweenness_w1, aes(as.numeric(betweenness_w1), colour = as.numeric(betweenness_w1))) +
+  geom_histogram(binwidth = 1.2, fill = "#FFFFB3") +
+  labs(
+    title = "Distribution Betweenness Wave 1",
+    x = "Distribution of Betweenness",
+    y = "Count") +
+   theme_minimal(base_family = "Arial") +  # Minimal, clean base theme
+  theme(
+    plot.background = element_rect(fill = "#2d2d2d", color = NA),  # Dark background
+    panel.background = element_rect(fill = "#2d2d2d", color = NA),  # Dark panel background
+    panel.grid.major = element_line(color = "#444444"),  # Subtle grid lines
+    panel.grid.minor = element_line(color = "#444444"),
+    axis.text = element_text(color = "#f0f0f0"),  # White axis text
+    axis.title = element_text(color = "#f0f0f0", face = "bold"),  # Bold white axis titles
+    plot.title = element_text(color = "#f0f0f0", face = "bold", hjust = 0.5),  # White centered title
+    legend.background = element_rect(fill = "#2d2d2d", color = NA),  # Dark legend background
+    legend.text = element_text(color = "#f0f0f0")  # White legend text
+  ) +
+  guides(fill = guide_legend(title = "Betweenness (rounded)"))  # Customize legend
+
+
+```
+
+### Clustering
+
+(with isolates)
+
+```{r, echo=FALSE}
+# Clustering the wave 
+clustering_w1 <- igraph::transitivity(test_w1, type = "local")
+clustering_w1 <- as.data.frame(clustering_w1)
+
+# Generate the dark mode plot with a single color fill
+ggplot(clustering_w1, aes(x = as.numeric(clustering_w1))) +
+   geom_histogram(binwidth = 0.05, fill = "#FFFFB3", color = "black", position = "dodge") +  
+  labs(
+    title = "Distribution Clustering Wave 1",
+    x = "Distribution of Clustering",
+    y = "Count"
+  ) +
+  theme_minimal(base_family = "Arial") +  # Clean, minimal base theme
+  theme(
+    plot.background = element_rect(fill = "#2d2d2d", color = NA),  # Dark background
+    panel.background = element_rect(fill = "#2d2d2d", color = NA),  # Dark panel background
+    panel.grid.major = element_line(color = "#444444"),  # Subtle grid lines
+    panel.grid.minor = element_line(color = "#444444"),
+    axis.text = element_text(color = "#f0f0f0"),  # White axis text
+    axis.title = element_text(color = "#f0f0f0", face = "bold"),  # Bold white axis titles
+    plot.title = element_text(color = "#f0f0f0", face = "bold", hjust = 0.5),  # White centered title
+    legend.background = element_rect(fill = "#2d2d2d", color = NA),  # Dark legend background
+    legend.text = element_text(color = "#f0f0f0")  # White legend text
+  ) + guides(fill = "none")  # Remove the legend (since all bars are the same color)
+
+```
+
+------------------------------------------------------------------------
+
+## Network Visualization (WITHOUT isolates)
+
+The isolates of the network have been removed to allow for a better readability of the graphs. Only vertices with edges remain part of the visualizations. In other words, only scholars with collaborations are seen in the following graphs. It should be noted that this may make the graphs look different and potentially makes the networks seems more well connected than they actually are. Nonetheless, some things stand out upon first glance. Consult the texts below for a more detailed description.
+
+**Removing isolates**
+
+```{r removing isolates, echo=TRUE}
+indegr_w1 <- igraph::degree(test_w1, mode = "in")
+
+isolates_w1 <- V(test_w1)[degree(test_w1, mode = "all") == 0]
+
+noisolates_w1 <- delete_vertices(test_w1, isolates_w1)
+
+```
+
+Remaining edges and vertices:
+
+```{r, echo=FALSE}
+gsize(noisolates_w1) # edges
+gorder(noisolates_w1) # vertices
+```
+
+### Gender
+
+```{r plot wo isolates, echo=FALSE}
+plot(noisolates_w1,
+  vertex.color = ifelse(df_ego$gender == 1, "#80B1D3", "#FFED6F"), # now, I can use actor attributes for plotting.
+  # here: if gender = 1 (aka man) then blue dot, if not then yellow
+  vertex.label = NA,
+  vertex.size = 9,
+  vertex.frame.color = "black",
+  edge.curved = 0.1,
+  edge.arrow.size = 0.5,
+  edge.color = "#999999",
+  edge.width = 0.5,
+  main = "Network without isolates [yellow = female, blue = male]",
+  asp=0)
+```
+
+In this network visualization yellow nodes represent women, while blue nodes represent men. We find some clusters of blue nodes, which suggests that clustering based on scholars' gender might be present in their collaboration preferences. However, these patterns do not stand out as drastically as they could upon first glance.
+
+### Gender & Department (indegree)
+
+```{r without iso gender per dep old code, echo=FALSE}
+# assign gender to scholar
+V(test_w1)$gender <- df_ego$gender
+
+# assign disciplines to scholars
+V(test_w1)$discipline <- df_ego$discipline.24
+V(test_w1)$indegree <- indegr_w1
+
+
+# remove isolates
+noisolates_w1 <- delete_vertices(test_w1, V(test_w1)[degree(test_w1) == 0])
+
+p_noisgender <- ggraph(noisolates_w1, layout = "fr") + geom_edge_link(end_cap = circle(4, 'mm'),color = "#D9D9D9", width = 0.7, arrow = arrow(length = unit(2, "mm")), type = "closed") +
+    geom_node_point(aes(size = indegree, color = as.factor(discipline), shape = as.factor(gender))) +
+    scale_size(range = c(3, 10)) + theme_void() +   theme(
+    plot.background = element_rect(fill = "#2d2d2d", color = NA),  # Dark background
+    panel.background = element_rect(fill = "#2d2d2d", color = NA),
+    text = element_text(color = "#f0f0f0")  # White text
+  )
+
+p_noisgender + labs(title = "Departments without isolates", subtitle = "Plot of indegree and gender",
+    caption = "Gender: 0 = female, 1 = male.\n Data refer to scholars from Radboud University.") + theme(plot.title = element_text(hjust = 0.5, face = "bold", color = "#f0f0f0"), plot.subtitle = element_text(hjust = 0.5, color = "#f0f0f0"), plot.caption = element_text(hjust = 1, color = "#f0f0f0"))
+```
+
+In the graph above, the size of a node represents their indegree, the color represents their belonging to a department (red = political science, blue = sociology), and the shape represents the gender (circle = woman, triangle = man). Focusing on department, represented by the colors, we can see a clear difference between the indegrees of the two departments. However, there seems to be very few scholars of the political science department in the non-isolate network to begin with. This may explain some of the later findings.
+
+### Gender & H-index (indegree)
+
+```{r dark g&h without iso, echo=FALSE}
+#assign gender to scholar 
+V(test_w1)$gender <- df_ego$gender
+
+# assign h-index to scholar
+V(test_w1)$h_index <- df_ego$h_index
+V(test_w1)$indegree <- indegr_w1
+
+
+#remove isolates
+noisolates_w1 <- delete_vertices(test_w1, V(test_w1)[degree(test_w1) == 0])
+
+p_noisogender <- ggraph(noisolates_w1,
+  layout = "fr") +
+  geom_edge_link(end_cap = circle(3, 'mm'),color = "#D9D9D9", width = 0.7, arrow = arrow(length = unit(1.75, "mm"), type = "closed")) +  # Darker edge color
+  geom_node_point(aes(size = indegree, color = h_index, shape = as.factor(gender))) +   
+  scale_size(range = c(3, 10)) + 
+  scale_color_gradient(low = "#F6222E", high = "#3283FE") +  # Retain original gradient
+  theme_void() +
+  theme(
+    plot.background = element_rect(fill = "#2d2d2d", color = NA),  # Dark background
+    panel.background = element_rect(fill = "#2d2d2d", color = NA),
+    text = element_text(color = "#f0f0f0")  # White text
+  )
+
+p_noisogender + labs(title = "Network without isolates",
+        subtitle = "Plot of indegree, H-index and gender",
+        caption = "Gender: 0 = female, 1 = male.\n Data refer to: Scholars RU sociology and political science departments.") +   
+  theme(plot.title = element_text(hjust = 0.5, face = "bold", color = "#f0f0f0"), plot.subtitle = element_text(hjust = 0.5, color = "#f0f0f0"), plot.caption = element_text(hjust = 1, color = "#f0f0f0"))
+
+
+```
+
+In this graph, the colour gradient from blue to red indicates the prestige of a scholar, with blue marking the highest h-index and red marking the lowest. The size represents the indegrees that node has, which refers to the number of collaboration that other scholars initiated with this scholar within the time span of 2015-2018. The shape represents scholars' gender with triangles representing men and circles representing women. With regard to H-index, we observe that the nodes with colors that are more blue are simultaneously also the biggest ones, indicating that scholars with high H-Indeces also have more indegrees and that clustering may be present based on scholars' prestige. In terms of gender difference, we see that those aformentioned nodes are also mostly triangular in shape, which signals that the men in this non-isolate sample seem to have an overall higher h-index and high number of indegress. This implies that clustering in collaborations is present and seems to relate to both scholars' prestige and gender.

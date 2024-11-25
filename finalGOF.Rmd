@@ -106,12 +106,12 @@ The GOF measures of Indegree Distribution for the null model (*p* = .008) and mo
 
 # Model 0
 
-```{r, hide = TRUE}
+```{r, hide = TRUE, echo=FALSE}
 Model0.1 <- fload("./data/processed/estimated_M0.1_20241123.rda")
 Model0.1
 ```
 
-```{r GOF M0, hide = TRUE}
+```{r GOF M0, hide = TRUE,echo=FALSE}
 GOF_M0.1 <- sienaGOF(Model0.1, IndegreeDistribution, verbose = FALSE, join = TRUE, varName = "nets")
 
 plot(GOF_M0.1, main = 'GOF - "Null" Model 0.1 \n Indegree Distribution')
@@ -121,12 +121,12 @@ plot(GOF_M0.1, main = 'GOF - "Null" Model 0.1 \n Indegree Distribution')
 
 # Model 1
 
-```{r, hide = TRUE}
+```{r, hide = TRUE, echo=FALSE}
 Model1.1 <- fload("./data/processed/estimated_M1.1_20241123.rda")
 
 ```
 
-```{r GOF M1, hide = TRUE}
+```{r GOF M1, hide = TRUE, echo=FALSE}
 GOF_M1.1 <- sienaGOF(Model1.1, IndegreeDistribution, verbose = FALSE, join = TRUE, varName = "nets")
 
 plot(GOF_M1.1, main = "GOF - Model 1 \n Indegree Distribution")
@@ -134,12 +134,12 @@ plot(GOF_M1.1, main = "GOF - Model 1 \n Indegree Distribution")
 
 # Model 2
 
-```{r, hide = TRUE}
+```{r, hide = TRUE, echo=FALSE}
 Model2.1 <- fload ("./data/processed/estimated_M2.1_20241123.rda")
 Model2.1
 ```
 
-```{r GOF M2, hide = TRUE}
+```{r GOF M2, hide = TRUE, echo=FALSE}
 GOF_M2.1 <- sienaGOF(Model2.1, IndegreeDistribution, verbose = FALSE, join = TRUE, varName = "nets")
 
 plot(GOF_M2.1, main = "GOF - Model 2 \n Indegree Distribution")
@@ -147,11 +147,11 @@ plot(GOF_M2.1, main = "GOF - Model 2 \n Indegree Distribution")
 
 # Model 3
 
-```{r, hide=TRUE}
+```{r, hide=TRUE, echo=FALSE}
 Model3 <- fload("./data/processed/estimated_M3_20241123.rda")
 ```
 
-```{r GOF M3, hide=TRUE}
+```{r GOF M3, hide=TRUE, echo=FALSE}
 GOF_M3 <- sienaGOF(Model3, IndegreeDistribution, verbose = FALSE, join = TRUE, varName = "nets")
 
 plot(GOF_M3, main = "GOF - Model 3 \n Indegree Distribution")
@@ -159,11 +159,11 @@ plot(GOF_M3, main = "GOF - Model 3 \n Indegree Distribution")
 
 # Model 4
 
-```{r, hide=TRUE}
+```{r, hide=TRUE, echo=FALSE}
 Model4 <- fload("./data/processed/estimated_M4_20241123.rda")
 ```
 
-```{r GOF M4, hide=TRUE}
+```{r GOF M4, hide=TRUE, echo=FALSE}
 GOF_M4 <- sienaGOF(Model4, IndegreeDistribution, verbose = FALSE, join = TRUE, varName = "nets")
 
 plot(GOF_M4, main = "GOF - Model 4 \n Indegree Distribution")

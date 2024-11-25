@@ -6,7 +6,7 @@ Filename is ./results/results_M3.txt.
 
 This file contains primary output for SIENA project <<./results/results_M3>>.
 
-Date and time: 23/11/2024 22:44:42 
+Date and time: 25/11/2024 16:41:16 
 
 RSiena version 1.4.7 (20 02 2024)
 
