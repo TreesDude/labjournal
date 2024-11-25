@@ -1,6 +1,6 @@
 ---
 title: "Model Estimation"
-author: "Verooo"
+author: "Vero Palm"
 date: "2024-11-23"
 output: html_document
 bibliography: references.bib

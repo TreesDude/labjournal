@@ -32,6 +32,9 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ![](images/you-krilled-him.jpg)
 
+Oh no, a *kriller* is on the loose!
+
+
 ```{r}
 # start with clean workspace
 rm(list = ls())
