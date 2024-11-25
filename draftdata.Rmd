@@ -390,7 +390,6 @@ table(df_ego$gender)
 ```
 
 Histogram: overall gender distribution in sample
-
 ```{r histogram gender, echo=FALSE}
 # Convert gender to a factor to avoid errors
 df_ego$gender <- as.factor(df_ego$gender)
@@ -425,14 +424,13 @@ ggplot(df_ego, aes(x = gender, fill = gender)) +
 ```
 
 Genders per department (0 = female, 1 = male)
-
 ```{r gender per dep., echo=FALSE}
-   
 # Wave 1: Gender count per department 
 table(df_ego$discipline.24, df_ego$gender)
 ```
 
-## H index - Ego level
+
+## H-Index - Ego level
 
 Descriptives (mean, distribution, etc.)
 

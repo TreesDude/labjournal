@@ -22,6 +22,7 @@ csl: apa.csl
 </head>
 
 </html>
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
@@ -46,13 +47,13 @@ klippy::klippy(position = c('top', 'right'))
 
 # Getting started
 
-```{r clean, hide =TRUE}
+```{r clean, echo=FALSE}
 rm(list = ls())
 ```
 
 ## Packages
 
-```{r package, hide=TRUE, results='hide'}
+```{r package, hide=TRUE, echo=FALSE}
 require(tidyverse)
 require(RSiena)
 require(RsienaTwoStep)
@@ -84,7 +85,7 @@ require(RColorBrewer)
 
 Functions chunk
 
-```{r functions 1, hide =TRUE, results = 'hide' }
+```{r functions 1, echo=FALSE}
 fpackage.check <- function(packages) {
     lapply(packages, FUN = function(x) {
         if (!require(x, character.only = TRUE)) {
@@ -193,8 +194,7 @@ f_pubnets <- function(df_scholars = df, list_publications = publications, discip
 ```
 
 More functions
-
-```{r functions 2, hide=TRUE, results ='hide'}
+```{r functions 2, echo=FALSE}
 fcolnet <- function(data = scholars, university = "RU", discipline = "sociology"+"political science", waves = list(c(2015,
     2018), c(2019, 2023)), type = c("first")) {
 
@@ -279,12 +279,12 @@ fcolnet <- function(data = scholars, university = "RU", discipline = "sociology"
 
 Scholar data
 
-```{r scholar data}
+```{r scholar data,echo=FALSE}
 scholars <- fload("./data/processed/scholars_20240924.rda") 
 #make sure to lead fload first of course
 ```
 
-```{r saving scholar output}
+```{r saving scholar output,echo=FALSE}
 # save the output of your function
 
 test  <- fcolnet(data = scholars, 
@@ -296,12 +296,25 @@ test  <- fcolnet(data = scholars,
 
 Ego data
 
-```{r df_ego data}
+```{r df_ego data,echo=FALSE}
 df_ego <- fload("./data/processed/df_ego_20241108.rda")
 
 ```
 
-```{r matrix data ego}
+
+# Descriptive Analysis
+
+[For Ego-level descriptives on gender and h-index, please consult the latter part of the Data & Analysis part of this final report]
+
+## Network Description
+
+The network data we are looking at pertains to 101 scholars and their publications. In the time frame of the wave at hand, namely form 2015 to 2018, we find 47 edges, with 6 reciprocated collaborations 36 ties that are asymmetric. Additionally, there were 5009 occasions in which a ties could have been made but was not. The edge density of 0.004 suggests that from all possible edges, this sample contains relatively few.
+
+In terms of triad-configurations, pertaining to the different possibilities three scholars could collaborate, we find that the most common one is no collaboration at all (configuration '003'). Beyond that, the configuration '012' is also common, meaning that only one directed edge is present in the triad. In our sample it is also common for such edge to be reciprocated, as seen in the third-highes-t count of the triad-configuration '102', a graph with a mutual connection between two vertices. Overall, the seems to be high number of isolates in the sample network.
+
+## Making graph object
+
+```{r matrix data ego, echo=FALSE}
 
 test_w1 <- igraph::graph_from_adjacency_matrix(
   test$nets[1,,], # first wave of data. 
@@ -314,35 +327,27 @@ test_w1 <- igraph::graph_from_adjacency_matrix(
 
 ```
 
-# Network Description
-
-[For Ego-level descriptives on gender and h-index, please consult the latter part of the Data & Analysis part of this final report]
-
-The network data we are looking at pertains to 101 scholars and their publications. In the time frame of the wave at hand, namely form 2015 to 2018, we find 47 edges, with 6 reciprocated collaborations 36 ties that are asymmetric. Additionally, there were 5009 occasions in which a ties could have been made but was not. The edge density of 0.004 suggests that from all possible edges, this sample contains relatively few.
-
-In terms of triad-configurations, pertaining to the different possibilities three scholars could collaborate, we find that the most common one is no collaboration at all (configuration '003'). Beyond that, the configuration '012' is also common, meaning that only one directed edge is present in the triad. In our sample it is also common for such edge to be reciprocated, as seen in the third-highes-t count of the triad-configuration '102', a graph with a mutual connection between two vertices. Overall, the seems to be high number of isolates in the sample network.
-
 ## Nr. of nodes/vertices
 
-```{r nodes}
+```{r nodes, echo=FALSE}
 vcount(test_w1)
 ```
 
 ## Nr. of edges
 
-```{r edges}
+```{r edges, echo=FALSE}
 ecount(test_w1)
 ```
 
 ## Dyad census
 
-```{r dyad cen}
+```{r dyad cen, echo=FALSE}
 igraph::dyad_census(test_w1)
 ```
 
 ## Triad-census
 
-```{r triad cen}
+```{r triad cen, echo=FALSE}
 igraph::triad_census(test_w1)
 ```
 
@@ -396,16 +401,16 @@ o D, U, C
 ```
 ## Edge-density
 
-```{r edge dens}
+```{r edge dens, echo=FALSE}
 # edge density
 igraph::edge_density(test_w1)
 ```
 
 ## Degree centrality
 
-Degree centrality, often simply called 'degree', measures the number of connections a scholar, or ego, has with other scholars, known as alters. In the context of our dataset, we distinguish between two types of degrees: incoming connections (indegrees) and outgoing connections (outdegrees). Indegrees represent ties directed toward the ego, which in this case signify instances where the ego is **not** the primary author of a paper. Conversely, outdegrees represent ties originating from the ego, indicating collaborations where the ego assumes the role of the first author.
+Degree centrality, often simply called 'degree', measures the number of connections a scholar, or ego, has with other scholars, known as alters. Here, we distinguish between two types of degrees: incoming connections (indegrees) and outgoing connections (outdegrees). Indegrees represent ties directed toward the ego, which in this case signify instances where the ego is **not** the primary author of a paper. Conversely, outdegrees represent ties originating from the ego, indicating collaborations where the ego assumes the role of the first author.
 
-```{r degree}
+```{r degree, echo=FALSE}
 # Calculate degree centrality
 degree_testw1 <- degree(test_w1)
 degree_testw1 <- as.data.frame(degree_testw1)
@@ -442,7 +447,7 @@ The indegree distribution is right-skewed. This suggests that only very few vert
 
 (with isolates)
 
-```{r betweenness}
+```{r betweenness, echo=FALSE}
 # Calculate betweenness centrality
 betweenness_w1 <- igraph::betweenness(test_w1, directed = TRUE)
 betweenness_w1 <- as.data.frame(betweenness_w1)
@@ -473,7 +478,7 @@ ggplot(betweenness_w1, aes(as.numeric(betweenness_w1), colour = as.numeric(betwe
 
 ## Clustering
 
-```{r}
+```{r, echo=FALSE}
 # Clustering the wave 
 clustering_w1 <- igraph::transitivity(test_w1, type = "local")
 clustering_w1 <- as.data.frame(clustering_w1)
@@ -500,7 +505,4 @@ ggplot(clustering_w1, aes(x = as.numeric(clustering_w1))) +
   ) + guides(fill = "none")  # Remove the legend (since all bars are the same color)
 
 ```
-
-## Segregation ? 
-
-# Plots 
+## Network Plots 
