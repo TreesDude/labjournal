@@ -18,7 +18,7 @@ editor_options:
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>My Descriptives</title>
+<title>My Models</title>
 
 <link rel="stylesheet" href="styles.css">
 <!-- Link to the CSS file I created for dark mode code chunks -->
@@ -49,7 +49,7 @@ klippy::klippy(position = c('top', 'right'))
 #klippy::klippy(tooltip_message = 'Click to copy', tooltip_success = 'Done')
 ```
 
-Note to self. Keep in mind: \
+Note to self. Keep in mind:\
 **meaning of significance in RSiena** "It is important to mention that
 significance in RSiena means something different than in conventional
 statistics. In normal statistics, such as OLS-regression, significance
@@ -700,7 +700,7 @@ First, I estimated a null model with only reciprocity and degree. The
 maximum convergence ratio of the model is 0.084. The GOF on the Indegree
 Distribution is zero**.** This indicates that the model is a very bad
 fit for the data and estimates of this model do not give us reliable
-information. \
+information.\
 *For all GOF plots compiled in one place, see here:
 <https://treesdude.github.io/labjournal/finalGOF.html>.\
 *For the sake of practise, here they are anyways:\
@@ -1136,7 +1136,7 @@ Model 3 highlights persistent gender homophily (H1) across departments
 but does not provide evidence for differences in gender homophily
 between Sociology and Political Science, contrary to H2.
 
-------------------------------------------------------
+------------------------------------------------------------------------
 
 Estimates and SEs model 3:
 
@@ -1155,7 +1155,7 @@ Estimates and SEs model 3:
 7\. eval: gender_RS ego -1.0066 ( 0.5121) insign (-1.965632) almost
 significant
 
-8\. eval: same gender_RS 0.6632 ( 0.2623) sign. (2.52840) \*\*\* \
+8\. eval: same gender_RS 0.6632 ( 0.2623) sign. (2.52840) \*\*\*\
 (sameX: comparison model 2 and 3:\
 estimate got hardly any smaller (0.6637--\>0.6632), SE got hardly any
 smaller (0.2685--\>0.2623), significance value got bigger
@@ -1400,7 +1400,7 @@ significant relevance (b = -1.4652, SE = 0.6963), with its negative
 estimate indicating that, once effects of h-index are controlled for,
 scholars from the political science (coded as 1) department have a lower
 tendency to initiate collaborations than scholars from the sociology
-department (coded as 0). \
+department (coded as 0).\
 Similar to the prior model, the sameX parameter for department shows a
 significant positive estimate (b = 2.6327, SE = 0.6080) scholars are
 still more likely to collaborate with others from the same department.
@@ -1437,18 +1437,15 @@ two people connected to a common third party collaborate) are more
 likely even across gender differences. Could be a potential
 counterbalance to homophily.
 
-R-Manual: in-degree popularity weighted by sender’s V (inPopX)
-defined by the sum of values of V for actors h for which there are ties
-i → j ← h
+R-Manual: in-degree popularity weighted by sender’s V (inPopX) defined
+by the sum of values of V for actors h for which there are ties i → j ←
+h
 
 note that to use this effect for p = 2 the variable V must be
-nonnegative, which
-implies that it must be non-centered;
-further note that if V is a behavioral variable, it will be used in the
-centered version,
-so that p must be 1; if weighting by a non-centered behavioral variable
-is desired, a
-new effect is necessary;
+nonnegative, which implies that it must be non-centered; further note
+that if V is a behavioral variable, it will be used in the centered
+version, so that p must be 1; if weighting by a non-centered behavioral
+variable is desired, a new effect is necessary;
 
 ### ---Step 1: Define Siena Data & Variables
 

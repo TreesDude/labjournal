@@ -7,6 +7,21 @@ bibliography: references.bib
 csl: apa.csl
 ---
 
+```{=html}
+<style>
+body {
+text-align: left;
+line-height: 1.5;
+}
+
+h1, .h1, h2, .h2, h3, .h3 {
+  margin-top: 24px;
+  line-height: 1;
+}
+
+</style>
+```
+
 <html lang="en">
 
 <head>
@@ -22,6 +37,7 @@ csl: apa.csl
 </head>
 
 </html>
+<!-- now part of data & Analysis part: ego level description of data -->
 
 ```{r globalsettings, echo=FALSE, warning=FALSE, results='hide'}
 library(knitr)
@@ -43,18 +59,17 @@ klippy::klippy(position = c('top', 'right'))
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-
 ```
 
 # Getting started
 
-```{r clean}
+```{r clean, results='hide'}
 rm(list = ls())
 ```
 
 ## Packages
 
-```{r package, hide=TRUE}
+```{r package, hide=TRUE, results='hide'}
 require(tidyverse)
 require(RSiena)
 require(RsienaTwoStep)
@@ -86,7 +101,7 @@ require(RColorBrewer)
 
 Functions chunk
 
-```{r functions 1, hide =TRUE}
+```{r functions 1, hide =TRUE, results='hide'}
 fpackage.check <- function(packages) {
     lapply(packages, FUN = function(x) {
         if (!require(x, character.only = TRUE)) {
@@ -196,7 +211,7 @@ f_pubnets <- function(df_scholars = df, list_publications = publications, discip
 
 More functions
 
-```{r functions 2, hide=TRUE}
+```{r functions 2, hide=TRUE, results='hide'}
 fcolnet <- function(data = scholars, university = "RU", discipline = "sociology"+"political science", waves = list(c(2015,
     2018), c(2019, 2023)), type = c("first")) {
 
@@ -316,15 +331,10 @@ test_w1 <- igraph::graph_from_adjacency_matrix(
 
 ```
 
-# Descriptives - Demographics 
-The following graphs represent the segregation of the network based on gender and on H-index for the wave of interest (2015-2018). 
 
+### Gender - Ego level 
 
-## Ego level
-
-### Gender
-
-descriptives (mean etc.) in whole sample
+Descriptives (mean, distibution, etc.) in whole sample
 
 ```{r sum gender}
 summary(df_ego$gender)
@@ -379,15 +389,15 @@ Genders per department (0 = female, 1 = male)
 table(df_ego$discipline.24, df_ego$gender)
 ```
 
-### h index
+### H index - Ego level 
 
-descriptives (mean etc.)
+Descriptives (mean, distribution, etc.)
 
 ```{r summary h index}
 summary(df_ego$h_index)
 ```
 
-Overall(2015-2018)
+H-Index Whole sample
 
 ```{r hist h index}
 # Histogram of prestige scores for Wave 1 

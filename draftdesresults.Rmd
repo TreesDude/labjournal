@@ -46,13 +46,13 @@ klippy::klippy(position = c('top', 'right'))
 
 # Getting started
 
-```{r clean}
+```{r clean, hide =TRUE}
 rm(list = ls())
 ```
 
 ## Packages
 
-```{r package, hide=TRUE}
+```{r package, hide=TRUE, results='hide'}
 require(tidyverse)
 require(RSiena)
 require(RsienaTwoStep)
@@ -84,7 +84,7 @@ require(RColorBrewer)
 
 Functions chunk
 
-```{r functions 1, hide =TRUE}
+```{r functions 1, hide =TRUE, results = 'hide' }
 fpackage.check <- function(packages) {
     lapply(packages, FUN = function(x) {
         if (!require(x, character.only = TRUE)) {
@@ -194,7 +194,7 @@ f_pubnets <- function(df_scholars = df, list_publications = publications, discip
 
 More functions
 
-```{r functions 2, hide=TRUE}
+```{r functions 2, hide=TRUE, results ='hide'}
 fcolnet <- function(data = scholars, university = "RU", discipline = "sociology"+"political science", waves = list(c(2015,
     2018), c(2019, 2023)), type = c("first")) {
 

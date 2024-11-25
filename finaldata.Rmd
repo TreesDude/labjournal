@@ -1,5 +1,5 @@
 ---
-title: "Data & Methods"
+title: "Data & Analysis"
 author: "Verooo"
 date: "2024-11-23"
 output: html_document
@@ -43,3 +43,12 @@ klippy::klippy(position = c('top', 'right'))
 knitr::opts_chunk$set(echo = TRUE)
 
 ```
+
+# Data 
+
+
+
+
+----
+
+# References 

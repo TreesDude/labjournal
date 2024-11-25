@@ -75,6 +75,29 @@ if (window.hljs) {
 }
 </style>
 
+<style type="text/css">
+/* for pandoc --citeproc since 2.11 */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
 
 <link rel="stylesheet" href="styles.css" type="text/css" />
 
@@ -581,8 +604,262 @@ h1, .h1, h2, .h2, h3, .h3 {
   addClassKlippyTo("pre.r, pre.markdown");
   addKlippy('right', 'top', 'auto', '1', 'Copy code', 'Copied!');
 </script>
+<div id="discussion" class="section level1" number="1">
+<h1><span class="header-section-number">1</span> Discussion</h1>
+<p>This study investigates how co-authorship networks among scholars are
+influenced by gender, departmental affiliation, and academic prestige.
+By examining networks within the Political Science and Sociology
+departments at Radboud University, this study utilizes ‘RSiena’,
+simulating changes in social networks, to understand how these factors
+jointly shape scholars’ collaboration patterns (<span
+class="citation">Snijders, Ripley, B’oda, V"or"os, &amp; Preciado
+(2024)</span>, <span class="citation">Snijders, Ripley, Boitmanis, et
+al. (2024)</span>. Scholars often prefer collaborators of the same
+gender, a phenomenon rooted in societal norms and perceived status
+differences ( <span class="citation">Horta, Feng, &amp; Santos
+(2022)</span> ). This is expected to result in gender clustering within
+academic networks, with men and women showing distinct preferences for
+same-gender collaborations (<em>Hypothesis 1).</em> Disciplines differ
+in their gender dynamics. Sociology, characterized by a more balanced
+gender representation, may facilitate cross-gender collaborations more
+so than the field of Political Science (<span class="citation">Kwiek
+&amp; Roszka (2021)</span>). Hence, gender homophily was expected to be
+less influential in collaboration preferences of scholars in the
+sociology department than those in political science <em>(Hypothesis
+2).<br />
+</em>Furthermore, structural features of collaboration networks, such as
+reciprocity, indegree popularity, and outdegree activity, shape how
+collaboration ties form (<span class="citation">Snijders, van de Bunt,
+&amp; Steglich (2010)</span>). These structural network effects may
+reinforce gender homophily in collaboration preferences in the creation
+of ties betwen scholars <em>(Hypothesis 3)</em>. Prestige, as measured
+by the Hirsch-Index, may mitigate gender homophily by increasing the
+appeal of high-status collaborators regardless of their gender (<span
+class="citation">Bellotti, Czerniawska, Everett, &amp; Guadalupi
+(2022)</span>). This hypothesis examined whether strategic
+collaborations dilute gendered preferences in scholarly networks.
+Specifically it investigated whether gender homophily is less
+promnounced in scholars’ preference to collaborate when potential
+collaborators have a higher H-index <em>(Hypothesis 4).</em></p>
+<div id="situating-findings" class="section level2" number="1.1">
+<h2><span class="header-section-number">1.1</span> Situating
+Findings</h2>
+<div id="gender-homophily-h1" class="section level3" number="1.1.1">
+<h3><span class="header-section-number">1.1.1</span> <strong>Gender
+Homophily (H1)</strong></h3>
+<p>The results consistently support Hypothesis 1, showing significant
+evidence of gender homophily across all models. The parameter for
+same-gender collaboration (sameX) remains positive and significant,
+indicating that scholars are more likely to collaborate with same-gender
+peers than with different-gender peers. This aligns with previous
+research suggesting that gendered barriers in academia, whether
+structural or cultural, can lead to gender clustering in collaborative
+networks (<span class="citation">Horta et al. (2022)</span>; <span
+class="citation">Kwiek &amp; Roszka (2021)</span>; <span
+class="citation">McPherson, Smith-Lovin, &amp; Cook (2001)</span>).</p>
+<p>Interestingly, the significance of gender clustering persists even
+after controlling for other covariates, such as department affiliation
+and h-index, demonstrating that it is a robust phenomenon in these
+networks. While this result is not unexpected, it emphasizes the
+enduring influence of gender dynamics on scholarly collaborations.</p>
+</div>
+<div id="departmental-differences-in-gender-homophily-h2"
+class="section level3" number="1.1.2">
+<h3><span class="header-section-number">1.1.2</span>
+<strong>Departmental Differences in Gender Homophily (H2)</strong></h3>
+<p>Hypothesi 2 proposed that scholars in the sociology department
+exhibit weaker gender homophily than those in the political science
+department. While this hypothesis was not explicitly tested using an
+interaction term, comparisons across models suggest no substantial
+department-level differences in gender clustering. The same-gender
+collaboration parameter (sameX for gender) is nearly identical in models
+2 and 3, indicating that the inclusion of department as a covariate does
+not significantly alter the pattern of same-gender collaborations.</p>
+<p>However, the department-related parameter for ego’s tendency to
+initiate collaborations (egoX for department) becomes significant in
+model 4, revealing a lower likelihood for political scientists to
+initiate collaborations compared to sociologists. This could imply
+department-level differences in collaboration norms or opportunities,
+which might indirectly influence gender homophily. An interaction term
+between department and gender would have been useful to further
+investigate these nuances.</p>
+<p>After all, hypothesis 2 was not supported. While scholars show a
+significant preference for collaborating within their own department,
+with sociologists more likely to initiate collaborations than political
+scientists, <em>no</em> substantial differences in gender homophily were
+observed in relation to scholars’ departments.</p>
+</div>
+<div id="structural-network-effects-and-gender-homophily-h3"
+class="section level3" number="1.1.3">
+<h3><span class="header-section-number">1.1.3</span> <strong>Structural
+Network Effects and Gender Homophily (H3)</strong></h3>
+<p>In terms of structural network effects, reciprocity emerges as a
+consistently significant factor, indicating that collaborations are more
+likely to be mutual. This aligns with existing theories of dyadic
+reciprocity in networks, suggesting that once a collaboration tie is
+initiated, it is likely to be reciprocated (<span
+class="citation">Snijders et al. (2010)</span>). Interestingly, the
+outdegree parameter (baseline likelihood of initiating a tie) fluctuates
+in significance across models but remains consistently negative when
+significant, indicating that scholars generally show a low tendency to
+initiate collaborations.</p>
+<p>In line with Hypothesis 3, Gender homophily (sameX) remains
+significant even when controlling for these structural effects,
+reinforcing its importance. This finding implies that scholars’
+same-gender preferences in creating ties are not merely a byproduct of
+network structure but reflect deeper social or cultural dynamics.</p>
+</div>
+<div id="prestige-and-gender-homopgily-h4" class="section level3"
+number="1.1.4">
+<h3><span class="header-section-number">1.1.4</span> Prestige and Gender
+Homopgily (H4)</h3>
+<p>The results provide little to no support for Hypothesis 4, which
+proposed that gender homophily is less influential when potential
+collaborators have higher academic prestige (as measured by the
+h-index). The inclusion of h-index as a covariate in model 4 reveals
+that scholars with higher h-index scores are more likely to attract
+collaborations (significant positive alter effect, altX) but less likely
+to initiate them (significant negative ego effect, egoX). This is
+consistent with theories of preferential attachment and upward mobility,
+where prestigious scholars act as hubs, receiving collaboration requests
+rather than initiating them (<span class="citation">Broido &amp; Clauset
+(2019)</span>; <span class="citation">Knobloch-Westerwick, Glynn, &amp;
+Huge (2013)</span>).</p>
+<p>However, since the the same-gender parameter (sameX) remained
+significant and largely unchanged, the influence of genderhomophily on
+scholars’ decisions to collaborate is not substantially impacted by
+scholars’ h-index. This finding suggests that while prestige plays a
+role in shaping collaboration networks, it does mitigate the tendency of
+scholars to prefer same-gender collaborations over different-gendered
+ones. Thus, while prestigious scholars are more sought after,
+collaboration preferences in scholars’ networks remain influenced by
+gender-preferences.</p>
+</div>
+</div>
+<div id="broader-implications" class="section level2" number="1.2">
+<h2><span class="header-section-number">1.2</span> <strong>Broader
+Implications</strong></h2>
+<p>The findings of this study highlight the interplay between
+structural, departmental, and individual factors in shaping
+co-authorship networks. Gender homophily appears to be a robust and
+enduring feature of these networks, resisting the influence of prestige
+and departmental context. This raises important questions about the
+structural barriers faced by scholars, particularly women, in accessing
+diverse collaboration opportunities.</p>
+<p>From a policy perspective, these results underscore the need for
+initiatives aimed at reducing gendered collaboration clustering. For
+example, mentorship programs or institutional incentives that encourage
+cross-gender and cross-department collaborations could help lessen these
+pattern. Additionally, the finding that prestigious scholars are less
+likely to initiate collaborations suggests that researchers early int
+heir career, particularly those from underrepresented groups, may face
+challenges in accessing these high-prestige hubs. Institutions should
+consider strategies to facilitate connections between early-career and
+high-prestige scholars to promote equity in collaboration
+opportunities.</p>
+</div>
+<div id="limitations-and-future-research" class="section level2"
+number="1.3">
+<h2><span class="header-section-number">1.3</span> <strong>Limitations
+and Future Research</strong></h2>
+<p>This study has several limitations that warrant consideration. First,
+the lack of interaction terms between gender and department or h-index
+limits the ability to make strong conclusions about how these factors
+jointly influence collaboration patterns. Future studies should include
+such interactions to better understand these dynamics. Second, while the
+h-index serves as a useful proxy for academic prestige, this study did
+not control for author characteristics such as age, which may account
+for some of the effects found. Besides, other measures of prestige or
+influence, such as grant funding or editorial roles, might yield
+additional insights. Finally, the examined sample is arguably small, and
+the generalizability of these findings is further limited to the
+specific departments and network structures examined here.</p>
+<p>Future research should explore longitudinal changes in collaboration
+patterns to assess whether gender homophily weakens over time,
+particularly as scholars gain prestige. Additionally, examining the role
+of institutional interventions, such as funding programs or diversity
+initiatives, could provide valuable insights into strategies for
+fostering more equitable collaboration networks.</p>
+</div>
+<div id="conclusion" class="section level2" number="1.4">
+<h2><span class="header-section-number">1.4</span>
+<strong>Conclusion</strong></h2>
+<p>This study contributes to our understanding of the dynamics of
+co-authorship networks by highlighting the persistent influence of
+gender homophily in scholars’ collaboration preferences, even in the
+presence of academic prestige and structural network effects. While
+prestigious scholars are more likely to attract collaborations, gendered
+patterns of collaboration endure. This underrscores the need for
+targeted interventions to address these disparities. By disentangling
+the effects of gender, department, and prestige, this research provides
+a foundation for future studies and practical efforts aimed at fostering
+more inclusive and diverse academic collaboration networks.</p>
+<hr />
+</div>
+</div>
+<div id="references" class="section level1 unnumbered">
+<h1 class="unnumbered">References</h1>
+<div id="refs" class="references csl-bib-body hanging-indent"
+entry-spacing="0" line-spacing="2">
+<div id="ref-Bellotti2022" class="csl-entry">
+Bellotti, E., Czerniawska, D., Everett, M. G., &amp; Guadalupi, L.
+(2022). Gender inequalities in research funding: Unequal network
+configurations, or unequal network returns? <em>Social Networks</em>,
+<em>70</em>, 138–151. doi:<a
+href="https://doi.org/10.1016/j.socnet.2021.12.007">https://doi.org/10.1016/j.socnet.2021.12.007</a>
+</div>
+<div id="ref-Broido2019" class="csl-entry">
+Broido, A. D., &amp; Clauset, A. (2019). Scale-free networks are rare.
+<em>Nature Communications</em>, <em>10</em>(1). doi:<a
+href="https://doi.org/10.1038/s41467-019-08746-5">10.1038/s41467-019-08746-5</a>
+</div>
+<div id="ref-Horta2022" class="csl-entry">
+Horta, H., Feng, S., &amp; Santos, J. M. (2022). Homophily in higher
+education research: A perspective based on co-authorships.
+<em>Scientometrics</em>, <em>127</em>, 523–543. Retrieved from <a
+href="https://api.semanticscholar.org/CorpusID:246167101">https://api.semanticscholar.org/CorpusID:246167101</a>
+</div>
+<div id="ref-Knobloch2013" class="csl-entry">
+Knobloch-Westerwick, S., Glynn, C. J., &amp; Huge, M. (2013). The
+matilda effect in science communication. <em>Science Communication</em>,
+<em>35</em>(5), 603–625. doi:<a
+href="https://doi.org/10.1177/1075547012472684">10.1177/1075547012472684</a>
+</div>
+<div id="ref-Kwiek2021" class="csl-entry">
+Kwiek, M., &amp; Roszka, W. (2021). Gender-based homophily in research:
+A large-scale study of man-woman collaboration. <em>Journal of
+Informetrics</em>, <em>15</em>(3), 101171. doi:<a
+href="https://doi.org/10.1016/j.joi.2021.101171">https://doi.org/10.1016/j.joi.2021.101171</a>
+</div>
+<div id="ref-McPherson2001" class="csl-entry">
+McPherson, M., Smith-Lovin, L., &amp; Cook, J. M. (2001). Birds of a
+feather: Homophily in social networks. <em>Annual Review of
+Sociology</em>, <em>27</em>(1), 415–444. doi:<a
+href="https://doi.org/10.1146/annurev.soc.27.1.415">10.1146/annurev.soc.27.1.415</a>
+</div>
+<div id="ref-RSiena_package" class="csl-entry">
+Snijders, T. A. B., Ripley, R. M., Boitmanis, K., Steglich, C., Niezink,
+N. M. D., Amati, V., &amp; Schoenenberger, F. (2024). Siena - simulation
+investigation for empirical network analysis. Groningen, The
+Netherlands: University of Groningen. Retrieved from <a
+href="https://www.stats.ox.ac.uk/~snijders/siena/">https://www.stats.ox.ac.uk/~snijders/siena/</a>
+</div>
+<div id="ref-RSiena_manual" class="csl-entry">
+Snijders, T. A. B., Ripley, R., B’oda, Z., V"or"os, A., &amp; Preciado,
+P. (2024). <em>Manual for RSiena</em>. Groningen, The Netherlands:
+University of Groningen. Retrieved from <a
+href="https://www.stats.ox.ac.uk/~snijders/siena/">https://www.stats.ox.ac.uk/~snijders/siena/</a>
+</div>
+<div id="ref-Snijders2010" class="csl-entry">
+Snijders, T. A. B., van de Bunt, G. G., &amp; Steglich, C. E. G. (2010).
+Introduction to stochastic actor-based models for network dynamics.
+<em>Social Networks</em>, <em>32</em>(1), 44–60. doi:<a
+href="https://doi.org/10.1016/j.socnet.2009.02.004">https://doi.org/10.1016/j.socnet.2009.02.004</a>
+</div>
+</div>
+</div>
 
-<div id="rmd-source-code">LS0tDQp0aXRsZTogIkRpc2N1c3Npb24iDQphdXRob3I6ICJWZXJvb28iDQpkYXRlOiAiMjAyNC0xMS0yMyINCm91dHB1dDogaHRtbF9kb2N1bWVudA0KYmlibGlvZ3JhcGh5OiByZWZlcmVuY2VzLmJpYg0KY3NsOiBhcGEuY3NsDQotLS0NCmBgYHs9aHRtbH0NCjxzdHlsZT4NCmJvZHkgew0KdGV4dC1hbGlnbjogbGVmdDsNCmxpbmUtaGVpZ2h0OiAxLjU7DQp9DQoNCmgxLCAuaDEsIGgyLCAuaDIsIGgzLCAuaDMgew0KICBtYXJnaW4tdG9wOiAyNHB4Ow0KICBsaW5lLWhlaWdodDogMTsNCn0NCg0KPC9zdHlsZT4NCmBgYA0KDQpgYGB7ciwgZ2xvYmFsc2V0dGluZ3MsIGVjaG89RkFMU0UsIHdhcm5pbmc9RkFMU0UsIHJlc3VsdHM9J2hpZGUnfQ0KbGlicmFyeShrbml0cikNCg0Ka25pdHI6Om9wdHNfY2h1bmskc2V0KGVjaG8gPSBUUlVFKQ0Kb3B0c19jaHVuayRzZXQodGlkeS5vcHRzPWxpc3Qod2lkdGguY3V0b2ZmPTEwMCksdGlkeT1UUlVFLCB3YXJuaW5nID0gRkFMU0UsIG1lc3NhZ2UgPSBGQUxTRSxjb21tZW50ID0gIiM+IiwgY2FjaGU9VFJVRSwgY2xhc3Muc291cmNlPWMoInRlc3QiKSwgY2xhc3Mub3V0cHV0PWMoInRlc3QyIikpDQpvcHRpb25zKHdpZHRoID0gMTAwKQ0KcmdsOjpzZXR1cEtuaXRyKCkNCg0KY29sb3JpemUgPC0gZnVuY3Rpb24oeCwgY29sb3IpIHtzcHJpbnRmKCI8c3BhbiBzdHlsZT0nY29sb3I6ICVzOyc+JXM8L3NwYW4+IiwgY29sb3IsIHgpIH0NCg0KYGBgDQoNCmBgYHtyIGtsaXBweSwgZWNobz1GQUxTRSwgaW5jbHVkZT1UUlVFfQ0Ka2xpcHB5OjprbGlwcHkocG9zaXRpb24gPSBjKCd0b3AnLCAncmlnaHQnKSkNCiNrbGlwcHk6OmtsaXBweShjb2xvciA9ICdkYXJrcmVkJykNCiNrbGlwcHk6OmtsaXBweSh0b29sdGlwX21lc3NhZ2UgPSAnQ2xpY2sgdG8gY29weScsIHRvb2x0aXBfc3VjY2VzcyA9ICdEb25lJykNCmBgYA0KDQpgYGB7ciBzZXR1cCwgaW5jbHVkZT1GQUxTRX0NCmtuaXRyOjpvcHRzX2NodW5rJHNldChlY2hvID0gVFJVRSkNCg0KYGBgDQo=</div>
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIkRpc2N1c3Npb24iDQphdXRob3I6ICJWZXJvb28iDQpkYXRlOiAiMjAyNC0xMS0yMyINCm91dHB1dDogaHRtbF9kb2N1bWVudA0KYmlibGlvZ3JhcGh5OiByZWZlcmVuY2VzLmJpYg0KY3NsOiBhcGEuY3NsDQotLS0NCg0KYGBgez1odG1sfQ0KPHN0eWxlPg0KYm9keSB7DQp0ZXh0LWFsaWduOiBsZWZ0Ow0KbGluZS1oZWlnaHQ6IDEuNTsNCn0NCg0KaDEsIC5oMSwgaDIsIC5oMiwgaDMsIC5oMyB7DQogIG1hcmdpbi10b3A6IDI0cHg7DQogIGxpbmUtaGVpZ2h0OiAxOw0KfQ0KDQo8L3N0eWxlPg0KYGBgDQpgYGB7ciwgZ2xvYmFsc2V0dGluZ3MsIGVjaG89RkFMU0UsIHdhcm5pbmc9RkFMU0UsIHJlc3VsdHM9J2hpZGUnfQ0KbGlicmFyeShrbml0cikNCg0Ka25pdHI6Om9wdHNfY2h1bmskc2V0KGVjaG8gPSBUUlVFKQ0Kb3B0c19jaHVuayRzZXQodGlkeS5vcHRzPWxpc3Qod2lkdGguY3V0b2ZmPTEwMCksdGlkeT1UUlVFLCB3YXJuaW5nID0gRkFMU0UsIG1lc3NhZ2UgPSBGQUxTRSxjb21tZW50ID0gIiM+IiwgY2FjaGU9VFJVRSwgY2xhc3Muc291cmNlPWMoInRlc3QiKSwgY2xhc3Mub3V0cHV0PWMoInRlc3QyIikpDQpvcHRpb25zKHdpZHRoID0gMTAwKQ0KcmdsOjpzZXR1cEtuaXRyKCkNCg0KY29sb3JpemUgPC0gZnVuY3Rpb24oeCwgY29sb3IpIHtzcHJpbnRmKCI8c3BhbiBzdHlsZT0nY29sb3I6ICVzOyc+JXM8L3NwYW4+IiwgY29sb3IsIHgpIH0NCg0KYGBgDQoNCmBgYHtyIGtsaXBweSwgZWNobz1GQUxTRSwgaW5jbHVkZT1UUlVFfQ0Ka2xpcHB5OjprbGlwcHkocG9zaXRpb24gPSBjKCd0b3AnLCAncmlnaHQnKSkNCiNrbGlwcHk6OmtsaXBweShjb2xvciA9ICdkYXJrcmVkJykNCiNrbGlwcHk6OmtsaXBweSh0b29sdGlwX21lc3NhZ2UgPSAnQ2xpY2sgdG8gY29weScsIHRvb2x0aXBfc3VjY2VzcyA9ICdEb25lJykNCmBgYA0KDQpgYGB7ciBzZXR1cCwgaW5jbHVkZT1GQUxTRX0NCmtuaXRyOjpvcHRzX2NodW5rJHNldChlY2hvID0gVFJVRSkNCg0KYGBgDQoNCiMgRGlzY3Vzc2lvbg0KDQpUaGlzIHN0dWR5IGludmVzdGlnYXRlcyBob3cgY28tYXV0aG9yc2hpcCBuZXR3b3JrcyBhbW9uZyBzY2hvbGFycyBhcmUgaW5mbHVlbmNlZCBieSBnZW5kZXIsIGRlcGFydG1lbnRhbCBhZmZpbGlhdGlvbiwgYW5kIGFjYWRlbWljIHByZXN0aWdlLiBCeSBleGFtaW5pbmcgbmV0d29ya3Mgd2l0aGluIHRoZSBQb2xpdGljYWwgU2NpZW5jZSBhbmQgU29jaW9sb2d5IGRlcGFydG1lbnRzIGF0IFJhZGJvdWQgVW5pdmVyc2l0eSwgdGhpcyBzdHVkeSB1dGlsaXplcyAnUlNpZW5hJywgc2ltdWxhdGluZyBjaGFuZ2VzIGluIHNvY2lhbCBuZXR3b3JrcywgdG8gdW5kZXJzdGFuZCBob3cgdGhlc2UgZmFjdG9ycyBqb2ludGx5IHNoYXBlIHNjaG9sYXJzJyBjb2xsYWJvcmF0aW9uIHBhdHRlcm5zIChAUlNpZW5hX21hbnVhbCwgQFJTaWVuYV9wYWNrYWdlLiBTY2hvbGFycyBvZnRlbiBwcmVmZXIgY29sbGFib3JhdG9ycyBvZiB0aGUgc2FtZSBnZW5kZXIsIGEgcGhlbm9tZW5vbiByb290ZWQgaW4gc29jaWV0YWwgbm9ybXMgYW5kIHBlcmNlaXZlZCBzdGF0dXMgZGlmZmVyZW5jZXMgKCBASG9ydGEyMDIyICkuIFRoaXMgaXMgZXhwZWN0ZWQgdG8gcmVzdWx0IGluIGdlbmRlciBjbHVzdGVyaW5nIHdpdGhpbiBhY2FkZW1pYyBuZXR3b3Jrcywgd2l0aCBtZW4gYW5kIHdvbWVuIHNob3dpbmcgZGlzdGluY3QgcHJlZmVyZW5jZXMgZm9yIHNhbWUtZ2VuZGVyIGNvbGxhYm9yYXRpb25zICgqSHlwb3RoZXNpcyAxKS4qIERpc2NpcGxpbmVzIGRpZmZlciBpbiB0aGVpciBnZW5kZXIgZHluYW1pY3MuIFNvY2lvbG9neSwgY2hhcmFjdGVyaXplZCBieSBhIG1vcmUgYmFsYW5jZWQgZ2VuZGVyIHJlcHJlc2VudGF0aW9uLCBtYXkgZmFjaWxpdGF0ZSBjcm9zcy1nZW5kZXIgY29sbGFib3JhdGlvbnMgbW9yZSBzbyB0aGFuIHRoZSBmaWVsZCBvZiBQb2xpdGljYWwgU2NpZW5jZSAoQEt3aWVrMjAyMSkuIEhlbmNlLCBnZW5kZXIgaG9tb3BoaWx5IHdhcyBleHBlY3RlZCB0byBiZSBsZXNzIGluZmx1ZW50aWFsIGluIGNvbGxhYm9yYXRpb24gcHJlZmVyZW5jZXMgb2Ygc2Nob2xhcnMgaW4gdGhlIHNvY2lvbG9neSBkZXBhcnRtZW50IHRoYW4gdGhvc2UgaW4gcG9saXRpY2FsIHNjaWVuY2UgKihIeXBvdGhlc2lzIDIpLlwNCipGdXJ0aGVybW9yZSwgc3RydWN0dXJhbCBmZWF0dXJlcyBvZiBjb2xsYWJvcmF0aW9uIG5ldHdvcmtzLCBzdWNoIGFzIHJlY2lwcm9jaXR5LCBpbmRlZ3JlZSBwb3B1bGFyaXR5LCBhbmQgb3V0ZGVncmVlIGFjdGl2aXR5LCBzaGFwZSBob3cgY29sbGFib3JhdGlvbiB0aWVzIGZvcm0gKEBTbmlqZGVyczIwMTApLiBUaGVzZSBzdHJ1Y3R1cmFsIG5ldHdvcmsgZWZmZWN0cyBtYXkgcmVpbmZvcmNlIGdlbmRlciBob21vcGhpbHkgaW4gY29sbGFib3JhdGlvbiBwcmVmZXJlbmNlcyBpbiB0aGUgY3JlYXRpb24gb2YgdGllcyBiZXR3ZW4gc2Nob2xhcnMgKihIeXBvdGhlc2lzIDMpKi4gUHJlc3RpZ2UsIGFzIG1lYXN1cmVkIGJ5IHRoZSBIaXJzY2gtSW5kZXgsIG1heSBtaXRpZ2F0ZSBnZW5kZXIgaG9tb3BoaWx5IGJ5IGluY3JlYXNpbmcgdGhlIGFwcGVhbCBvZiBoaWdoLXN0YXR1cyBjb2xsYWJvcmF0b3JzIHJlZ2FyZGxlc3Mgb2YgdGhlaXIgZ2VuZGVyIChAQmVsbG90dGkyMDIyKS4gVGhpcyBoeXBvdGhlc2lzIGV4YW1pbmVkIHdoZXRoZXIgc3RyYXRlZ2ljIGNvbGxhYm9yYXRpb25zIGRpbHV0ZSBnZW5kZXJlZCBwcmVmZXJlbmNlcyBpbiBzY2hvbGFybHkgbmV0d29ya3MuIFNwZWNpZmljYWxseSBpdCBpbnZlc3RpZ2F0ZWQgd2hldGhlciBnZW5kZXIgaG9tb3BoaWx5IGlzIGxlc3MgcHJvbW5vdW5jZWQgaW4gc2Nob2xhcnMnIHByZWZlcmVuY2UgdG8gY29sbGFib3JhdGUgd2hlbiBwb3RlbnRpYWwgY29sbGFib3JhdG9ycyBoYXZlIGEgaGlnaGVyIEgtaW5kZXggKihIeXBvdGhlc2lzIDQpLioNCg0KIyMgU2l0dWF0aW5nIEZpbmRpbmdzDQoNCiMjIyAqKkdlbmRlciBIb21vcGhpbHkgKEgxKSoqDQoNClRoZSByZXN1bHRzIGNvbnNpc3RlbnRseSBzdXBwb3J0IEh5cG90aGVzaXMgMSwgc2hvd2luZyBzaWduaWZpY2FudCBldmlkZW5jZSBvZiBnZW5kZXIgaG9tb3BoaWx5IGFjcm9zcyBhbGwgbW9kZWxzLiBUaGUgcGFyYW1ldGVyIGZvciBzYW1lLWdlbmRlciBjb2xsYWJvcmF0aW9uIChzYW1lWCkgcmVtYWlucyBwb3NpdGl2ZSBhbmQgc2lnbmlmaWNhbnQsIGluZGljYXRpbmcgdGhhdCBzY2hvbGFycyBhcmUgbW9yZSBsaWtlbHkgdG8gY29sbGFib3JhdGUgd2l0aCBzYW1lLWdlbmRlciBwZWVycyB0aGFuIHdpdGggZGlmZmVyZW50LWdlbmRlciBwZWVycy4gVGhpcyBhbGlnbnMgd2l0aCBwcmV2aW91cyByZXNlYXJjaCBzdWdnZXN0aW5nIHRoYXQgZ2VuZGVyZWQgYmFycmllcnMgaW4gYWNhZGVtaWEsIHdoZXRoZXIgc3RydWN0dXJhbCBvciBjdWx0dXJhbCwgY2FuIGxlYWQgdG8gZ2VuZGVyIGNsdXN0ZXJpbmcgaW4gY29sbGFib3JhdGl2ZSBuZXR3b3JrcyAoQEhvcnRhMjAyMjsgQEt3aWVrMjAyMTsgQE1jUGhlcnNvbjIwMDEpLg0KDQpJbnRlcmVzdGluZ2x5LCB0aGUgc2lnbmlmaWNhbmNlIG9mIGdlbmRlciBjbHVzdGVyaW5nIHBlcnNpc3RzIGV2ZW4gYWZ0ZXIgY29udHJvbGxpbmcgZm9yIG90aGVyIGNvdmFyaWF0ZXMsIHN1Y2ggYXMgZGVwYXJ0bWVudCBhZmZpbGlhdGlvbiBhbmQgaC1pbmRleCwgZGVtb25zdHJhdGluZyB0aGF0IGl0IGlzIGEgcm9idXN0IHBoZW5vbWVub24gaW4gdGhlc2UgbmV0d29ya3MuIFdoaWxlIHRoaXMgcmVzdWx0IGlzIG5vdCB1bmV4cGVjdGVkLCBpdCBlbXBoYXNpemVzIHRoZSBlbmR1cmluZyBpbmZsdWVuY2Ugb2YgZ2VuZGVyIGR5bmFtaWNzIG9uIHNjaG9sYXJseSBjb2xsYWJvcmF0aW9ucy4NCg0KIyMjICoqRGVwYXJ0bWVudGFsIERpZmZlcmVuY2VzIGluIEdlbmRlciBIb21vcGhpbHkgKEgyKSoqDQoNCkh5cG90aGVzaSAyIHByb3Bvc2VkIHRoYXQgc2Nob2xhcnMgaW4gdGhlIHNvY2lvbG9neSBkZXBhcnRtZW50IGV4aGliaXQgd2Vha2VyIGdlbmRlciBob21vcGhpbHkgdGhhbiB0aG9zZSBpbiB0aGUgcG9saXRpY2FsIHNjaWVuY2UgZGVwYXJ0bWVudC4gV2hpbGUgdGhpcyBoeXBvdGhlc2lzIHdhcyBub3QgZXhwbGljaXRseSB0ZXN0ZWQgdXNpbmcgYW4gaW50ZXJhY3Rpb24gdGVybSwgY29tcGFyaXNvbnMgYWNyb3NzIG1vZGVscyBzdWdnZXN0IG5vIHN1YnN0YW50aWFsIGRlcGFydG1lbnQtbGV2ZWwgZGlmZmVyZW5jZXMgaW4gZ2VuZGVyIGNsdXN0ZXJpbmcuIFRoZSBzYW1lLWdlbmRlciBjb2xsYWJvcmF0aW9uIHBhcmFtZXRlciAoc2FtZVggZm9yIGdlbmRlcikgaXMgbmVhcmx5IGlkZW50aWNhbCBpbiBtb2RlbHMgMiBhbmQgMywgaW5kaWNhdGluZyB0aGF0IHRoZSBpbmNsdXNpb24gb2YgZGVwYXJ0bWVudCBhcyBhIGNvdmFyaWF0ZSBkb2VzIG5vdCBzaWduaWZpY2FudGx5IGFsdGVyIHRoZSBwYXR0ZXJuIG9mIHNhbWUtZ2VuZGVyIGNvbGxhYm9yYXRpb25zLg0KDQpIb3dldmVyLCB0aGUgZGVwYXJ0bWVudC1yZWxhdGVkIHBhcmFtZXRlciBmb3IgZWdv4oCZcyB0ZW5kZW5jeSB0byBpbml0aWF0ZSBjb2xsYWJvcmF0aW9ucyAoZWdvWCBmb3IgZGVwYXJ0bWVudCkgYmVjb21lcyBzaWduaWZpY2FudCBpbiBtb2RlbCA0LCByZXZlYWxpbmcgYSBsb3dlciBsaWtlbGlob29kIGZvciBwb2xpdGljYWwgc2NpZW50aXN0cyB0byBpbml0aWF0ZSBjb2xsYWJvcmF0aW9ucyBjb21wYXJlZCB0byBzb2Npb2xvZ2lzdHMuIFRoaXMgY291bGQgaW1wbHkgZGVwYXJ0bWVudC1sZXZlbCBkaWZmZXJlbmNlcyBpbiBjb2xsYWJvcmF0aW9uIG5vcm1zIG9yIG9wcG9ydHVuaXRpZXMsIHdoaWNoIG1pZ2h0IGluZGlyZWN0bHkgaW5mbHVlbmNlIGdlbmRlciBob21vcGhpbHkuIEFuIGludGVyYWN0aW9uIHRlcm0gYmV0d2VlbiBkZXBhcnRtZW50IGFuZCBnZW5kZXIgd291bGQgaGF2ZSBiZWVuIHVzZWZ1bCB0byBmdXJ0aGVyIGludmVzdGlnYXRlIHRoZXNlIG51YW5jZXMuDQoNCkFmdGVyIGFsbCwgaHlwb3RoZXNpcyAyIHdhcyBub3Qgc3VwcG9ydGVkLiBXaGlsZSBzY2hvbGFycyBzaG93IGEgc2lnbmlmaWNhbnQgcHJlZmVyZW5jZSBmb3IgY29sbGFib3JhdGluZyB3aXRoaW4gdGhlaXIgb3duIGRlcGFydG1lbnQsIHdpdGggc29jaW9sb2dpc3RzIG1vcmUgbGlrZWx5IHRvIGluaXRpYXRlIGNvbGxhYm9yYXRpb25zIHRoYW4gcG9saXRpY2FsIHNjaWVudGlzdHMsICpubyogc3Vic3RhbnRpYWwgZGlmZmVyZW5jZXMgaW4gZ2VuZGVyIGhvbW9waGlseSB3ZXJlIG9ic2VydmVkIGluIHJlbGF0aW9uIHRvIHNjaG9sYXJzJyBkZXBhcnRtZW50cy4NCg0KIyMjICoqU3RydWN0dXJhbCBOZXR3b3JrIEVmZmVjdHMgYW5kIEdlbmRlciBIb21vcGhpbHkgKEgzKSoqDQoNCkluIHRlcm1zIG9mIHN0cnVjdHVyYWwgbmV0d29yayBlZmZlY3RzLCByZWNpcHJvY2l0eSBlbWVyZ2VzIGFzIGEgY29uc2lzdGVudGx5IHNpZ25pZmljYW50IGZhY3RvciwgaW5kaWNhdGluZyB0aGF0IGNvbGxhYm9yYXRpb25zIGFyZSBtb3JlIGxpa2VseSB0byBiZSBtdXR1YWwuIFRoaXMgYWxpZ25zIHdpdGggZXhpc3RpbmcgdGhlb3JpZXMgb2YgZHlhZGljIHJlY2lwcm9jaXR5IGluIG5ldHdvcmtzLCBzdWdnZXN0aW5nIHRoYXQgb25jZSBhIGNvbGxhYm9yYXRpb24gdGllIGlzIGluaXRpYXRlZCwgaXQgaXMgbGlrZWx5IHRvIGJlIHJlY2lwcm9jYXRlZCAoQFNuaWpkZXJzMjAxMCkuIEludGVyZXN0aW5nbHksIHRoZSBvdXRkZWdyZWUgcGFyYW1ldGVyIChiYXNlbGluZSBsaWtlbGlob29kIG9mIGluaXRpYXRpbmcgYSB0aWUpIGZsdWN0dWF0ZXMgaW4gc2lnbmlmaWNhbmNlIGFjcm9zcyBtb2RlbHMgYnV0IHJlbWFpbnMgY29uc2lzdGVudGx5IG5lZ2F0aXZlIHdoZW4gc2lnbmlmaWNhbnQsIGluZGljYXRpbmcgdGhhdCBzY2hvbGFycyBnZW5lcmFsbHkgc2hvdyBhIGxvdyB0ZW5kZW5jeSB0byBpbml0aWF0ZSBjb2xsYWJvcmF0aW9ucy4NCg0KSW4gbGluZSB3aXRoIEh5cG90aGVzaXMgMywgR2VuZGVyIGhvbW9waGlseSAoc2FtZVgpIHJlbWFpbnMgc2lnbmlmaWNhbnQgZXZlbiB3aGVuIGNvbnRyb2xsaW5nIGZvciB0aGVzZSBzdHJ1Y3R1cmFsIGVmZmVjdHMsIHJlaW5mb3JjaW5nIGl0cyBpbXBvcnRhbmNlLiBUaGlzIGZpbmRpbmcgaW1wbGllcyB0aGF0IHNjaG9sYXJzJyBzYW1lLWdlbmRlciBwcmVmZXJlbmNlcyBpbiBjcmVhdGluZyB0aWVzIGFyZSBub3QgbWVyZWx5IGEgYnlwcm9kdWN0IG9mIG5ldHdvcmsgc3RydWN0dXJlIGJ1dCByZWZsZWN0IGRlZXBlciBzb2NpYWwgb3IgY3VsdHVyYWwgZHluYW1pY3MuDQoNCiMjIyBQcmVzdGlnZSBhbmQgR2VuZGVyIEhvbW9wZ2lseSAoSDQpDQoNClRoZSByZXN1bHRzIHByb3ZpZGUgbGl0dGxlIHRvIG5vIHN1cHBvcnQgZm9yIEh5cG90aGVzaXMgNCwgd2hpY2ggcHJvcG9zZWQgdGhhdCBnZW5kZXIgaG9tb3BoaWx5IGlzIGxlc3MgaW5mbHVlbnRpYWwgd2hlbiBwb3RlbnRpYWwgY29sbGFib3JhdG9ycyBoYXZlIGhpZ2hlciBhY2FkZW1pYyBwcmVzdGlnZSAoYXMgbWVhc3VyZWQgYnkgdGhlIGgtaW5kZXgpLiBUaGUgaW5jbHVzaW9uIG9mIGgtaW5kZXggYXMgYSBjb3ZhcmlhdGUgaW4gbW9kZWwgNCByZXZlYWxzIHRoYXQgc2Nob2xhcnMgd2l0aCBoaWdoZXIgaC1pbmRleCBzY29yZXMgYXJlIG1vcmUgbGlrZWx5IHRvIGF0dHJhY3QgY29sbGFib3JhdGlvbnMgKHNpZ25pZmljYW50IHBvc2l0aXZlIGFsdGVyIGVmZmVjdCwgYWx0WCkgYnV0IGxlc3MgbGlrZWx5IHRvIGluaXRpYXRlIHRoZW0gKHNpZ25pZmljYW50IG5lZ2F0aXZlIGVnbyBlZmZlY3QsIGVnb1gpLiBUaGlzIGlzIGNvbnNpc3RlbnQgd2l0aCB0aGVvcmllcyBvZiBwcmVmZXJlbnRpYWwgYXR0YWNobWVudCBhbmQgdXB3YXJkIG1vYmlsaXR5LCB3aGVyZSBwcmVzdGlnaW91cyBzY2hvbGFycyBhY3QgYXMgaHVicywgcmVjZWl2aW5nIGNvbGxhYm9yYXRpb24gcmVxdWVzdHMgcmF0aGVyIHRoYW4gaW5pdGlhdGluZyB0aGVtIChAQnJvaWRvMjAxOTsgQEtub2Jsb2NoMjAxMykuDQoNCkhvd2V2ZXIsIHNpbmNlIHRoZSB0aGUgc2FtZS1nZW5kZXIgcGFyYW1ldGVyIChzYW1lWCkgcmVtYWluZWQgc2lnbmlmaWNhbnQgYW5kIGxhcmdlbHkgdW5jaGFuZ2VkLCB0aGUgaW5mbHVlbmNlIG9mIGdlbmRlcmhvbW9waGlseSBvbiBzY2hvbGFycycgZGVjaXNpb25zIHRvIGNvbGxhYm9yYXRlIGlzIG5vdCBzdWJzdGFudGlhbGx5IGltcGFjdGVkIGJ5IHNjaG9sYXJzJyBoLWluZGV4LiBUaGlzIGZpbmRpbmcgc3VnZ2VzdHMgdGhhdCB3aGlsZSBwcmVzdGlnZSBwbGF5cyBhIHJvbGUgaW4gc2hhcGluZyBjb2xsYWJvcmF0aW9uIG5ldHdvcmtzLCBpdCBkb2VzIG1pdGlnYXRlIHRoZSB0ZW5kZW5jeSBvZiBzY2hvbGFycyB0byBwcmVmZXIgc2FtZS1nZW5kZXIgY29sbGFib3JhdGlvbnMgb3ZlciBkaWZmZXJlbnQtZ2VuZGVyZWQgb25lcy4gVGh1cywgd2hpbGUgcHJlc3RpZ2lvdXMgc2Nob2xhcnMgYXJlIG1vcmUgc291Z2h0IGFmdGVyLCBjb2xsYWJvcmF0aW9uIHByZWZlcmVuY2VzIGluIHNjaG9sYXJzJyBuZXR3b3JrcyByZW1haW4gaW5mbHVlbmNlZCBieSBnZW5kZXItcHJlZmVyZW5jZXMuDQoNCiMjICoqQnJvYWRlciBJbXBsaWNhdGlvbnMqKg0KDQpUaGUgZmluZGluZ3Mgb2YgdGhpcyBzdHVkeSBoaWdobGlnaHQgdGhlIGludGVycGxheSBiZXR3ZWVuIHN0cnVjdHVyYWwsIGRlcGFydG1lbnRhbCwgYW5kIGluZGl2aWR1YWwgZmFjdG9ycyBpbiBzaGFwaW5nIGNvLWF1dGhvcnNoaXAgbmV0d29ya3MuIEdlbmRlciBob21vcGhpbHkgYXBwZWFycyB0byBiZSBhIHJvYnVzdCBhbmQgZW5kdXJpbmcgZmVhdHVyZSBvZiB0aGVzZSBuZXR3b3JrcywgcmVzaXN0aW5nIHRoZSBpbmZsdWVuY2Ugb2YgcHJlc3RpZ2UgYW5kIGRlcGFydG1lbnRhbCBjb250ZXh0LiBUaGlzIHJhaXNlcyBpbXBvcnRhbnQgcXVlc3Rpb25zIGFib3V0IHRoZSBzdHJ1Y3R1cmFsIGJhcnJpZXJzIGZhY2VkIGJ5IHNjaG9sYXJzLCBwYXJ0aWN1bGFybHkgd29tZW4sIGluIGFjY2Vzc2luZyBkaXZlcnNlIGNvbGxhYm9yYXRpb24gb3Bwb3J0dW5pdGllcy4NCg0KRnJvbSBhIHBvbGljeSBwZXJzcGVjdGl2ZSwgdGhlc2UgcmVzdWx0cyB1bmRlcnNjb3JlIHRoZSBuZWVkIGZvciBpbml0aWF0aXZlcyBhaW1lZCBhdCByZWR1Y2luZyBnZW5kZXJlZCBjb2xsYWJvcmF0aW9uIGNsdXN0ZXJpbmcuIEZvciBleGFtcGxlLCBtZW50b3JzaGlwIHByb2dyYW1zIG9yIGluc3RpdHV0aW9uYWwgaW5jZW50aXZlcyB0aGF0IGVuY291cmFnZSBjcm9zcy1nZW5kZXIgYW5kIGNyb3NzLWRlcGFydG1lbnQgY29sbGFib3JhdGlvbnMgY291bGQgaGVscCBsZXNzZW4gdGhlc2UgcGF0dGVybi4gQWRkaXRpb25hbGx5LCB0aGUgZmluZGluZyB0aGF0IHByZXN0aWdpb3VzIHNjaG9sYXJzIGFyZSBsZXNzIGxpa2VseSB0byBpbml0aWF0ZSBjb2xsYWJvcmF0aW9ucyBzdWdnZXN0cyB0aGF0IHJlc2VhcmNoZXJzIGVhcmx5IGludCBoZWlyIGNhcmVlciwgcGFydGljdWxhcmx5IHRob3NlIGZyb20gdW5kZXJyZXByZXNlbnRlZCBncm91cHMsIG1heSBmYWNlIGNoYWxsZW5nZXMgaW4gYWNjZXNzaW5nIHRoZXNlIGhpZ2gtcHJlc3RpZ2UgaHVicy4gSW5zdGl0dXRpb25zIHNob3VsZCBjb25zaWRlciBzdHJhdGVnaWVzIHRvIGZhY2lsaXRhdGUgY29ubmVjdGlvbnMgYmV0d2VlbiBlYXJseS1jYXJlZXIgYW5kIGhpZ2gtcHJlc3RpZ2Ugc2Nob2xhcnMgdG8gcHJvbW90ZSBlcXVpdHkgaW4gY29sbGFib3JhdGlvbiBvcHBvcnR1bml0aWVzLg0KDQojIyAqKkxpbWl0YXRpb25zIGFuZCBGdXR1cmUgUmVzZWFyY2gqKg0KDQpUaGlzIHN0dWR5IGhhcyBzZXZlcmFsIGxpbWl0YXRpb25zIHRoYXQgd2FycmFudCBjb25zaWRlcmF0aW9uLiBGaXJzdCwgdGhlIGxhY2sgb2YgaW50ZXJhY3Rpb24gdGVybXMgYmV0d2VlbiBnZW5kZXIgYW5kIGRlcGFydG1lbnQgb3IgaC1pbmRleCBsaW1pdHMgdGhlIGFiaWxpdHkgdG8gbWFrZSBzdHJvbmcgY29uY2x1c2lvbnMgYWJvdXQgaG93IHRoZXNlIGZhY3RvcnMgam9pbnRseSBpbmZsdWVuY2UgY29sbGFib3JhdGlvbiBwYXR0ZXJucy4gRnV0dXJlIHN0dWRpZXMgc2hvdWxkIGluY2x1ZGUgc3VjaCBpbnRlcmFjdGlvbnMgdG8gYmV0dGVyIHVuZGVyc3RhbmQgdGhlc2UgZHluYW1pY3MuIFNlY29uZCwgd2hpbGUgdGhlIGgtaW5kZXggc2VydmVzIGFzIGEgdXNlZnVsIHByb3h5IGZvciBhY2FkZW1pYyBwcmVzdGlnZSwgdGhpcyBzdHVkeSBkaWQgbm90IGNvbnRyb2wgZm9yIGF1dGhvciBjaGFyYWN0ZXJpc3RpY3Mgc3VjaCBhcyBhZ2UsIHdoaWNoIG1heSBhY2NvdW50IGZvciBzb21lIG9mIHRoZSBlZmZlY3RzIGZvdW5kLiBCZXNpZGVzLCBvdGhlciBtZWFzdXJlcyBvZiBwcmVzdGlnZSBvciBpbmZsdWVuY2UsIHN1Y2ggYXMgZ3JhbnQgZnVuZGluZyBvciBlZGl0b3JpYWwgcm9sZXMsIG1pZ2h0IHlpZWxkIGFkZGl0aW9uYWwgaW5zaWdodHMuIEZpbmFsbHksIHRoZSBleGFtaW5lZCBzYW1wbGUgaXMgYXJndWFibHkgc21hbGwsIGFuZCB0aGUgZ2VuZXJhbGl6YWJpbGl0eSBvZiB0aGVzZSBmaW5kaW5ncyBpcyBmdXJ0aGVyIGxpbWl0ZWQgdG8gdGhlIHNwZWNpZmljIGRlcGFydG1lbnRzIGFuZCBuZXR3b3JrIHN0cnVjdHVyZXMgZXhhbWluZWQgaGVyZS4NCg0KRnV0dXJlIHJlc2VhcmNoIHNob3VsZCBleHBsb3JlIGxvbmdpdHVkaW5hbCBjaGFuZ2VzIGluIGNvbGxhYm9yYXRpb24gcGF0dGVybnMgdG8gYXNzZXNzIHdoZXRoZXIgZ2VuZGVyIGhvbW9waGlseSB3ZWFrZW5zIG92ZXIgdGltZSwgcGFydGljdWxhcmx5IGFzIHNjaG9sYXJzIGdhaW4gcHJlc3RpZ2UuIEFkZGl0aW9uYWxseSwgZXhhbWluaW5nIHRoZSByb2xlIG9mIGluc3RpdHV0aW9uYWwgaW50ZXJ2ZW50aW9ucywgc3VjaCBhcyBmdW5kaW5nIHByb2dyYW1zIG9yIGRpdmVyc2l0eSBpbml0aWF0aXZlcywgY291bGQgcHJvdmlkZSB2YWx1YWJsZSBpbnNpZ2h0cyBpbnRvIHN0cmF0ZWdpZXMgZm9yIGZvc3RlcmluZyBtb3JlIGVxdWl0YWJsZSBjb2xsYWJvcmF0aW9uIG5ldHdvcmtzLg0KDQojIyAqKkNvbmNsdXNpb24qKg0KDQpUaGlzIHN0dWR5IGNvbnRyaWJ1dGVzIHRvIG91ciB1bmRlcnN0YW5kaW5nIG9mIHRoZSBkeW5hbWljcyBvZiBjby1hdXRob3JzaGlwIG5ldHdvcmtzIGJ5IGhpZ2hsaWdodGluZyB0aGUgcGVyc2lzdGVudCBpbmZsdWVuY2Ugb2YgZ2VuZGVyIGhvbW9waGlseSBpbiBzY2hvbGFycycgY29sbGFib3JhdGlvbiBwcmVmZXJlbmNlcywgZXZlbiBpbiB0aGUgcHJlc2VuY2Ugb2YgYWNhZGVtaWMgcHJlc3RpZ2UgYW5kIHN0cnVjdHVyYWwgbmV0d29yayBlZmZlY3RzLiBXaGlsZSBwcmVzdGlnaW91cyBzY2hvbGFycyBhcmUgbW9yZSBsaWtlbHkgdG8gYXR0cmFjdCBjb2xsYWJvcmF0aW9ucywgZ2VuZGVyZWQgcGF0dGVybnMgb2YgY29sbGFib3JhdGlvbiBlbmR1cmUuIFRoaXMgdW5kZXJyc2NvcmVzIHRoZSBuZWVkIGZvciB0YXJnZXRlZCBpbnRlcnZlbnRpb25zIHRvIGFkZHJlc3MgdGhlc2UgZGlzcGFyaXRpZXMuIEJ5IGRpc2VudGFuZ2xpbmcgdGhlIGVmZmVjdHMgb2YgZ2VuZGVyLCBkZXBhcnRtZW50LCBhbmQgcHJlc3RpZ2UsIHRoaXMgcmVzZWFyY2ggcHJvdmlkZXMgYSBmb3VuZGF0aW9uIGZvciBmdXR1cmUgc3R1ZGllcyBhbmQgcHJhY3RpY2FsIGVmZm9ydHMgYWltZWQgYXQgZm9zdGVyaW5nIG1vcmUgaW5jbHVzaXZlIGFuZCBkaXZlcnNlIGFjYWRlbWljIGNvbGxhYm9yYXRpb24gbmV0d29ya3MuDQoNCi0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQ0KDQojIFJlZmVyZW5jZXMNCg==</div>
 
 
 </div>

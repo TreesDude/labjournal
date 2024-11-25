@@ -6,6 +6,7 @@ output: html_document
 bibliography: references.bib
 csl: apa.csl
 ---
+
 ```{=html}
 <style>
 body {
@@ -42,4 +43,128 @@ klippy::klippy(position = c('top', 'right'))
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 
+```
+
+# Setup
+
+Clean workspace.
+
+```{r clean, hide =TRUE}
+rm(list = ls())
+```
+
+## Packages
+
+```{r package, hide =TRUE}
+require(RSiena)
+
+```
+
+## Functions
+
+Functions chunk
+
+```{r functions 1, hide = TRUE}
+fpackage.check <- function(packages) {
+    lapply(packages, FUN = function(x) {
+        if (!require(x, character.only = TRUE)) {
+            install.packages(x, dependencies = TRUE)
+            library(x, character.only = TRUE)
+        }
+    })
+}
+
+fsave <- function(x, file = NULL, location = "./data/processed/") {
+    ifelse(!dir.exists("data"), dir.create("data"), FALSE)
+    ifelse(!dir.exists("data/processed"), dir.create("data/processed"), FALSE)
+    if (is.null(file))
+        file = deparse(substitute(x))
+    datename <- substr(gsub("[:-]", "", Sys.time()), 1, 8)
+    totalname <- paste(location, file, "_", datename, ".rda", sep = "")
+    save(x, file = totalname)  #need to fix if file is reloaded as input name, not as x. 
+}
+
+fload <- function(filename) {
+    load(filename)
+    get(ls()[ls() != "filename"])
+}
+
+fshowdf <- function(x, ...) {
+    knitr::kable(x, digits = 2, "html", ...) %>%
+        kableExtra::kable_styling(bootstrap_options = c("striped", "hover")) %>%
+        kableExtra::scroll_box(width = "100%", height = "300px")
+}
+
+```
+
+# Goodness of Fit
+
+The goodness of fit (GOF) for a model assesses how well the estimated model fits the observed data. This evaluation is crucial because `RSiena` relies on simulations to estimate changes within the network (@RSiena_manual). GOF measures indicate whether the simulated network matches the changes in the observed network. The use of the specific GOF measure of a model's Indegree Distribution seems most appropriate since the study's focus lies on changes in directed ties between schoalrs. A GOF with a p-value below .05 indicates a poor fit and calls for adjustment of the model, while a p-value above .05 usually indicates an acceptable or good fit.\
+The GOF measures of Indegree Distribution for the null model (*p* = .008) and model 1 *(p* = .002) both display p-values below .05. This indicates that they do not fit the data well. This makes sense, since the null model and model 1 do not contain any network effects yet. This also implies that we should not interpret the estimates of these models. The GOF of model 2 (*p* = .096) indicates an acceptable fit, while model 3 (*p* = .12) seems to be even better fitting. Overall, the final model, model 4 (*p* = .197), including all the covariates investigated in this study, has the best fit.
+
+<!--  M0: 0.008  M1: 0.002  M2: 0.096  M3: 0.12  M4: 0.197  -->
+
+# Model 0
+
+```{r, hide = TRUE}
+Model0.1 <- fload("./data/processed/estimated_M0.1_20241123.rda")
+Model0.1
+```
+
+```{r GOF M0, hide = TRUE}
+GOF_M0.1 <- sienaGOF(Model0.1, IndegreeDistribution, verbose = FALSE, join = TRUE, varName = "nets")
+
+plot(GOF_M0.1, main = 'GOF - "Null" Model 0.1 \n Indegree Distribution')
+
+
+```
+
+# Model 1
+
+```{r, hide = TRUE}
+Model1.1 <- fload("./data/processed/estimated_M1.1_20241123.rda")
+
+```
+
+```{r GOF M1, hide = TRUE}
+GOF_M1.1 <- sienaGOF(Model1.1, IndegreeDistribution, verbose = FALSE, join = TRUE, varName = "nets")
+
+plot(GOF_M1.1, main = "GOF - Model 1 \n Indegree Distribution")
+```
+
+# Model 2
+
+```{r, hide = TRUE}
+Model2.1 <- fload ("./data/processed/estimated_M2.1_20241123.rda")
+Model2.1
+```
+
+```{r GOF M2, hide = TRUE}
+GOF_M2.1 <- sienaGOF(Model2.1, IndegreeDistribution, verbose = FALSE, join = TRUE, varName = "nets")
+
+plot(GOF_M2.1, main = "GOF - Model 2 \n Indegree Distribution")
+```
+
+# Model 3
+
+```{r, hide=TRUE}
+Model3 <- fload("./data/processed/estimated_M3_20241123.rda")
+```
+
+```{r GOF M3, hide=TRUE}
+GOF_M3 <- sienaGOF(Model3, IndegreeDistribution, verbose = FALSE, join = TRUE, varName = "nets")
+
+plot(GOF_M3, main = "GOF - Model 3 \n Indegree Distribution")
+```
+
+# Model 4
+
+```{r, hide=TRUE}
+Model4 <- fload("./data/processed/estimated_M4_20241123.rda")
+```
+
+```{r GOF M4, hide=TRUE}
+GOF_M4 <- sienaGOF(Model4, IndegreeDistribution, verbose = FALSE, join = TRUE, varName = "nets")
+
+plot(GOF_M4, main = "GOF - Model 4 \n Indegree Distribution")
 ```

@@ -44,36 +44,280 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```
 
+## Getting started
+
+```{r clean, results='hide', hide =TRUE}
+rm(list = ls())
+```
+
+### Packages
+
+```{r package, hide=TRUE, results='hide'}
+require(tidyverse)
+require(RSiena)
+require(RsienaTwoStep)
+
+#install.packages("data.table")
+require(data.table)  # mainly for faster data handling
+# install.packages('xml2')
+require(xml2)
+# install.packages('rvest')
+require(rvest)
+require(igraph)
+require(ggraph)
+require(ggplot2)
+
+
+#install.packages('visNetwork')
+require(visNetwork)
+#install.packages('threejs')
+require(threejs)
+#install.packages('networkD3')
+require(networkD3)
+
+require(RColorBrewer)
+
+
+```
+
+### Functions
+
+```{r functions 1, hide =TRUE, results='hide'}
+fpackage.check <- function(packages) {
+    lapply(packages, FUN = function(x) {
+        if (!require(x, character.only = TRUE)) {
+            install.packages(x, dependencies = TRUE)
+            library(x, character.only = TRUE)
+        }
+    })
+}
+
+fsave <- function(x, file = NULL, location = "./data/processed/") {
+    ifelse(!dir.exists("data"), dir.create("data"), FALSE)
+    ifelse(!dir.exists("data/processed"), dir.create("data/processed"), FALSE)
+    if (is.null(file))
+        file = deparse(substitute(x))
+    datename <- substr(gsub("[:-]", "", Sys.time()), 1, 8)
+    totalname <- paste(location, file, "_", datename, ".rda", sep = "")
+    save(x, file = totalname)  #need to fix if file is reloaded as input name, not as x. 
+}
+
+fload <- function(filename) {
+    load(filename)
+    get(ls()[ls() != "filename"])
+}
+
+fshowdf <- function(x, ...) {
+    knitr::kable(x, digits = 2, "html", ...) %>%
+        kableExtra::kable_styling(bootstrap_options = c("striped", "hover")) %>%
+        kableExtra::scroll_box(width = "100%", height = "300px")
+}
+
+
+# this is the most important one. We created it in the previous script
+
+f_pubnets <- function(df_scholars = df, list_publications = publications, discip = "sociology"+"political science", affiliation = "RU",
+    waves = list(wave1 = c(2018, 2019, 2020), wave2 = c(2021, 2022, 2023))) {
+
+    publications <- list_publications %>%
+        bind_rows() %>%
+        distinct(title, .keep_all = TRUE)
+
+    df_scholars %>%
+        filter(affil1 == affiliation | affil2 == affiliation) %>%
+        filter(discipline == discip) -> df_sel
+
+    networklist <- list()
+    for (wave in 1:length(waves)) {
+        networklist[[wave]] <- matrix(0, nrow = nrow(df_sel), ncol = nrow(df_sel))
+    }
+
+    publicationlist <- list()
+    for (wave in 1:length(waves)) {
+        publicationlist[[wave]] <- publications %>%
+            filter(gs_id %in% df_sel$gs_id) %>%
+            filter(year %in% waves[[wave]]) %>%
+            select(author) %>%
+            lapply(str_split, pattern = ",")
+    }
+
+    publicationlist2 <- list()
+    for (wave in 1:length(waves)) {
+        publicationlist2[[wave]] <- publicationlist[[wave]]$author %>%
+            # lowercase
+        lapply(tolower) %>%
+            # Removing diacritics
+        lapply(stri_trans_general, id = "latin-ascii") %>%
+            # only last name
+        lapply(word, start = -1, sep = " ") %>%
+            # only last last name
+        lapply(word, start = -1, sep = "-")
+    }
+
+    for (wave in 1:length(waves)) {
+        # let us remove all publications with only one author
+        remove <- which(sapply(publicationlist2[[wave]], FUN = function(x) length(x) == 1) == TRUE)
+        publicationlist2[[wave]] <- publicationlist2[[wave]][-remove]
+    }
+
+    for (wave in 1:length(waves)) {
+        pubs <- publicationlist2[[wave]]
+        for (ego in 1:nrow(df_sel)) {
+            # which ego?
+            lastname_ego <- df_sel$lastname[ego]
+            # for all publications
+            for (pub in 1:length(pubs)) {
+                # only continue if ego is author of pub
+                if (lastname_ego %in% pubs[[pub]]) {
+                  aut_pot <- which.max(pubs[[pub]] %in% lastname_ego)
+                  # only continue if ego is first author of pub
+                  if (aut_pot == 1) {
+                    # check all alters/co-authors
+                    for (alter in 1:nrow(df_sel)) {
+                      # which alter
+                      lastname_alter <- df_sel$lastname[alter]
+                      if (lastname_alter %in% pubs[[pub]]) {
+                        networklist[[wave]][ego, alter] <- networklist[[wave]][ego, alter] + 1
+                      }
+                    }
+                  }
+                }
+            }
+        }
+    }
+    return(list(df = df_sel, network = networklist))
+}
+
+```
+
+```{r functions 2, hide=TRUE, results='hide'}
+fcolnet <- function(data = scholars, university = "RU", discipline = "sociology"+"political science", waves = list(c(2015,
+    2018), c(2019, 2023)), type = c("first")) {
+
+    # step 1
+    demographics <- do.call(rbind.data.frame, data$demographics)
+    demographics <- demographics %>%
+        mutate(Universiteit1.22 = replace(Universiteit1.22, is.na(Universiteit1.22), ""), Universiteit2.22 = replace(Universiteit2.22,
+            is.na(Universiteit2.22), ""), Universiteit1.24 = replace(Universiteit1.24, is.na(Universiteit1.24),
+            ""), Universiteit2.24 = replace(Universiteit2.24, is.na(Universiteit2.24), ""), discipline.22 = replace(discipline.22,
+            is.na(discipline.22), ""), discipline.24 = replace(discipline.24, is.na(discipline.24), ""))
+
+    sample <- which((demographics$Universiteit1.22 %in% university | demographics$Universiteit2.22 %in%
+        university | demographics$Universiteit1.24 %in% university | demographics$Universiteit2.24 %in%
+        university) & (demographics$discipline.22 %in% discipline | demographics$discipline.24 %in% discipline))
+
+    demographics_soc <- demographics[sample, ]
+    scholars_sel <- lapply(scholars, "[", sample)
+
+    # step 2
+    ids <- demographics_soc$au_id
+    nwaves <- length(waves)
+    nets <- array(0, dim = c(nwaves, length(ids), length(ids)), dimnames = list(wave = 1:nwaves, ids,
+        ids))
+    dimnames(nets)
+
+    # step 3
+    df_works <- tibble(works_id = unlist(lapply(scholars_sel$work, function(l) l$id)), works_author = unlist(lapply(scholars_sel$work,
+        function(l) l$author), recursive = FALSE), works_year = unlist(lapply(scholars_sel$work, function(l) l$publication_year),
+        recursive = FALSE))
+
+    df_works <- df_works[!duplicated(df_works), ]
+
+    # step 4
+    if (type == "first") {
+        for (j in 1:nwaves) {
+            df_works_w <- df_works[df_works$works_year >= waves[[j]][1] & df_works$works_year <= waves[[j]][2],
+                ]
+            for (i in 1:nrow(df_works_w)) {
+                ego <- df_works_w$works_author[i][[1]]$au_id[1]
+                alters <- df_works_w$works_author[i][[1]]$au_id[-1]
+                if (sum(ids %in% ego) > 0 & sum(ids %in% alters) > 0) {
+                  nets[j, which(ids %in% ego), which(ids %in% alters)] <- 1
+                }
+            }
+        }
+    }
+
+    if (type == "last") {
+        for (j in 1:nwaves) {
+            df_works_w <- df_works[df_works$works_year >= waves[[j]][1] & df_works$works_year <= waves[[j]][2],
+                ]
+            for (i in 1:nrow(df_works_w)) {
+                ego <- rev(df_works_w$works_author[i][[1]]$au_id)[1]
+                alters <- rev(df_works_w$works_author[i][[1]]$au_id)[-1]
+                if (sum(ids %in% ego) > 0 & sum(ids %in% alters) > 0) {
+                  nets[j, which(ids %in% ego), which(ids %in% alters)] <- 1
+                }
+            }
+        }
+    }
+
+    if (type == "all") {
+        for (j in 1:nwaves) {
+            df_works_w <- df_works[df_works$works_year >= waves[[j]][1] & df_works$works_year <= waves[[j]][2],
+                ]
+            for (i in 1:nrow(df_works_w)) {
+                egos <- df_works_w$works_author[i][[1]]$au_id
+                if (sum(ids %in% egos) > 0) {
+                  nets[j, which(ids %in% egos), which(ids %in% egos)] <- 1
+                }
+            }
+        }
+    }
+    output <- list()
+    output$data <- scholars_sel
+    output$nets <- nets
+    return(output)
+}
+```
+
 # Data
 
 ## Sample data
 
-The data for this study was obtained by collecting information from all Sociology and Political Science scholars at all Dutch institutions. During the initial phase of data collection, all important information regarding the author's position, university affiliation, names, IDs, departments, and more was gathered. The coordinator of this course, Jochem Tolsma, has provided a dataset with said information to be used in this project (**source sunbelt?** ). OpenAlex was used to scrape all published works, including important work-related information such as work id, concepts, citations, abstracts, and subjects, up until 2024 (@Priem2022). From this data, I created a final dataset (n=101) that included all authors from the Sociology and Political Science departments at Radboud University within the time frame of **[INSERT TIME FRAME]**.
-
--   [**timeframe of focus**]{.underline}
+The data for this study was obtained by collecting information from all Sociology and Political Science scholars at all Dutch institutions. During the initial phase of data collection, all important information regarding the author's position, university affiliation, names, IDs, departments, and more was gathered. The coordinator of this course, Jochem Tolsma, has provided a dataset with said information to be used in this project (**source sunbelt?** ). 'OpenAlex' was used to scrape all published works, including important work-related information such as work id, concepts, citations, abstracts, and subjects, up until 2024 (@Priem2022). From this data, I created a final dataset (n=101) that included all authors from the Sociology and Political Science departments at Radboud University within the time frame of 2015 to 2018. I also included a second wave of data, pertainning to 2019-2024, which is purely included for the sake of running the simulations needed to analyse the data, while the focus remained on the first wave (2015-2018) only. Based on this data collaboration networks were constructed to capture whether two scholars in the sample had collaborated on a publication during a given wave.
 
 ## Dependent variable
 
-The dependent variable in this dataset, indicated by the ties between scholars, refers to academic collaborations between them and are often called co-authorships. The data was scraped from OpenAlex API using the rvest and xml2 packages in R ( @Priem2022, @xml2**,** @rvest). The dependent variable, represented by an *adjacency matrix*, shows whether two actors or writers collaborated on one of their publications in the specified wave.\
+The dependent variable in this dataset, indicated by the ties between scholars, refers to academic collaborations between them and are often called co-authorships. The data was scraped from OpenAlex API using the rvest and xml2 packages in R ( @Priem2022, @xml2, @rvest). The dependent variable, represented by an *adjacency matrix*, shows whether two actors or writers collaborated on one of their publications in the specified wave.\
 Each dyad (author combination) is assessed based on whether they collaborated (1) or not (0) throughout the data period.
 
--   ***In this study, ties are described as directional*** **[ARE THEY??]** which implies that they are delivered by one actor and received by another. This means each actor has both outdegrees and indegrees. Outdegrees refer to 'sent' connections that refer to being the first author of a manuscript. Indegrees, or 'received' connections, imply collaboration on an article without being the 'initial' author. The generated adjacency matrix can take the form of a network, indicating the collaboration patterns of the academics at Radboud University between **YEAR AND YEAR**.
+**I**n the collboartion networks analysed in this study, ties are described as directional, which implies that they are delivered by one actor and received by another. This means each actor has both outdegrees and indegrees. Outdegrees refer to 'sent' connections that refer to being the first author of a publication. Indegrees, or 'received' connections, imply collaboration on an article without being the 'initial' author. The generated adjacency matrix is thus holds a network, indicating the collaboration patterns of the academics at Radboud University between 2015-2018.
 
 ## Independent variables
 
 ### Gender
 
-The first covariate of my study is the gender of the scholars in the sample. This information was not available through OpenAlex, and was instead manually generated by consulting the website of the Dutch 'Voornamenbank' of the Meertens Institute (@MeertensInstituut). If the website indicated that a name was used my more males than females, the scholar with that name was considered be male, and vice versa (female/male: 0/1).
+The first covariate of my study is the gender of the scholars in the sample. This information was not available through OpenAlex, and was instead manually generated by consulting the website of the Dutch 'Voornamenbank' of the Meertens Institute (@MeertensInstituut). If the website indicated that a name was used my more males than females, the scholar with that name was considered be male, and vice versa (female/male: 0/1). In cases the website did not suggest a majority for, the name was manually assigned a gender by the person who coded the data, based on limited online research (aka I did a quick Google search) on the name in question.
 
-For the sake of simplicity, gender in this study was inferred from scholars’ names and treated as binary, conflating gender identity with biological sex. I acknowledge that names do not reliably indicate a person's gender identity and that gender encompasses more than the categories of men and women. Additionally, I recognize that while *men* and *women* typically refer to gender identities, *male* and *female* are often used to denote biological sex. These distinctions were not upheld in this study, which conflates the terms and disregards individuals' self-identified genders. This approach was taken solely due to the constraints of a university assignment and does not reflect my standard research practices, which would respect and account for the complexity of gender and self-identification outside the academic coursework context.
+For the sake of simplicity, scholars' gender in this study was inferred from scholars’ names and treated as binary, which conflates the concepts of gender identity with biological sex. I acknowledge that names do not reliably indicate a person's gender identity and that gender encompasses more than the categories of men and women. Additionally, I recognize that while *men* and *women* typically refer to gender identities, *male* and *female* are often used to denote biological sex. These distinctions were not upheld throughout the documentation of this study, which conflates the terms and disregards individuals' self-identified genders. This approach was taken solely due to the constraints of this being a university assignment and does not reflect my standard research practices, which would try to respect and account for the complexity of gender and self-identification outside this coursework context.
 
 ### Prestige
 
 The scholars' h-indices will serve as a control variable in this research design (@Bornmann2020, @Bornmann2021). The h-index calculates the number of publications that have been cited at least as frequently as the author's total number of publications. This number can then be used as measure for the author's 'prestige' (@Hirsch2005). The number of citations and publications needed for this calculation were webscraped through OpenAlex API (@Priem2022**).** The code for this process was provided by Lucan Bovens.
 
-# Methods
+## Ethical concerns
 
-To evaluate the homophiliy in collaboration networks by gender and h-index, the analysis of the data will be as follows. The first step involves examining descriptives of the data to answer question of how homophily manifests in terms of degree and prestige within these networks. These descriptive findings will then serve as a foundation for the second phase of the analysis, which focuses on answering the explanatory research question of this study. This phase investigates the impact of homophily on collaboration and explores the interaction between gender and h-index. Descriptive analyses will utilize functions of the igraph and ggraph packages and t-tests, while the explanatory questions will be examined using Stochastic Actor-Based Models implemented via the RSiena package (@igraph, @ggraph, @RSiena_package, @RSiena_manual).
+### Webscraping
+
+This study relies on data obtained through web scraping publicly available sources, which raises several ethical concerns. One key issue is that the scholars included in the dataset did not provide informed consent for the use of their data in this research. To address this, several measures were implemented. First, efforts were made to anonymize the data presented in this study to the greatest extent possible. Second, only information directly relevant to the research objectives was collected, minimizing potential intrusions on privacy. Third, the scraped data did not include sensitive or harmful content, thereby reducing the risk of any negative consequences arising from its use.
+
+Despite these precautions, the fundamental issue of using non-consensual data persists. I do not agree with the view that making data publicly available equates to granting unrestricted permission for its use in research. While the data in this study was already accessible online, the research generates new insights, such as patterns of tie formation between scholars, which were not previously explicit. Although names and other identifying details have been omitted to avoid recognizing individuals within network graphs or other outputs, informed consent for the use of personal data was not obtained. As such, this method of data collection remains ethically contentious at best.
+
+### Operationalization of gender
+
+An additional ethical concern relates to the treatment of gender in this study. The method used to infer gender, based on names and a binary framework, may raise issues regarding inclusivity and respect for individuals’ self-identified gender. This approach disregards the complexity of gender identity and risks misrepresentation.
+
+# Analysis
+
+To evaluate the homophiliy in collaboration networks by gender and h-index, the analysis of the data will be as follows. The first step involves examining descriptive analyses and visualisaitons of the data which will then serve as a foundation for the second phase of the analysis, which focuses on answering the explanatory research question of this study. This latter phase investigates the impact of same-gender preference in scholars' collaboration networks and explores the interaction between the gender and h-index of scholars. Descriptive analyses will utilize functions of the igraph and ggraph packages, while the explanatory questions will be examined using Stochastic Actor-Based Models implemented via the RSiena package (@igraph, @ggraph, @RSiena_package, @RSiena_manual).
+
+## RSiena
+
+SIENA, which stands for *Simulation Investigation for Empirical Network Analysis*, is a software tool designed to perform statistical estimation of models for longitudinal social network data. SIENA version 4.0, also known as RSiena, is a package for the R statistical software and was developed by Ruth Ripley and Krists Boitmanis, in collaboration with Tom Snijders (@RSiena_package, @RSiena_manual). The use of RSiena for this project is highly based on the practical information provided in "[Social Network Analysis for Social Scientists](https://jochemtolsma.github.io/SNA-4-Social-Scientists/)**"** (@SNASS).
+
+To ensure the model accurately represents the collaboration network, I developed it iteratively, beginning with a null model (Model 0) and gradually building up to a more comprehensive model (Model 4). Each successive model incorporates additional effects, allowing for targeted testing of specific hypotheses. The **null model** serves as the foundation and includes only basic structural effects: reciprocity and outdegree (density), as is standard in RSiena. This model provides a baseline for comparison but does not address any hypotheses directly. The **first model** incorporates additional structural network effects, such as isolates, indegree popularity, and outdegree activity, to examine how these features influence collaboration dynamics. This model offers insights into *Hypothesis 3*, as it highlights the structural factors shaping network patterns. Building on model 1, this model introduces covariate effects for gender, including ego, alter, and same-gender preferences (sameX), as well as a structural effect for gender-differentiated transitivity (diffXTransTrip). By analyzing gender-based network patterns, this model tests *Hypothesis 1*, which focuses on gender homophily.\
+Expanding on model 2, **model 3** incorporates departmental effects, such as ego and alter preferences for department membership, as well as same-department collaboration tendencies (sameX). This addition allows for a more nuanced analysis of departmental differences in gender homophily, addressing *Hypothesis 2*. The final model (**model 4**) integrates prestige effects through covariate interactions for the h-index, including ego, alter, and indegree popularity weighted by the h-index. These additions test *Hypothesis 4*, examining whether prestige moderates gender homophily in collaboration patterns. The fit of each model and its relevance interpreting the estimates will be reported in the Analysis chapter and further detailed in the [GOFpart](https://treesdude.github.io/labjournal/finalGOF.html) of this final report webpage.
 
 ## Descriptives
 
@@ -81,27 +325,169 @@ To evaluate the homophiliy in collaboration networks by gender and h-index, the 
 
 First, ego-level descriptives such as the counts and distributions of gender and h-indices in both departments were generated to establish a clearer picture of the data at hand.
 
-I also examined descriptives of the ego network and of the whole network of scholars included in the data. Among others, these included the number of nodes, edges, reciprocity, degreee centrality, clustering, density, and path-length. With the help of these decriptives it was possible for me to...... **[INSERT INSIGHT FROM DESCRIPTIVES HERE]**
-
+I also examined descriptives of the ego network and of the whole collaboration network of scholars. Among others, these included the number of nodes, edges, reciprocity, degreee centrality, clustering, density, and path-length. **[INSERT RELEVANT DESCRIPTIVES HERE]**\
 \
-**[UNSURE IF THIS IS NEEDED IF GENDER IS FIRST COVARIATE AND H INDEX ONLY CONTRL VARIABLE]**\
-Then, the networks were visualized using graphs to identify the presence of hubs and examine whether these hubs are concentrated among individuals with the highest h-index. Various centrality measures were also calculated and analyzed to determine their correlation with the scholars' h-index, providing further insight into whether network hubs tend to form around those with the highest h-index.
+Then, the networks were visualized using graphs to identify the presence of clustering and examine whether they are concentrated among individuals with the highest h-index or around specifically gendered scholars.
 
-## RSiena
+**[UNSURE IF THIS IS NEEDED IF GENDER IS FIRST COVARIATE AND H INDEX ONLY CONTRL VARIABLE]**
 
-SIENA, which stands for *Simulation Investigation for Empirical Network Analysis*, is a software tool designed to perform statistical estimation of models for longitudinal social network data. SIENA version 4.0, also known as RSiena, is a package for the R statistical software and was developed by Ruth Ripley and Krists Boitmanis, in collaboration with Tom Snijders (@RSiena_package, @RSiena_manual). The use of RSiena for this project is highly based on the book "[Social Network Analysis for Social Scientists](https://jochemtolsma.github.io/SNA-4-Social-Scientists/)**"** by Jochem Tolsma and Bas Hofstra (@SNASS).
+Various centrality measures were also calculated and analyzed to determine their correlation with the scholars' h-index, providing further insight into whether network hubs tend to form around those with the highest h-index.
 
-# Ethical concerns
+------------------------------------------------------------------------
 
-## Webscraping
+# Ego-Level Descriptives
 
-This study relies on data obtained through web scraping publicly available sources, which raises several ethical concerns. One key issue is that the scholars included in the dataset did not provide informed consent for the use of their data in this research. To address this, several measures were implemented. First, efforts were made to anonymize the data presented in this study to the greatest extent possible. Second, only information directly relevant to the research objectives was collected, minimizing potential intrusions on privacy. Third, the scraped data did not include sensitive or harmful content, thereby reducing the risk of any negative consequences arising from its use.
+**Load data**
 
-Despite these precautions, the fundamental issue of using non-consensual data persists. I do not adhere to the view that making data publicly available equates to granting unrestricted permission for its use in research. While the data in this study was already accessible online, the research generates new insights, such as patterns of tie formation between scholars, which were not previously explicit. Although names and other identifying details have been omitted to avoid recognizing individuals within network graphs or other outputs, informed consent for the use of personal data was not obtained. As such, this method of data collection remains ethically contentious at best.
+Scholar data
 
-## Operationalization of gender
+```{r scholar data}
+scholars <- fload("./data/processed/scholars_20240924.rda") 
+#make sure to lead fload first of course
+```
 
-An additional ethical concern relates to the treatment of gender in this study. The method used to infer gender, based on names and a binary framework, may raise issues regarding inclusivity and respect for individuals’ self-identified gender. This approach disregards the complexity of gender identity and risks misrepresentation. A more detailed explanation of how gender data was defined and its limitations is provided in the data definition section.
+```{r saving scholar output}
+# save the output of your function
+test  <- fcolnet(data = scholars, 
+                university = "RU", 
+                discipline = c("sociology", "political science"),
+                waves = list(c(2015, 2018), c(2019, 2023)), 
+                type = c("first"))
+```
+
+Ego data
+
+```{r df_ego data}
+df_ego <- fload("./data/processed/df_ego_20241108.rda")
+```
+
+```{r matrix data ego}
+
+test_w1 <- igraph::graph_from_adjacency_matrix(
+  test$nets[1,,], # first wave of data. 
+  # (thus I select the array of networks and take the first matrix)
+  mode = c("directed"),
+  weighted = NULL,
+  diag = FALSE,
+  add.colnames = NULL,
+  add.rownames = NULL)
+
+```
+
+## Gender - Ego level
+
+Descriptives (mean, distibution, etc.) in whole sample
+
+```{r sum gender, hide = TRUE, echo=FALSE }
+summary(df_ego$gender)
+```
+
+gender counts across whole sample (0 = female, 1 = male)
+
+```{r counts gender-all, hide = TRUE, echo=FALSE }
+table(df_ego$gender)
+```
+
+Histogram: overall gender distribution in sample
+
+```{r histogram gender, hide = TRUE, echo=FALSE }
+# Convert gender to a factor to avoid errors
+df_ego$gender <- as.factor(df_ego$gender)
+# Create the histogram with a dark theme and two colors for bars
+ggplot(df_ego, aes(x = gender, fill = gender)) +
+  geom_bar(color = "darkgrey", width = 0.6) +  # Add borders for bars
+  scale_fill_manual(
+    values = c("0" = "#FFFFB3", "1" = "#80B1D3"),  # Custom colors: yellow for females, blue for males
+    labels = c("Female", "Male")  # Optional: customize legend labels
+  ) +
+  labs(
+    title = "Gender Distribution",
+    x = "Gender\n (0 = female, 1 = male)",
+    y = "Count",
+    fill = "Gender"  # Legend title
+  ) +
+  theme_minimal(base_family = "Arial") +  # Clean, minimal base theme
+  theme(
+    plot.background = element_rect(fill = "#2d2d2d", color = NA),  # Dark background
+    panel.background = element_rect(fill = "#2d2d2d", color = NA),  # Dark panel background
+    panel.grid.major = element_line(color = "#444444"),  # Subtle grid lines
+    panel.grid.minor = element_line(color = "#444444"),
+    axis.text = element_text(color = "#f0f0f0"),  # White axis text
+    axis.title = element_text(color = "#f0f0f0", face = "bold"),  # Bold white axis titles
+    plot.title = element_text(color = "#f0f0f0", face = "bold", hjust = 0.5),  # White centered title
+    legend.background = element_rect(fill = "#2d2d2d", color = NA),  # Dark legend background
+    legend.text = element_text(color = "#f0f0f0"),  # White legend text
+    legend.title = element_text(color = "#f0f0f0")  # White legend title
+    )
+
+
+```
+
+Genders per department (0 = female, 1 = male)
+
+```{r gender per dep., hide = TRUE, echo=FALSE }
+   
+# Wave 1: Gender count per department 
+table(df_ego$discipline.24, df_ego$gender)
+```
+
+## H index - Ego level
+
+Descriptives (mean, distribution, etc.)
+
+```{r summary h index, hide = TRUE, echo=FALSE }
+summary(df_ego$h_index)
+```
+
+H-Index Whole sample
+
+```{r hist h index, hide = TRUE, echo=FALSE }
+# Histogram of prestige scores for Wave 1 
+
+# Create a data frame for ggplot2 
+df_h_index <- data.frame(h_index = df_ego$h_index)
+
+# Generate the histogram with ggplot2
+ggplot(df_h_index, aes(x = h_index)) +
+  geom_histogram(
+    bins = 30,
+    fill = "#FFFFB3",  # Bar color
+    color = "black"    # Border color for bars
+  ) +
+  labs(
+    title = "Distribution of H-Index from 2015 to 2018",
+    x = "H Index",
+    y = "Frequency"
+  ) +
+  theme_minimal(base_family = "Arial") +  # Clean, minimal base theme
+  theme(
+    plot.background = element_rect(fill = "#2d2d2d", color = NA),  # Dark background
+    panel.background = element_rect(fill = "#2d2d2d", color = NA),  # Dark panel background
+    panel.grid.major = element_line(color = "#444444"),  # Subtle grid lines
+    panel.grid.minor = element_line(color = "#444444"),
+    axis.text = element_text(color = "#f0f0f0"),  # White axis text
+    axis.title = element_text(color = "#f0f0f0", face = "bold"),  # Bold white axis titles
+    plot.title = element_text(color = "#f0f0f0", face = "bold", hjust = 0.5)  # White centered title
+  )
+
+```
+
+H index per department
+
+```{r table per dep h index, hide = TRUE, echo=FALSE }
+# Wave 1: Prestige distribution by dep. and total
+df_ego %>%
+    group_by(discipline.24) %>%
+    summarise(mean_h_index = mean(h_index, na.rm = TRUE), min_h_index = min(h_index,
+        na.rm = TRUE), max_h_index = max(h_index, na.rm = TRUE), sd_h_index = sd(h_index,
+        na.rm = TRUE)) %>%
+    bind_rows(df_ego %>%
+        summarise(discipline.24 = "total", mean_h_index = mean(h_index, na.rm = TRUE), min_h_index = min(h_index,
+            na.rm = TRUE), max_h_index = max(h_index, na.rm = TRUE), sd_h_index = sd(h_index,
+            na.rm = TRUE)))
+```
+
+------------------------------------------------------------------------
 
 # Written References (remove in final paper)
 

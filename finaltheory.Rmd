@@ -46,7 +46,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Theory & Hypotheses
 
-Understanding collaboration patterns in academia requires examining how individual preferences, structural factors, and institutional norms interact to shape scholarly networks. Two key mechanisms guide this inquiry: **homophily**, the tendency to form ties with similar others (@McPherson2001), and **preferential attachment**, where individuals gravitate toward high-prestige collaborators (@Merton1968). Additionally, the concept of **upward mobility** highlights how strategic collaborations with prestigious scholars can counterbalance preferences based on similarity, such as gender homophily. The study tests four hypotheses across the Political Science and Sociology departments at Radboud University to explore how these mechanisms may interact to influence scholars' collaboration patterns.
+Understanding collaboration patterns in academia requires examining how individual preferences, structural factors, and institutional norms interact to shape scholarly networks. Two key mechanisms guide this inquiry: **homophily**, the tendency to form ties with similar others (@McPherson2001), and **preferential attachment**, where individuals gravitate toward high-prestige collaborators (@Merton1968). Additionally, the concept of **upward mobility** highlights how strategic collaborations with prestigious scholars can counterbalance preferences based on similarity, such as gender homophily. The study tests four hypotheses across the political science and sociology departments at Radboud University to explore how these mechanisms may interact to influence scholars' collaboration patterns.
 
 ## **H1: Gender Homophily in Collaboration Networks**
 
@@ -56,7 +56,7 @@ Homophily explains the widespread tendency of individuals to associate with simi
 
 ## **H2: Variation in Gender Homophily Between Departments**
 
-The extent of gender homophily may vary by discipline duee to differences in gender representation and cultural norms. Sociology, often seen as more gender-balanced or even female-dominated, may facilitate cross-gender collaborations more than Political Science, which remains a male-dominated field associated with traditional masculine traits such as assertiveness and rationality (@Kwiek2021). These cultural perceptions influence collaboration preferences, potentially reducing gender homophily in disciplines where gender parity id normalized. The second hypothesis tests whether departmental norms and gender dynamics affect scholars' tendency for gender homophily in their collaborations.
+The extent of gender homophily may vary by discipline duee to differences in gender representation and cultural norms. Sociology, often seen as more gender-balanced or even female-dominated, may facilitate cross-gender collaborations more than political science, which remains a male-dominated field associated with traditional masculine traits such as assertiveness and rationality (@Kwiek2021). These cultural perceptions influence collaboration preferences, potentially reducing gender homophily in disciplines where gender parity id normalized (@Knobloch2013). The second hypothesis tests whether departmental norms and gender dynamics affect scholars' tendency for gender homophily in their collaborations.
 
 -   ***H2:** Scholars in the sociology department exhibit weaker preferences for same-gender collaborators than those in the political science department.*
 

@@ -7,21 +7,20 @@ bibliography: references.bib
 csl: apa.csl
 ---
 
-<html lang="en">
+```{=html}
+<style>
+body {
+text-align: left;
+line-height: 1.5;
+}
 
-<head>
+h1, .h1, h2, .h2, h3, .h3 {
+  margin-top: 24px;
+  line-height: 1;
+}
 
-<meta charset="UTF-8">
-
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>GOF</title>
-
-<link rel="stylesheet" href="styles.css"> <!-- Link to the CSS file I created for dark mode code chunks -->
-
-</head>
-
-</html>
+</style>
+```
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -99,12 +98,11 @@ fshowdf <- function(x, ...) {
 
 # Goodness of Fit
 
-The goodness of fit (GOF) for a model assesses how well the estimated model fits the observed data. This evaluation is crucial because `RSiena` relies on simulations to estimate changes within the network (@RSiena_manual). GOF measures indicate whether the simulated network matches the changes in the observed network. The use of the specific GOF measure of a model's Indegree Distribution seems most appropriate since the study's focus lies on changes in directed ties between schoalrs. A GOF with a p-value below .05 indicates a poor fit and calls for adjustment of the model, while a p-value above .05 usually indicates an acceptable or good fit. \
+The goodness of fit (GOF) for a model assesses how well the estimated model fits the observed data. This evaluation is crucial because `RSiena` relies on simulations to estimate changes within the network (@RSiena_manual). GOF measures indicate whether the simulated network matches the changes in the observed network. The use of the specific GOF measure of a model's Indegree Distribution seems most appropriate since the study's focus lies on changes in directed ties between schoalrs. A GOF with a p-value below .05 indicates a poor fit and calls for adjustment of the model, while a p-value above .05 usually indicates an acceptable or good fit.\
 The GOF measures of Indegree Distribution for the null model (*p* = .008) and model 1 *(p* = .002) both display p-values below .05. This indicates that they do not fit the data well. This makes sense, since the null model and model 1 do not contain any network effects yet. This also implies that we should not interpret the estimates of these models. The GOF of model 2 (*p* = .096) indicates an acceptable fit, while model 3 (*p* = .12) seems to be even better fitting. Overall, the final model, model 4 (*p* = .197), including all the covariates investigated in this study, has the best fit.
 
-```{=html}
 <!--  M0: 0.008  M1: 0.002  M2: 0.096  M3: 0.12  M4: 0.197  -->
-```
+
 # Model 0
 
 ```{r}
